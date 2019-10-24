@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.aldy.difacademy">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".OpDetailNotificationActivity"></activity>
+        <activity android:name=".OpNotificationActivity" />
+        <activity android:name=".OpAddVideoBlendedCourseActivity" />
+        <activity android:name=".OpAddQuizActivity" />
+        <activity android:name=".OpQuizActivity" />
+        <activity android:name=".OpAddBlendedCourseActivity" />
+        <activity android:name=".OpBlendedCourseActivity" />
+        <activity android:name=".OpTagsActivity" />
+        <activity android:name=".OpAddNewsActivity" />
+        <activity android:name=".OpNewsActivity" />
+        <activity android:name=".OpAddFreeCourseActivity" />
+        <activity android:name=".OpFreeCourseActivity" />
+        <activity android:name=".OpMainActivity" />
+        <activity android:name=".QuizActivity" />
+        <activity android:name=".PaymentActivity" />
+        <activity android:name=".ListVideoCourseActivity" />
+        <activity android:name=".DetailCourseActivity" />
+        <activity android:name=".DetailNewsActivity" />
+        <activity android:name=".ListNewsActivity" />
+        <activity android:name=".EditProfileActivity" />
+        <activity android:name=".SettingsActivity" />
+        <activity android:name=".WatchVideoActivity" />
+        <activity android:name=".BlendedCourseActivity" />
+        <activity android:name=".FreeCourseActivity" />
+        <activity android:name=".OngoingCourseActivity" />
+        <activity android:name=".ForgetPasswordActivity" />
+        <activity android:name=".RegisterActivity" />
+        <activity android:name=".LoginActivity" />
+        <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>
