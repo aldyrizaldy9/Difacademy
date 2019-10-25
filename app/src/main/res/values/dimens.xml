@@ -1,2 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <dimen name="margin_vertical">16dp</dimen>
+    <dimen name="margin_horizontal">16dp</dimen>
+
+    <dimen name="nav_bar_height">56dp</dimen>
+
+    <dimen name="icon_width">24dp</dimen>
+    <dimen name="icon_height">24dp</dimen>
+
+    <dimen name="icon_btn_width">40dp</dimen>
+    <dimen name="icon_btn_height">40dp</dimen>
+</resources>
