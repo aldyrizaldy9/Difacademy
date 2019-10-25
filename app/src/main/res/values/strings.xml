@@ -7,4 +7,6 @@
     <string name="berita">berita</string>
     <string name="tags">tags</string>
 
+    <string name="hapus">hapus</string>
+    <string name="simpan">simpan</string>
 </resources>
