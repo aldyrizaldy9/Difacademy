@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Difacademy</string>
+
+    <string name="kelas_gratis">kelas gratis</string>
+    <string name="kelas_online">kelas online</string>
+    <string name="kelas_blended">kelas campuran</string>
+    <string name="berita">berita</string>
+    <string name="tags">tags</string>
+
 </resources>

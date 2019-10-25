@@ -10,4 +10,7 @@
 
     <dimen name="icon_btn_width">40dp</dimen>
     <dimen name="icon_btn_height">40dp</dimen>
+
+    <dimen name="thumbnail_op_width">90dp</dimen>
+    <dimen name="thumbnail_op_height">60dp</dimen>
 </resources>
