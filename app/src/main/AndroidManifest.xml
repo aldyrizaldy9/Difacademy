@@ -9,8 +9,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".OpVideoBlendedCourseActivity"></activity>
-        <activity android:name=".OpDetailNotificationActivity" />
+        <activity android:name=".OpNotifGradActivity"></activity>
+        <activity android:name=".OpVideoBlendedCourseActivity" />
+        <activity android:name=".OpNotifActivity" />
         <activity android:name=".OpNotifPaymentActivity" />
         <activity android:name=".OpAddVideoBlendedCourseActivity" />
         <activity android:name=".OpAddQuizActivity" />
