@@ -16,19 +16,20 @@
 
         <TextView
             android:id="@+id/tv_hubungi_nama"
+            style="@style/Difacademy.Subtitle1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:text="Rizaldy Ilham Akbar"
-            android:textSize="18sp"
             app:layout_constraintEnd_toStartOf="@+id/tv_status_hubungi"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tv_hubungi_kelas"
+            style="@style/Difacademy.Body1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -43,6 +44,7 @@
 
         <TextView
             android:id="@+id/tv_status_hubungi"
+            style="@style/Difacademy.Subtitle2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
@@ -62,19 +64,20 @@
 
         <TextView
             android:id="@+id/tv_beli_nama"
+            style="@style/Difacademy.Subtitle1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:text="Rizaldy Ilham Akbar"
-            android:textSize="18sp"
             app:layout_constraintEnd_toStartOf="@+id/tv_status_beli"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tv_beli_kelas"
+            style="@style/Difacademy.Body1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -87,6 +90,7 @@
 
         <TextView
             android:id="@+id/tv_status_beli"
+            style="@style/Difacademy.Subtitle2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"

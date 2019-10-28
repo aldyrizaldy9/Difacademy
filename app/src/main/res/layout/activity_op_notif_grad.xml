@@ -8,11 +8,11 @@
 
     <TextView
         android:id="@+id/textView16"
+        style="@style/Difacademy.Subtitle2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="Kelas yang Lulus"
-        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="@+id/tv_nowa"
         app:layout_constraintStart_toStartOf="@+id/tv_nowa"
         app:layout_constraintTop_toBottomOf="@+id/tv_nowa" />
@@ -25,13 +25,13 @@
 
     <TextView
         android:id="@+id/textView6"
+        style="@style/Difacademy.Subtitle2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:text="UserId"
-        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -39,6 +39,7 @@
 
     <TextView
         android:id="@+id/tv_userid"
+        style="@style/Difacademy.Body1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -49,17 +50,18 @@
 
     <TextView
         android:id="@+id/textView8"
+        style="@style/Difacademy.Subtitle2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="KelasId"
-        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="@+id/tv_userid"
         app:layout_constraintStart_toStartOf="@+id/tv_userid"
         app:layout_constraintTop_toBottomOf="@+id/tv_userid" />
 
     <TextView
         android:id="@+id/tv_kelasid"
+        style="@style/Difacademy.Body1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -70,17 +72,18 @@
 
     <TextView
         android:id="@+id/textView10"
+        style="@style/Difacademy.Subtitle2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="Nama"
-        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="@+id/tv_kelasid"
         app:layout_constraintStart_toStartOf="@+id/tv_kelasid"
         app:layout_constraintTop_toBottomOf="@+id/tv_kelasid" />
 
     <TextView
         android:id="@+id/tv_nama"
+        style="@style/Difacademy.Body1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -91,17 +94,18 @@
 
     <TextView
         android:id="@+id/textView12"
+        style="@style/Difacademy.Subtitle2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="Email"
-        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="@+id/tv_nama"
         app:layout_constraintStart_toStartOf="@+id/tv_nama"
         app:layout_constraintTop_toBottomOf="@+id/tv_nama" />
 
     <TextView
         android:id="@+id/tv_email"
+        style="@style/Difacademy.Body1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -112,17 +116,18 @@
 
     <TextView
         android:id="@+id/textView14"
+        style="@style/Difacademy.Subtitle2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="No. WA"
-        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="@+id/tv_email"
         app:layout_constraintStart_toStartOf="@+id/tv_email"
         app:layout_constraintTop_toBottomOf="@+id/tv_email" />
 
     <TextView
         android:id="@+id/tv_nowa"
+        style="@style/Difacademy.Body1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -133,6 +138,7 @@
 
     <TextView
         android:id="@+id/tv_kelas"
+        style="@style/Difacademy.Body1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
