@@ -16,10 +16,8 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="4dp"
         android:scaleType="centerCrop"
         android:src="@color/colorAccent"
-        app:layout_constraintBottom_toTopOf="@+id/tv_card_video_thumbnail"
         app:layout_constraintDimensionRatio="16:9"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -30,19 +28,21 @@
         style="@style/Difacademy.Headline6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:text="Judul"
-        app:layout_constraintBottom_toTopOf="@+id/tv_card_video_thumbnail_tag"
-        app:layout_constraintStart_toStartOf="@+id/iv_card_video_thumbnail" />
+        app:layout_constraintStart_toStartOf="@+id/iv_card_video_thumbnail"
+        app:layout_constraintTop_toBottomOf="@+id/iv_card_video_thumbnail" />
 
     <TextView
         android:id="@+id/tv_card_video_thumbnail_tag"
         style="@style/Difacademy.Subtitle1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="4dp"
+        android:layout_marginBottom="8dp"
         android:text="Tag"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/tv_card_video_thumbnail" />
+        app:layout_constraintStart_toStartOf="@+id/tv_card_video_thumbnail"
+        app:layout_constraintTop_toBottomOf="@+id/tv_card_video_thumbnail" />
 
     <TextView
         android:id="@+id/tv_card_video_thumbnail_status_ongoing"

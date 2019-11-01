@@ -67,8 +67,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                app:layout_constraintEnd_toStartOf="@+id/img_upload"
+                app:layout_constraintEnd_toStartOf="@+id/cl_op_blended_upload"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textInputLayout8">
 
@@ -94,25 +93,6 @@
                 app:layout_constraintTop_toBottomOf="@+id/tv_upload_process"
                 app:layout_constraintVertical_bias="1.0" />
 
-            <ImageView
-                android:id="@+id/img_upload"
-                android:layout_width="@dimen/icon_btn_width"
-                android:layout_height="@dimen/icon_btn_height"
-                android:layout_marginEnd="16dp"
-                app:layout_constraintBottom_toBottomOf="@+id/textInputLayout9"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/textInputLayout9"
-                tools:srcCompat="@drawable/ic_cloud_upload" />
-
-            <ImageView
-                android:id="@+id/img_cancel_upload"
-                android:layout_width="@dimen/icon_btn_width"
-                android:layout_height="@dimen/icon_btn_height"
-                android:layout_marginTop="16dp"
-                app:layout_constraintEnd_toEndOf="@+id/img_upload"
-                app:layout_constraintTop_toBottomOf="@+id/img_upload"
-                tools:srcCompat="@drawable/ic_cancel" />
-
             <TextView
                 android:id="@+id/tv_upload_process"
                 style="@style/Difacademy.Subtitle1"
@@ -129,11 +109,50 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                app:layout_constraintBottom_toBottomOf="@+id/img_cancel_upload"
-                app:layout_constraintEnd_toStartOf="@+id/img_cancel_upload"
+                app:layout_constraintBottom_toBottomOf="@+id/cl_op_blended_cancel_upload"
+                app:layout_constraintEnd_toStartOf="@+id/cl_op_blended_cancel_upload"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/img_cancel_upload" />
+                app:layout_constraintTop_toTopOf="@+id/cl_op_blended_cancel_upload" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_op_blended_upload"
+                android:layout_width="@dimen/icon_btn_width"
+                android:layout_height="@dimen/icon_btn_height"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintBottom_toBottomOf="@+id/textInputLayout9"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/textInputLayout9">
+
+                <ImageView
+                    android:id="@+id/img_upload"
+                    android:layout_width="@dimen/icon_width"
+                    android:layout_height="@dimen/icon_height"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:srcCompat="@drawable/ic_cloud_upload" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_op_blended_cancel_upload"
+                android:layout_width="@dimen/icon_btn_width"
+                android:layout_height="@dimen/icon_btn_height"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cl_op_blended_upload">
+
+                <ImageView
+                    android:id="@+id/img_cancel_upload"
+                    android:layout_width="@dimen/icon_width"
+                    android:layout_height="@dimen/icon_height"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:srcCompat="@drawable/ic_cancel" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

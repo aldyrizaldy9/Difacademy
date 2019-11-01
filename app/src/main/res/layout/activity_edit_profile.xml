@@ -25,6 +25,7 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edt_nama"
+            style="@style/Difacademy.Body1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Nama" />
@@ -43,6 +44,7 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edt_nowa"
+            style="@style/Difacademy.Body1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Nomor WA" />
@@ -61,6 +63,7 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edt_old_pass"
+            style="@style/Difacademy.Body1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Kata Sandi Lama" />
@@ -79,6 +82,7 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edt_new_pass"
+            style="@style/Difacademy.Body1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Kata Sandi Baru" />
@@ -97,6 +101,7 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edt_new_pass_confirm"
+            style="@style/Difacademy.Body1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Konfirmasi Kata Sandi Baru" />

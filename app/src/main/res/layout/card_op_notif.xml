@@ -49,6 +49,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:text="Belum Dihubungi"
+            android:textAllCaps="true"
             app:layout_constraintBottom_toBottomOf="@+id/tv_hubungi_kelas"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/tv_hubungi_nama" />
@@ -95,6 +96,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:text="INGIN BELI"
+            android:textAllCaps="true"
             app:layout_constraintBottom_toBottomOf="@+id/tv_beli_kelas"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/tv_beli_nama" />

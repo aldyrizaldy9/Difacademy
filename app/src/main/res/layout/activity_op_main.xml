@@ -14,6 +14,7 @@
 
     <Button
         android:id="@+id/btn_freecourse"
+        style="@style/Difacademy.Button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -26,6 +27,7 @@
 
     <Button
         android:id="@+id/btn_onlinecourse"
+        style="@style/Difacademy.Button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -38,6 +40,7 @@
 
     <Button
         android:id="@+id/btn_blendedcourse"
+        style="@style/Difacademy.Button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -50,6 +53,7 @@
 
     <Button
         android:id="@+id/btn_news"
+        style="@style/Difacademy.Button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -62,6 +66,7 @@
 
     <Button
         android:id="@+id/btn_tags"
+        style="@style/Difacademy.Button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"

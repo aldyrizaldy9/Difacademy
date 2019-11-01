@@ -38,6 +38,7 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/edt_soal"
+                    style="@style/Difacademy.Body1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Soal" />
@@ -56,6 +57,7 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/edt_jawaban_a"
+                    style="@style/Difacademy.Body1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Jawaban A" />
@@ -74,6 +76,7 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/edt_jawaban_b"
+                    style="@style/Difacademy.Body1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Jawaban B" />
@@ -92,6 +95,7 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/edt_jawaban_c"
+                    style="@style/Difacademy.Body1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Jawaban C" />
@@ -110,6 +114,7 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/edt_jawaban_d"
+                    style="@style/Difacademy.Body1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Jawaban D" />
@@ -128,6 +133,7 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/edt_jawaban_e"
+                    style="@style/Difacademy.Body1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Jawaban E" />
@@ -135,6 +141,7 @@
 
             <TextView
                 android:id="@+id/textView5"
+                style="@style/Difacademy.Body1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -145,6 +152,7 @@
 
             <Spinner
                 android:id="@+id/spinner"
+                style="@style/Difacademy.Body1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -156,6 +164,7 @@
 
             <Button
                 android:id="@+id/btn_simpan"
+                style="@style/Difacademy.Button"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
