@@ -4,6 +4,39 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
+    android:background="@android:color/darker_gray"
     tools:context=".Activity.BlendedCourseActivity">
+    <include
+        android:id="@+id/include"
+        layout="@layout/nav_bar"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/nav_bar_height"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_blended_course_video"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/include"
+        app:layout_constraintVertical_bias="1.0"
+        tools:listitem="@layout/card_video_with_thumbnail" />
+
+    <include
+        android:id="@+id/include_search"
+        layout="@layout/layout_tag_search"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/layout_tag_search_height"
+        android:elevation="2dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/include" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

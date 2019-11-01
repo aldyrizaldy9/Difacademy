@@ -109,7 +109,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:text="*kata sandi boleh tidak diisi apabila tidak ingin mengganti kata sandi"
+        android:text="*Kata sandi boleh tidak diisi apabila tidak ingin mengganti kata sandi"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/textInputLayout22"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout22" />

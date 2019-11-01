@@ -6,13 +6,258 @@
     android:layout_height="match_parent"
     tools:context=".Activity.MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_main_settings"
+        android:layout_width="@dimen/icon_btn_width"
+        android:layout_height="@dimen/icon_btn_height"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/btn_login"
+        android:backgroundTint="@android:color/white"
+        android:elevation="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/iv_main_settings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_settings" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_main_ongoing_class"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:layout_constraintEnd_toEndOf="@+id/tv_main_diikuti_semua"
+                app:layout_constraintStart_toStartOf="@+id/tv_main_kelas_diikuti"
+                app:layout_constraintTop_toBottomOf="@+id/tv_main_kelas_diikuti">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cl_main_ongoing_container"
+                    android:layout_width="0dp"
+                    android:layout_height="100dp"
+                    android:layout_marginStart="16dp"
+                    android:background="@drawable/rounded_corner_card_border"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="@+id/iv_main_ongoing_thumbnail"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <ImageView
+                    android:id="@+id/iv_main_ongoing_thumbnail"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/cl_main_ongoing_container"
+                    app:layout_constraintDimensionRatio="16:9"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/cl_main_ongoing_container"
+                    app:srcCompat="@color/colorAccent" />
+
+                <TextView
+                    android:id="@+id/tv_main_ongoing_judul"
+                    style="@style/Difacademy.Headline6"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:maxLines="2"
+                    android:text="Judul"
+                    app:layout_constraintEnd_toEndOf="@+id/cl_main_ongoing_container"
+                    app:layout_constraintStart_toEndOf="@+id/iv_main_ongoing_thumbnail"
+                    app:layout_constraintTop_toTopOf="@+id/iv_main_ongoing_thumbnail" />
+
+                <TextView
+                    android:id="@+id/tv_main_ongoing_tag"
+                    style="@style/Difacademy.Subtitle1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Tag"
+                    app:layout_constraintEnd_toEndOf="@+id/tv_main_ongoing_judul"
+                    app:layout_constraintStart_toStartOf="@+id/tv_main_ongoing_judul"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_main_ongoing_judul" />
+
+                <TextView
+                    android:id="@+id/tv_main_ongoing_status"
+                    style="@style/Difacademy.Subtitle1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="4/8"
+                    app:layout_constraintBottom_toBottomOf="@+id/cl_main_ongoing_container"
+                    app:layout_constraintEnd_toEndOf="@+id/cl_main_ongoing_container" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <ImageView
+                android:id="@+id/iv_main_banner"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:scaleType="centerCrop"
+                app:layout_constraintDimensionRatio="16:9"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:srcCompat="@tools:sample/backgrounds/scenic" />
+
+            <TextView
+                android:id="@+id/tv_main_kelas_diikuti"
+                style="@style/Difacademy.Headline6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:text="Kelas sedang diikuti"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/iv_main_banner" />
+
+            <TextView
+                android:id="@+id/tv_main_diikuti_semua"
+                style="@style/Difacademy.Headline6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:text="Semua"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/tv_main_kelas_diikuti" />
+
+            <TextView
+                android:id="@+id/tv_main_pilihan_kelas"
+                style="@style/Difacademy.Headline6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Pilihan kelas"
+                app:layout_constraintStart_toStartOf="@+id/cl_main_ongoing_class"
+                app:layout_constraintTop_toBottomOf="@+id/cl_main_ongoing_class" />
+
+            <ImageView
+                android:id="@+id/iv_main_kelas_gratis"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:scaleType="centerCrop"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintEnd_toStartOf="@+id/iv_main_kelas_online"
+                app:layout_constraintHorizontal_chainStyle="spread_inside"
+                app:layout_constraintStart_toStartOf="@+id/tv_main_pilihan_kelas"
+                app:layout_constraintTop_toBottomOf="@+id/tv_main_pilihan_kelas"
+                tools:srcCompat="@tools:sample/avatars" />
+
+            <ImageView
+                android:id="@+id/iv_main_kelas_online"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginEnd="16dp"
+                android:scaleType="centerCrop"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintEnd_toStartOf="@+id/iv_main_kelas_campuran"
+                app:layout_constraintStart_toEndOf="@+id/iv_main_kelas_gratis"
+                app:layout_constraintTop_toTopOf="@+id/iv_main_kelas_gratis"
+                tools:srcCompat="@tools:sample/avatars" />
+
+            <ImageView
+                android:id="@+id/iv_main_kelas_campuran"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginEnd="16dp"
+                android:scaleType="centerCrop"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/iv_main_kelas_online"
+                app:layout_constraintTop_toTopOf="@+id/iv_main_kelas_online"
+                tools:srcCompat="@tools:sample/avatars" />
+
+            <TextView
+                android:id="@+id/tv_main_kelas_gratis"
+                style="@style/Difacademy.Subtitle2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:text="Kelas\nGratis"
+                android:textAlignment="center"
+                app:layout_constraintBottom_toBottomOf="@+id/iv_main_kelas_gratis"
+                app:layout_constraintEnd_toEndOf="@+id/iv_main_kelas_gratis"
+                app:layout_constraintStart_toStartOf="@+id/iv_main_kelas_gratis" />
+
+            <TextView
+                android:id="@+id/tv_main_kelas_online"
+                style="@style/Difacademy.Subtitle2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:text="Kelas\nOnline"
+                android:textAlignment="center"
+                app:layout_constraintBottom_toBottomOf="@+id/iv_main_kelas_online"
+                app:layout_constraintEnd_toEndOf="@+id/iv_main_kelas_online"
+                app:layout_constraintStart_toStartOf="@+id/iv_main_kelas_online" />
+
+            <TextView
+                android:id="@+id/tv_main_kelas_campuran"
+                style="@style/Difacademy.Subtitle2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:text="Kelas\nCampuran"
+                android:textAlignment="center"
+                app:layout_constraintBottom_toBottomOf="@+id/iv_main_kelas_campuran"
+                app:layout_constraintEnd_toEndOf="@+id/iv_main_kelas_campuran"
+                app:layout_constraintStart_toStartOf="@+id/iv_main_kelas_campuran" />
+
+            <TextView
+                android:id="@+id/tv_main_berita"
+                style="@style/Difacademy.Headline6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Berita terbaru"
+                app:layout_constraintStart_toStartOf="@+id/iv_main_kelas_gratis"
+                app:layout_constraintTop_toBottomOf="@+id/iv_main_kelas_gratis" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_main_berita"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="@+id/iv_main_kelas_campuran"
+                app:layout_constraintStart_toStartOf="@+id/tv_main_berita"
+                app:layout_constraintTop_toBottomOf="@+id/tv_main_berita"
+                tools:listitem="@layout/card_news" />
+
+            <Button
+                android:id="@+id/btn_main_berita_lainnya"
+                style="@style/Difacademy.Button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:text="lainnya"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="@id/rv_main_berita"
+                app:layout_constraintRight_toRightOf="@id/rv_main_berita"
+                app:layout_constraintTop_toBottomOf="@id/rv_main_berita" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

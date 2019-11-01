@@ -8,9 +8,11 @@
     <dimen name="icon_width">24dp</dimen>
     <dimen name="icon_height">24dp</dimen>
 
-    <dimen name="icon_btn_width">40dp</dimen>
-    <dimen name="icon_btn_height">40dp</dimen>
+    <dimen name="icon_btn_width">48dp</dimen>
+    <dimen name="icon_btn_height">48dp</dimen>
 
     <dimen name="thumbnail_op_width">90dp</dimen>
     <dimen name="thumbnail_op_height">60dp</dimen>
+
+    <dimen name="layout_tag_search_height">100dp</dimen>
 </resources>
