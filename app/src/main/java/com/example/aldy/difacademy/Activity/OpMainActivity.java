@@ -9,7 +9,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.aldy.difacademy.R;
@@ -25,32 +27,80 @@ public class OpMainActivity extends AppCompatActivity {
     boolean doubleBackToExitPressedOnce = false;
     ConstraintLayout clLogout;
     ImageView imgLogout;
+    Button btnFree, btnOnline, btnBlended, btnBerita, btnTags;
+    TextView tvNavbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_op_main);
 
+        findView();
+        onClick();
+    }
+
+    private void findView(){
         clLogout = findViewById(R.id.cl_icon3);
         imgLogout = findViewById(R.id.img_icon3);
         imgLogout.setImageResource(R.drawable.ic_power_settings_new);
+        btnFree = findViewById(R.id.btn_freecourse);
+        btnOnline = findViewById(R.id.btn_onlinecourse);
+        btnBlended = findViewById(R.id.btn_blendedcourse);
+        btnBerita = findViewById(R.id.btn_news);
+        btnTags = findViewById(R.id.btn_tags);
+        tvNavbar = findViewById(R.id.tv_navbar);
 
+        tvNavbar.setText("Welcome, Admin");
+    }
+
+    private void onClick(){
         clLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d(TAG, "onClick: berjalan");
-                SharedPreferences sharedPreferences = getSharedPreferences(SHARE_PREFS, MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString(USERID_PREFS, "");
-                editor.putString(JENIS_USER_PREFS, "");
-                editor.apply();
-
-                FirebaseAuth.getInstance().signOut();
-                Intent intent = new Intent(OpMainActivity.this, LoginActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                logout();
+            }
+        });
+        btnFree.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(OpMainActivity.this, OpFreeCourseActivity.class);
                 startActivity(intent);
             }
         });
+        btnBlended.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(OpMainActivity.this, OpBlendedCourseActivity.class);
+                startActivity(intent);
+            }
+        });
+        btnBerita.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(OpMainActivity.this, OpNewsActivity.class);
+                startActivity(intent);
+            }
+        });
+        btnTags.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(OpMainActivity.this, OpTagsActivity.class);
+                startActivity(intent);
+            }
+        });
+    }
+
+    private void logout(){
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARE_PREFS, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(USERID_PREFS, "");
+        editor.putString(JENIS_USER_PREFS, "");
+        editor.apply();
+
+        FirebaseAuth.getInstance().signOut();
+        Intent intent = new Intent(OpMainActivity.this, LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
     }
 
     @Override

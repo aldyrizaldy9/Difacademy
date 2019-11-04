@@ -91,7 +91,8 @@
                 app:layout_constraintBottom_toTopOf="@+id/img_login_tombol_masuk"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/til_login_email">
+                app:layout_constraintTop_toBottomOf="@id/til_login_email"
+                app:passwordToggleEnabled="true">
 
                 <EditText
                     android:id="@+id/edt_login_kata_sandi"
