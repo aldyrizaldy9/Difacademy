@@ -6,189 +6,208 @@
     android:layout_height="match_parent"
     tools:context=".Activity.RegisterActivity">
 
-    <ImageView
-        android:id="@+id/img_register_wave_2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:scaleType="fitStart"
-        android:src="@drawable/register_wave_2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/img_register_wave_1" />
 
-    <ImageView
-        android:id="@+id/img_register_wave_3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:scaleType="fitStart"
-        android:src="@drawable/register_wave_3"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/img_register_wave_2" />
-
-    <ImageView
-        android:id="@+id/img_register_wave_1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:scaleType="fitStart"
-        android:src="@drawable/register_wave_1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/tv_register_buat_akun"
-        style="@style/Difacademy.Headline3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="36dp"
-        android:layout_marginTop="80dp"
-        android:text="Buat\nAkun"
-        android:textColor="@android:color/black"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/til_register_nama"
+    <ScrollView
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:paddingLeft="36dp"
-        android:paddingRight="36dp"
-        app:layout_constraintBottom_toTopOf="@+id/til_register_email"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_register_buat_akun"
-        app:layout_constraintVertical_chainStyle="packed">
-
-        <EditText
-            android:id="@+id/edt_register_nama"
-            style="@style/Difacademy.Body1"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:hint="Nama"
-            android:inputType="textPersonName" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/til_register_email"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:paddingLeft="36dp"
-        android:paddingRight="32dp"
-        app:layout_constraintBottom_toTopOf="@+id/til_register_wa"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/til_register_nama">
-
-        <EditText
-            android:id="@+id/edt_register_email"
-            style="@style/Difacademy.Body1"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:hint="Email"
-            android:inputType="textEmailAddress" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/til_register_wa"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:paddingLeft="36dp"
-        android:paddingRight="32dp"
-        app:layout_constraintBottom_toTopOf="@+id/til_register_kata_sandi"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/til_register_email">
-
-        <EditText
-            android:id="@+id/edt_register_wa"
-            style="@style/Difacademy.Body1"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:hint="Nomor Whatsapp"
-            android:inputType="phone" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/til_register_kata_sandi"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:paddingLeft="36dp"
-        android:paddingRight="32dp"
-        app:layout_constraintBottom_toTopOf="@+id/til_register_konf_kata_sandi"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/til_register_wa">
-
-        <EditText
-            android:id="@+id/edt_register_kata_sandi"
-            style="@style/Difacademy.Body1"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:hint="Kata sandi"
-            android:inputType="textPassword" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/til_register_konf_kata_sandi"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:paddingLeft="36dp"
-        android:paddingRight="32dp"
-        app:layout_constraintBottom_toTopOf="@+id/img_register_tombol_daftar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/til_register_kata_sandi">
-
-        <EditText
-            android:id="@+id/edt_register_konf_kata_sandi"
-            style="@style/Difacademy.Body1"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:hint="Konfirmasi kata sandi"
-            android:inputType="textPassword" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <TextView
-        android:id="@+id/tv_register_masuk"
-        style="@style/Difacademy.Headline6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="36dp"
-        android:layout_marginBottom="36dp"
-        android:text="Masuk"
+        android:layout_height="0dp"
+        android:fillViewport="true"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/tv_register_daftar"
-        style="@style/Difacademy.Headline4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="36dp"
-        android:layout_marginBottom="100dp"
-        android:text="Daftar"
-        app:layout_constraintBottom_toTopOf="@+id/tv_register_masuk"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <ImageView
-        android:id="@+id/img_register_tombol_daftar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="36dp"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_register_daftar"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tv_register_daftar"
-        app:srcCompat="@drawable/btn_login" />
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-    <ImageView
-        android:id="@+id/img_register_panah_daftar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/img_register_tombol_daftar"
-        app:layout_constraintEnd_toEndOf="@+id/img_register_tombol_daftar"
-        app:layout_constraintStart_toStartOf="@+id/img_register_tombol_daftar"
-        app:layout_constraintTop_toTopOf="@+id/img_register_tombol_daftar"
-        app:srcCompat="@drawable/ic_arrow_forward" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <!--    <ImageView-->
+            <!--        android:id="@+id/img_register_wave_2"-->
+            <!--        android:layout_width="wrap_content"-->
+            <!--        android:layout_height="wrap_content"-->
+            <!--        android:scaleType="fitStart"-->
+            <!--        android:src="@drawable/register_wave_2"-->
+            <!--        app:layout_constraintEnd_toEndOf="parent"-->
+            <!--        app:layout_constraintStart_toStartOf="parent"-->
+            <!--        app:layout_constraintTop_toTopOf="@+id/img_register_wave_1" />-->
+
+            <!--    <ImageView-->
+            <!--        android:id="@+id/img_register_wave_3"-->
+            <!--        android:layout_width="wrap_content"-->
+            <!--        android:layout_height="wrap_content"-->
+            <!--        android:scaleType="fitStart"-->
+            <!--        android:src="@drawable/register_wave_3"-->
+            <!--        app:layout_constraintEnd_toEndOf="parent"-->
+            <!--        app:layout_constraintStart_toStartOf="parent"-->
+            <!--        app:layout_constraintTop_toTopOf="@+id/img_register_wave_2" />-->
+
+            <!--    <ImageView-->
+            <!--        android:id="@+id/img_register_wave_1"-->
+            <!--        android:layout_width="wrap_content"-->
+            <!--        android:layout_height="wrap_content"-->
+            <!--        android:scaleType="fitStart"-->
+            <!--        android:src="@drawable/register_wave_1"-->
+            <!--        app:layout_constraintEnd_toEndOf="parent"-->
+            <!--        app:layout_constraintStart_toStartOf="parent"-->
+            <!--        app:layout_constraintTop_toTopOf="parent" />-->
+
+            <TextView
+                android:id="@+id/tv_register_buat_akun"
+                style="@style/Difacademy.Headline3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="36dp"
+                android:layout_marginTop="48dp"
+                android:text="Buat\nAkun"
+                android:textColor="@android:color/black"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_register_nama"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:paddingLeft="36dp"
+                android:paddingRight="36dp"
+                app:layout_constraintBottom_toTopOf="@+id/til_register_email"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_register_buat_akun"
+                app:layout_constraintVertical_chainStyle="packed">
+
+                <EditText
+                    android:id="@+id/edt_register_nama"
+                    style="@style/Difacademy.Body1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Nama"
+                    android:inputType="textPersonName" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_register_email"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:paddingLeft="36dp"
+                android:paddingRight="32dp"
+                app:layout_constraintBottom_toTopOf="@+id/til_register_wa"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/til_register_nama">
+
+                <EditText
+                    android:id="@+id/edt_register_email"
+                    style="@style/Difacademy.Body1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Email"
+                    android:inputType="textEmailAddress" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_register_wa"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:paddingLeft="36dp"
+                android:paddingRight="32dp"
+                app:layout_constraintBottom_toTopOf="@+id/til_register_kata_sandi"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/til_register_email">
+
+                <EditText
+                    android:id="@+id/edt_register_wa"
+                    style="@style/Difacademy.Body1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Nomor Whatsapp"
+                    android:inputType="phone" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_register_kata_sandi"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:paddingLeft="36dp"
+                android:paddingRight="32dp"
+                app:layout_constraintBottom_toTopOf="@+id/til_register_konf_kata_sandi"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/til_register_wa"
+                app:passwordToggleEnabled="true">
+
+                <EditText
+                    android:id="@+id/edt_register_kata_sandi"
+                    style="@style/Difacademy.Body1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Kata sandi"
+                    android:inputType="textPassword" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_register_konf_kata_sandi"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:paddingLeft="36dp"
+                android:paddingRight="32dp"
+                app:layout_constraintBottom_toTopOf="@+id/img_register_tombol_daftar"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/til_register_kata_sandi"
+                app:passwordToggleEnabled="true">
+
+                <EditText
+                    android:id="@+id/edt_register_konf_kata_sandi"
+                    style="@style/Difacademy.Body1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Konfirmasi kata sandi"
+                    android:inputType="textPassword" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/tv_register_masuk"
+                style="@style/Difacademy.Headline6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="36dp"
+                android:layout_marginBottom="24dp"
+                android:text="Masuk"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_register_daftar"
+                style="@style/Difacademy.Headline4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="36dp"
+                android:layout_marginBottom="32dp"
+                android:text="Daftar"
+                app:layout_constraintBottom_toTopOf="@+id/tv_register_masuk"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <ImageView
+                android:id="@+id/img_register_tombol_daftar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="36dp"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_register_daftar"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/tv_register_daftar"
+                app:srcCompat="@drawable/btn_login" />
+
+            <ImageView
+                android:id="@+id/img_register_panah_daftar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="@+id/img_register_tombol_daftar"
+                app:layout_constraintEnd_toEndOf="@+id/img_register_tombol_daftar"
+                app:layout_constraintStart_toStartOf="@+id/img_register_tombol_daftar"
+                app:layout_constraintTop_toTopOf="@+id/img_register_tombol_daftar"
+                app:srcCompat="@drawable/ic_arrow_forward" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -37,7 +37,7 @@
         <activity android:name=".Activity.FreeCourseActivity" />
         <activity android:name=".Activity.OngoingCourseActivity" />
         <activity android:name=".Activity.ForgetPasswordActivity" />
-        <activity android:name=".Activity.RegisterActivity" />
+        <activity android:name=".Activity.RegisterActivity"/>
         <activity android:name=".Activity.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
