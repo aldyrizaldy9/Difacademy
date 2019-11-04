@@ -8,9 +8,10 @@
     android:orientation="vertical">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout4"
-        android:layout_width="@dimen/icon_btn_width"
-        android:layout_height="@dimen/icon_btn_height"
+        android:id="@+id/cl_c_op_edit"
+        android:layout_width="43dp"
+        android:layout_height="40dp"
+        android:background="?android:attr/selectableItemBackground"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -37,7 +38,7 @@
         android:maxLines="2"
         android:text="Judul Video/Berita"
         app:layout_constraintBottom_toTopOf="@+id/tv_c_op_tag"
-        app:layout_constraintEnd_toStartOf="@+id/constraintLayout6"
+        app:layout_constraintEnd_toStartOf="@+id/cl_c_op_delete"
         app:layout_constraintHorizontal_chainStyle="spread"
         app:layout_constraintStart_toEndOf="@+id/img_c_op_thumbnail"
         app:layout_constraintTop_toTopOf="parent"
@@ -77,13 +78,14 @@
         tools:srcCompat="@color/colorPrimary" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout6"
+        android:id="@+id/cl_c_op_delete"
         android:layout_width="@dimen/icon_btn_width"
         android:layout_height="@dimen/icon_btn_height"
         android:layout_marginEnd="8dp"
-        app:layout_constraintBottom_toBottomOf="@+id/constraintLayout4"
-        app:layout_constraintEnd_toStartOf="@+id/constraintLayout4"
-        app:layout_constraintTop_toTopOf="@+id/constraintLayout4">
+        android:background="?android:attr/selectableItemBackground"
+        app:layout_constraintBottom_toBottomOf="@+id/cl_c_op_edit"
+        app:layout_constraintEnd_toStartOf="@+id/cl_c_op_edit"
+        app:layout_constraintTop_toTopOf="@+id/cl_c_op_edit">
 
         <ImageView
             android:id="@+id/img_c_op_delete"
