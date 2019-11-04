@@ -18,20 +18,39 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <ImageView
+            android:id="@+id/img_icon1"
+            android:layout_width="@dimen/icon_width"
+            android:layout_height="@dimen/icon_height"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:srcCompat="@tools:sample/avatars" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <ImageView
-        android:id="@+id/img_icon1"
-        android:layout_width="@dimen/icon_width"
-        android:layout_height="@dimen/icon_height"
-        app:layout_constraintBottom_toBottomOf="@+id/cl_icon1"
-        app:layout_constraintEnd_toEndOf="@+id/cl_icon1"
-        app:layout_constraintStart_toStartOf="@+id/cl_icon1"
-        app:layout_constraintTop_toTopOf="@+id/cl_icon1"
-        tools:srcCompat="@tools:sample/avatars" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_icon2"
+        android:layout_width="@dimen/icon_btn_width"
+        android:layout_height="@dimen/icon_btn_height"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/cl_icon3"
+        app:layout_constraintEnd_toStartOf="@+id/cl_icon3"
+        app:layout_constraintTop_toTopOf="@+id/cl_icon3">
+
+        <ImageView
+            android:id="@+id/img_icon2"
+            android:layout_width="@dimen/icon_width"
+            android:layout_height="@dimen/icon_height"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:srcCompat="@tools:sample/avatars" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_icon3"
         android:layout_width="@dimen/icon_btn_width"
         android:layout_height="@dimen/icon_btn_height"
         android:layout_marginEnd="8dp"
@@ -39,38 +58,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <ImageView
+            android:id="@+id/img_icon3"
+            android:layout_width="@dimen/icon_width"
+            android:layout_height="@dimen/icon_height"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:srcCompat="@tools:sample/avatars" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <ImageView
-        android:id="@+id/img_icon2"
-        android:layout_width="@dimen/icon_width"
-        android:layout_height="@dimen/icon_height"
-        app:layout_constraintBottom_toBottomOf="@+id/cl_icon3"
-        app:layout_constraintEnd_toEndOf="@+id/cl_icon3"
-        app:layout_constraintStart_toStartOf="@+id/cl_icon3"
-        app:layout_constraintTop_toTopOf="@+id/cl_icon3"
-        tools:srcCompat="@tools:sample/avatars" />
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cl_icon3"
-        android:layout_width="@dimen/icon_btn_width"
-        android:layout_height="@dimen/icon_btn_height"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintBottom_toBottomOf="@+id/cl_icon2"
-        app:layout_constraintEnd_toStartOf="@+id/cl_icon2"
-        app:layout_constraintTop_toTopOf="@+id/cl_icon2">
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <ImageView
-        android:id="@+id/img_icon3"
-        android:layout_width="@dimen/icon_width"
-        android:layout_height="@dimen/icon_height"
-        app:layout_constraintBottom_toBottomOf="@+id/cl_icon2"
-        app:layout_constraintEnd_toEndOf="@+id/cl_icon2"
-        app:layout_constraintStart_toStartOf="@+id/cl_icon2"
-        app:layout_constraintTop_toTopOf="@+id/cl_icon2"
-        tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
         android:id="@+id/tv_navbar"
