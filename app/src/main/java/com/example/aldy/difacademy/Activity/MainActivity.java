@@ -16,7 +16,7 @@ import com.example.aldy.difacademy.R;
 public class MainActivity extends AppCompatActivity {
 
     ConstraintLayout clSettings, clOngoing;
-    ImageView ivKelasGratis, ivKelasOnline, ivKelasCampuran;
+    ImageView imgKelasGratis, ivKelasOnline, ivKelasCampuran;
     Button btnBeritaLainnya;
     TextView tvDiikutiSemua;
 
@@ -31,9 +31,9 @@ public class MainActivity extends AppCompatActivity {
     private void findView() {
         clSettings = findViewById(R.id.cl_main_settings);
         clOngoing = findViewById(R.id.cl_main_ongoing_container);
-        ivKelasGratis = findViewById(R.id.iv_main_kelas_gratis);
-        ivKelasOnline = findViewById(R.id.iv_main_kelas_online);
-        ivKelasCampuran = findViewById(R.id.iv_main_kelas_campuran);
+        imgKelasGratis = findViewById(R.id.img_main_kelas_gratis);
+        ivKelasOnline = findViewById(R.id.img_main_kelas_online);
+        ivKelasCampuran = findViewById(R.id.img_main_kelas_campuran);
         btnBeritaLainnya = findViewById(R.id.btn_main_berita_lainnya);
         tvDiikutiSemua = findViewById(R.id.tv_main_diikuti_semua);
     }
@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        ivKelasGratis.setOnClickListener(new View.OnClickListener() {
+        imgKelasGratis.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, FreeCourseActivity.class);

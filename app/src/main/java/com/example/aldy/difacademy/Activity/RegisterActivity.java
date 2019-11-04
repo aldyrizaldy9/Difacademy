@@ -7,15 +7,24 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.aldy.difacademy.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class RegisterActivity extends AppCompatActivity {
 
     private EditText edtNama, edtEmail, edtWa, edtSandi, edtKonfSandi;
-    private ImageView ivDaftar;
+    private ImageView imgDaftar;
     private TextView tvMasuk;
+
+    FirebaseAuth auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,12 +40,12 @@ public class RegisterActivity extends AppCompatActivity {
         edtWa = findViewById(R.id.edt_register_wa);
         edtSandi = findViewById(R.id.edt_register_kata_sandi);
         edtKonfSandi = findViewById(R.id.edt_register_konf_kata_sandi);
-        ivDaftar = findViewById(R.id.iv_register_tombol_daftar);
+        imgDaftar = findViewById(R.id.img_register_tombol_daftar);
         tvMasuk = findViewById(R.id.tv_register_masuk);
     }
 
     private void onClick() {
-        ivDaftar.setOnClickListener(new View.OnClickListener() {
+        imgDaftar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
@@ -50,5 +59,21 @@ public class RegisterActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    private void register(String nama, String email, String wa, String sandi){
+        auth.createUserWithEmailAndPassword(email, sandi)
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()){
+                            FirebaseUser firebaseUser = auth.getCurrentUser();
+                            assert firebaseUser == null;
+
+                            String userId = firebaseUser.getUid();
+
+                        }
+                    }
+                });
     }
 }

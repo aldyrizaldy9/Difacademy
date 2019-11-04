@@ -55,13 +55,13 @@ public class FreeCourseAdapter extends RecyclerView.Adapter<FreeCourseAdapter.Vi
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        private ImageView ivThumbnail;
+        private ImageView imgThumbnail;
         private TextView tvJudul, tvTag;
         private ConstraintLayout clContainer;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            ivThumbnail = itemView.findViewById(R.id.iv_card_video_thumbnail);
+            imgThumbnail = itemView.findViewById(R.id.img_card_video_thumbnail);
             tvJudul = itemView.findViewById(R.id.tv_card_video_thumbnail_judul);
             tvTag = itemView.findViewById(R.id.tv_card_video_thumbnail_tag);
             clContainer = itemView.findViewById(R.id.cl_card_video_thumbnail_container);

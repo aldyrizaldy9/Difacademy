@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "540075910731",
+    "firebase_url": "https://trydifacademy.firebaseio.com",
+    "project_id": "trydifacademy",
+    "storage_bucket": "trydifacademy.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:540075910731:android:1bb61e3e5c34d4bc350fce",
+        "android_client_info": {
+          "package_name": "com.example.aldy.difacademy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "540075910731-958sj1f4rq0td7k2jusjsqgph3aa40a1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.aldy.difacademy",
+            "certificate_hash": "a8bfc029b651af285770885d6646cb1d1006db52"
+          }
+        },
+        {
+          "client_id": "540075910731-1ppllf3idd8jrf67rblle3a3s00io0an.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDcgeqFtMROmVKaFZXQcWpO0LzUOCWtnuQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "540075910731-1ppllf3idd8jrf67rblle3a3s00io0an.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

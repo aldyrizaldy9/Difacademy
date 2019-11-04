@@ -19,7 +19,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/iv_main_settings"
+            android:id="@+id/img_main_settings"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -58,13 +58,13 @@
                     android:background="@drawable/rounded_corner_card_border"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="@+id/iv_main_ongoing_thumbnail"
+                    app:layout_constraintStart_toStartOf="@+id/img_main_ongoing_thumbnail"
                     app:layout_constraintTop_toTopOf="parent">
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <ImageView
-                    android:id="@+id/iv_main_ongoing_thumbnail"
+                    android:id="@+id/img_main_ongoing_thumbnail"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:layout_marginTop="16dp"
@@ -85,8 +85,8 @@
                     android:maxLines="2"
                     android:text="Judul"
                     app:layout_constraintEnd_toEndOf="@+id/cl_main_ongoing_container"
-                    app:layout_constraintStart_toEndOf="@+id/iv_main_ongoing_thumbnail"
-                    app:layout_constraintTop_toTopOf="@+id/iv_main_ongoing_thumbnail" />
+                    app:layout_constraintStart_toEndOf="@+id/img_main_ongoing_thumbnail"
+                    app:layout_constraintTop_toTopOf="@+id/img_main_ongoing_thumbnail" />
 
                 <TextView
                     android:id="@+id/tv_main_ongoing_tag"
@@ -111,7 +111,7 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <ImageView
-                android:id="@+id/iv_main_banner"
+                android:id="@+id/img_main_banner"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:scaleType="centerCrop"
@@ -130,7 +130,7 @@
                 android:layout_marginTop="16dp"
                 android:text="Kelas sedang diikuti"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/iv_main_banner" />
+                app:layout_constraintTop_toBottomOf="@+id/img_main_banner" />
 
             <TextView
                 android:id="@+id/tv_main_diikuti_semua"
@@ -153,41 +153,41 @@
                 app:layout_constraintTop_toBottomOf="@+id/cl_main_ongoing_class" />
 
             <ImageView
-                android:id="@+id/iv_main_kelas_gratis"
+                android:id="@+id/img_main_kelas_gratis"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
                 android:scaleType="centerCrop"
                 app:layout_constraintDimensionRatio="1:1"
-                app:layout_constraintEnd_toStartOf="@+id/iv_main_kelas_online"
+                app:layout_constraintEnd_toStartOf="@+id/img_main_kelas_online"
                 app:layout_constraintHorizontal_chainStyle="spread_inside"
                 app:layout_constraintStart_toStartOf="@+id/tv_main_pilihan_kelas"
                 app:layout_constraintTop_toBottomOf="@+id/tv_main_pilihan_kelas"
                 tools:srcCompat="@tools:sample/avatars" />
 
             <ImageView
-                android:id="@+id/iv_main_kelas_online"
+                android:id="@+id/img_main_kelas_online"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginEnd="16dp"
                 android:scaleType="centerCrop"
                 app:layout_constraintDimensionRatio="1:1"
-                app:layout_constraintEnd_toStartOf="@+id/iv_main_kelas_campuran"
-                app:layout_constraintStart_toEndOf="@+id/iv_main_kelas_gratis"
-                app:layout_constraintTop_toTopOf="@+id/iv_main_kelas_gratis"
+                app:layout_constraintEnd_toStartOf="@+id/img_main_kelas_campuran"
+                app:layout_constraintStart_toEndOf="@+id/img_main_kelas_gratis"
+                app:layout_constraintTop_toTopOf="@+id/img_main_kelas_gratis"
                 tools:srcCompat="@tools:sample/avatars" />
 
             <ImageView
-                android:id="@+id/iv_main_kelas_campuran"
+                android:id="@+id/img_main_kelas_campuran"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginEnd="16dp"
                 android:scaleType="centerCrop"
                 app:layout_constraintDimensionRatio="1:1"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/iv_main_kelas_online"
-                app:layout_constraintTop_toTopOf="@+id/iv_main_kelas_online"
+                app:layout_constraintStart_toEndOf="@+id/img_main_kelas_online"
+                app:layout_constraintTop_toTopOf="@+id/img_main_kelas_online"
                 tools:srcCompat="@tools:sample/avatars" />
 
             <TextView
@@ -198,9 +198,9 @@
                 android:layout_marginBottom="8dp"
                 android:text="Kelas\nGratis"
                 android:textAlignment="center"
-                app:layout_constraintBottom_toBottomOf="@+id/iv_main_kelas_gratis"
-                app:layout_constraintEnd_toEndOf="@+id/iv_main_kelas_gratis"
-                app:layout_constraintStart_toStartOf="@+id/iv_main_kelas_gratis" />
+                app:layout_constraintBottom_toBottomOf="@+id/img_main_kelas_gratis"
+                app:layout_constraintEnd_toEndOf="@+id/img_main_kelas_gratis"
+                app:layout_constraintStart_toStartOf="@+id/img_main_kelas_gratis" />
 
             <TextView
                 android:id="@+id/tv_main_kelas_online"
@@ -210,9 +210,9 @@
                 android:layout_marginBottom="8dp"
                 android:text="Kelas\nOnline"
                 android:textAlignment="center"
-                app:layout_constraintBottom_toBottomOf="@+id/iv_main_kelas_online"
-                app:layout_constraintEnd_toEndOf="@+id/iv_main_kelas_online"
-                app:layout_constraintStart_toStartOf="@+id/iv_main_kelas_online" />
+                app:layout_constraintBottom_toBottomOf="@+id/img_main_kelas_online"
+                app:layout_constraintEnd_toEndOf="@+id/img_main_kelas_online"
+                app:layout_constraintStart_toStartOf="@+id/img_main_kelas_online" />
 
             <TextView
                 android:id="@+id/tv_main_kelas_campuran"
@@ -222,9 +222,9 @@
                 android:layout_marginBottom="8dp"
                 android:text="Kelas\nCampuran"
                 android:textAlignment="center"
-                app:layout_constraintBottom_toBottomOf="@+id/iv_main_kelas_campuran"
-                app:layout_constraintEnd_toEndOf="@+id/iv_main_kelas_campuran"
-                app:layout_constraintStart_toStartOf="@+id/iv_main_kelas_campuran" />
+                app:layout_constraintBottom_toBottomOf="@+id/img_main_kelas_campuran"
+                app:layout_constraintEnd_toEndOf="@+id/img_main_kelas_campuran"
+                app:layout_constraintStart_toStartOf="@+id/img_main_kelas_campuran" />
 
             <TextView
                 android:id="@+id/tv_main_berita"
@@ -233,14 +233,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="Berita terbaru"
-                app:layout_constraintStart_toStartOf="@+id/iv_main_kelas_gratis"
-                app:layout_constraintTop_toBottomOf="@+id/iv_main_kelas_gratis" />
+                app:layout_constraintStart_toStartOf="@+id/img_main_kelas_gratis"
+                app:layout_constraintTop_toBottomOf="@+id/img_main_kelas_gratis" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_main_berita"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="@+id/iv_main_kelas_campuran"
+                app:layout_constraintEnd_toEndOf="@+id/img_main_kelas_campuran"
                 app:layout_constraintStart_toStartOf="@+id/tv_main_berita"
                 app:layout_constraintTop_toBottomOf="@+id/tv_main_berita"
                 tools:listitem="@layout/card_news" />

@@ -40,7 +40,7 @@
             android:layout_height="match_parent">
 
             <ImageView
-                android:id="@+id/iv_detail_course_thumbnail"
+                android:id="@+id/img_detail_course_thumbnail"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:scaleType="centerCrop"
@@ -61,7 +61,7 @@
                 android:text="Judul"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/iv_detail_course_thumbnail" />
+                app:layout_constraintTop_toBottomOf="@+id/img_detail_course_thumbnail" />
 
             <TextView
                 android:id="@+id/tv_detail_course_tag"

@@ -54,13 +54,13 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        private ImageView ivThumbnail;
+        private ImageView imgThumbnail;
         private TextView tvJudul;
         private ConstraintLayout clContainer;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            ivThumbnail = itemView.findViewById(R.id.img_c_berita_thumbnail);
+            imgThumbnail = itemView.findViewById(R.id.img_c_berita_thumbnail);
             tvJudul = itemView.findViewById(R.id.tv_c_berita_judul);
             clContainer = itemView.findViewById(R.id.cl_card_news_container);
         }

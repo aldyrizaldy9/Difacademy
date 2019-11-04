@@ -61,7 +61,7 @@ public class OpOperatorAdapter extends RecyclerView.Adapter<OpOperatorAdapter.Vi
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView tvJudul, tvTag, tvDeskripsi;
-        private ImageView ivThumbnail;
+        private ImageView imgThumbnail;
         private ConstraintLayout clEdit, clHapus;
 
         public ViewHolder(@NonNull View itemView) {
@@ -69,7 +69,7 @@ public class OpOperatorAdapter extends RecyclerView.Adapter<OpOperatorAdapter.Vi
             tvJudul = itemView.findViewById(R.id.tv_c_op_judul);
             tvTag = itemView.findViewById(R.id.tv_c_op_tag);
             tvDeskripsi = itemView.findViewById(R.id.tv_c_op_deskripsi);
-            ivThumbnail = itemView.findViewById(R.id.img_c_op_thumbnail);
+            imgThumbnail = itemView.findViewById(R.id.img_c_op_thumbnail);
             clEdit = itemView.findViewById(R.id.cl_c_op_edit);
             clHapus = itemView.findViewById(R.id.cl_c_op_delete);
         }

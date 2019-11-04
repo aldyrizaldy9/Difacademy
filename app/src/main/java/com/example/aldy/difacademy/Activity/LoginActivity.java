@@ -13,7 +13,7 @@ import com.example.aldy.difacademy.R;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private ImageView ivLogin;
+    private ImageView imgLogin;
     private TextView tvDaftar, tvLupaKataSandi;
     private EditText edtEmail, edtKataSandi;
 
@@ -26,7 +26,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void findView() {
-        ivLogin = findViewById(R.id.iv_login_tombol_masuk);
+        imgLogin = findViewById(R.id.img_login_tombol_masuk);
         tvDaftar = findViewById(R.id.tv_login_daftar);
         tvLupaKataSandi = findViewById(R.id.tv_login_lupa_sandi);
         edtEmail = findViewById(R.id.edt_login_email);
@@ -34,7 +34,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void onClick() {
-        ivLogin.setOnClickListener(new View.OnClickListener() {
+        imgLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);

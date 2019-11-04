@@ -7,27 +7,27 @@
     tools:context=".Activity.RegisterActivity">
 
     <ImageView
-        android:id="@+id/iv_register_wave_2"
+        android:id="@+id/img_register_wave_2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:scaleType="fitStart"
         android:src="@drawable/register_wave_2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/iv_register_wave_1" />
+        app:layout_constraintTop_toTopOf="@+id/img_register_wave_1" />
 
     <ImageView
-        android:id="@+id/iv_register_wave_3"
+        android:id="@+id/img_register_wave_3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:scaleType="fitStart"
         android:src="@drawable/register_wave_3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/iv_register_wave_2" />
+        app:layout_constraintTop_toTopOf="@+id/img_register_wave_2" />
 
     <ImageView
-        android:id="@+id/iv_register_wave_1"
+        android:id="@+id/img_register_wave_1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:scaleType="fitStart"
@@ -136,7 +136,7 @@
         android:layout_height="wrap_content"
         android:paddingLeft="36dp"
         android:paddingRight="32dp"
-        app:layout_constraintBottom_toTopOf="@+id/iv_register_tombol_daftar"
+        app:layout_constraintBottom_toTopOf="@+id/img_register_tombol_daftar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/til_register_kata_sandi">
@@ -173,7 +173,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
-        android:id="@+id/iv_register_tombol_daftar"
+        android:id="@+id/img_register_tombol_daftar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="36dp"
@@ -183,12 +183,12 @@
         app:srcCompat="@drawable/btn_login" />
 
     <ImageView
-        android:id="@+id/iv_register_panah_daftar"
+        android:id="@+id/img_register_panah_daftar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/iv_register_tombol_daftar"
-        app:layout_constraintEnd_toEndOf="@+id/iv_register_tombol_daftar"
-        app:layout_constraintStart_toStartOf="@+id/iv_register_tombol_daftar"
-        app:layout_constraintTop_toTopOf="@+id/iv_register_tombol_daftar"
+        app:layout_constraintBottom_toBottomOf="@+id/img_register_tombol_daftar"
+        app:layout_constraintEnd_toEndOf="@+id/img_register_tombol_daftar"
+        app:layout_constraintStart_toStartOf="@+id/img_register_tombol_daftar"
+        app:layout_constraintTop_toTopOf="@+id/img_register_tombol_daftar"
         app:srcCompat="@drawable/ic_arrow_forward" />
 </androidx.constraintlayout.widget.ConstraintLayout>
