@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.aldy.difacademy.Activity.DetailNewsActivity;
 import com.example.aldy.difacademy.Model.NewsModel;
 import com.example.aldy.difacademy.R;
@@ -38,6 +39,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull NewsAdapter.ViewHolder holder, int position) {
         NewsModel newsModel = newsModels.get(position);
+//        Glide.with(context).load().into(holder.imgThumbnail);
         holder.tvJudul.setText(newsModel.getJudul());
         holder.clContainer.setOnClickListener(new View.OnClickListener() {
             @Override
