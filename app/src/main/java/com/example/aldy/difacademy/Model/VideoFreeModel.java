@@ -1,7 +1,17 @@
 package com.example.aldy.difacademy.Model;
 
 public class VideoFreeModel {
-    private String videoFreeId, link, judul, tag;
+    private String videoFreeId, link, judul, tagId;
+
+    public VideoFreeModel(String link, String judul, String tagId) {
+        this.link = link;
+        this.judul = judul;
+        this.tagId = tagId;
+    }
+
+    public void setVideoFreeId(String videoFreeId) {
+        this.videoFreeId = videoFreeId;
+    }
 
     public String getVideoFreeId() {
         return videoFreeId;
@@ -15,7 +25,7 @@ public class VideoFreeModel {
         return judul;
     }
 
-    public String getTag() {
-        return tag;
+    public String getTagId() {
+        return tagId;
     }
 }

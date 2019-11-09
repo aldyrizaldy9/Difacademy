@@ -9,9 +9,10 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_c_op_edit"
-        android:layout_width="43dp"
-        android:layout_height="40dp"
+        android:layout_width="@dimen/icon_btn_width"
+        android:layout_height="@dimen/icon_btn_height"
         android:background="?android:attr/selectableItemBackground"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -25,7 +26,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:srcCompat="@drawable/ic_edit" />
+            android:src="@drawable/ic_edit" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
@@ -34,9 +35,11 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
         android:ellipsize="end"
         android:maxLines="2"
         android:text="Judul Video/Berita"
+        android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@+id/tv_c_op_tag"
         app:layout_constraintEnd_toStartOf="@+id/cl_c_op_delete"
         app:layout_constraintHorizontal_chainStyle="spread"
@@ -47,11 +50,14 @@
     <TextView
         android:id="@+id/tv_c_op_tag"
         style="@style/Difacademy.Subtitle2"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
         android:text="@string/tags"
         app:layout_constraintBottom_toTopOf="@+id/tv_c_op_deskripsi"
-        app:layout_constraintStart_toStartOf="@+id/tv_c_op_judul"
+        app:layout_constraintEnd_toStartOf="@+id/cl_c_op_delete"
+        app:layout_constraintStart_toEndOf="@+id/img_c_op_thumbnail"
         app:layout_constraintTop_toBottomOf="@+id/tv_c_op_judul" />
 
     <TextView
@@ -59,18 +65,21 @@
         style="@style/Difacademy.Body1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         android:ellipsize="end"
         android:maxLines="1"
         android:text="link video/deskripsi"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/tv_c_op_judul"
-        app:layout_constraintStart_toStartOf="@+id/tv_c_op_tag"
+        app:layout_constraintStart_toEndOf="@+id/img_c_op_thumbnail"
         app:layout_constraintTop_toBottomOf="@+id/tv_c_op_tag" />
 
     <ImageView
         android:id="@+id/img_c_op_thumbnail"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="@+id/tv_c_op_deskripsi"
         app:layout_constraintDimensionRatio="16:9"
         app:layout_constraintStart_toStartOf="parent"
@@ -81,7 +90,7 @@
         android:id="@+id/cl_c_op_delete"
         android:layout_width="@dimen/icon_btn_width"
         android:layout_height="@dimen/icon_btn_height"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="4dp"
         android:background="?android:attr/selectableItemBackground"
         app:layout_constraintBottom_toBottomOf="@+id/cl_c_op_edit"
         app:layout_constraintEnd_toStartOf="@+id/cl_c_op_edit"
@@ -95,6 +104,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:srcCompat="@drawable/ic_delete" />
+            android:src="@drawable/ic_delete"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -38,10 +38,13 @@ public class OpNewsActivity extends AppCompatActivity {
         tvNavBar = findViewById(R.id.tv_navbar);
         tvNavBar.setText("Berita");
         clTambah = findViewById(R.id.cl_icon3);
+        clTambah.setVisibility(View.VISIBLE);
         clBack = findViewById(R.id.cl_icon1);
+        clBack.setVisibility(View.VISIBLE);
         imgTambah = findViewById(R.id.img_icon3);
         imgTambah.setImageResource(R.drawable.ic_add);
         imgBack = findViewById(R.id.img_icon1);
+        imgBack.setImageResource(R.drawable.ic_arrow_back);
         rvNews = findViewById(R.id.rv_op_news);
     }
 

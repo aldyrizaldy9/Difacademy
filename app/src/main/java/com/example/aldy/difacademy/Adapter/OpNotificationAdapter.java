@@ -68,11 +68,11 @@ public class OpNotificationAdapter extends RecyclerView.Adapter<OpNotificationAd
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvNama = itemView.findViewById(R.id.tv_hubungi_nama);
-            tvKelas = itemView.findViewById(R.id.tv_hubungi_kelas);
-            tvStatus = itemView.findViewById(R.id.tv_status_hubungi);
-            clContainerPay = itemView.findViewById(R.id.cl_op_notif_beli);
-            clContainerGrad = itemView.findViewById(R.id.cl_op_notif_hubungi);
+//            tvNama = itemView.findViewById(R.id.tv_hubungi_nama);
+//            tvKelas = itemView.findViewById(R.id.tv_hubungi_kelas);
+//            tvStatus = itemView.findViewById(R.id.tv_status_hubungi);
+//            clContainerPay = itemView.findViewById(R.id.cl_op_notif_beli);
+//            clContainerGrad = itemView.findViewById(R.id.cl_op_notif_hubungi);
         }
     }
 }

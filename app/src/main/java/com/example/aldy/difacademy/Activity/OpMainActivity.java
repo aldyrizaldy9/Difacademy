@@ -44,11 +44,11 @@ public class OpMainActivity extends AppCompatActivity {
         clLogout = findViewById(R.id.cl_icon3);
         imgLogout = findViewById(R.id.img_icon3);
         imgLogout.setImageResource(R.drawable.ic_power_settings_new);
-        btnFree = findViewById(R.id.btn_freecourse);
-        btnOnline = findViewById(R.id.btn_onlinecourse);
-        btnBlended = findViewById(R.id.btn_blendedcourse);
-        btnBerita = findViewById(R.id.btn_news);
-        btnTags = findViewById(R.id.btn_tags);
+        btnFree = findViewById(R.id.btn_op_main_free_course);
+        btnOnline = findViewById(R.id.btn_op_main_online_course);
+        btnBlended = findViewById(R.id.btn_op_main_blended_course);
+        btnBerita = findViewById(R.id.btn_op_main_news);
+        btnTags = findViewById(R.id.btn_op_main_tags);
         tvNavbar = findViewById(R.id.tv_navbar);
 
         tvNavbar.setText("Welcome, Admin");
