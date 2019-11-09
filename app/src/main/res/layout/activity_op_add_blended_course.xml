@@ -26,7 +26,7 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                android:id="@+id/img_thumbnail"
+                android:id="@+id/img_op_add_blended_thumbnail"
                 android:layout_width="0dp"
                 android:layout_height="200dp"
                 android:scaleType="centerCrop"
@@ -36,7 +36,7 @@
                 tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/constraintLayout"
+                android:id="@+id/cl_edt_op_add_blended_video_materi"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -46,7 +46,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/spn_tag">
+                app:layout_constraintTop_toBottomOf="@+id/spn_edt_op_add_blended_tag">
 
                 <TextView
                     android:id="@+id/textView2"
@@ -62,7 +62,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageView
-                    android:id="@+id/img_video_materi"
+                    android:id="@+id/img_op_add_blended_video_materi"
                     android:layout_width="@dimen/icon_width"
                     android:layout_height="@dimen/icon_height"
                     android:layout_marginTop="8dp"
@@ -86,7 +86,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/textInputLayout3">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edt_link"
+                    android:id="@+id/edt_op_add_blended_link"
                     style="@style/Difacademy.Body1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -94,16 +94,19 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/constraintLayout5"
+                android:id="@+id/cl_edt_op_add_blended_soal_tes"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
                 android:background="@android:color/holo_blue_bright"
+                app:layout_constraintBottom_toTopOf="@+id/btn_op_add_blended_hapus"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
+                app:layout_constraintTop_toBottomOf="@+id/cl_edt_op_add_blended_video_materi"
+                app:layout_constraintVertical_bias="0.0">
 
                 <TextView
                     android:id="@+id/textView3"
@@ -119,7 +122,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageView
-                    android:id="@+id/img_soal_tes"
+                    android:id="@+id/img_op_add_blended_soal_tes"
                     android:layout_width="@dimen/icon_width"
                     android:layout_height="@dimen/icon_height"
                     android:layout_marginTop="8dp"
@@ -143,7 +146,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/textInputLayout2">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edt_isi"
+                    android:id="@+id/edt_op_add_blended_isi"
                     style="@style/Difacademy.Body1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -159,10 +162,10 @@
                 android:layout_marginEnd="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/img_thumbnail">
+                app:layout_constraintTop_toBottomOf="@+id/img_op_add_blended_thumbnail">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edt_judul"
+                    android:id="@+id/edt_op_add_blended_judul"
                     style="@style/Difacademy.Body1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -170,36 +173,34 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <Button
-                android:id="@+id/btn_hubungi"
+                android:id="@+id/btn_op_add_blended_hapus"
                 style="@style/Difacademy.Button"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
+                android:layout_marginBottom="8dp"
                 android:text="@string/hapus"
+                android:visibility="visible"
+                app:layout_constraintBottom_toTopOf="@+id/btn_op_add_blended_simpan"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/constraintLayout5" />
+                app:layout_constraintStart_toStartOf="parent" />
 
             <Button
-                android:id="@+id/btn_simpan"
+                android:id="@+id/btn_op_add_blended_simpan"
                 style="@style/Difacademy.Button"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                android:layout_marginBottom="32dp"
+                android:layout_marginBottom="16dp"
                 android:text="@string/simpan"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/btn_hubungi"
-                app:layout_constraintVertical_bias="0.0" />
+                app:layout_constraintStart_toStartOf="parent" />
 
             <Spinner
-                android:id="@+id/spn_tag"
+                android:id="@+id/spn_edt_op_add_blended_tag"
                 style="@style/TextAppearance.MaterialComponents.Body1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -222,7 +223,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/textInputLayout4">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edt_harga"
+                    android:id="@+id/edt_op_add_blended_harga"
                     style="@style/Difacademy.Body1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -233,8 +234,8 @@
                 android:id="@+id/cl_op_add_blended_course_add_photo"
                 android:layout_width="@dimen/icon_btn_width"
                 android:layout_height="@dimen/icon_btn_width"
-                app:layout_constraintBottom_toBottomOf="@+id/img_thumbnail"
-                app:layout_constraintEnd_toEndOf="@+id/img_thumbnail">
+                app:layout_constraintBottom_toBottomOf="@+id/img_op_add_blended_thumbnail"
+                app:layout_constraintEnd_toEndOf="@+id/img_op_add_blended_thumbnail">
 
                 <ImageView
                     android:id="@+id/img_add_photo"

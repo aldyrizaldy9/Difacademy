@@ -27,7 +27,7 @@
             android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/tv_judul"
+                android:id="@+id/tv_detail_news_judul"
                 style="@style/Difacademy.Headline6"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -38,24 +38,25 @@
                 android:textAlignment="center"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageView4" />
+                app:layout_constraintTop_toBottomOf="@+id/img_detail_news_thumbnail" />
 
             <TextView
-                android:id="@+id/tv_isi"
+                android:id="@+id/tv_detail_news_isi"
                 style="@style/Difacademy.Body1"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp"
                 android:text="Deskripsi berita"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@+id/tv_judul"
-                app:layout_constraintStart_toStartOf="@+id/tv_judul"
-                app:layout_constraintTop_toBottomOf="@+id/tv_judul"
-                app:layout_constraintVertical_bias="0.0" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_detail_news_judul" />
 
             <ImageView
-                android:id="@+id/imageView4"
+                android:id="@+id/img_detail_news_thumbnail"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:scaleType="centerCrop"

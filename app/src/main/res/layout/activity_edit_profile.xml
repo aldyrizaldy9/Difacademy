@@ -24,7 +24,7 @@
         app:layout_constraintTop_toBottomOf="@+id/include">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/edt_nama"
+            android:id="@+id/edt_edit_profile_nama"
             style="@style/Difacademy.Body1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -43,7 +43,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout16">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/edt_nowa"
+            android:id="@+id/edt_edit_profile_nowa"
             style="@style/Difacademy.Body1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -62,7 +62,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout17">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/edt_old_pass"
+            android:id="@+id/edt_edit_profile_old_pass"
             style="@style/Difacademy.Body1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -81,7 +81,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout18">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/edt_new_pass"
+            android:id="@+id/edt_edit_profile_new_pass"
             style="@style/Difacademy.Body1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -100,7 +100,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout19">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/edt_new_pass_confirm"
+            android:id="@+id/edt_edit_profile_new_pass_confirm"
             style="@style/Difacademy.Body1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

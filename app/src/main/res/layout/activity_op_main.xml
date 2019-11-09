@@ -10,10 +10,10 @@
         android:id="@+id/include"
         layout="@layout/nav_bar"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/nav_bar_height"/>
+        android:layout_height="@dimen/nav_bar_height" />
 
     <Button
-        android:id="@+id/btn_freecourse"
+        android:id="@+id/btn_op_main_free_course"
         style="@style/Difacademy.Button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -26,7 +26,7 @@
         app:layout_constraintTop_toBottomOf="@+id/include" />
 
     <Button
-        android:id="@+id/btn_onlinecourse"
+        android:id="@+id/btn_op_main_online_course"
         style="@style/Difacademy.Button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -36,10 +36,10 @@
         android:text="@string/kelas_online"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_freecourse" />
+        app:layout_constraintTop_toBottomOf="@+id/btn_op_main_free_course" />
 
     <Button
-        android:id="@+id/btn_blendedcourse"
+        android:id="@+id/btn_op_main_blended_course"
         style="@style/Difacademy.Button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -49,10 +49,10 @@
         android:text="@string/kelas_blended"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_onlinecourse" />
+        app:layout_constraintTop_toBottomOf="@+id/btn_op_main_online_course" />
 
     <Button
-        android:id="@+id/btn_news"
+        android:id="@+id/btn_op_main_news"
         style="@style/Difacademy.Button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -62,10 +62,10 @@
         android:text="@string/berita"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_blendedcourse" />
+        app:layout_constraintTop_toBottomOf="@+id/btn_op_main_blended_course" />
 
     <Button
-        android:id="@+id/btn_tags"
+        android:id="@+id/btn_op_main_tags"
         style="@style/Difacademy.Button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -75,7 +75,7 @@
         android:text="@string/tags"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_news" />
+        app:layout_constraintTop_toBottomOf="@+id/btn_op_main_news" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

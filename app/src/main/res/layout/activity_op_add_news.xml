@@ -26,7 +26,7 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                android:id="@+id/img_thumbnail"
+                android:id="@+id/img_op_add_news_thumbnail"
                 android:layout_width="0dp"
                 android:layout_height="200dp"
                 android:scaleType="centerCrop"
@@ -43,14 +43,14 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp"
-                app:layout_constraintBottom_toTopOf="@+id/btn_hubungi"
+                app:layout_constraintBottom_toTopOf="@+id/btn_op_add_news_hapus"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textInputLayout2"
                 app:layout_constraintVertical_bias="0.0">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edt_isi"
+                    android:id="@+id/edt_op_add_news_isi"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Isi" />
@@ -65,7 +65,7 @@
                 android:layout_marginEnd="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/img_thumbnail">
+                app:layout_constraintTop_toBottomOf="@+id/img_op_add_news_thumbnail">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/edt_judul"
@@ -75,19 +75,19 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <Button
-                android:id="@+id/btn_hubungi"
+                android:id="@+id/btn_op_add_news_hapus"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp"
                 android:text="@string/hapus"
-                app:layout_constraintBottom_toTopOf="@+id/btn_simpan"
+                app:layout_constraintBottom_toTopOf="@+id/btn_op_add_news_simpan"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
 
             <Button
-                android:id="@+id/btn_simpan"
+                android:id="@+id/btn_op_add_news_simpan"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -102,11 +102,11 @@
                 android:id="@+id/cl_op_add_news_add_photo"
                 android:layout_width="@dimen/icon_btn_width"
                 android:layout_height="@dimen/icon_btn_height"
-                app:layout_constraintBottom_toBottomOf="@+id/img_thumbnail"
-                app:layout_constraintEnd_toEndOf="@+id/img_thumbnail">
+                app:layout_constraintBottom_toBottomOf="@+id/img_op_add_news_thumbnail"
+                app:layout_constraintEnd_toEndOf="@+id/img_op_add_news_thumbnail">
 
                 <ImageView
-                    android:id="@+id/img_add_photo"
+                    android:id="@+id/img_op_add_news_add_photo"
                     android:layout_width="@dimen/icon_width"
                     android:layout_height="@dimen/icon_height"
                     app:layout_constraintBottom_toBottomOf="parent"

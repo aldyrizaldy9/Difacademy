@@ -97,7 +97,7 @@
             </RadioGroup>
 
             <ImageView
-                android:id="@+id/imageView5"
+                android:id="@+id/img_detail_course_list_video"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:layout_editor_absoluteX="243dp"

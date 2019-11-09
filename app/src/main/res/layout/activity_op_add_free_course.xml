@@ -34,7 +34,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/edt_link"
+            android:id="@+id/edt_op_add_free_link"
             style="@style/Difacademy.Body1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -42,7 +42,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <Spinner
-        android:id="@+id/spn_tags"
+        android:id="@+id/spn_op_add_free_tags"
         style="@style/Difacademy.Body1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -53,7 +53,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
 
     <Button
-        android:id="@+id/btn_simpan"
+        android:id="@+id/btn_op_add_free_simpan"
         style="@style/Difacademy.Button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -66,7 +66,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/btn_hubungi"
+        android:id="@+id/btn_op_add_free_hapus"
         style="@style/Difacademy.Button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -74,7 +74,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:text="@string/hapus"
-        app:layout_constraintBottom_toTopOf="@+id/btn_simpan"
+        app:layout_constraintBottom_toTopOf="@+id/btn_op_add_free_simpan"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

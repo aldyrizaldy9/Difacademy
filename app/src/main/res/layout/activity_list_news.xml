@@ -13,7 +13,7 @@
         android:layout_height="@dimen/nav_bar_height" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_news"
+        android:id="@+id/rv_list_news"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -38,7 +38,7 @@
         app:layout_constraintTop_toBottomOf="@+id/include" />
 
     <TextView
-        android:id="@+id/tv_userid"
+        android:id="@+id/tv_op_notif_pay_userid"
         style="@style/Difacademy.Body1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -54,12 +54,12 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="KelasId"
-        app:layout_constraintEnd_toEndOf="@+id/tv_userid"
-        app:layout_constraintStart_toStartOf="@+id/tv_userid"
-        app:layout_constraintTop_toBottomOf="@+id/tv_userid" />
+        app:layout_constraintEnd_toEndOf="@+id/tv_op_notif_pay_userid"
+        app:layout_constraintStart_toStartOf="@+id/tv_op_notif_pay_userid"
+        app:layout_constraintTop_toBottomOf="@+id/tv_op_notif_pay_userid" />
 
     <TextView
-        android:id="@+id/tv_kelasid"
+        android:id="@+id/tv_op_notif_pay_kelasid"
         style="@style/Difacademy.Body1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -75,12 +75,12 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="Nama"
-        app:layout_constraintEnd_toEndOf="@+id/tv_kelasid"
-        app:layout_constraintStart_toStartOf="@+id/tv_kelasid"
-        app:layout_constraintTop_toBottomOf="@+id/tv_kelasid" />
+        app:layout_constraintEnd_toEndOf="@+id/tv_op_notif_pay_kelasid"
+        app:layout_constraintStart_toStartOf="@+id/tv_op_notif_pay_kelasid"
+        app:layout_constraintTop_toBottomOf="@+id/tv_op_notif_pay_kelasid" />
 
     <TextView
-        android:id="@+id/tv_nama"
+        android:id="@+id/tv_op_notif_pay_nama"
         style="@style/Difacademy.Body1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -96,12 +96,12 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="Email"
-        app:layout_constraintEnd_toEndOf="@+id/tv_nama"
-        app:layout_constraintStart_toStartOf="@+id/tv_nama"
-        app:layout_constraintTop_toBottomOf="@+id/tv_nama" />
+        app:layout_constraintEnd_toEndOf="@+id/tv_op_notif_pay_nama"
+        app:layout_constraintStart_toStartOf="@+id/tv_op_notif_pay_nama"
+        app:layout_constraintTop_toBottomOf="@+id/tv_op_notif_pay_nama" />
 
     <TextView
-        android:id="@+id/tv_email"
+        android:id="@+id/tv_op_notif_pay_email"
         style="@style/Difacademy.Body1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -117,12 +117,12 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="No. WA"
-        app:layout_constraintEnd_toEndOf="@+id/tv_email"
-        app:layout_constraintStart_toStartOf="@+id/tv_email"
-        app:layout_constraintTop_toBottomOf="@+id/tv_email" />
+        app:layout_constraintEnd_toEndOf="@+id/tv_op_notif_pay_email"
+        app:layout_constraintStart_toStartOf="@+id/tv_op_notif_pay_email"
+        app:layout_constraintTop_toBottomOf="@+id/tv_op_notif_pay_email" />
 
     <TextView
-        android:id="@+id/tv_nowa"
+        android:id="@+id/tv_op_notif_pay_nowa"
         style="@style/Difacademy.Body1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -132,7 +132,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView14" />
 
     <TextView
-        android:id="@+id/tv_kelas"
+        android:id="@+id/tv_op_notif_pay_kelas"
         style="@style/Difacademy.Body1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -142,7 +142,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView16" />
 
     <Button
-        android:id="@+id/btn_hubungi"
+        android:id="@+id/btn_op_notif_pay_hapus"
         style="@style/Difacademy.Button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -150,12 +150,12 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:text="@string/hapus"
-        app:layout_constraintBottom_toTopOf="@+id/btn_tandai"
+        app:layout_constraintBottom_toTopOf="@+id/btn_op_notif_pay_tandai"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/btn_tandai"
+        android:id="@+id/btn_op_notif_pay_tandai"
         style="@style/Difacademy.Button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

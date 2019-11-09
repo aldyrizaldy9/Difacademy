@@ -37,7 +37,7 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edt_judul"
+                    android:id="@+id/edt_op_add_video_blended_judul"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Judul" />
@@ -55,7 +55,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/textInputLayout7">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edt_deskripsi"
+                    android:id="@+id/edt_op_add_video_blended_deskripsi"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Deskripsi" />
@@ -72,14 +72,14 @@
                 app:layout_constraintTop_toBottomOf="@+id/textInputLayout8">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edt_file_video"
+                    android:id="@+id/edt_op_add_video_blended_file_video"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="File Video" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <Button
-                android:id="@+id/btn_simpan"
+                android:id="@+id/btn_op_add_video_blended_simpan"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -90,11 +90,11 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_upload_process"
+                app:layout_constraintTop_toBottomOf="@+id/tv_op_add_video_blended_upload_process"
                 app:layout_constraintVertical_bias="1.0" />
 
             <TextView
-                android:id="@+id/tv_upload_process"
+                android:id="@+id/tv_op_add_video_blended_upload_process"
                 style="@style/Difacademy.Subtitle1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -104,7 +104,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/pb_upload" />
 
             <ProgressBar
-                android:id="@+id/pb_upload"
+                android:id="@+id/pb_op_add_video_blended_upload"
                 style="?android:attr/progressBarStyleHorizontal"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -124,7 +124,7 @@
                 app:layout_constraintTop_toTopOf="@+id/textInputLayout9">
 
                 <ImageView
-                    android:id="@+id/img_upload"
+                    android:id="@+id/img_op_add_video_blended_upload"
                     android:layout_width="@dimen/icon_width"
                     android:layout_height="@dimen/icon_height"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -144,7 +144,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/cl_op_blended_upload">
 
                 <ImageView
-                    android:id="@+id/img_cancel_upload"
+                    android:id="@+id/img_op_add_video_blended_cancel_upload"
                     android:layout_width="@dimen/icon_width"
                     android:layout_height="@dimen/icon_height"
                     app:layout_constraintBottom_toBottomOf="parent"
