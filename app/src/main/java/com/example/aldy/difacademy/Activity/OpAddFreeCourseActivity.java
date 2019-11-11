@@ -122,22 +122,16 @@ public class OpAddFreeCourseActivity extends AppCompatActivity {
                     }
 
                     YResponse yResponse = response.body();
+//                    Log.d(TAG, "onResponse: " + new GsonBuilder().setPrettyPrinting().create().toJson(response));
+                    
                     String title = yResponse.getItems().get(0).getSnippet().getTitle();
                     String description = yResponse.getItems().get(0).getSnippet().getDescription();
                     String thumbDefault = yResponse.getItems().get(0).getSnippet().getThumbnails().getNormal().getUrl();
-                    String thumbMedium = yResponse.getItems().get(0).getSnippet().getThumbnails().getMedium().getUrl();
+//                    String thumbMedium = yResponse.getItems().get(0).getSnippet().getThumbnails().getMedium().getUrl();
                     String thumbStandard = yResponse.getItems().get(0).getSnippet().getThumbnails().getStandard().getUrl();
-                    String thumbHigh = yResponse.getItems().get(0).getSnippet().getThumbnails().getHigh().getUrl();
-                    String thumbMaxres = yResponse.getItems().get(0).getSnippet().getThumbnails().getMaxres().getUrl();
-
-                    Log.d(TAG, "onResponse: idYoutubeVideo : " + youtubeVideoId);
-                    Log.d(TAG, "onResponse: title : " + title);
-                    Log.d(TAG, "onResponse: description : " + description);
-                    Log.d(TAG, "onResponse: thumbnail default : " + thumbDefault);
-                    Log.d(TAG, "onResponse: thumbnail medium : " + thumbMedium);
-                    Log.d(TAG, "onResponse: thumbnail standard : " + thumbStandard);
-                    Log.d(TAG, "onResponse: thumbnail high : " + thumbHigh);
-                    Log.d(TAG, "onResponse: thumbnail maxres : " + thumbMaxres);
+//                    String thumbHigh = yResponse.getItems().get(0).getSnippet().getThumbnails().getHigh().getUrl();
+//                    String thumbMaxres = yResponse.getItems().get(0).getSnippet().getThumbnails().getMaxres().getUrl();
+                    
                 }
 
                 @Override
