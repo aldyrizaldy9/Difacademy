@@ -1,16 +1,66 @@
 package com.example.aldy.difacademy.Model;
 
-public class VideoFreeModel {
-    private String thumbnailUrl, videoYoutubeId, title, description, tagId;
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class VideoFreeModel implements Parcelable {
+    private String thumbnailUrl, videoYoutubeId, title, description, tagId, documentId, tag;
 
     public VideoFreeModel(){}
 
-    public VideoFreeModel(String thumbnailUrl, String videoYoutubeId, String title, String description, String tagId) {
+    public VideoFreeModel(String thumbnailUrl, String videoYoutubeId, String title, String description, String tagId, String tag) {
         this.thumbnailUrl = thumbnailUrl;
         this.videoYoutubeId = videoYoutubeId;
         this.title = title;
         this.description = description;
         this.tagId = tagId;
+        this.tag = tag;
+    }
+
+    protected VideoFreeModel(Parcel in) {
+        thumbnailUrl = in.readString();
+        videoYoutubeId = in.readString();
+        title = in.readString();
+        description = in.readString();
+        tagId = in.readString();
+        documentId = in.readString();
+        tag = in.readString();
+    }
+
+    public static final Creator<VideoFreeModel> CREATOR = new Creator<VideoFreeModel>() {
+        @Override
+        public VideoFreeModel createFromParcel(Parcel in) {
+            return new VideoFreeModel(in);
+        }
+
+        @Override
+        public VideoFreeModel[] newArray(int size) {
+            return new VideoFreeModel[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(thumbnailUrl);
+        parcel.writeString(videoYoutubeId);
+        parcel.writeString(title);
+        parcel.writeString(description);
+        parcel.writeString(tagId);
+        parcel.writeString(documentId);
+        parcel.writeString(tag);
+    }
+
+    public String getDocumentId() {
+        return documentId;
+    }
+
+    public void setDocumentId(String documentId) {
+        this.documentId = documentId;
     }
 
     public String getThumbnailUrl() {
@@ -51,5 +101,13 @@ public class VideoFreeModel {
 
     public void setTagId(String tagId) {
         this.tagId = tagId;
+    }
+
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
     }
 }
