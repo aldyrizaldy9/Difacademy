@@ -38,7 +38,7 @@ public class FreeCourseAdapter extends RecyclerView.Adapter<FreeCourseAdapter.Vi
     @Override
     public void onBindViewHolder(@NonNull FreeCourseAdapter.ViewHolder holder, int position) {
         VideoFreeModel videoFreeModel = freeModels.get(position);
-        holder.tvJudul.setText(videoFreeModel.getJudul());
+//        holder.tvJudul.setText(videoFreeModel.getJudul());
 //        holder.tvTag.setText(videoFreeModel.getTag());
         holder.clContainer.setOnClickListener(new View.OnClickListener() {
             @Override
