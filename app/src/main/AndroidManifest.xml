@@ -2,7 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.aldy.difacademy">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -39,7 +40,7 @@
         <activity android:name=".Activity.FreeCourseActivity" />
         <activity android:name=".Activity.OngoingCourseActivity" />
         <activity android:name=".Activity.ForgetPasswordActivity" />
-        <activity android:name=".Activity.RegisterActivity"/>
+        <activity android:name=".Activity.RegisterActivity" />
         <activity android:name=".Activity.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

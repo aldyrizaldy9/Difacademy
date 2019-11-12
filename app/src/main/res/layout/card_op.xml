@@ -5,6 +5,8 @@
     android:id="@+id/cl_c_op"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:minHeight="80dp"
+    android:layout_marginBottom="8dp"
     android:orientation="vertical">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -12,7 +14,7 @@
         android:layout_width="@dimen/icon_btn_width"
         android:layout_height="@dimen/icon_btn_height"
         android:background="?android:attr/selectableItemBackground"
-        android:visibility="visible"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -21,12 +23,12 @@
             android:id="@+id/img_c_op_edit"
             android:layout_width="@dimen/icon_width"
             android:layout_height="@dimen/icon_height"
+            android:src="@drawable/ic_edit"
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:src="@drawable/ic_edit" />
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
@@ -81,10 +83,10 @@
         android:layout_height="0dp"
         android:scaleType="centerCrop"
         android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_c_op_deskripsi"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintDimensionRatio="16:9"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tv_c_op_judul"
+        app:layout_constraintTop_toTopOf="parent"
         tools:srcCompat="@color/colorPrimary" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -93,6 +95,7 @@
         android:layout_height="@dimen/icon_btn_height"
         android:layout_marginEnd="4dp"
         android:background="?android:attr/selectableItemBackground"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/cl_c_op_edit"
         app:layout_constraintEnd_toStartOf="@+id/cl_c_op_edit"
         app:layout_constraintTop_toTopOf="@+id/cl_c_op_edit">
@@ -101,10 +104,10 @@
             android:id="@+id/img_c_op_delete"
             android:layout_width="@dimen/icon_width"
             android:layout_height="@dimen/icon_height"
+            android:src="@drawable/ic_delete"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:src="@drawable/ic_delete"/>
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
