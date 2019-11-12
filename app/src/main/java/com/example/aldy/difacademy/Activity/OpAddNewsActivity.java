@@ -26,6 +26,7 @@ import com.example.aldy.difacademy.Model.NewsModel;
 import com.example.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -54,6 +55,7 @@ public class OpAddNewsActivity extends AppCompatActivity {
     private CollectionReference newsRef = db.collection("News");
 
     private NewsModel newsModel;
+    private long dateCreated;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -291,21 +293,32 @@ public class OpAddNewsActivity extends AppCompatActivity {
     }
 
     private void addNewsToFirestore(String downloadURL) {
-        NewsModel newsModel = new NewsModel(edtJudul.getText().toString(), edtIsi.getText().toString(), downloadURL);
-        newsRef.add(newsModel)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        progressDialog.dismiss();
-                        onBackPressed();
-                        Toast.makeText(OpAddNewsActivity.this, "Berita telah ditambahkan", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                    }
-                });
+        try {
+            dateCreated = Timestamp.now().getSeconds();
+        } catch (Exception e) {
+            progressDialog.dismiss();
+            Log.d(TAG, e.toString());
+            return;
+        }
+        if (dateCreated != 0) {
+            NewsModel newsModel = new NewsModel(edtJudul.getText().toString(), edtIsi.getText().toString(), downloadURL, dateCreated);
+            newsRef.add(newsModel)
+                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                        @Override
+                        public void onSuccess(DocumentReference documentReference) {
+                            progressDialog.dismiss();
+                            onBackPressed();
+                            Toast.makeText(OpAddNewsActivity.this, "Berita telah ditambahkan", Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            progressDialog.dismiss();
+                            Log.d(TAG, e.toString());
+                        }
+                    });
+        }
 
     }
 
@@ -356,23 +369,33 @@ public class OpAddNewsActivity extends AppCompatActivity {
     }
 
     private void updateNewstoFirestore(String downloadURL) {
-        NewsModel newsModel = new NewsModel(edtJudul.getText().toString(), edtIsi.getText().toString(), downloadURL);
-        DocumentReference documentReference = newsRef.document(this.newsModel.getNewsId());
-        documentReference.set(newsModel)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        progressDialog.dismiss();
-                        onBackPressed();
-                        Toast.makeText(OpAddNewsActivity.this, "Berita telah disunting", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d(TAG, e.toString());
-                    }
-                });
+        try {
+            dateCreated = Timestamp.now().getSeconds();
+        } catch (Exception e) {
+            progressDialog.dismiss();
+            Log.d(TAG, e.toString());
+            return;
+        }
+        if (dateCreated != 0) {
+            NewsModel newsModel = new NewsModel(edtJudul.getText().toString(), edtIsi.getText().toString(), downloadURL, dateCreated);
+            DocumentReference documentReference = newsRef.document(this.newsModel.getNewsId());
+            documentReference.set(newsModel)
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            progressDialog.dismiss();
+                            onBackPressed();
+                            Toast.makeText(OpAddNewsActivity.this, "Berita telah disunting", Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            progressDialog.dismiss();
+                            Log.d(TAG, e.toString());
+                        }
+                    });
+        }
     }
 
 }

@@ -96,7 +96,7 @@ public class OpFreeCourseActivity extends AppCompatActivity {
     }
 
     private void loadData(){
-        videoFreeRef.orderBy("dateCreated", Query.Direction.ASCENDING)
+        videoFreeRef.orderBy("dateCreated", Query.Direction.DESCENDING)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
