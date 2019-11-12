@@ -46,6 +46,11 @@ public class OpNewsActivity extends AppCompatActivity {
         getData();
     }
 
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        getData();
+    }
 
     private void findView() {
         TextView tvNavBar = findViewById(R.id.tv_navbar);
@@ -95,6 +100,7 @@ public class OpNewsActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        newsModels.clear();
                         for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
                             NewsModel newsModel = queryDocumentSnapshot.toObject(NewsModel.class);
                             newsModel.setNewsId(queryDocumentSnapshot.getId());

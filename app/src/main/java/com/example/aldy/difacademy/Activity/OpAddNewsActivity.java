@@ -46,10 +46,14 @@ public class OpAddNewsActivity extends AppCompatActivity {
     private Uri imageUri;
     private static final String TAG = "OpAddNewsActivity";
     private ProgressDialog progressDialog;
+
+    private FirebaseStorage firebaseStorage;
     private StorageReference storageReference;
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference newsRef = db.collection("News");
+
+    private NewsModel newsModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +80,7 @@ public class OpAddNewsActivity extends AppCompatActivity {
     }
 
     private void initFirebaseStorage() {
-        FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
+        firebaseStorage = FirebaseStorage.getInstance();
         storageReference = firebaseStorage.getReference();
     }
 
@@ -96,11 +100,13 @@ public class OpAddNewsActivity extends AppCompatActivity {
         btnSimpan = findViewById(R.id.btn_op_add_news_simpan);
         progressDialog = new ProgressDialog(this);
         Intent intent = getIntent();
+
+        //Jika user menambahkan berita baru maka tombol hapus akan di hide
         if (intent.getParcelableExtra("newsModel") == null) {
             btnHapus.setVisibility(View.GONE);
         } else {
             btnHapus.setVisibility(View.VISIBLE);
-            NewsModel newsModel = intent.getParcelableExtra("newsModel");
+            newsModel = intent.getParcelableExtra("newsModel");
             setViewWithParcelable(newsModel);
         }
     }
@@ -130,31 +136,121 @@ public class OpAddNewsActivity extends AppCompatActivity {
         btnHapus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                konfirmasiHapus();
             }
         });
         btnSimpan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                simpanData();
+                konfirmasiSimpan();
             }
         });
     }
 
-    private void simpanData() {
-        if (imageUri == null) {
+    private void konfirmasiHapus() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Apakah anda yakin ingin menghapus?");
+        builder.setTitle("Hapus");
+        builder.setCancelable(false);
+        builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                deleteImageFromFirebaseStorage();
+            }
+        });
+
+        builder.setNegativeButton("Tidak", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+
+    private void deleteImageFromFirebaseStorage() {
+        progressDialog.show();
+        progressDialog.setCancelable(false);
+        progressDialog.setMessage("Menghapus");
+        storageReference = firebaseStorage.getReferenceFromUrl(newsModel.getLinkfoto());
+        storageReference
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        deleteNewsFromFirestore();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        progressDialog.dismiss();
+                        Log.d(TAG, e.toString());
+                    }
+                });
+    }
+
+    private void deleteNewsFromFirestore() {
+        newsRef.document(newsModel.getNewsId())
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        progressDialog.dismiss();
+                        onBackPressed();
+                        Toast.makeText(OpAddNewsActivity.this, "Berita telah dihapus", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, e.toString());
+                    }
+                });
+    }
+
+    private void konfirmasiSimpan() {
+        //Jika user menambahkan berita tetapi belum menambahkan foto maka akan muncul toast
+        if (imageUri == null && newsModel == null) {
             Toast.makeText(this, "Harap unggah foto thumbnail terlebih dahulu", Toast.LENGTH_SHORT).show();
         } else if (edtJudul.length() == 0) {
             Toast.makeText(this, "Harap memasukkan judul berita terlebih dahulu", Toast.LENGTH_SHORT).show();
         } else if (edtIsi.length() == 0) {
             Toast.makeText(this, "Harap memasukkan isi berita terlebih dahulu", Toast.LENGTH_SHORT).show();
         } else {
-            showDialogKonfirmasi();
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("Apakah anda yakin ingin menyimpan?");
+            builder.setTitle("Simpan");
+            builder.setCancelable(false);
+            builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
+
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    if (newsModel == null) {
+                        uploadImageToFirebaseStorage();
+                    } else {
+                        updateImageToFirebaseStorage();
+                    }
+                }
+            });
+
+            builder.setNegativeButton("Tidak", new DialogInterface.OnClickListener() {
+
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+            AlertDialog alertDialog = builder.create();
+            alertDialog.show();
         }
     }
 
-    private void uploadToFirebase() {
-        final ProgressDialog progressDialog = new ProgressDialog(this);
+    private void uploadImageToFirebaseStorage() {
         progressDialog.show();
         progressDialog.setCancelable(false);
         final StorageReference ref = storageReference.child("Berita/" + UUID.randomUUID().toString());
@@ -166,13 +262,13 @@ public class OpAddNewsActivity extends AppCompatActivity {
                                 .addOnSuccessListener(new OnSuccessListener<Uri>() {
                                     @Override
                                     public void onSuccess(Uri uri) {
-                                        addToFirestore(uri.toString());
+                                        addNewsToFirestore(uri.toString());
                                     }
                                 })
                                 .addOnFailureListener(new OnFailureListener() {
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
-
+                                        Log.d(TAG, e.toString());
                                     }
                                 });
 
@@ -196,15 +292,15 @@ public class OpAddNewsActivity extends AppCompatActivity {
 
     }
 
-    private void addToFirestore(String downloadURL) {
+    private void addNewsToFirestore(String downloadURL) {
         NewsModel newsModel = new NewsModel(edtJudul.getText().toString(), edtIsi.getText().toString(), downloadURL);
         newsRef.add(newsModel)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
                         progressDialog.dismiss();
-                        Toast.makeText(OpAddNewsActivity.this, "Berita telah ditambahkan", Toast.LENGTH_SHORT).show();
                         onBackPressed();
+                        Toast.makeText(OpAddNewsActivity.this, "Berita telah ditambahkan", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -216,29 +312,70 @@ public class OpAddNewsActivity extends AppCompatActivity {
 
     }
 
-    private void showDialogKonfirmasi() {
+    private void updateImageToFirebaseStorage() {
+        progressDialog.show();
+        progressDialog.setCancelable(false);
+        storageReference = firebaseStorage.getReferenceFromUrl(newsModel.getLinkfoto());
+        //Jika user mengubah gambar maka gambar di firebase storage akan diupdate
+        if (imageUri != null) {
+            storageReference.putFile(imageUri)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            storageReference.getDownloadUrl()
+                                    .addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                        @Override
+                                        public void onSuccess(Uri uri) {
+                                            updateNewstoFirestore(uri.toString());
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Log.d(TAG, e.toString());
+                                        }
+                                    });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.d(TAG, e.toString());
+                        }
+                    })
+                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onProgress(@NonNull UploadTask.TaskSnapshot taskSnapshot) {
+                            double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot
+                                    .getTotalByteCount());
+                            progressDialog.setMessage("Proses unggah " + (int) progress + "%");
+                        }
+                    });
+        } else {
+            //Jika tidak maka akan diupdate judul dan isinya saja
+            progressDialog.setMessage("Menyimpan");
+            updateNewstoFirestore(newsModel.getLinkfoto());
+        }
+    }
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Apakah anda yakin ingin menyimpan?");
-        builder.setTitle("Simpan");
-        builder.setCancelable(false);
-        builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
-
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                uploadToFirebase();
-            }
-        });
-
-        builder.setNegativeButton("Tidak", new DialogInterface.OnClickListener() {
-
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-        AlertDialog alertDialog = builder.create();
-        alertDialog.show();
+    private void updateNewstoFirestore(String downloadURL) {
+        NewsModel newsModel = new NewsModel(edtJudul.getText().toString(), edtIsi.getText().toString(), downloadURL);
+        DocumentReference documentReference = newsRef.document(this.newsModel.getNewsId());
+        documentReference.set(newsModel)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        progressDialog.dismiss();
+                        onBackPressed();
+                        Toast.makeText(OpAddNewsActivity.this, "Berita telah disunting", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, e.toString());
+                    }
+                });
     }
 
 }
