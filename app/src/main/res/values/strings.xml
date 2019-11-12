@@ -13,4 +13,5 @@
 
     <string name="no_internet">Check Your Network Connection</string>
     <string name="link_not_valid">Link Tidak Valid</string>
+    <string name="data_not_complete">Data Tidak Lengkap</string>
 </resources>
