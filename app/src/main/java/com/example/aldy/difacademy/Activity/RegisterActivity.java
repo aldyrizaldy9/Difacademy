@@ -137,7 +137,6 @@ public class RegisterActivity extends AppCompatActivity {
                                     .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                         @Override
                                         public void onSuccess(DocumentReference documentReference) {
-                                            Log.d(TAG, "onSuccess: 1");
                                             auth.signOut();
                                             pd.dismiss();
                                             Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
@@ -148,7 +147,6 @@ public class RegisterActivity extends AppCompatActivity {
                                     .addOnFailureListener(new OnFailureListener() {
                                         @Override
                                         public void onFailure(@NonNull Exception e) {
-                                            Log.d(TAG, "onFailure: 2");
                                         }
                                     });
                         } else {

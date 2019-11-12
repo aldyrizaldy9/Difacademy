@@ -114,7 +114,6 @@ public class OpNewsActivity extends AppCompatActivity {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.d(TAG, e.toString());
                         progressDialog.dismiss();
                     }
                 });
