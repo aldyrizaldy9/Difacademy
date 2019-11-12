@@ -339,7 +339,6 @@ public class OpAddFreeCourseActivity extends AppCompatActivity {
                 public void onFailure(Call<YResponse> call, Throwable t) {
                     pd.dismiss();
                     Toast.makeText(OpAddFreeCourseActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
-                    Log.d(TAG, "onFailure: " + t.getMessage());
                 }
             });
         } else {

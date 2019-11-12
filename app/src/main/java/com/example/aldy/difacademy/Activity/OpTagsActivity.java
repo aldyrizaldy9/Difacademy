@@ -127,14 +127,12 @@ public class OpTagsActivity extends AppCompatActivity {
                         tagAdapter.notifyDataSetChanged();
 
                         Toast.makeText(OpTagsActivity.this, "Tag berhasil ditambahkan", Toast.LENGTH_SHORT).show();
-                        Log.d(TAG, "onSuccess: add tag");
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Toast.makeText(OpTagsActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
-                        Log.d(TAG, "onFailure: " + e.toString());
                     }
                 });
     }
