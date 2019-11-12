@@ -5,17 +5,20 @@ import android.os.Parcelable;
 
 public class VideoFreeModel implements Parcelable {
     private String thumbnailUrl, videoYoutubeId, title, description, tagId, documentId, tag;
+    private long dateCreated;
 
     public VideoFreeModel(){}
 
-    public VideoFreeModel(String thumbnailUrl, String videoYoutubeId, String title, String description, String tagId, String tag) {
+    public VideoFreeModel(String thumbnailUrl, String videoYoutubeId, String title, String description, String tagId, String tag, long dateCreated) {
         this.thumbnailUrl = thumbnailUrl;
         this.videoYoutubeId = videoYoutubeId;
         this.title = title;
         this.description = description;
         this.tagId = tagId;
         this.tag = tag;
+        this.dateCreated = dateCreated;
     }
+
 
     protected VideoFreeModel(Parcel in) {
         thumbnailUrl = in.readString();
@@ -25,6 +28,7 @@ public class VideoFreeModel implements Parcelable {
         tagId = in.readString();
         documentId = in.readString();
         tag = in.readString();
+        dateCreated = in.readLong();
     }
 
     public static final Creator<VideoFreeModel> CREATOR = new Creator<VideoFreeModel>() {
@@ -53,6 +57,7 @@ public class VideoFreeModel implements Parcelable {
         parcel.writeString(tagId);
         parcel.writeString(documentId);
         parcel.writeString(tag);
+        parcel.writeLong(dateCreated);
     }
 
     public String getDocumentId() {
@@ -109,5 +114,13 @@ public class VideoFreeModel implements Parcelable {
 
     public void setTag(String tag) {
         this.tag = tag;
+    }
+
+    public long getDateCreated() {
+        return dateCreated;
+    }
+
+    public void setDateCreated(long dateCreated) {
+        this.dateCreated = dateCreated;
     }
 }

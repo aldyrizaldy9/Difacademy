@@ -31,15 +31,20 @@ import com.example.aldy.difacademy.YoutubeApiKeyConfig;
 import com.example.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.WriteBatch;
+import com.google.firebase.firestore.model.value.ServerTimestampValue;
+import com.google.firestore.v1.DocumentTransform;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -276,46 +281,57 @@ public class OpAddFreeCourseActivity extends AppCompatActivity {
                     String thumbStandard = yResponse.getItems().get(0).getSnippet().getThumbnails().getStandard().getUrl();
                     String tagId = tagVideoId;
                     String tag = tagVideo;
+                    long datecreated = 0;
 
-                    VideoFreeModel videoFreeModel = new VideoFreeModel(thumbStandard, youtubeVideoId,
-                            title, description, tagId, tag);
-                    if (status.equals("update")) {
-                        WriteBatch batch = db.batch();
-                        DocumentReference videoRef = videoFreeRef.document(videoFreeModelIntent.getDocumentId());
-                        batch.update(videoRef, "description", description);
-                        batch.update(videoRef, "tagId", tagId);
-                        batch.update(videoRef, "thumbnailUrl", thumbStandard);
-                        batch.update(videoRef, "title", title);
-                        batch.update(videoRef, "videoYoutubeId", youtubeVideoId);
-                        batch.update(videoRef, "tag", tag);
-                        batch.commit()
-                                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void aVoid) {
-                                        onBackPressed();
-                                    }
-                                })
-                                .addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        Toast.makeText(OpAddFreeCourseActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                    } else {
-                        videoFreeRef.add(videoFreeModel)
-                                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                    @Override
-                                    public void onSuccess(DocumentReference documentReference) {
-                                        onBackPressed();
-                                    }
-                                })
-                                .addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        pd.dismiss();
-                                        Toast.makeText(OpAddFreeCourseActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                                    }
-                                });
+                    try {
+                        datecreated = Timestamp.now().getSeconds();
+                    }catch (Exception e){
+                        Toast.makeText(OpAddFreeCourseActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    if (datecreated > 0){
+                        VideoFreeModel videoFreeModel = new VideoFreeModel(thumbStandard, youtubeVideoId,
+                                title, description, tagId, tag, datecreated);
+                        if (status.equals("update")) {
+                            WriteBatch batch = db.batch();
+                            DocumentReference videoRef = videoFreeRef.document(videoFreeModelIntent.getDocumentId());
+                            batch.update(videoRef, "description", description);
+                            batch.update(videoRef, "tagId", tagId);
+                            batch.update(videoRef, "thumbnailUrl", thumbStandard);
+                            batch.update(videoRef, "title", title);
+                            batch.update(videoRef, "videoYoutubeId", youtubeVideoId);
+                            batch.update(videoRef, "tag", tag);
+                            batch.update(videoRef, "dateCreated", datecreated);
+                            batch.commit()
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            onBackPressed();
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Toast.makeText(OpAddFreeCourseActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                        } else {
+                            videoFreeRef.add(videoFreeModel)
+                                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                        @Override
+                                        public void onSuccess(DocumentReference documentReference) {
+                                            onBackPressed();
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            pd.dismiss();
+                                            Toast.makeText(OpAddFreeCourseActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                        }
                     }
                 }
 
