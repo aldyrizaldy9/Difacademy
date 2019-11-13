@@ -37,7 +37,7 @@ public class OpNewsAdapter extends RecyclerView.Adapter<OpNewsAdapter.ViewHolder
     }
 
     @Override
-    public void onBindViewHolder(@NonNull OpNewsAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull OpNewsAdapter.ViewHolder holder, final int position) {
         final NewsModel newsModel = newsModels.get(position);
         holder.tvJudul.setText(newsModel.getJudul());
         holder.tvTag.setVisibility(View.GONE);
@@ -48,6 +48,7 @@ public class OpNewsAdapter extends RecyclerView.Adapter<OpNewsAdapter.ViewHolder
             public void onClick(View v) {
                 Intent intent = new Intent(context, OpAddNewsActivity.class);
                 intent.putExtra("newsModel", newsModel);
+                intent.putExtra("index", position);
                 context.startActivity(intent);
             }
         });
@@ -58,12 +59,12 @@ public class OpNewsAdapter extends RecyclerView.Adapter<OpNewsAdapter.ViewHolder
         return newsModels.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder {
         private TextView tvJudul, tvTag, tvDeskripsi;
         private ImageView imgThumbnail;
         private ConstraintLayout clContainer;
 
-        public ViewHolder(@NonNull View itemView) {
+        ViewHolder(@NonNull View itemView) {
             super(itemView);
             tvJudul = itemView.findViewById(R.id.tv_c_op_judul);
             tvTag = itemView.findViewById(R.id.tv_c_op_tag);

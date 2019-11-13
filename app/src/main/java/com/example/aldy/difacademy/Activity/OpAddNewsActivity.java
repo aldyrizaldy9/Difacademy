@@ -55,7 +55,13 @@ public class OpAddNewsActivity extends AppCompatActivity {
     private CollectionReference newsRef = db.collection("News");
 
     private NewsModel newsModel;
+    private int index;
     private long dateCreated;
+
+    static final int PHOTO_PICK_REQUEST_CODE = 1;
+    static final int ADD_NEWS_REQUEST_CODE = 2;
+    static final int DELETE_NEWS_REQUEST_CODE = 3;
+    static final int UPDATE_NEWS_REQUEST_CODE = 4;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +75,7 @@ public class OpAddNewsActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1 && resultCode == RESULT_OK
+        if (requestCode == PHOTO_PICK_REQUEST_CODE && resultCode == RESULT_OK
                 && data != null && data.getData() != null) {
             imageUri = data.getData();
 
@@ -93,13 +99,19 @@ public class OpAddNewsActivity extends AppCompatActivity {
         imgBack.setImageResource(R.drawable.ic_arrow_back);
         imgBack.setVisibility(View.VISIBLE);
         TextView tvNavbar = findViewById(R.id.tv_navbar);
-        tvNavbar.setText("Tambah Berita");
+        tvNavbar.setText(R.string.tambah_berita);
         edtJudul = findViewById(R.id.edt_judul);
         edtIsi = findViewById(R.id.edt_op_add_news_isi);
         btnHapus = findViewById(R.id.btn_op_add_news_hapus);
         btnSimpan = findViewById(R.id.btn_op_add_news_simpan);
         progressDialog = new ProgressDialog(this);
         Intent intent = getIntent();
+
+        //Menentukan index apabila ada
+        int index = intent.getIntExtra("index", -1);
+        if (index != -1) {
+            this.index = index;
+        }
 
         //Jika user menambahkan berita baru maka tombol hapus akan di hide
         if (intent.getParcelableExtra("newsModel") == null) {
@@ -129,7 +141,7 @@ public class OpAddNewsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                 intent.setType("image/*");
-                startActivityForResult(Intent.createChooser(intent, "Pilih Gambar"), 1);
+                startActivityForResult(Intent.createChooser(intent, "Pilih Gambar"), PHOTO_PICK_REQUEST_CODE);
             }
 
         });
@@ -201,7 +213,9 @@ public class OpAddNewsActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(Void aVoid) {
                         progressDialog.dismiss();
-                        onBackPressed();
+                        Intent intent = new Intent(OpAddNewsActivity.this, OpNewsActivity.class);
+                        intent.putExtra("index", index);
+                        startActivityForResult(intent, DELETE_NEWS_REQUEST_CODE);
                         Toast.makeText(OpAddNewsActivity.this, "Berita telah dihapus", Toast.LENGTH_SHORT).show();
                     }
                 })
@@ -300,13 +314,15 @@ public class OpAddNewsActivity extends AppCompatActivity {
             return;
         }
         if (dateCreated != 0) {
-            NewsModel newsModel = new NewsModel(edtJudul.getText().toString(), edtIsi.getText().toString(), downloadURL, dateCreated);
+            final NewsModel newsModel = new NewsModel(edtJudul.getText().toString(), edtIsi.getText().toString(), downloadURL, dateCreated);
             newsRef.add(newsModel)
                     .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                         @Override
                         public void onSuccess(DocumentReference documentReference) {
                             progressDialog.dismiss();
-                            onBackPressed();
+                            Intent intent = new Intent(OpAddNewsActivity.this, OpNewsActivity.class);
+                            intent.putExtra("newsModel", newsModel);
+                            startActivityForResult(intent, ADD_NEWS_REQUEST_CODE);
                             Toast.makeText(OpAddNewsActivity.this, "Berita telah ditambahkan", Toast.LENGTH_SHORT).show();
                         }
                     })
@@ -376,14 +392,17 @@ public class OpAddNewsActivity extends AppCompatActivity {
             return;
         }
         if (dateCreated != 0) {
-            NewsModel newsModel = new NewsModel(edtJudul.getText().toString(), edtIsi.getText().toString(), downloadURL, dateCreated);
+            final NewsModel newsModel = new NewsModel(edtJudul.getText().toString(), edtIsi.getText().toString(), downloadURL, dateCreated);
             DocumentReference documentReference = newsRef.document(this.newsModel.getNewsId());
             documentReference.set(newsModel)
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
                             progressDialog.dismiss();
-                            onBackPressed();
+                            Intent intent = new Intent(OpAddNewsActivity.this, OpNewsActivity.class);
+                            intent.putExtra("newsModel", newsModel);
+                            intent.putExtra("index", index);
+                            startActivityForResult(intent, UPDATE_NEWS_REQUEST_CODE);
                             Toast.makeText(OpAddNewsActivity.this, "Berita telah disunting", Toast.LENGTH_SHORT).show();
                         }
                     })

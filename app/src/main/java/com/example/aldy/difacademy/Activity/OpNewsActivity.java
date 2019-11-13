@@ -3,11 +3,13 @@ package com.example.aldy.difacademy.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -26,13 +28,15 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
+import static com.example.aldy.difacademy.Activity.OpAddNewsActivity.ADD_NEWS_REQUEST_CODE;
+import static com.example.aldy.difacademy.Activity.OpAddNewsActivity.DELETE_NEWS_REQUEST_CODE;
+import static com.example.aldy.difacademy.Activity.OpAddNewsActivity.UPDATE_NEWS_REQUEST_CODE;
+
 public class OpNewsActivity extends AppCompatActivity {
     private ConstraintLayout clTambah, clBack;
     private RecyclerView rvNews;
     private ArrayList<NewsModel> newsModels;
     private OpNewsAdapter opNewsAdapter;
-    private FirebaseFirestore db;
-    private CollectionReference newsRef;
     private static final String TAG = "OpNewsActivity";
     private ProgressDialog progressDialog;
 
@@ -47,14 +51,33 @@ public class OpNewsActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onPostResume() {
-        super.onPostResume();
-        getData();
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Intent intent = getIntent();
+        NewsModel newsModel = intent.getParcelableExtra("newsModel");
+        int index = intent.getIntExtra("index", -1);
+
+        if (requestCode == ADD_NEWS_REQUEST_CODE && resultCode == RESULT_OK) {
+            if (newsModel != null) {
+                newsModels.add(newsModel);
+                opNewsAdapter.notifyDataSetChanged();
+            }
+        } else if (requestCode == DELETE_NEWS_REQUEST_CODE && resultCode == RESULT_OK) {
+            if (index != -1) {
+                newsModels.remove(index);
+                opNewsAdapter.notifyDataSetChanged();
+            }
+        } else if (requestCode == UPDATE_NEWS_REQUEST_CODE && resultCode == RESULT_OK) {
+            if (newsModel != null) {
+                newsModels.set(index, newsModel);
+                opNewsAdapter.notifyDataSetChanged();
+            }
+        }
     }
 
     private void findView() {
         TextView tvNavBar = findViewById(R.id.tv_navbar);
-        tvNavBar.setText("Berita");
+        tvNavBar.setText(R.string.berita);
         clTambah = findViewById(R.id.cl_icon3);
         clTambah.setVisibility(View.VISIBLE);
         clBack = findViewById(R.id.cl_icon1);
@@ -94,8 +117,8 @@ public class OpNewsActivity extends AppCompatActivity {
         progressDialog.setMessage("Memuat");
         progressDialog.setCancelable(false);
         progressDialog.show();
-        db = FirebaseFirestore.getInstance();
-        newsRef = db.collection("News");
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference newsRef = db.collection("News");
         newsRef.orderBy("dateCreated", Query.Direction.DESCENDING)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -116,6 +139,7 @@ public class OpNewsActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         progressDialog.dismiss();
+                        Log.d(TAG, e.toString());
                     }
                 });
     }
