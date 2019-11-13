@@ -13,11 +13,9 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,8 +45,6 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -80,6 +76,8 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
 
     String thumbnailUrl = "";
 
+    FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,6 +85,7 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
 
         pd = new ProgressDialog(this);
         pd.setMessage("Loading...");
+        pd.setCancelable(false);
 
         initView();
         onClick();
@@ -103,6 +102,7 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
             edtJudul.setText(blendedCourseModelIntent.getTitle());
             edtLinkGDrive.setText(blendedCourseModelIntent.getgDriveUrl());
             edtHargaKelas.setText(blendedCourseModelIntent.getHarga());
+            edtDeskripsi.setText(blendedCourseModelIntent.getDescription());
         }
     }
 
@@ -118,11 +118,11 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
         if (requestCode == 1 && resultCode == RESULT_OK
                 && data != null && data.getData() != null) {
             imageUri = data.getData();
-            try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
-                imgThumbnail.setImageBitmap(bitmap);
-            } catch (IOException e) {
-            }
+
+            Glide.with(this)
+                    .load(imageUri)
+                    .into(imgThumbnail);
+
         }
     }
 
@@ -167,9 +167,20 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //ambil foto di gallery
-                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                intent.setType("image/*");
-                startActivityForResult(Intent.createChooser(intent, "Pilih Gambar"), 1);
+
+                if (ContextCompat.checkSelfPermission(OpAddBlendedCourseActivity.this,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(OpAddBlendedCourseActivity.this,
+                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 2);
+                } else {
+                    Intent intent = new Intent(Intent.ACTION_PICK);
+                    intent.setType("image/*");
+                    startActivityForResult(intent, 1);
+                }
+
+//                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+//                intent.setType("image/*");
+//                startActivityForResult(Intent.createChooser(intent, "Pilih Gambar"), 1);
             }
         });
         clAddVideo.setOnClickListener(new View.OnClickListener() {
@@ -215,9 +226,33 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
         });
     }
 
-    private void uploadImageToFirebase() {
+    private void checkEditOrAddImage() {
         pd.show();
-        FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
+
+        if (thereIsData && imageUri == null) {
+            addOrUpdateData();
+        } else if (thereIsData && imageUri != null) {
+            StorageReference deleteRef = firebaseStorage.getReferenceFromUrl(blendedCourseModelIntent.getThumbnailUrl());
+            deleteRef.delete()
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            uploadImageToFirebase(imageUri);
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            pd.dismiss();
+                            Toast.makeText(OpAddBlendedCourseActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } else {
+            uploadImageToFirebase(imageUri);
+        }
+    }
+
+    private void uploadImageToFirebase(Uri imageUri) {
         final StorageReference ref = firebaseStorage.getReference().child("BlendedVideo/" + UUID.randomUUID().toString());
         ref.putFile(imageUri)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -388,19 +423,32 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
     }
 
     private void hapus() {
-        DocumentReference docRef = blendedCourseRef.document(blendedCourseModelIntent.getDocumentId());
-        docRef.delete()
+        StorageReference deleteRef = firebaseStorage.getReferenceFromUrl(blendedCourseModelIntent.getThumbnailUrl());
+        deleteRef.delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        onBackPressed();
+                        DocumentReference docRef = blendedCourseRef.document(blendedCourseModelIntent.getDocumentId());
+                        docRef.delete()
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        onBackPressed();
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        pd.dismiss();
+                                        Toast.makeText(OpAddBlendedCourseActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+                                    }
+                                });
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         pd.dismiss();
-                        Log.d(TAG, "onFailure: hapus document gagal");
                         Toast.makeText(OpAddBlendedCourseActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -440,7 +488,7 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
                 pd.show();
-                uploadImageToFirebase();
+                checkEditOrAddImage();
             }
         });
 
