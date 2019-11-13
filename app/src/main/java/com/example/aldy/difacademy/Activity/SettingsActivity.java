@@ -2,6 +2,7 @@ package com.example.aldy.difacademy.Activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 
@@ -10,6 +11,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.aldy.difacademy.R;
+import com.google.firebase.auth.FirebaseAuth;
+
+import static com.example.aldy.difacademy.Activity.LoginActivity.JENIS_USER_PREFS;
+import static com.example.aldy.difacademy.Activity.LoginActivity.SHARE_PREFS;
+import static com.example.aldy.difacademy.Activity.LoginActivity.USERID_PREFS;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -50,21 +56,15 @@ public class SettingsActivity extends AppCompatActivity {
         builder.setTitle("Keluar");
         builder.setCancelable(false);
         builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
-
             @Override
             public void onClick(DialogInterface dialog, int which) {
-//                pd.show();
-//
-//                auth.signOut();
-//
-//                SharedPreferences sharedPreferences = context.getSharedPreferences(SHARE_PREFS, MODE_PRIVATE);
-//                SharedPreferences.Editor editor = sharedPreferences.edit();
-//
-//                editor.putInt(STATE_USER_LOGGED_PREF, 0);
-//                editor.apply();
-//                STATE_USER_LOGGED = 0;
-//
-//                pd.dismiss();
+                SharedPreferences sharedPreferences = getSharedPreferences(SHARE_PREFS, MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString(USERID_PREFS, "");
+                editor.putString(JENIS_USER_PREFS, "");
+                editor.apply();
+
+                FirebaseAuth.getInstance().signOut();
                 Intent intent = new Intent(SettingsActivity.this, LoginActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);

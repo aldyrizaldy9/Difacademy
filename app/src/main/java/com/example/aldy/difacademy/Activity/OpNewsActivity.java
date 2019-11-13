@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -26,6 +27,10 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+
+import static com.example.aldy.difacademy.Activity.OpAddNewsActivity.ADD_NEWS_REQUEST_CODE;
+import static com.example.aldy.difacademy.Activity.OpAddNewsActivity.DELETE_NEWS_REQUEST_CODE;
+import static com.example.aldy.difacademy.Activity.OpAddNewsActivity.UPDATE_NEWS_REQUEST_CODE;
 
 public class OpNewsActivity extends AppCompatActivity {
     private ConstraintLayout clTambah, clBack;
@@ -46,9 +51,28 @@ public class OpNewsActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onPostResume() {
-        super.onPostResume();
-        getData();
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Intent intent = getIntent();
+        NewsModel newsModel = intent.getParcelableExtra("newsModel");
+        int index = intent.getIntExtra("index", -1);
+
+        if (requestCode == ADD_NEWS_REQUEST_CODE && resultCode == RESULT_OK) {
+            if (newsModel != null) {
+                newsModels.add(newsModel);
+                opNewsAdapter.notifyDataSetChanged();
+            }
+        } else if (requestCode == DELETE_NEWS_REQUEST_CODE && resultCode == RESULT_OK) {
+            if (index != -1) {
+                newsModels.remove(index);
+                opNewsAdapter.notifyDataSetChanged();
+            }
+        } else if (requestCode == UPDATE_NEWS_REQUEST_CODE && resultCode == RESULT_OK) {
+            if (newsModel != null) {
+                newsModels.set(index, newsModel);
+                opNewsAdapter.notifyDataSetChanged();
+            }
+        }
     }
 
     private void findView() {
