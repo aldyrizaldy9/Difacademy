@@ -1,8 +1,8 @@
 package com.example.aldy.difacademy.Adapter;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,8 +19,6 @@ import com.example.aldy.difacademy.Model.TagModel;
 import com.example.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -29,17 +27,18 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.WriteBatch;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class TagAdapter extends RecyclerView.Adapter<TagAdapter.ViewHolder> {
     private static final String TAG = "TagAdapter";
 
     private Context context;
     private ArrayList<TagModel> tagModels;
+    private ProgressDialog progressDialog;
 
     public TagAdapter(Context context, ArrayList<TagModel> tagModels) {
         this.context = context;
         this.tagModels = tagModels;
+        progressDialog = new ProgressDialog(context);
     }
 
     @NonNull
@@ -89,6 +88,9 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.ViewHolder> {
     }
 
     private void hapusTag(final String tagId) {
+        progressDialog.show();
+        progressDialog.setMessage("Menghapus");
+        progressDialog.setCancelable(false);
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference tagRef = db.collection("Tags").document(tagId);
 
@@ -110,9 +112,16 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.ViewHolder> {
                                             batch.update(docRef, "tag", "");
                                         }
                                         batch.commit()
+                                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                    @Override
+                                                    public void onSuccess(Void aVoid) {
+                                                        progressDialog.dismiss();
+                                                    }
+                                                })
                                                 .addOnFailureListener(new OnFailureListener() {
                                                     @Override
                                                     public void onFailure(@NonNull Exception e) {
+                                                        progressDialog.dismiss();
                                                         Toast.makeText(context, context.getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
                                                     }
                                                 });
@@ -121,6 +130,7 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.ViewHolder> {
                                 .addOnFailureListener(new OnFailureListener() {
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
+                                        progressDialog.dismiss();
                                         Toast.makeText(context, context.getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
                                     }
                                 });
@@ -129,6 +139,7 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.ViewHolder> {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
+                        progressDialog.dismiss();
                         Toast.makeText(context, context.getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
                     }
                 });

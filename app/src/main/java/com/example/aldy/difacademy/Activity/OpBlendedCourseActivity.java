@@ -1,17 +1,18 @@
 package com.example.aldy.difacademy.Activity;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.aldy.difacademy.Adapter.OpBlendedCourseAdapter;
 import com.example.aldy.difacademy.Model.BlendedCourseModel;
@@ -40,6 +41,8 @@ public class OpBlendedCourseActivity extends AppCompatActivity {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     CollectionReference blendedCourseRef = db.collection("BlendedCourse");
 
+    private ProgressDialog progressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,7 +61,7 @@ public class OpBlendedCourseActivity extends AppCompatActivity {
         loadData();
     }
 
-    private void initView(){
+    private void initView() {
         tvNavbar = findViewById(R.id.tv_navbar);
         tvNavbar.setText("Blended Course");
         clBack = findViewById(R.id.cl_icon1);
@@ -76,9 +79,11 @@ public class OpBlendedCourseActivity extends AppCompatActivity {
         imgAdd = findViewById(R.id.img_icon3);
         imgAdd.setImageResource(R.drawable.ic_add);
         rvBlended = findViewById(R.id.rv_op_blended);
+
+        progressDialog = new ProgressDialog(this);
     }
 
-    private void onClick(){
+    private void onClick() {
         clAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -88,32 +93,35 @@ public class OpBlendedCourseActivity extends AppCompatActivity {
         });
     }
 
-    private void setRecyclerView(){
+    private void setRecyclerView() {
         rvBlended.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         adapter = new OpBlendedCourseAdapter(this, blendedCourseModels);
         rvBlended.setAdapter(adapter);
     }
 
-    private void loadData(){
+    private void loadData() {
+        progressDialog.show();
+        progressDialog.setCancelable(false);
+        progressDialog.setMessage("Memuat");
         blendedCourseRef.orderBy("dateCreated", Query.Direction.DESCENDING)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         blendedCourseModels.clear();
-                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
-                            BlendedCourseModel newBlendedCourseModel= documentSnapshot.toObject(BlendedCourseModel.class);
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                            BlendedCourseModel newBlendedCourseModel = documentSnapshot.toObject(BlendedCourseModel.class);
                             newBlendedCourseModel.setDocumentId(documentSnapshot.getId());
                             blendedCourseModels.add(newBlendedCourseModel);
                         }
                         adapter.notifyDataSetChanged();
+                        progressDialog.dismiss();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        blendedCourseModels.clear();
-                        adapter.notifyDataSetChanged();
+                        progressDialog.dismiss();
                         Toast.makeText(OpBlendedCourseActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
                     }
                 });

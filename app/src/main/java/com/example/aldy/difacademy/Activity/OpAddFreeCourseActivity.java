@@ -139,11 +139,7 @@ public class OpAddFreeCourseActivity extends AppCompatActivity {
                 if (url.length() != 0) {
                     if (!tagVideoId.equals("")) {
                         progressDialog.show();
-                        if (thereIsData) {
-                            addOrUpdateData(url);
-                        } else {
-                            addOrUpdateData(url);
-                        }
+                        addOrUpdateData(url);
                     } else {
                         Toast.makeText(OpAddFreeCourseActivity.this, "Mohon Pilih Tag", Toast.LENGTH_SHORT).show();
                     }
@@ -243,6 +239,7 @@ public class OpAddFreeCourseActivity extends AppCompatActivity {
                         progressDialog.dismiss();
                         Intent intent = new Intent(OpAddFreeCourseActivity.this, OpFreeCourseActivity.class);
                         intent.putExtra("index", index);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivityForResult(intent, DELETE_FREE_COURSE_REQUEST_CODE);
                     }
                 })
@@ -273,14 +270,12 @@ public class OpAddFreeCourseActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(Call<YResponse> call, Response<YResponse> response) {
                     if (!response.isSuccessful()) {
-                        progressDialog.dismiss();
                         return;
                     }
 
                     YResponse yResponse = response.body();
 
                     if (yResponse.getItems().size() == 0) {
-                        progressDialog.dismiss();
                         Toast.makeText(OpAddFreeCourseActivity.this, getString(R.string.link_not_valid), Toast.LENGTH_SHORT).show();
                         return;
                     }
@@ -308,15 +303,18 @@ public class OpAddFreeCourseActivity extends AppCompatActivity {
                                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void aVoid) {
+                                            progressDialog.dismiss();
                                             Intent intent = new Intent(OpAddFreeCourseActivity.this, OpFreeCourseActivity.class);
                                             intent.putExtra("index", index);
                                             intent.putExtra("videoFreeModel", videoFreeModel);
+                                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                             startActivityForResult(intent, UPDATE_FREE_COURSE_REQUEST_CODE);
                                         }
                                     })
                                     .addOnFailureListener(new OnFailureListener() {
                                         @Override
                                         public void onFailure(@NonNull Exception e) {
+                                            progressDialog.dismiss();
                                             Toast.makeText(OpAddFreeCourseActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
                                         }
                                     });
@@ -325,8 +323,10 @@ public class OpAddFreeCourseActivity extends AppCompatActivity {
                                     .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                         @Override
                                         public void onSuccess(DocumentReference documentReference) {
+                                            progressDialog.dismiss();
                                             Intent intent = new Intent(OpAddFreeCourseActivity.this, OpFreeCourseActivity.class);
                                             intent.putExtra("videoFreeModel", videoFreeModel);
+                                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                             startActivityForResult(intent, ADD_FREE_COURSE_REQUEST_CODE);
                                         }
                                     })

@@ -1,11 +1,6 @@
 package com.example.aldy.difacademy.Activity;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -14,6 +9,12 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.aldy.difacademy.Adapter.TagAdapter;
 import com.example.aldy.difacademy.Model.TagModel;
@@ -46,6 +47,8 @@ public class OpTagsActivity extends AppCompatActivity {
     ArrayList<TagModel> tagModels;
     TagAdapter tagAdapter;
 
+    private ProgressDialog progressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,7 +59,7 @@ public class OpTagsActivity extends AppCompatActivity {
         loadTag();
     }
 
-    private void initView(){
+    private void initView() {
         tvNavbar = findViewById(R.id.tv_navbar);
         tvNavbar.setText("Tags");
         clBack = findViewById(R.id.cl_icon1);
@@ -69,9 +72,10 @@ public class OpTagsActivity extends AppCompatActivity {
         btnTambah = findViewById(R.id.btn_op_tags_simpan);
 
         edtAddTag.requestFocus();
+        progressDialog = new ProgressDialog(this);
     }
 
-    private void onClick(){
+    private void onClick() {
         clBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -83,7 +87,7 @@ public class OpTagsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String tag = edtAddTag.getText().toString();
-                if (tag.length() != 0){
+                if (tag.length() != 0) {
                     edtAddTag.setText("");
                     tambahTag(tag);
                 }
@@ -91,32 +95,43 @@ public class OpTagsActivity extends AppCompatActivity {
         });
     }
 
-    private void loadTag(){
+    private void loadTag() {
+        progressDialog.show();
+        progressDialog.setMessage("Memuat");
+        progressDialog.setCancelable(false);
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference tagRef = db.collection("Tags");
         tagRef.get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                             TagModel tagModel = documentSnapshot.toObject(TagModel.class);
                             tagModel.setTagid(documentSnapshot.getId());
 
                             tagModels.add(new TagModel(tagModel.getTag(), tagModel.getTagid()));
                         }
                         tagAdapter.notifyDataSetChanged();
+                        progressDialog.dismiss();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        progressDialog.dismiss();
+                        Log.d(TAG, e.toString());
                     }
                 });
     }
 
-    private void setRecyclerView(){
+    private void setRecyclerView() {
         tagModels = new ArrayList<>();
         tagAdapter = new TagAdapter(OpTagsActivity.this, tagModels);
         rvTags.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         rvTags.setAdapter(tagAdapter);
     }
 
-    private void tambahTag(final String tag){
+    private void tambahTag(final String tag) {
         TagModel tagModel = new TagModel(tag);
         tagsRef.add(tagModel)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {

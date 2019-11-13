@@ -215,6 +215,7 @@ public class OpAddNewsActivity extends AppCompatActivity {
                         progressDialog.dismiss();
                         Intent intent = new Intent(OpAddNewsActivity.this, OpNewsActivity.class);
                         intent.putExtra("index", index);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivityForResult(intent, DELETE_NEWS_REQUEST_CODE);
                         Toast.makeText(OpAddNewsActivity.this, "Berita telah dihapus", Toast.LENGTH_SHORT).show();
                     }
@@ -322,6 +323,7 @@ public class OpAddNewsActivity extends AppCompatActivity {
                             progressDialog.dismiss();
                             Intent intent = new Intent(OpAddNewsActivity.this, OpNewsActivity.class);
                             intent.putExtra("newsModel", newsModel);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             startActivityForResult(intent, ADD_NEWS_REQUEST_CODE);
                             Toast.makeText(OpAddNewsActivity.this, "Berita telah ditambahkan", Toast.LENGTH_SHORT).show();
                         }
@@ -402,6 +404,7 @@ public class OpAddNewsActivity extends AppCompatActivity {
                             Intent intent = new Intent(OpAddNewsActivity.this, OpNewsActivity.class);
                             intent.putExtra("newsModel", newsModel);
                             intent.putExtra("index", index);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             startActivityForResult(intent, UPDATE_NEWS_REQUEST_CODE);
                             Toast.makeText(OpAddNewsActivity.this, "Berita telah disunting", Toast.LENGTH_SHORT).show();
                         }
