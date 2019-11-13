@@ -1,5 +1,6 @@
 package com.example.aldy.difacademy.Activity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -45,6 +46,8 @@ public class OpFreeCourseActivity extends AppCompatActivity {
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     CollectionReference videoFreeRef = db.collection("VideoFree");
+
+    ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +97,7 @@ public class OpFreeCourseActivity extends AppCompatActivity {
         imgAdd = findViewById(R.id.img_icon3);
         imgAdd.setImageResource(R.drawable.ic_add);
         rvFree = findViewById(R.id.rv_op_free);
+        progressDialog = new ProgressDialog(this);
     }
 
     private void onClick() {
@@ -119,6 +123,9 @@ public class OpFreeCourseActivity extends AppCompatActivity {
     }
 
     private void loadData() {
+        progressDialog.show();
+        progressDialog.setCancelable(false);
+        progressDialog.setMessage("Memuat");
         videoFreeRef.orderBy("dateCreated", Query.Direction.DESCENDING)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -131,13 +138,13 @@ public class OpFreeCourseActivity extends AppCompatActivity {
                             videoFreeModels.add(newVideoFreeModel);
                         }
                         adapter.notifyDataSetChanged();
+                        progressDialog.dismiss();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        videoFreeModels.clear();
-                        adapter.notifyDataSetChanged();
+                        progressDialog.dismiss();
                         Toast.makeText(OpFreeCourseActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
                     }
                 });

@@ -69,7 +69,7 @@ public class OpAddFreeCourseActivity extends AppCompatActivity {
     boolean thereIsData = false;
     VideoFreeModel videoFreeModelIntent;
 
-    ProgressDialog pd;
+    ProgressDialog progressDialog;
 
     private int index;
 
@@ -82,8 +82,8 @@ public class OpAddFreeCourseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_op_add_free_course);
 
-        pd = new ProgressDialog(this);
-        pd.setMessage("Loading...");
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Loading...");
 
         initView();
         onClick();
@@ -138,7 +138,7 @@ public class OpAddFreeCourseActivity extends AppCompatActivity {
                 String url = edtLink.getText().toString();
                 if (url.length() != 0) {
                     if (!tagVideoId.equals("")) {
-                        pd.show();
+                        progressDialog.show();
                         if (thereIsData) {
                             addOrUpdateData(url);
                         } else {
@@ -154,7 +154,7 @@ public class OpAddFreeCourseActivity extends AppCompatActivity {
 
     @Override
     protected void onPause() {
-        pd.dismiss();
+        progressDialog.dismiss();
         super.onPause();
     }
 
@@ -240,7 +240,7 @@ public class OpAddFreeCourseActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        pd.dismiss();
+                        progressDialog.dismiss();
                         Intent intent = new Intent(OpAddFreeCourseActivity.this, OpFreeCourseActivity.class);
                         intent.putExtra("index", index);
                         startActivityForResult(intent, DELETE_FREE_COURSE_REQUEST_CODE);
@@ -249,7 +249,7 @@ public class OpAddFreeCourseActivity extends AppCompatActivity {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        pd.dismiss();
+                        progressDialog.dismiss();
                         Toast.makeText(OpAddFreeCourseActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -273,14 +273,14 @@ public class OpAddFreeCourseActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(Call<YResponse> call, Response<YResponse> response) {
                     if (!response.isSuccessful()) {
-                        pd.dismiss();
+                        progressDialog.dismiss();
                         return;
                     }
 
                     YResponse yResponse = response.body();
 
                     if (yResponse.getItems().size() == 0) {
-                        pd.dismiss();
+                        progressDialog.dismiss();
                         Toast.makeText(OpAddFreeCourseActivity.this, getString(R.string.link_not_valid), Toast.LENGTH_SHORT).show();
                         return;
                     }
@@ -333,7 +333,7 @@ public class OpAddFreeCourseActivity extends AppCompatActivity {
                                     .addOnFailureListener(new OnFailureListener() {
                                         @Override
                                         public void onFailure(@NonNull Exception e) {
-                                            pd.dismiss();
+                                            progressDialog.dismiss();
                                             Toast.makeText(OpAddFreeCourseActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                                         }
                                     });
@@ -343,12 +343,12 @@ public class OpAddFreeCourseActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<YResponse> call, Throwable t) {
-                    pd.dismiss();
+                    progressDialog.dismiss();
                     Toast.makeText(OpAddFreeCourseActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
                 }
             });
         } else {
-            pd.dismiss();
+            progressDialog.dismiss();
             Toast.makeText(this, getString(R.string.link_not_valid), Toast.LENGTH_SHORT).show();
         }
     }
@@ -362,7 +362,7 @@ public class OpAddFreeCourseActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
-                pd.show();
+                progressDialog.show();
                 hapus();
             }
         });
