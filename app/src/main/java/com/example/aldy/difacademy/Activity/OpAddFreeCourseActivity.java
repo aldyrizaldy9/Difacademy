@@ -133,9 +133,9 @@ public class OpAddFreeCourseActivity extends AppCompatActivity {
                     if (!tagVideoId.equals("")) {
                         pd.show();
                         if (thereIsData) {
-                            addOrUpdateData(url, "update");
+                            addOrUpdateData(url);
                         } else {
-                            addOrUpdateData(url, "add");
+                            addOrUpdateData(url);
                         }
                     } else {
                         Toast.makeText(OpAddFreeCourseActivity.this, "Mohon Pilih Tag", Toast.LENGTH_SHORT).show();
@@ -197,7 +197,7 @@ public class OpAddFreeCourseActivity extends AppCompatActivity {
             }
         });
 
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
+//        FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference tagRef = db.collection("Tags");
         tagRef.get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -246,7 +246,7 @@ public class OpAddFreeCourseActivity extends AppCompatActivity {
                 });
     }
 
-    private void addOrUpdateData(String url, final String status) {
+    private void addOrUpdateData(String url) {
         final String youtubeVideoId = YoutubeApiKeyConfig.getYoutubeVideoId(url);
         if (!youtubeVideoId.equals("")) {
             Retrofit retrofit = new Retrofit.Builder()
@@ -293,7 +293,7 @@ public class OpAddFreeCourseActivity extends AppCompatActivity {
                     if (datecreated > 0){
                         VideoFreeModel videoFreeModel = new VideoFreeModel(thumbStandard, youtubeVideoId,
                                 title, description, tagId, tag, datecreated);
-                        if (status.equals("update")) {
+                        if (thereIsData) {
                             WriteBatch batch = db.batch();
                             DocumentReference videoRef = videoFreeRef.document(videoFreeModelIntent.getDocumentId());
                             batch.update(videoRef, "description", description);
