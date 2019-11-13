@@ -1,7 +1,9 @@
 package com.example.aldy.difacademy.Activity;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
@@ -9,8 +11,20 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.aldy.difacademy.Adapter.OpBlendedCourseAdapter;
+import com.example.aldy.difacademy.Model.BlendedCourseModel;
 import com.example.aldy.difacademy.R;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.ArrayList;
 
 public class OpBlendedCourseActivity extends AppCompatActivity {
     private static final String TAG = "OpBlendedCourseActivity";
@@ -20,14 +34,28 @@ public class OpBlendedCourseActivity extends AppCompatActivity {
     ImageView imgBack, imgAdd;
     RecyclerView rvBlended;
 
+    ArrayList<BlendedCourseModel> blendedCourseModels;
+    OpBlendedCourseAdapter adapter;
+
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    CollectionReference blendedCourseRef = db.collection("BlendedCourse");
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_op_blended_course);
 
+        blendedCourseModels = new ArrayList<>();
+
         initView();
         onClick();
         setRecyclerView();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadData();
     }
 
     private void initView(){
@@ -61,6 +89,33 @@ public class OpBlendedCourseActivity extends AppCompatActivity {
     }
 
     private void setRecyclerView(){
+        rvBlended.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        adapter = new OpBlendedCourseAdapter(this, blendedCourseModels);
+        rvBlended.setAdapter(adapter);
+    }
 
+    private void loadData(){
+        blendedCourseRef.orderBy("dateCreated", Query.Direction.DESCENDING)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        blendedCourseModels.clear();
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
+                            BlendedCourseModel newBlendedCourseModel= documentSnapshot.toObject(BlendedCourseModel.class);
+                            newBlendedCourseModel.setDocumentId(documentSnapshot.getId());
+                            blendedCourseModels.add(newBlendedCourseModel);
+                        }
+                        adapter.notifyDataSetChanged();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        blendedCourseModels.clear();
+                        adapter.notifyDataSetChanged();
+                        Toast.makeText(OpBlendedCourseActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 }

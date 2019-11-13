@@ -72,11 +72,10 @@ public class OpAddNewsActivity extends AppCompatActivity {
         if (requestCode == 1 && resultCode == RESULT_OK
                 && data != null && data.getData() != null) {
             imageUri = data.getData();
-            try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
-                imgThumbnail.setImageBitmap(bitmap);
-            } catch (IOException e) {
-            }
+
+            Glide.with(this)
+                    .load(imageUri)
+                    .into(imgThumbnail);
         }
     }
 

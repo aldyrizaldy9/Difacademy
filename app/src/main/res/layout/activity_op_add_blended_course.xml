@@ -29,11 +29,10 @@
                 android:id="@+id/img_op_add_blended_thumbnail"
                 android:layout_width="0dp"
                 android:layout_height="200dp"
-                android:scaleType="centerCrop"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:srcCompat="@tools:sample/backgrounds/scenic" />
+                tools:srcCompat="@android:color/holo_blue_bright" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/cl_op_add_blended_video_materi"
