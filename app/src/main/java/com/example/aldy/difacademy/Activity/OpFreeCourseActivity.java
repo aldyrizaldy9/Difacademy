@@ -1,17 +1,18 @@
 package com.example.aldy.difacademy.Activity;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.aldy.difacademy.Adapter.OpFreeCourseAdapter;
 import com.example.aldy.difacademy.Model.VideoFreeModel;
@@ -25,6 +26,10 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+
+import static com.example.aldy.difacademy.Activity.OpAddFreeCourseActivity.ADD_FREE_COURSE_REQUEST_CODE;
+import static com.example.aldy.difacademy.Activity.OpAddFreeCourseActivity.DELETE_FREE_COURSE_REQUEST_CODE;
+import static com.example.aldy.difacademy.Activity.OpAddFreeCourseActivity.UPDATE_FREE_COURSE_REQUEST_CODE;
 
 public class OpFreeCourseActivity extends AppCompatActivity {
 
@@ -51,15 +56,33 @@ public class OpFreeCourseActivity extends AppCompatActivity {
         initView();
         onClick();
         setRecyclerView();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
         loadData();
     }
 
-    private void initView(){
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Intent intent = getIntent();
+        VideoFreeModel videoFreeModel = intent.getParcelableExtra("videoFreeModel");
+        int index = intent.getIntExtra("index", -1);
+
+        if (requestCode == ADD_FREE_COURSE_REQUEST_CODE && resultCode == RESULT_OK) {
+            if (videoFreeModel != null) {
+                videoFreeModels.add(videoFreeModel);
+            }
+        } else if (requestCode == DELETE_FREE_COURSE_REQUEST_CODE && resultCode == RESULT_OK) {
+            if (index != -1) {
+                videoFreeModels.remove(index);
+            }
+        } else if (requestCode == UPDATE_FREE_COURSE_REQUEST_CODE && resultCode == RESULT_OK) {
+            if (videoFreeModel != null) {
+                videoFreeModels.set(index, videoFreeModel);
+            }
+        }
+        adapter.notifyDataSetChanged();
+    }
+
+    private void initView() {
         tvNavbar = findViewById(R.id.tv_navbar);
         tvNavbar.setText("Free Course");
         clBack = findViewById(R.id.cl_icon1);
@@ -73,7 +96,7 @@ public class OpFreeCourseActivity extends AppCompatActivity {
         rvFree = findViewById(R.id.rv_op_free);
     }
 
-    private void onClick(){
+    private void onClick() {
         clBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -89,20 +112,20 @@ public class OpFreeCourseActivity extends AppCompatActivity {
         });
     }
 
-    private void setRecyclerView(){
+    private void setRecyclerView() {
         rvFree.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         adapter = new OpFreeCourseAdapter(this, videoFreeModels);
         rvFree.setAdapter(adapter);
     }
 
-    private void loadData(){
+    private void loadData() {
         videoFreeRef.orderBy("dateCreated", Query.Direction.DESCENDING)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         videoFreeModels.clear();
-                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                             VideoFreeModel newVideoFreeModel = documentSnapshot.toObject(VideoFreeModel.class);
                             newVideoFreeModel.setDocumentId(documentSnapshot.getId());
                             videoFreeModels.add(newVideoFreeModel);

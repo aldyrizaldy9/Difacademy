@@ -36,7 +36,7 @@ public class FreeCourseAdapter extends RecyclerView.Adapter<FreeCourseAdapter.Vi
     }
 
     @Override
-    public void onBindViewHolder(@NonNull FreeCourseAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull FreeCourseAdapter.ViewHolder holder, final int position) {
         VideoFreeModel videoFreeModel = freeModels.get(position);
 //        holder.tvJudul.setText(videoFreeModel.getJudul());
 //        holder.tvTag.setText(videoFreeModel.getTag());
@@ -44,6 +44,7 @@ public class FreeCourseAdapter extends RecyclerView.Adapter<FreeCourseAdapter.Vi
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, DetailCourseActivity.class);
+                intent.putExtra("index", position);
                 context.startActivity(intent);
             }
         });

@@ -1,17 +1,10 @@
 package com.example.aldy.difacademy.Activity;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -23,12 +16,18 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+
 import com.example.aldy.difacademy.JsonApiRetrofit;
 import com.example.aldy.difacademy.Model.TagModel;
 import com.example.aldy.difacademy.Model.VideoFreeModel;
 import com.example.aldy.difacademy.ModelForYoutube.YResponse;
-import com.example.aldy.difacademy.YoutubeApiKeyConfig;
 import com.example.aldy.difacademy.R;
+import com.example.aldy.difacademy.YoutubeApiKeyConfig;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Timestamp;
@@ -37,14 +36,9 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.WriteBatch;
-import com.google.firebase.firestore.model.value.ServerTimestampValue;
-import com.google.firestore.v1.DocumentTransform;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -77,6 +71,12 @@ public class OpAddFreeCourseActivity extends AppCompatActivity {
 
     ProgressDialog pd;
 
+    private int index;
+
+    static final int ADD_FREE_COURSE_REQUEST_CODE = 1;
+    static final int DELETE_FREE_COURSE_REQUEST_CODE = 2;
+    static final int UPDATE_FREE_COURSE_REQUEST_CODE = 3;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,8 +108,15 @@ public class OpAddFreeCourseActivity extends AppCompatActivity {
         btnSave = findViewById(R.id.btn_op_add_free_simpan);
         btnHapus = findViewById(R.id.btn_op_add_free_hapus);
         edtLink = findViewById(R.id.edt_op_add_free_link);
-
         spnTag = findViewById(R.id.spn_op_add_free_tags);
+
+        Intent intent = getIntent();
+
+        //Menentukan index apabila ada
+        int index = intent.getIntExtra("index", -1);
+        if (index != -1) {
+            this.index = index;
+        }
     }
 
     private void onClick() {
@@ -234,7 +241,9 @@ public class OpAddFreeCourseActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(Void aVoid) {
                         pd.dismiss();
-                        onBackPressed();
+                        Intent intent = new Intent(OpAddFreeCourseActivity.this, OpFreeCourseActivity.class);
+                        intent.putExtra("index", index);
+                        startActivityForResult(intent, DELETE_FREE_COURSE_REQUEST_CODE);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -285,29 +294,24 @@ public class OpAddFreeCourseActivity extends AppCompatActivity {
 
                     try {
                         datecreated = Timestamp.now().getSeconds();
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         Toast.makeText(OpAddFreeCourseActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
                         return;
                     }
 
-                    if (datecreated > 0){
-                        VideoFreeModel videoFreeModel = new VideoFreeModel(thumbStandard, youtubeVideoId,
+                    if (datecreated > 0) {
+                        final VideoFreeModel videoFreeModel = new VideoFreeModel(thumbStandard, youtubeVideoId,
                                 title, description, tagId, tag, datecreated);
                         if (thereIsData) {
-                            WriteBatch batch = db.batch();
                             DocumentReference videoRef = videoFreeRef.document(videoFreeModelIntent.getDocumentId());
-                            batch.update(videoRef, "description", description);
-                            batch.update(videoRef, "tagId", tagId);
-                            batch.update(videoRef, "thumbnailUrl", thumbStandard);
-                            batch.update(videoRef, "title", title);
-                            batch.update(videoRef, "videoYoutubeId", youtubeVideoId);
-                            batch.update(videoRef, "tag", tag);
-                            batch.update(videoRef, "dateCreated", datecreated);
-                            batch.commit()
+                            videoRef.set(videoFreeModel)
                                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void aVoid) {
-                                            onBackPressed();
+                                            Intent intent = new Intent(OpAddFreeCourseActivity.this, OpFreeCourseActivity.class);
+                                            intent.putExtra("index", index);
+                                            intent.putExtra("videoFreeModel", videoFreeModel);
+                                            startActivityForResult(intent, UPDATE_FREE_COURSE_REQUEST_CODE);
                                         }
                                     })
                                     .addOnFailureListener(new OnFailureListener() {
@@ -321,7 +325,9 @@ public class OpAddFreeCourseActivity extends AppCompatActivity {
                                     .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                         @Override
                                         public void onSuccess(DocumentReference documentReference) {
-                                            onBackPressed();
+                                            Intent intent = new Intent(OpAddFreeCourseActivity.this, OpFreeCourseActivity.class);
+                                            intent.putExtra("videoFreeModel", videoFreeModel);
+                                            startActivityForResult(intent, ADD_FREE_COURSE_REQUEST_CODE);
                                         }
                                     })
                                     .addOnFailureListener(new OnFailureListener() {

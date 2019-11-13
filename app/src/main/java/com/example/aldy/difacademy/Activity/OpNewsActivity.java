@@ -60,19 +60,17 @@ public class OpNewsActivity extends AppCompatActivity {
         if (requestCode == ADD_NEWS_REQUEST_CODE && resultCode == RESULT_OK) {
             if (newsModel != null) {
                 newsModels.add(newsModel);
-                opNewsAdapter.notifyDataSetChanged();
             }
         } else if (requestCode == DELETE_NEWS_REQUEST_CODE && resultCode == RESULT_OK) {
             if (index != -1) {
                 newsModels.remove(index);
-                opNewsAdapter.notifyDataSetChanged();
             }
         } else if (requestCode == UPDATE_NEWS_REQUEST_CODE && resultCode == RESULT_OK) {
             if (newsModel != null) {
                 newsModels.set(index, newsModel);
-                opNewsAdapter.notifyDataSetChanged();
             }
         }
+        opNewsAdapter.notifyDataSetChanged();
     }
 
     private void findView() {
