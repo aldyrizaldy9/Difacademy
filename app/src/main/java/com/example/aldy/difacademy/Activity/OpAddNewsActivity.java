@@ -55,6 +55,7 @@ public class OpAddNewsActivity extends AppCompatActivity {
     private CollectionReference newsRef = db.collection("News");
 
     private NewsModel newsModel;
+    private int index;
     private long dateCreated;
 
     @Override
@@ -74,8 +75,9 @@ public class OpAddNewsActivity extends AppCompatActivity {
             imageUri = data.getData();
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
-                imgThumbnail.setImageBitmap(bitmap);
+                Glide.with(this).load(bitmap).into(imgThumbnail);
             } catch (IOException e) {
+                Log.d(TAG, e.toString());
             }
         }
     }
@@ -94,13 +96,19 @@ public class OpAddNewsActivity extends AppCompatActivity {
         imgBack.setImageResource(R.drawable.ic_arrow_back);
         imgBack.setVisibility(View.VISIBLE);
         TextView tvNavbar = findViewById(R.id.tv_navbar);
-        tvNavbar.setText("Tambah Berita");
+        tvNavbar.setText(R.string.tambah_berita);
         edtJudul = findViewById(R.id.edt_judul);
         edtIsi = findViewById(R.id.edt_op_add_news_isi);
         btnHapus = findViewById(R.id.btn_op_add_news_hapus);
         btnSimpan = findViewById(R.id.btn_op_add_news_simpan);
         progressDialog = new ProgressDialog(this);
         Intent intent = getIntent();
+
+        //Menentukan index apabila ada
+        int index = intent.getIntExtra("index", -1);
+        if (index != -1) {
+            this.index = index;
+        }
 
         //Jika user menambahkan berita baru maka tombol hapus akan di hide
         if (intent.getParcelableExtra("newsModel") == null) {

@@ -3,6 +3,7 @@ package com.example.aldy.difacademy.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -31,8 +32,6 @@ public class OpNewsActivity extends AppCompatActivity {
     private RecyclerView rvNews;
     private ArrayList<NewsModel> newsModels;
     private OpNewsAdapter opNewsAdapter;
-    private FirebaseFirestore db;
-    private CollectionReference newsRef;
     private static final String TAG = "OpNewsActivity";
     private ProgressDialog progressDialog;
 
@@ -54,7 +53,7 @@ public class OpNewsActivity extends AppCompatActivity {
 
     private void findView() {
         TextView tvNavBar = findViewById(R.id.tv_navbar);
-        tvNavBar.setText("Berita");
+        tvNavBar.setText(R.string.berita);
         clTambah = findViewById(R.id.cl_icon3);
         clTambah.setVisibility(View.VISIBLE);
         clBack = findViewById(R.id.cl_icon1);
@@ -94,8 +93,8 @@ public class OpNewsActivity extends AppCompatActivity {
         progressDialog.setMessage("Memuat");
         progressDialog.setCancelable(false);
         progressDialog.show();
-        db = FirebaseFirestore.getInstance();
-        newsRef = db.collection("News");
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference newsRef = db.collection("News");
         newsRef.orderBy("dateCreated", Query.Direction.DESCENDING)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -116,6 +115,7 @@ public class OpNewsActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         progressDialog.dismiss();
+                        Log.d(TAG, e.toString());
                     }
                 });
     }
