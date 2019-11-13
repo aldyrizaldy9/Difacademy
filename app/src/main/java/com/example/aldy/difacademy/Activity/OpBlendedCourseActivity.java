@@ -100,9 +100,9 @@ public class OpBlendedCourseActivity extends AppCompatActivity {
     }
 
     private void loadData() {
-        progressDialog.show();
-        progressDialog.setCancelable(false);
         progressDialog.setMessage("Memuat");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
         blendedCourseRef.orderBy("dateCreated", Query.Direction.DESCENDING)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {

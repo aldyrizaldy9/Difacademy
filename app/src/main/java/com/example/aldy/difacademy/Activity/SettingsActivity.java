@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,7 +21,9 @@ import static com.example.aldy.difacademy.Activity.LoginActivity.USERID_PREFS;
 
 public class SettingsActivity extends AppCompatActivity {
 
-    ConstraintLayout clSunting, clKeluar;
+    private ConstraintLayout clSunting, clKeluar, clBack;
+    private ImageView imgBack;
+    private TextView tvNavBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +36,12 @@ public class SettingsActivity extends AppCompatActivity {
     private void findView() {
         clSunting = findViewById(R.id.cl_settings_sunting);
         clKeluar = findViewById(R.id.cl_settings_keluar);
+        clBack = findViewById(R.id.cl_icon1);
+        clBack.setVisibility(View.VISIBLE);
+        imgBack = findViewById(R.id.img_icon1);
+        imgBack.setImageResource(R.drawable.ic_arrow_back);
+        tvNavBar = findViewById(R.id.tv_navbar);
+        tvNavBar.setText("Pengaturan");
     }
 
     private void onClick() {
@@ -46,6 +56,12 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 showKeluarDialog();
+            }
+        });
+        clBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
             }
         });
     }

@@ -88,9 +88,9 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.ViewHolder> {
     }
 
     private void hapusTag(final String tagId) {
-        progressDialog.show();
         progressDialog.setMessage("Menghapus");
         progressDialog.setCancelable(false);
+        progressDialog.show();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference tagRef = db.collection("Tags").document(tagId);
 

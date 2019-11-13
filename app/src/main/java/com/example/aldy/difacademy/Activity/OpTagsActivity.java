@@ -96,9 +96,9 @@ public class OpTagsActivity extends AppCompatActivity {
     }
 
     private void loadTag() {
-        progressDialog.show();
         progressDialog.setMessage("Memuat");
         progressDialog.setCancelable(false);
+        progressDialog.show();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference tagRef = db.collection("Tags");
         tagRef.get()

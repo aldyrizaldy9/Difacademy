@@ -123,9 +123,9 @@ public class OpFreeCourseActivity extends AppCompatActivity {
     }
 
     private void loadData() {
-        progressDialog.show();
-        progressDialog.setCancelable(false);
         progressDialog.setMessage("Memuat");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
         videoFreeRef.orderBy("dateCreated", Query.Direction.DESCENDING)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {

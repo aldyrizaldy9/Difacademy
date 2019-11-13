@@ -3,10 +3,8 @@ package com.example.aldy.difacademy.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -35,7 +33,6 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import java.io.IOException;
 import java.util.UUID;
 
 public class OpAddNewsActivity extends AppCompatActivity {
@@ -185,9 +182,9 @@ public class OpAddNewsActivity extends AppCompatActivity {
     }
 
     private void deleteImageFromFirebaseStorage() {
-        progressDialog.show();
-        progressDialog.setCancelable(false);
         progressDialog.setMessage("Menghapus");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
         storageReference = firebaseStorage.getReferenceFromUrl(newsModel.getLinkfoto());
         storageReference
                 .delete()
@@ -266,8 +263,8 @@ public class OpAddNewsActivity extends AppCompatActivity {
     }
 
     private void uploadImageToFirebaseStorage() {
-        progressDialog.show();
         progressDialog.setCancelable(false);
+        progressDialog.show();
         final StorageReference ref = storageReference.child("Berita/" + UUID.randomUUID().toString());
         ref.putFile(imageUri)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -340,8 +337,8 @@ public class OpAddNewsActivity extends AppCompatActivity {
     }
 
     private void updateImageToFirebaseStorage() {
-        progressDialog.show();
         progressDialog.setCancelable(false);
+        progressDialog.show();
         storageReference = firebaseStorage.getReferenceFromUrl(newsModel.getLinkfoto());
         //Jika user mengubah gambar maka gambar di firebase storage akan diupdate
         if (imageUri != null) {

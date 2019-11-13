@@ -42,6 +42,7 @@ public class OpMainActivity extends AppCompatActivity {
 
     private void findView() {
         clLogout = findViewById(R.id.cl_icon3);
+        clLogout.setVisibility(View.VISIBLE);
         imgLogout = findViewById(R.id.img_icon3);
         imgLogout.setImageResource(R.drawable.ic_power_settings_new);
         btnFree = findViewById(R.id.btn_op_main_free_course);
