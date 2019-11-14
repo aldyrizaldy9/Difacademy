@@ -113,6 +113,7 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
         blendedCourseModelIntent = intent.getParcelableExtra("blended_course_model");
         if (blendedCourseModelIntent != null) {
             thereIsData = true;
+            thumbnailUrl = blendedCourseModelIntent.getThumbnailUrl();
             btnHapus.setVisibility(View.VISIBLE);
             Glide.with(this)
                     .load(blendedCourseModelIntent.getThumbnailUrl())
@@ -303,7 +304,7 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
     }
 
     private void uploadImageToFirebase(Uri imageUri) {
-        final StorageReference ref = firebaseStorage.getReference().child("BlendedVideo/" + UUID.randomUUID().toString());
+        final StorageReference ref = firebaseStorage.getReference().child("BlendedCourse/" + UUID.randomUUID().toString());
         ref.putFile(imageUri)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
@@ -406,7 +407,6 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
     }
 
     private void addOrUpdateData() {
-        String thumbnailUrl = this.thumbnailUrl;
         String title = edtJudul.getText().toString();
         String description = edtDeskripsi.getText().toString();
         String gDriveUrl = edtLinkGDrive.getText().toString();
@@ -433,7 +433,7 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
                             public void onSuccess(Void aVoid) {
                                 pd.dismiss();
                                 if (wannaAddVideoMateri) {
-                                    Intent intent = new Intent(OpAddBlendedCourseActivity.this, OpAddVideoBlendedCourseActivity.class);
+                                    Intent intent = new Intent(OpAddBlendedCourseActivity.this, OpVideoBlendedCourseActivity.class);
                                     intent.putExtra("document_id", blendedCourseModelIntent.getDocumentId());
                                     startActivity(intent);
                                 } else if (wannaAddSoal) {
@@ -463,7 +463,7 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
                             public void onSuccess(DocumentReference documentReference) {
                                 pd.dismiss();
                                 if (wannaAddVideoMateri) {
-                                    Intent intent = new Intent(OpAddBlendedCourseActivity.this, OpAddVideoBlendedCourseActivity.class);
+                                    Intent intent = new Intent(OpAddBlendedCourseActivity.this, OpVideoBlendedCourseActivity.class);
                                     intent.putExtra("document_id", documentReference.getId());
                                     startActivity(intent);
                                 } else if (wannaAddSoal) {
@@ -472,7 +472,7 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
                                     startActivity(intent);
                                 } else {
                                     Intent intent = new Intent(OpAddBlendedCourseActivity.this, OpBlendedCourseActivity.class);
-                                    intent.putExtra("blended_course_mode", blendedCourseModel);
+                                    intent.putExtra("blended_course_model", blendedCourseModel);
                                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                     startActivityForResult(intent, ADD_REQUEST_CODE);
                                 }

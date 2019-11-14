@@ -6,6 +6,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -22,7 +23,6 @@ import com.example.aldy.difacademy.Model.BlendedVideoModel;
 import com.example.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
@@ -33,6 +33,10 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.util.UUID;
+
+import static com.example.aldy.difacademy.Activity.OpMainActivity.ADD_REQUEST_CODE;
+import static com.example.aldy.difacademy.Activity.OpMainActivity.DELETE_REQUEST_CODE;
+import static com.example.aldy.difacademy.Activity.OpMainActivity.UPDATE_REQUEST_CODE;
 
 public class OpAddVideoBlendedCourseActivity extends AppCompatActivity {
     private static final String TAG = "OpAddVideoBlendedCourse";
@@ -48,10 +52,14 @@ public class OpAddVideoBlendedCourseActivity extends AppCompatActivity {
     Button btnHapus, btnSimpan;
 
     Uri videoUri;
-    String documentId;
+    String docBlendedCourseId;
     UploadTask uploadTask;
     String videoUrl = "";
     boolean isUploading = false;
+    boolean thereIsData = false;
+    int index;
+    long dateCreated = 0;
+    BlendedVideoModel blendedVideoModelIntent;
 
     FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
 
@@ -59,11 +67,17 @@ public class OpAddVideoBlendedCourseActivity extends AppCompatActivity {
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     DocumentReference docRef;
+    CollectionReference colVideoMateriRef;
+
+    ProgressDialog pd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_op_add_video_blended_course);
+
+        pd = new ProgressDialog(this);
+        pd.setMessage("Loading...");
 
         initView();
         onClick();
@@ -134,10 +148,24 @@ public class OpAddVideoBlendedCourseActivity extends AppCompatActivity {
 
     private void loadData() {
         Intent intent = getIntent();
-        documentId = intent.getStringExtra("document_id");
-        docRef = db.collection("BlendedCourse").document(documentId);
+        docBlendedCourseId = intent.getStringExtra("document_id");
+        docRef = db.collection("BlendedCourse").document(docBlendedCourseId);
+        colVideoMateriRef = docRef.collection("VideoMateri");
 
         //ambil video yang udah ada sebelumnya
+        blendedVideoModelIntent = intent.getParcelableExtra("blended_video_model");
+        if (blendedVideoModelIntent != null){
+            btnHapus.setVisibility(View.VISIBLE);
+            int index = intent.getIntExtra("index", -1);
+            if (index != -1) {
+                this.index = index;
+            }
+
+            thereIsData = true;
+            edtTitle.setText(blendedVideoModelIntent.getTitle());
+            edtDescription.setText(blendedVideoModelIntent.getDescription());
+            videoUrl = blendedVideoModelIntent.getVideoUrl();
+        }
     }
 
     @Override
@@ -212,37 +240,101 @@ public class OpAddVideoBlendedCourseActivity extends AppCompatActivity {
     }
 
     private void hapus() {
-
-    }
-
-    private void addOrUpdate() {
-        CollectionReference collRef = docRef.collection("VideoMateri");
-        String title = edtTitle.getText().toString();
-        String description = edtDescription.getText().toString();
-        String videoUrl = this.videoUrl;
-        long dateCreated = 0;
-
-        try {
-            dateCreated = Timestamp.now().getSeconds();
-        } catch (Exception e) {
-            Toast.makeText(this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        BlendedVideoModel blendedVideoModel = new BlendedVideoModel(title, description, videoUrl, dateCreated);
-        collRef.add(blendedVideoModel)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+        pd.show();
+        StorageReference deleteRef = firebaseStorage.getReferenceFromUrl(blendedVideoModelIntent.getVideoUrl());
+        deleteRef.delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        onBackPressed();
+                    public void onSuccess(Void aVoid) {
+                        DocumentReference docRef = colVideoMateriRef.document(blendedVideoModelIntent.getDocumentId());
+                        docRef.delete()
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        pd.dismiss();
+                                        Intent intent = new Intent(OpAddVideoBlendedCourseActivity.this, OpVideoBlendedCourseActivity.class);
+                                        intent.putExtra("index", index);
+                                        intent.putExtra("document_id", docBlendedCourseId);
+                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                        startActivityForResult(intent, DELETE_REQUEST_CODE);
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        pd.dismiss();
+                                        Toast.makeText(OpAddVideoBlendedCourseActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+                                    }
+                                });
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
+                        pd.dismiss();
                         Toast.makeText(OpAddVideoBlendedCourseActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
                     }
                 });
+    }
+
+    private void addOrUpdate() {
+        pd.show();
+        String title = edtTitle.getText().toString();
+        String description = edtDescription.getText().toString();
+        String videoUrl = this.videoUrl;
+        if (thereIsData){ //edit
+            dateCreated = blendedVideoModelIntent.getDateCreated();
+            final BlendedVideoModel blendedVideoModel = new BlendedVideoModel(title, description, videoUrl, dateCreated);
+            DocumentReference docRef = colVideoMateriRef.document(blendedVideoModelIntent.getDocumentId());
+            docRef.set(blendedVideoModel)
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            pd.dismiss();
+                            Intent intent = new Intent(OpAddVideoBlendedCourseActivity.this, OpVideoBlendedCourseActivity.class);
+                            intent.putExtra("blended_video_model", blendedVideoModel);
+                            intent.putExtra("index", index);
+                            intent.putExtra("document_id", docBlendedCourseId);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivityForResult(intent, UPDATE_REQUEST_CODE);
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            pd.dismiss();
+                            Toast.makeText(OpAddVideoBlendedCourseActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } else { //tambah
+            try {
+                dateCreated = Timestamp.now().getSeconds();
+            } catch (Exception e) {
+                Toast.makeText(this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            final BlendedVideoModel blendedVideoModel = new BlendedVideoModel(title, description, videoUrl, dateCreated);
+            colVideoMateriRef.add(blendedVideoModel)
+                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                        @Override
+                        public void onSuccess(DocumentReference documentReference) {
+                            pd.dismiss();
+                            Intent intent = new Intent(OpAddVideoBlendedCourseActivity.this, OpVideoBlendedCourseActivity.class);
+                            intent.putExtra("blended_video_model", blendedVideoModel);
+                            intent.putExtra("document_id", docBlendedCourseId);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivityForResult(intent, ADD_REQUEST_CODE);
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            pd.dismiss();
+                            Toast.makeText(OpAddVideoBlendedCourseActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        }
     }
 
     private void showCancelUploadDialog() {
@@ -278,7 +370,11 @@ public class OpAddVideoBlendedCourseActivity extends AppCompatActivity {
         builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                addOrUpdate();
+                if (isUploading){
+                    Toast.makeText(OpAddVideoBlendedCourseActivity.this, "Uploading...", Toast.LENGTH_SHORT).show();
+                } else {
+                    addOrUpdate();
+                }
                 dialog.cancel();
             }
         });

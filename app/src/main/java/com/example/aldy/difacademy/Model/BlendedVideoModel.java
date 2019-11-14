@@ -7,6 +7,8 @@ public class BlendedVideoModel implements Parcelable {
     String title, description, videoUrl, documentId;
     long dateCreated;
 
+    public BlendedVideoModel(){}
+
     public BlendedVideoModel(String title, String description, String videoUrl, long dateCreated) {
         this.title = title;
         this.description = description;
