@@ -28,9 +28,9 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
-import static com.example.aldy.difacademy.Activity.OpAddNewsActivity.ADD_NEWS_REQUEST_CODE;
-import static com.example.aldy.difacademy.Activity.OpAddNewsActivity.DELETE_NEWS_REQUEST_CODE;
-import static com.example.aldy.difacademy.Activity.OpAddNewsActivity.UPDATE_NEWS_REQUEST_CODE;
+import static com.example.aldy.difacademy.Activity.OpMainActivity.ADD_REQUEST_CODE;
+import static com.example.aldy.difacademy.Activity.OpMainActivity.DELETE_REQUEST_CODE;
+import static com.example.aldy.difacademy.Activity.OpMainActivity.UPDATE_REQUEST_CODE;
 
 public class OpNewsActivity extends AppCompatActivity {
     private ConstraintLayout clTambah, clBack;
@@ -57,15 +57,15 @@ public class OpNewsActivity extends AppCompatActivity {
         NewsModel newsModel = intent.getParcelableExtra("newsModel");
         int index = intent.getIntExtra("index", -1);
 
-        if (requestCode == ADD_NEWS_REQUEST_CODE && resultCode == RESULT_OK) {
+        if (requestCode == ADD_REQUEST_CODE && resultCode == RESULT_OK) {
             if (newsModel != null) {
                 newsModels.add(newsModel);
             }
-        } else if (requestCode == DELETE_NEWS_REQUEST_CODE && resultCode == RESULT_OK) {
+        } else if (requestCode == DELETE_REQUEST_CODE && resultCode == RESULT_OK) {
             if (index != -1) {
                 newsModels.remove(index);
             }
-        } else if (requestCode == UPDATE_NEWS_REQUEST_CODE && resultCode == RESULT_OK) {
+        } else if (requestCode == UPDATE_REQUEST_CODE && resultCode == RESULT_OK) {
             if (newsModel != null) {
                 newsModels.set(index, newsModel);
             }

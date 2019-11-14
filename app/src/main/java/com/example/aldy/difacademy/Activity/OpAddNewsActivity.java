@@ -35,6 +35,11 @@ import com.google.firebase.storage.UploadTask;
 
 import java.util.UUID;
 
+import static com.example.aldy.difacademy.Activity.OpMainActivity.ADD_REQUEST_CODE;
+import static com.example.aldy.difacademy.Activity.OpMainActivity.DELETE_REQUEST_CODE;
+import static com.example.aldy.difacademy.Activity.OpMainActivity.PHOTO_PICK_REQUEST_CODE;
+import static com.example.aldy.difacademy.Activity.OpMainActivity.UPDATE_REQUEST_CODE;
+
 public class OpAddNewsActivity extends AppCompatActivity {
 
     private ConstraintLayout clAddPhoto, clBack;
@@ -54,11 +59,6 @@ public class OpAddNewsActivity extends AppCompatActivity {
     private NewsModel newsModel;
     private int index;
     private long dateCreated;
-
-    static final int PHOTO_PICK_REQUEST_CODE = 1;
-    static final int ADD_NEWS_REQUEST_CODE = 2;
-    static final int DELETE_NEWS_REQUEST_CODE = 3;
-    static final int UPDATE_NEWS_REQUEST_CODE = 4;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -213,7 +213,7 @@ public class OpAddNewsActivity extends AppCompatActivity {
                         Intent intent = new Intent(OpAddNewsActivity.this, OpNewsActivity.class);
                         intent.putExtra("index", index);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivityForResult(intent, DELETE_NEWS_REQUEST_CODE);
+                        startActivityForResult(intent, DELETE_REQUEST_CODE);
                         Toast.makeText(OpAddNewsActivity.this, "Berita telah dihapus", Toast.LENGTH_SHORT).show();
                     }
                 })
@@ -321,7 +321,7 @@ public class OpAddNewsActivity extends AppCompatActivity {
                             Intent intent = new Intent(OpAddNewsActivity.this, OpNewsActivity.class);
                             intent.putExtra("newsModel", newsModel);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            startActivityForResult(intent, ADD_NEWS_REQUEST_CODE);
+                            startActivityForResult(intent, ADD_REQUEST_CODE);
                             Toast.makeText(OpAddNewsActivity.this, "Berita telah ditambahkan", Toast.LENGTH_SHORT).show();
                         }
                     })
@@ -402,7 +402,7 @@ public class OpAddNewsActivity extends AppCompatActivity {
                             intent.putExtra("newsModel", newsModel);
                             intent.putExtra("index", index);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            startActivityForResult(intent, UPDATE_NEWS_REQUEST_CODE);
+                            startActivityForResult(intent, UPDATE_REQUEST_CODE);
                             Toast.makeText(OpAddNewsActivity.this, "Berita telah disunting", Toast.LENGTH_SHORT).show();
                         }
                     })

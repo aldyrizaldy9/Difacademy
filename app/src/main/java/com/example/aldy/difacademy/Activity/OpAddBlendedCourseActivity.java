@@ -49,6 +49,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import static com.example.aldy.difacademy.Activity.OpMainActivity.ADD_REQUEST_CODE;
+import static com.example.aldy.difacademy.Activity.OpMainActivity.DELETE_REQUEST_CODE;
+import static com.example.aldy.difacademy.Activity.OpMainActivity.PHOTO_PICK_REQUEST_CODE;
+import static com.example.aldy.difacademy.Activity.OpMainActivity.UPDATE_REQUEST_CODE;
+import static com.example.aldy.difacademy.Activity.OpMainActivity.WRITE_PERM_REQUEST_CODE;
+
 public class OpAddBlendedCourseActivity extends AppCompatActivity {
     private static final String TAG = "OpAddBlendedCourseActiv";
 
@@ -69,14 +75,19 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
     String tagCourseId = "";
 
     boolean thereIsData = false;
+    boolean wannaAddVideoMateri = false;
+    boolean wannaAddSoal = false;
     BlendedCourseModel blendedCourseModelIntent;
 
     ProgressDialog pd;
     Uri imageUri;
 
     String thumbnailUrl = "";
+    String documentId = "";
 
     FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
+
+    int index;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,11 +98,18 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
         pd.setMessage("Loading...");
         pd.setCancelable(false);
 
+
         initView();
         onClick();
         loadTags();
 
         Intent intent = getIntent();
+
+        int index = intent.getIntExtra("index", -1);
+        if (index != -1) {
+            this.index = index;
+        }
+
         blendedCourseModelIntent = intent.getParcelableExtra("blended_course_model");
         if (blendedCourseModelIntent != null) {
             thereIsData = true;
@@ -103,6 +121,7 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
             edtLinkGDrive.setText(blendedCourseModelIntent.getgDriveUrl());
             edtHargaKelas.setText(blendedCourseModelIntent.getHarga());
             edtDeskripsi.setText(blendedCourseModelIntent.getDescription());
+            documentId = blendedCourseModelIntent.getDocumentId();
         }
     }
 
@@ -115,20 +134,19 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1 && resultCode == RESULT_OK
+        if (requestCode == PHOTO_PICK_REQUEST_CODE && resultCode == RESULT_OK
                 && data != null && data.getData() != null) {
             imageUri = data.getData();
 
             Glide.with(this)
                     .load(imageUri)
                     .into(imgThumbnail);
-
         }
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == 2) {
+        if (requestCode == WRITE_PERM_REQUEST_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 showKonfirmasiDialog();
             }
@@ -162,12 +180,17 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
         spnTag = findViewById(R.id.spn_op_add_blended_tag);
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        wannaAddSoal = false;
+        wannaAddVideoMateri = false;
+    }
+
     private void onClick() {
         clAddPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //ambil foto di gallery
-
                 if (ContextCompat.checkSelfPermission(OpAddBlendedCourseActivity.this,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                     ActivityCompat.requestPermissions(OpAddBlendedCourseActivity.this,
@@ -175,26 +198,53 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
                 } else {
                     Intent intent = new Intent(Intent.ACTION_PICK);
                     intent.setType("image/*");
-                    startActivityForResult(intent, 1);
+                    startActivityForResult(intent, PHOTO_PICK_REQUEST_CODE);
                 }
-
-//                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-//                intent.setType("image/*");
-//                startActivityForResult(Intent.createChooser(intent, "Pilih Gambar"), 1);
             }
         });
         clAddVideo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(OpAddBlendedCourseActivity.this, OpAddVideoBlendedCourseActivity.class);
-                startActivity(intent);
+                wannaAddVideoMateri = true;
+
+                if (blendedCourseModelIntent != null){
+                    if (edtJudul.getText().equals("") ||
+                            edtDeskripsi.getText().equals("") ||
+                            edtHargaKelas.getText().equals("") ||
+                            tagCourseId.equals("") ||
+                            tagCourse.equals("")) {
+                        Toast.makeText(OpAddBlendedCourseActivity.this, getString(R.string.data_not_complete), Toast.LENGTH_SHORT).show();
+                    } else {
+                        showKonfirmasiDialog();
+                    }
+                } else {
+                    if (imageUri == null ||
+                            edtJudul.getText().equals("") ||
+                            edtDeskripsi.getText().equals("") ||
+                            edtHargaKelas.getText().equals("") ||
+                            tagCourseId.equals("") ||
+                            tagCourse.equals("")) {
+                        Toast.makeText(OpAddBlendedCourseActivity.this, getString(R.string.data_not_complete), Toast.LENGTH_SHORT).show();
+                    } else {
+                        showKonfirmasiDialog();
+                    }
+                }
             }
         });
         clAddQuiz.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(OpAddBlendedCourseActivity.this, OpAddQuizActivity.class);
-                startActivity(intent);
+                wannaAddSoal = true;
+                if (imageUri == null ||
+                        edtJudul.getText().equals("") ||
+                        edtDeskripsi.getText().equals("") ||
+                        edtHargaKelas.getText().equals("") ||
+                        tagCourseId.equals("") ||
+                        tagCourse.equals("")) {
+                    Toast.makeText(OpAddBlendedCourseActivity.this, getString(R.string.data_not_complete), Toast.LENGTH_SHORT).show();
+                } else {
+                    showKonfirmasiDialog();
+                }
             }
         });
         btnSimpan.setOnClickListener(new View.OnClickListener() {
@@ -211,7 +261,7 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
                     if (ContextCompat.checkSelfPermission(OpAddBlendedCourseActivity.this,
                             Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                         ActivityCompat.requestPermissions(OpAddBlendedCourseActivity.this,
-                                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 2);
+                                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, WRITE_PERM_REQUEST_CODE);
                     } else {
                         showKonfirmasiDialog();
                     }
@@ -374,30 +424,35 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
         }
 
         if (dataCreated > 0) {
-            BlendedCourseModel blendedCourseModel = new BlendedCourseModel(title, description, tagId, tag, thumbnailUrl, gDriveUrl, harga, dataCreated);
+            final BlendedCourseModel blendedCourseModel = new BlendedCourseModel(title, description, tagId, tag, thumbnailUrl, gDriveUrl, harga, dataCreated);
             if (thereIsData) {
-                WriteBatch batch = db.batch();
                 DocumentReference docRef = blendedCourseRef.document(blendedCourseModelIntent.getDocumentId());
-                batch.update(docRef, "thumbnailUrl", blendedCourseModel.getThumbnailUrl());
-                batch.update(docRef, "title", blendedCourseModel.getTitle());
-                batch.update(docRef, "description", blendedCourseModel.getDescription());
-                batch.update(docRef, "tagId", tagCourseId);
-                batch.update(docRef, "tag", tagCourse);
-                batch.update(docRef, "gDriveUrl", blendedCourseModel.getgDriveUrl());
-                batch.update(docRef, "harga", blendedCourseModel.getHarga());
-                batch.update(docRef, "dateCreated", blendedCourseModel.getDateCreated());
-                batch.commit()
+                docRef.set(blendedCourseModel)
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
-                                onBackPressed();
+                                pd.dismiss();
+                                if (wannaAddVideoMateri) {
+                                    Intent intent = new Intent(OpAddBlendedCourseActivity.this, OpAddVideoBlendedCourseActivity.class);
+                                    intent.putExtra("document_id", blendedCourseModelIntent.getDocumentId());
+                                    startActivity(intent);
+                                } else if (wannaAddSoal) {
+                                    Intent intent = new Intent(OpAddBlendedCourseActivity.this, OpAddQuizActivity.class);
+                                    intent.putExtra("document_id", blendedCourseModelIntent.getDocumentId());
+                                    startActivity(intent);
+                                } else {
+                                    Intent intent = new Intent(OpAddBlendedCourseActivity.this, OpBlendedCourseActivity.class);
+                                    intent.putExtra("blended_course_model", blendedCourseModel);
+                                    intent.putExtra("index", index);
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                    startActivityForResult(intent, UPDATE_REQUEST_CODE);
+                                }
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
                                 pd.dismiss();
-                                Log.d(TAG, "onFailure: batch commit gagal");
                                 Toast.makeText(OpAddBlendedCourseActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
                             }
                         });
@@ -407,7 +462,20 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
                             @Override
                             public void onSuccess(DocumentReference documentReference) {
                                 pd.dismiss();
-                                onBackPressed();
+                                if (wannaAddVideoMateri) {
+                                    Intent intent = new Intent(OpAddBlendedCourseActivity.this, OpAddVideoBlendedCourseActivity.class);
+                                    intent.putExtra("document_id", documentReference.getId());
+                                    startActivity(intent);
+                                } else if (wannaAddSoal) {
+                                    Intent intent = new Intent(OpAddBlendedCourseActivity.this, OpAddQuizActivity.class);
+                                    intent.putExtra("document_id", documentReference.getId());
+                                    startActivity(intent);
+                                } else {
+                                    Intent intent = new Intent(OpAddBlendedCourseActivity.this, OpBlendedCourseActivity.class);
+                                    intent.putExtra("blended_course_mode", blendedCourseModel);
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                    startActivityForResult(intent, ADD_REQUEST_CODE);
+                                }
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {
@@ -433,7 +501,10 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
-                                        onBackPressed();
+                                        Intent intent = new Intent(OpAddBlendedCourseActivity.this, OpBlendedCourseActivity.class);
+                                        intent.putExtra("index", index);
+                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                        startActivityForResult(intent, DELETE_REQUEST_CODE);
                                     }
                                 })
                                 .addOnFailureListener(new OnFailureListener() {

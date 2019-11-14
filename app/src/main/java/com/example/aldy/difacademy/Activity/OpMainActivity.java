@@ -31,6 +31,12 @@ public class OpMainActivity extends AppCompatActivity {
     Button btnFree, btnOnline, btnBlended, btnBerita, btnTags;
     TextView tvNavbar;
 
+    static final int PHOTO_PICK_REQUEST_CODE = 1;
+    static final int ADD_REQUEST_CODE = 2;
+    static final int DELETE_REQUEST_CODE = 3;
+    static final int UPDATE_REQUEST_CODE = 4;
+    static final int WRITE_PERM_REQUEST_CODE = 5;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -37,7 +37,7 @@ public class OpBlendedCourseAdapter extends RecyclerView.Adapter<OpBlendedCourse
     }
 
     @Override
-    public void onBindViewHolder(@NonNull OpBlendedCourseAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull OpBlendedCourseAdapter.ViewHolder holder, final int position) {
         final BlendedCourseModel blendedCourseModel = blendedCourseModels.get(position);
         holder.tvDeskripsi.setText(blendedCourseModel.getDescription());
         holder.tvJudul.setText(blendedCourseModel.getTitle());
@@ -53,6 +53,7 @@ public class OpBlendedCourseAdapter extends RecyclerView.Adapter<OpBlendedCourse
                 //pindah ke detail
                 Intent intent = new Intent(context, OpAddBlendedCourseActivity.class);
                 intent.putExtra("blended_course_model", blendedCourseModel);
+                intent.putExtra("index", position);
                 context.startActivity(intent);
             }
         });
