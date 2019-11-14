@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:focusable="false"
     tools:context=".Activity.MainActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -119,7 +120,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:srcCompat="@tools:sample/backgrounds/scenic" />
+                app:srcCompat="@color/design_default_color_primary" />
 
             <TextView
                 android:id="@+id/tv_main_kelas_diikuti"
@@ -164,7 +165,7 @@
                 app:layout_constraintHorizontal_chainStyle="spread_inside"
                 app:layout_constraintStart_toStartOf="@+id/tv_main_pilihan_kelas"
                 app:layout_constraintTop_toBottomOf="@+id/tv_main_pilihan_kelas"
-                tools:srcCompat="@tools:sample/avatars" />
+                app:srcCompat="@color/colorAccent" />
 
             <ImageView
                 android:id="@+id/img_main_kelas_online"
@@ -176,7 +177,7 @@
                 app:layout_constraintEnd_toStartOf="@+id/img_main_kelas_campuran"
                 app:layout_constraintStart_toEndOf="@+id/img_main_kelas_gratis"
                 app:layout_constraintTop_toTopOf="@+id/img_main_kelas_gratis"
-                tools:srcCompat="@tools:sample/avatars" />
+                app:srcCompat="@color/colorPrimary" />
 
             <ImageView
                 android:id="@+id/img_main_kelas_campuran"
@@ -188,7 +189,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/img_main_kelas_online"
                 app:layout_constraintTop_toTopOf="@+id/img_main_kelas_online"
-                tools:srcCompat="@tools:sample/avatars" />
+                app:srcCompat="@color/colorPrimaryDark" />
 
             <TextView
                 android:id="@+id/tv_main_kelas_gratis"

@@ -12,7 +12,8 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.aldy.difacademy.Activity.DetailCourseActivity;
+import com.bumptech.glide.Glide;
+import com.example.aldy.difacademy.Activity.WatchVideoActivity;
 import com.example.aldy.difacademy.Model.VideoFreeModel;
 import com.example.aldy.difacademy.R;
 
@@ -37,14 +38,16 @@ public class FreeCourseAdapter extends RecyclerView.Adapter<FreeCourseAdapter.Vi
 
     @Override
     public void onBindViewHolder(@NonNull FreeCourseAdapter.ViewHolder holder, final int position) {
-        VideoFreeModel videoFreeModel = freeModels.get(position);
-//        holder.tvJudul.setText(videoFreeModel.getJudul());
-//        holder.tvTag.setText(videoFreeModel.getTag());
+        final VideoFreeModel videoFreeModel = freeModels.get(position);
+        holder.tvJudul.setText(videoFreeModel.getTitle());
+        holder.tvTag.setText(videoFreeModel.getTag());
+        holder.tvEpisode.setVisibility(View.GONE);
+        Glide.with(context).load(videoFreeModel.getThumbnailUrl()).into(holder.imgThumbnail);
         holder.clContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, DetailCourseActivity.class);
-                intent.putExtra("index", position);
+                Intent intent = new Intent(context, WatchVideoActivity.class);
+                intent.putExtra("videoFreeModel", videoFreeModel);
                 context.startActivity(intent);
             }
         });
@@ -57,7 +60,7 @@ public class FreeCourseAdapter extends RecyclerView.Adapter<FreeCourseAdapter.Vi
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private ImageView imgThumbnail;
-        private TextView tvJudul, tvTag;
+        private TextView tvJudul, tvTag, tvEpisode;
         private ConstraintLayout clContainer;
 
         public ViewHolder(@NonNull View itemView) {
@@ -66,6 +69,7 @@ public class FreeCourseAdapter extends RecyclerView.Adapter<FreeCourseAdapter.Vi
             tvJudul = itemView.findViewById(R.id.tv_card_video_thumbnail_judul);
             tvTag = itemView.findViewById(R.id.tv_card_video_thumbnail_tag);
             clContainer = itemView.findViewById(R.id.cl_card_video_thumbnail_container);
+            tvEpisode = itemView.findViewById(R.id.tv_card_video_thumbnail_status_ongoing);
         }
     }
 }

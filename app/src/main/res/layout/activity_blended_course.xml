@@ -7,6 +7,7 @@
     android:animateLayoutChanges="true"
     android:background="@android:color/darker_gray"
     tools:context=".Activity.BlendedCourseActivity">
+
     <include
         android:id="@+id/include"
         layout="@layout/nav_bar"
@@ -25,17 +26,21 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/include_search"
+        app:layout_constraintTop_toBottomOf="@+id/include"
         tools:listitem="@layout/card_video_with_thumbnail" />
 
-    <include
-        android:id="@+id/include_search"
-        layout="@layout/layout_tag_search"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/layout_tag_search_height"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_blended_course_search"
+        android:layout_width="0dp"
+        android:layout_height="100dp"
+        android:background="@android:color/white"
         android:elevation="2dp"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/include" />
+        app:layout_constraintTop_toBottomOf="@+id/include">
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

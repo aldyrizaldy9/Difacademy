@@ -1,9 +1,14 @@
 package com.example.aldy.difacademy.Model;
 
+import com.google.firebase.firestore.Exclude;
+
 import java.util.ArrayList;
 
 public class UserModel {
-    private String userId, nama, email, noTelp;
+    private String userId, nama, email, noTelp, userDocId;
+
+    public UserModel() {
+    }
 
     public UserModel(String userId, String nama, String email, String noTelp) {
         this.userId = userId;
@@ -28,4 +33,12 @@ public class UserModel {
         return noTelp;
     }
 
+    @Exclude
+    public String getUserDocId() {
+        return userDocId;
+    }
+
+    public void setUserDocId(String userDocId) {
+        this.userDocId = userDocId;
+    }
 }

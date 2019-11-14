@@ -1,8 +1,8 @@
 package com.example.aldy.difacademy.Activity;
 
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,67 +13,70 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.aldy.difacademy.R;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class ForgetPasswordActivity extends AppCompatActivity {
 
-    ConstraintLayout clBack;
-    EditText edtEmail;
-    Button btnLupaSandi;
+    private ConstraintLayout clBack;
+    private EditText edtEmail;
+    private Button btnLupaSandi;
+    private ProgressDialog progressDialog;
 
-    ProgressDialog pd;
+    private static final String TAG = "ForgetPasswordActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forget_password);
-
-        pd = new ProgressDialog(ForgetPasswordActivity.this);
-        pd.setMessage("Loading...");
-
-        findView();
+        initView();
         onClick();
     }
 
-    private void findView() {
+    private void initView() {
         clBack = findViewById(R.id.cl_lupa_sandi_back);
         edtEmail = findViewById(R.id.edt_lupa_sandi_email);
         btnLupaSandi = findViewById(R.id.btn_lupa_sandi_lupa_sandi);
+        progressDialog = new ProgressDialog(this);
     }
 
     private void onClick() {
         clBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ForgetPasswordActivity.this, LoginActivity.class);
-                startActivity(intent);
+                onBackPressed();
             }
         });
         btnLupaSandi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (edtEmail.getText().length() != 0){
-                    pd.show();
+                if (edtEmail.getText().length() != 0) {
                     resetPassword(edtEmail.getText().toString());
+                } else {
+                    Toast.makeText(ForgetPasswordActivity.this, "Email tidak boleh kosong", Toast.LENGTH_SHORT).show();
                 }
             }
         });
     }
 
-    private void resetPassword(String email){
+    private void resetPassword(String email) {
+        progressDialog.setMessage("Memproses permintaan lupa password");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
         FirebaseAuth auth = FirebaseAuth.getInstance();
         auth.sendPasswordResetEmail(email)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()){
-                            pd.dismiss();
-                            Toast.makeText(ForgetPasswordActivity.this, "Mohon periksa email anda", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(ForgetPasswordActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                        }
+                    public void onSuccess(Void aVoid) {
+                        progressDialog.dismiss();
+                        Toast.makeText(ForgetPasswordActivity.this, "Mohon periksa email anda", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, e.toString());
                     }
                 });
     }

@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:animateLayoutChanges="true"
     android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
     android:background="@android:color/darker_gray"
     tools:context=".Activity.FreeCourseActivity">
 
@@ -30,14 +30,27 @@
         app:layout_constraintVertical_bias="1.0"
         tools:listitem="@layout/card_video_with_thumbnail" />
 
-    <include
-        android:id="@+id/include_search"
-        layout="@layout/layout_tag_search"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/layout_tag_search_height"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_free_course_search"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
         android:elevation="2dp"
+        android:padding="16dp"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/include" />
+        app:layout_constraintTop_toBottomOf="@+id/include">
+
+        <Spinner
+            android:id="@+id/spn_free_course_search"
+            style="@style/Difacademy.Body1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/cl_free_course_search"
+            app:layout_constraintStart_toStartOf="@id/cl_free_course_search"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
