@@ -14,43 +14,44 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.aldy.difacademy.Activity.OpAddBlendedCourseActivity;
-import com.example.aldy.difacademy.Model.BlendedCourseModel;
+import com.example.aldy.difacademy.Activity.OpAddVideoBlendedCourseActivity;
+import com.example.aldy.difacademy.Model.BlendedVideoModel;
 import com.example.aldy.difacademy.R;
 
 import java.util.ArrayList;
 
-public class OpBlendedCourseAdapter extends RecyclerView.Adapter<OpBlendedCourseAdapter.ViewHolder> {
-    private Context context;
-    private ArrayList<BlendedCourseModel> blendedCourseModels;
+public class OpBlendedCourseVideoAdapter extends RecyclerView.Adapter<OpBlendedCourseVideoAdapter.ViewHolder>{
 
-    public OpBlendedCourseAdapter(Context context, ArrayList<BlendedCourseModel> blendedCourseModels) {
+    private Context context;
+    private ArrayList<BlendedVideoModel> blendedVideoModels;
+
+    public OpBlendedCourseVideoAdapter(Context context, ArrayList<BlendedVideoModel> blendedVideoModels) {
         this.context = context;
-        this.blendedCourseModels = blendedCourseModels;
+        this.blendedVideoModels = blendedVideoModels;
     }
 
     @NonNull
     @Override
-    public OpBlendedCourseAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         View view = layoutInflater.inflate(R.layout.card_op, parent, false);
-        return new OpBlendedCourseAdapter.ViewHolder(view);
+        return new OpBlendedCourseVideoAdapter.ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull OpBlendedCourseAdapter.ViewHolder holder, final int position) {
-        final BlendedCourseModel blendedCourseModel = blendedCourseModels.get(position);
-        holder.tvDeskripsi.setText(blendedCourseModel.getDescription());
-        holder.tvJudul.setText(blendedCourseModel.getTitle());
-        holder.tvTag.setText(blendedCourseModel.getTag());
-        Glide.with(context)
-                .load(blendedCourseModel.getThumbnailUrl())
-                .into(holder.imgThumbnail);
+    public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
+        final BlendedVideoModel blendedVideoModel = blendedVideoModels.get(position);
+        holder.tvDeskripsi.setText(blendedVideoModel.getDescription());
+        holder.tvJudul.setText(blendedVideoModel.getTitle());
+        holder.tvTag.setVisibility(View.GONE);
+        holder.imgThumbnail.setVisibility(View.GONE);
         holder.container.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //pindah ke detail
-                Intent intent = new Intent(context, OpAddBlendedCourseActivity.class);
-                intent.putExtra("blended_course_model", blendedCourseModel);
+                Intent intent = new Intent(context, OpAddVideoBlendedCourseActivity.class);
+                intent.putExtra("blended_video_model", blendedVideoModel);
+                intent.putExtra("document_id", blendedVideoModel.getDocumentId());
                 intent.putExtra("index", position);
                 context.startActivity(intent);
             }
@@ -59,7 +60,7 @@ public class OpBlendedCourseAdapter extends RecyclerView.Adapter<OpBlendedCourse
 
     @Override
     public int getItemCount() {
-        return blendedCourseModels.size();
+        return blendedVideoModels.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

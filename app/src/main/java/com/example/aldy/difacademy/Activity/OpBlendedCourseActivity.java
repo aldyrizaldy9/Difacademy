@@ -9,6 +9,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -26,6 +27,10 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+
+import static com.example.aldy.difacademy.Activity.OpMainActivity.ADD_REQUEST_CODE;
+import static com.example.aldy.difacademy.Activity.OpMainActivity.DELETE_REQUEST_CODE;
+import static com.example.aldy.difacademy.Activity.OpMainActivity.UPDATE_REQUEST_CODE;
 
 public class OpBlendedCourseActivity extends AppCompatActivity {
     private static final String TAG = "OpBlendedCourseActivity";
@@ -53,12 +58,30 @@ public class OpBlendedCourseActivity extends AppCompatActivity {
         initView();
         onClick();
         setRecyclerView();
+        loadData();
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        loadData();
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Intent intent = getIntent();
+        BlendedCourseModel blendedCourseModel= intent.getParcelableExtra("blended_course_model");
+        int index = intent.getIntExtra("index", -1);
+
+        if (requestCode == ADD_REQUEST_CODE && resultCode == RESULT_OK) {
+            if (blendedCourseModel != null) {
+                blendedCourseModels.add(blendedCourseModel);
+            }
+        } else if (requestCode == DELETE_REQUEST_CODE && resultCode == RESULT_OK) {
+            if (index != -1) {
+                blendedCourseModels.remove(index);
+            }
+        } else if (requestCode == UPDATE_REQUEST_CODE && resultCode == RESULT_OK) {
+            if (blendedCourseModel != null) {
+                blendedCourseModels.set(index, blendedCourseModel);
+            }
+        }
+        adapter.notifyDataSetChanged();
     }
 
     private void initView() {

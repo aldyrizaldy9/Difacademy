@@ -83,15 +83,12 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="32dp"
                 android:text="@string/simpan"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_op_add_video_blended_upload_process"
-                app:layout_constraintVertical_bias="1.0" />
+                app:layout_constraintStart_toStartOf="parent" />
 
             <TextView
                 android:id="@+id/tv_op_add_video_blended_upload_process"
@@ -99,9 +96,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:text="uploading..."
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                app:layout_constraintBottom_toTopOf="@+id/btn_op_add_video_blended_hapus"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/pb_upload" />
+                app:layout_constraintTop_toBottomOf="@+id/cl_op_blended_cancel_upload"
+                app:layout_constraintVertical_bias="0.0"
+                tools:text="uploading..." />
 
             <ProgressBar
                 android:id="@+id/pb_op_add_video_blended_upload"
@@ -109,6 +112,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
+                android:visibility="visible"
                 app:layout_constraintBottom_toBottomOf="@+id/cl_op_blended_cancel_upload"
                 app:layout_constraintEnd_toStartOf="@+id/cl_op_blended_cancel_upload"
                 app:layout_constraintStart_toStartOf="parent"
@@ -131,7 +135,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:srcCompat="@drawable/ic_cloud_upload" />
+                    android:src="@drawable/ic_cloud_upload" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -140,6 +144,7 @@
                 android:layout_height="@dimen/icon_btn_height"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
+                android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cl_op_blended_upload">
 
@@ -147,12 +152,25 @@
                     android:id="@+id/img_op_add_video_blended_cancel_upload"
                     android:layout_width="@dimen/icon_width"
                     android:layout_height="@dimen/icon_height"
+                    android:src="@drawable/ic_cancel"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:srcCompat="@drawable/ic_cancel" />
+                    app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <Button
+                android:id="@+id/btn_op_add_video_blended_hapus"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="8dp"
+                android:text="@string/hapus"
+                android:visibility="gone"
+                app:layout_constraintBottom_toTopOf="@id/btn_op_add_video_blended_simpan"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
