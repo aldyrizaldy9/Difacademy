@@ -1,6 +1,5 @@
 package com.example.aldy.difacademy.Activity;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -17,7 +16,6 @@ import android.widget.TextView;
 import com.example.aldy.difacademy.Adapter.OpBlendedCourseVideoAdapter;
 import com.example.aldy.difacademy.Model.BlendedVideoModel;
 import com.example.aldy.difacademy.R;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -27,18 +25,17 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
+import static com.example.aldy.difacademy.Activity.OpAddBlendedCourseActivity.blendedCourseDocId;
 import static com.example.aldy.difacademy.Activity.OpMainActivity.ADD_REQUEST_CODE;
 import static com.example.aldy.difacademy.Activity.OpMainActivity.DELETE_REQUEST_CODE;
 import static com.example.aldy.difacademy.Activity.OpMainActivity.UPDATE_REQUEST_CODE;
 
-public class OpVideoBlendedCourseActivity extends AppCompatActivity {
+public class OpBlendedCourseVideoActivity extends AppCompatActivity {
     private static final String TAG = "OpVideoBlendedCourseActiv";
 
     TextView tvNavbar;
     ConstraintLayout clBack, clAdd;
     ImageView imgBack, imgAdd;
-
-    String documentId = "";
 
     RecyclerView rvVideoMateri;
     ArrayList<BlendedVideoModel> blendedVideoModels;
@@ -47,7 +44,7 @@ public class OpVideoBlendedCourseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_op_video_blended_course);
+        setContentView(R.layout.activity_op_blended_course_video);
 
         initView();
         setRecyclerView();
@@ -95,8 +92,7 @@ public class OpVideoBlendedCourseActivity extends AppCompatActivity {
         clAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(OpVideoBlendedCourseActivity.this, OpAddVideoBlendedCourseActivity.class);
-                intent.putExtra("document_id", documentId);
+                Intent intent = new Intent(OpBlendedCourseVideoActivity.this, OpAddBlendedCourseVideoActivity.class);
                 startActivity(intent);
             }
         });
@@ -107,11 +103,9 @@ public class OpVideoBlendedCourseActivity extends AppCompatActivity {
     }
 
     private void loadData(){
-        Intent intent = getIntent();
-        documentId = intent.getStringExtra("document_id");
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference collRef = db.collection("BlendedCourse")
-                .document(documentId)
+                .document(blendedCourseDocId)
                 .collection("VideoMateri");
 
         collRef.orderBy("dateCreated", Query.Direction.ASCENDING)

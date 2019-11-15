@@ -16,7 +16,6 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -40,7 +39,6 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.WriteBatch;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -83,7 +81,8 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
     Uri imageUri;
 
     String thumbnailUrl = "";
-    String documentId = "";
+
+    public static String blendedCourseDocId = "";
 
     FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
 
@@ -122,7 +121,9 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
             edtLinkGDrive.setText(blendedCourseModelIntent.getgDriveUrl());
             edtHargaKelas.setText(blendedCourseModelIntent.getHarga());
             edtDeskripsi.setText(blendedCourseModelIntent.getDescription());
-            documentId = blendedCourseModelIntent.getDocumentId();
+            blendedCourseDocId = blendedCourseModelIntent.getDocumentId();
+        } else {
+            blendedCourseDocId = "";
         }
     }
 
@@ -195,7 +196,7 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
                 if (ContextCompat.checkSelfPermission(OpAddBlendedCourseActivity.this,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                     ActivityCompat.requestPermissions(OpAddBlendedCourseActivity.this,
-                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 2);
+                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, WRITE_PERM_REQUEST_CODE);
                 } else {
                     Intent intent = new Intent(Intent.ACTION_PICK);
                     intent.setType("image/*");
@@ -426,19 +427,17 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
         if (dataCreated > 0) {
             final BlendedCourseModel blendedCourseModel = new BlendedCourseModel(title, description, tagId, tag, thumbnailUrl, gDriveUrl, harga, dataCreated);
             if (thereIsData) {
-                DocumentReference docRef = blendedCourseRef.document(blendedCourseModelIntent.getDocumentId());
+                DocumentReference docRef = blendedCourseRef.document(blendedCourseDocId);
                 docRef.set(blendedCourseModel)
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
                                 pd.dismiss();
                                 if (wannaAddVideoMateri) {
-                                    Intent intent = new Intent(OpAddBlendedCourseActivity.this, OpVideoBlendedCourseActivity.class);
-                                    intent.putExtra("document_id", blendedCourseModelIntent.getDocumentId());
+                                    Intent intent = new Intent(OpAddBlendedCourseActivity.this, OpBlendedCourseVideoActivity.class);
                                     startActivity(intent);
                                 } else if (wannaAddSoal) {
                                     Intent intent = new Intent(OpAddBlendedCourseActivity.this, OpAddQuizActivity.class);
-                                    intent.putExtra("document_id", blendedCourseModelIntent.getDocumentId());
                                     startActivity(intent);
                                 } else {
                                     Intent intent = new Intent(OpAddBlendedCourseActivity.this, OpBlendedCourseActivity.class);
@@ -462,13 +461,12 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
                             @Override
                             public void onSuccess(DocumentReference documentReference) {
                                 pd.dismiss();
+                                blendedCourseDocId = documentReference.getId();
                                 if (wannaAddVideoMateri) {
-                                    Intent intent = new Intent(OpAddBlendedCourseActivity.this, OpVideoBlendedCourseActivity.class);
-                                    intent.putExtra("document_id", documentReference.getId());
+                                    Intent intent = new Intent(OpAddBlendedCourseActivity.this, OpBlendedCourseVideoActivity.class);
                                     startActivity(intent);
                                 } else if (wannaAddSoal) {
                                     Intent intent = new Intent(OpAddBlendedCourseActivity.this, OpAddQuizActivity.class);
-                                    intent.putExtra("document_id", documentReference.getId());
                                     startActivity(intent);
                                 } else {
                                     Intent intent = new Intent(OpAddBlendedCourseActivity.this, OpBlendedCourseActivity.class);
@@ -482,7 +480,6 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
                             @Override
                             public void onFailure(@NonNull Exception e) {
                                 pd.dismiss();
-                                Log.d(TAG, "onFailure: add blended course model gagal");
                                 Toast.makeText(OpAddBlendedCourseActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
                             }
                         });
@@ -491,6 +488,7 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
     }
 
     private void hapus() {
+        //yang hapus ini belum hapus semua video materi dan semua soalnya
         StorageReference deleteRef = firebaseStorage.getReferenceFromUrl(blendedCourseModelIntent.getThumbnailUrl());
         deleteRef.delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {

@@ -12,9 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-import com.example.aldy.difacademy.Activity.OpAddBlendedCourseActivity;
-import com.example.aldy.difacademy.Activity.OpAddVideoBlendedCourseActivity;
+import com.example.aldy.difacademy.Activity.OpAddBlendedCourseVideoActivity;
 import com.example.aldy.difacademy.Model.BlendedVideoModel;
 import com.example.aldy.difacademy.R;
 
@@ -49,9 +47,8 @@ public class OpBlendedCourseVideoAdapter extends RecyclerView.Adapter<OpBlendedC
             @Override
             public void onClick(View view) {
                 //pindah ke detail
-                Intent intent = new Intent(context, OpAddVideoBlendedCourseActivity.class);
+                Intent intent = new Intent(context, OpAddBlendedCourseVideoActivity.class);
                 intent.putExtra("blended_video_model", blendedVideoModel);
-                intent.putExtra("document_id", blendedVideoModel.getDocumentId());
                 intent.putExtra("index", position);
                 context.startActivity(intent);
             }

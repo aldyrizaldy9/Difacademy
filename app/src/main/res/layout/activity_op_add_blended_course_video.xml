@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activity.OpAddVideoBlendedCourseActivity">
+    tools:context=".Activity.OpAddBlendedCourseVideoActivity">
 
     <include
         android:id="@+id/include"
@@ -37,7 +37,7 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edt_op_add_video_blended_judul"
+                    android:id="@+id/edt_op_add_blended_video_judul"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Judul" />
@@ -55,31 +55,14 @@
                 app:layout_constraintTop_toBottomOf="@+id/textInputLayout7">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edt_op_add_video_blended_deskripsi"
+                    android:id="@+id/edt_op_add_blended_video_deskripsi"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Deskripsi" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textInputLayout9"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                app:layout_constraintEnd_toStartOf="@+id/cl_op_blended_upload"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textInputLayout8">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edt_op_add_video_blended_file_video"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="File Video" />
-            </com.google.android.material.textfield.TextInputLayout>
-
             <Button
-                android:id="@+id/btn_op_add_video_blended_simpan"
+                android:id="@+id/btn_op_add_blended_video_simpan"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -91,76 +74,36 @@
                 app:layout_constraintStart_toStartOf="parent" />
 
             <TextView
-                android:id="@+id/tv_op_add_video_blended_upload_process"
+                android:id="@+id/tv_op_add_blended_video_upload_process"
                 style="@style/Difacademy.Subtitle1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp"
-                app:layout_constraintBottom_toTopOf="@+id/btn_op_add_video_blended_hapus"
+                app:layout_constraintBottom_toTopOf="@+id/btn_op_add_blended_video_hapus"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cl_op_blended_cancel_upload"
+                app:layout_constraintTop_toBottomOf="@+id/pb_op_add_blended_video_upload"
                 app:layout_constraintVertical_bias="0.0"
                 tools:text="uploading..." />
 
             <ProgressBar
-                android:id="@+id/pb_op_add_video_blended_upload"
+                android:id="@+id/pb_op_add_blended_video_upload"
                 style="?android:attr/progressBarStyleHorizontal"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="16dp"
                 android:visibility="visible"
-                app:layout_constraintBottom_toBottomOf="@+id/cl_op_blended_cancel_upload"
-                app:layout_constraintEnd_toStartOf="@+id/cl_op_blended_cancel_upload"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/cl_op_blended_cancel_upload" />
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/cl_op_blended_upload"
-                android:layout_width="@dimen/icon_btn_width"
-                android:layout_height="@dimen/icon_btn_height"
-                android:layout_marginEnd="16dp"
-                app:layout_constraintBottom_toBottomOf="@+id/textInputLayout9"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/textInputLayout9">
-
-                <ImageView
-                    android:id="@+id/img_op_add_video_blended_upload"
-                    android:layout_width="@dimen/icon_width"
-                    android:layout_height="@dimen/icon_height"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:src="@drawable/ic_cloud_upload" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/cl_op_blended_cancel_upload"
-                android:layout_width="@dimen/icon_btn_width"
-                android:layout_height="@dimen/icon_btn_height"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp"
-                android:visibility="visible"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cl_op_blended_upload">
-
-                <ImageView
-                    android:id="@+id/img_op_add_video_blended_cancel_upload"
-                    android:layout_width="@dimen/icon_width"
-                    android:layout_height="@dimen/icon_height"
-                    android:src="@drawable/ic_cancel"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                app:layout_constraintTop_toBottomOf="@+id/tv_op_add_blended_video_pilih_file" />
 
             <Button
-                android:id="@+id/btn_op_add_video_blended_hapus"
+                android:id="@+id/btn_op_add_blended_video_hapus"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -168,7 +111,42 @@
                 android:layout_marginBottom="8dp"
                 android:text="@string/hapus"
                 android:visibility="gone"
-                app:layout_constraintBottom_toTopOf="@id/btn_op_add_video_blended_simpan"
+                app:layout_constraintBottom_toTopOf="@+id/btn_op_add_blended_video_upload"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <Button
+                android:id="@+id/btn_op_add_blended_video_pilih_file"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="18dp"
+                android:layout_marginTop="16dp"
+                android:text="pilih file"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textInputLayout8" />
+
+            <TextView
+                android:id="@+id/tv_op_add_blended_video_pilih_file"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:text="Belum Pilih File"
+                app:layout_constraintBottom_toBottomOf="@+id/btn_op_add_blended_video_pilih_file"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/btn_op_add_blended_video_pilih_file"
+                app:layout_constraintTop_toTopOf="@+id/btn_op_add_blended_video_pilih_file" />
+
+            <Button
+                android:id="@+id/btn_op_add_blended_video_upload"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="8dp"
+                android:text="upload"
+                android:visibility="gone"
+                app:layout_constraintBottom_toTopOf="@+id/btn_op_add_blended_video_simpan"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
 

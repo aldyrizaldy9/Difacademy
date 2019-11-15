@@ -13,10 +13,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".Activity.OpNotifGradActivity"></activity>
-        <activity android:name=".Activity.OpVideoBlendedCourseActivity" />
+        <activity android:name=".Activity.OpBlendedCourseVideoActivity" />
         <activity android:name=".Activity.OpNotifActivity" />
         <activity android:name=".Activity.OpNotifPaymentActivity" />
-        <activity android:name=".Activity.OpAddVideoBlendedCourseActivity" />
+        <activity android:name=".Activity.OpAddBlendedCourseVideoActivity" />
         <activity android:name=".Activity.OpAddQuizActivity" />
         <activity android:name=".Activity.OpQuizActivity" />
         <activity android:name=".Activity.OpAddBlendedCourseActivity" />
