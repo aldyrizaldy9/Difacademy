@@ -13,7 +13,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.aldy.difacademy.Activity.WatchVideoActivity;
+import com.example.aldy.difacademy.Activity.WatchYoutubeVideoActivity;
 import com.example.aldy.difacademy.Model.VideoFreeModel;
 import com.example.aldy.difacademy.R;
 
@@ -42,12 +42,14 @@ public class FreeCourseAdapter extends RecyclerView.Adapter<FreeCourseAdapter.Vi
         holder.tvJudul.setText(videoFreeModel.getTitle());
         holder.tvTag.setText(videoFreeModel.getTag());
         holder.tvEpisode.setVisibility(View.GONE);
-        Glide.with(context).load(videoFreeModel.getThumbnailUrl()).into(holder.imgThumbnail);
+        Glide.with(context)
+                .load(videoFreeModel.getThumbnailUrl())
+                .into(holder.imgThumbnail);
         holder.clContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, WatchVideoActivity.class);
-                intent.putExtra("videoFreeModel", videoFreeModel);
+                Intent intent = new Intent(context, WatchYoutubeVideoActivity.class);
+                intent.putExtra("video_free_model", videoFreeModel);
                 context.startActivity(intent);
             }
         });

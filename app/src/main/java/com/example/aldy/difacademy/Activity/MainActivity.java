@@ -85,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
         btnBeritaLainnya = findViewById(R.id.btn_main_berita_lainnya);
         tvDiikutiSemua = findViewById(R.id.tv_main_diikuti_semua);
         rvMainBerita = findViewById(R.id.rv_main_berita);
+        rvMainBerita.setNestedScrollingEnabled(false);
         progressDialog = new ProgressDialog(this);
     }
 

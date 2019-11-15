@@ -35,10 +35,10 @@ import java.util.ArrayList;
 public class FreeCourseActivity extends AppCompatActivity {
     private ConstraintLayout clBack, clSearch, clSearchContainer;
     private RecyclerView rvVideo;
-    private FreeCourseAdapter freeCourseAdapter;
+    private FreeCourseAdapter adapter;
     private ArrayList<VideoFreeModel> videoFreeModels;
     private ArrayList<String> tags;
-    private ProgressDialog progressDialog;
+    //    private ProgressDialog progressDialog;
     private Spinner spnTags;
 
     private FirebaseFirestore firebaseFirestore;
@@ -53,7 +53,8 @@ public class FreeCourseActivity extends AppCompatActivity {
         initView();
         onClick();
         setRecyclerView();
-        loadVideoFreeData(true);
+        loadTagsData();
+        loadVideoFreeData();
     }
 
     private void initView() {
@@ -69,7 +70,6 @@ public class FreeCourseActivity extends AppCompatActivity {
         TextView tvNavBar = findViewById(R.id.tv_navbar);
         tvNavBar.setText("Free Video");
         rvVideo = findViewById(R.id.rv_free_course_video);
-        progressDialog = new ProgressDialog(this);
         spnTags = findViewById(R.id.spn_free_course_search);
     }
 
@@ -94,19 +94,16 @@ public class FreeCourseActivity extends AppCompatActivity {
 
     private void setRecyclerView() {
         videoFreeModels = new ArrayList<>();
-        freeCourseAdapter = new FreeCourseAdapter(this, videoFreeModels);
-        rvVideo.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
-        rvVideo.setAdapter(freeCourseAdapter);
+        adapter = new FreeCourseAdapter(this, videoFreeModels);
+        rvVideo.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        rvVideo.setAdapter(adapter);
     }
 
-    private void loadVideoFreeData(final Boolean isEmpty) {
-        progressDialog.setMessage("Memuat");
-        progressDialog.setCancelable(false);
-        progressDialog.show();
+    private void loadVideoFreeData() {
         firebaseFirestore = FirebaseFirestore.getInstance();
         videoFreeRef = firebaseFirestore.collection("VideoFree");
-        videoFreeRef
-                .orderBy("dateCreated", Query.Direction.DESCENDING)
+
+        videoFreeRef.orderBy("dateCreated", Query.Direction.DESCENDING)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
@@ -118,19 +115,13 @@ public class FreeCourseActivity extends AppCompatActivity {
 
                             videoFreeModels.add(videoFreeModel);
                         }
-                        if (isEmpty) {
-                            loadTagsData();
-                        } else {
-                            progressDialog.dismiss();
-                        }
-                        freeCourseAdapter.notifyDataSetChanged();
+                        adapter.notifyDataSetChanged();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        progressDialog.dismiss();
-                        Log.d(TAG, e.toString());
+
                     }
                 });
     }
@@ -140,8 +131,7 @@ public class FreeCourseActivity extends AppCompatActivity {
         tags.add("Tags");
         firebaseFirestore = FirebaseFirestore.getInstance();
         CollectionReference tagsRef = firebaseFirestore.collection("Tags");
-        tagsRef
-                .orderBy("tag", Query.Direction.ASCENDING)
+        tagsRef.orderBy("tag", Query.Direction.ASCENDING)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
@@ -158,8 +148,7 @@ public class FreeCourseActivity extends AppCompatActivity {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        progressDialog.dismiss();
-                        Log.d(TAG, e.toString());
+
                     }
                 });
     }
@@ -189,7 +178,7 @@ public class FreeCourseActivity extends AppCompatActivity {
                 if (position != 0) {
                     loadVideoFreeWithSameTag(tags.get(position));
                 } else {
-                    loadVideoFreeData(false);
+                    loadVideoFreeData();
                 }
             }
 
@@ -197,15 +186,10 @@ public class FreeCourseActivity extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
-        progressDialog.dismiss();
     }
 
     private void loadVideoFreeWithSameTag(String tag) {
-        progressDialog.setMessage("Memuat");
-        progressDialog.setCancelable(false);
-        progressDialog.show();
-        videoFreeRef
-                .whereEqualTo("tag", tag)
+        videoFreeRef.whereEqualTo("tag", tag)
                 .orderBy("dateCreated", Query.Direction.DESCENDING)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -218,15 +202,13 @@ public class FreeCourseActivity extends AppCompatActivity {
 
                             videoFreeModels.add(videoFreeModel);
                         }
-                        progressDialog.dismiss();
-                        freeCourseAdapter.notifyDataSetChanged();
+                        adapter.notifyDataSetChanged();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        progressDialog.dismiss();
-                        Log.d(TAG, e.toString());
+
                     }
                 });
     }

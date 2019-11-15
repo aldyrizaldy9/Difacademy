@@ -208,8 +208,7 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 wannaAddVideoMateri = true;
-
-                if (blendedCourseModelIntent != null){
+                if (thereIsData) {
                     if (edtJudul.getText().equals("") ||
                             edtDeskripsi.getText().equals("") ||
                             edtHargaKelas.getText().equals("") ||
@@ -237,33 +236,51 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 wannaAddSoal = true;
-                if (imageUri == null ||
-                        edtJudul.getText().equals("") ||
-                        edtDeskripsi.getText().equals("") ||
-                        edtHargaKelas.getText().equals("") ||
-                        tagCourseId.equals("") ||
-                        tagCourse.equals("")) {
-                    Toast.makeText(OpAddBlendedCourseActivity.this, getString(R.string.data_not_complete), Toast.LENGTH_SHORT).show();
+                if (thereIsData) {
+                    if (edtJudul.getText().equals("") ||
+                            edtDeskripsi.getText().equals("") ||
+                            edtHargaKelas.getText().equals("") ||
+                            tagCourseId.equals("") ||
+                            tagCourse.equals("")) {
+                        Toast.makeText(OpAddBlendedCourseActivity.this, getString(R.string.data_not_complete), Toast.LENGTH_SHORT).show();
+                    } else {
+                        showKonfirmasiDialog();
+                    }
                 } else {
-                    showKonfirmasiDialog();
+                    if (imageUri == null ||
+                            edtJudul.getText().equals("") ||
+                            edtDeskripsi.getText().equals("") ||
+                            edtHargaKelas.getText().equals("") ||
+                            tagCourseId.equals("") ||
+                            tagCourse.equals("")) {
+                        Toast.makeText(OpAddBlendedCourseActivity.this, getString(R.string.data_not_complete), Toast.LENGTH_SHORT).show();
+                    } else {
+                        showKonfirmasiDialog();
+                    }
                 }
             }
         });
         btnSimpan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (imageUri == null ||
-                        edtJudul.getText().equals("") ||
-                        edtDeskripsi.getText().equals("") ||
-                        edtHargaKelas.getText().equals("") ||
-                        tagCourseId.equals("") ||
-                        tagCourse.equals("")) {
-                    Toast.makeText(OpAddBlendedCourseActivity.this, getString(R.string.data_not_complete), Toast.LENGTH_SHORT).show();
+                if (thereIsData) {
+                    if (edtJudul.getText().equals("") ||
+                            edtDeskripsi.getText().equals("") ||
+                            edtHargaKelas.getText().equals("") ||
+                            tagCourseId.equals("") ||
+                            tagCourse.equals("")) {
+                        Toast.makeText(OpAddBlendedCourseActivity.this, getString(R.string.data_not_complete), Toast.LENGTH_SHORT).show();
+                    } else {
+                        showKonfirmasiDialog();
+                    }
                 } else {
-                    if (ContextCompat.checkSelfPermission(OpAddBlendedCourseActivity.this,
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                        ActivityCompat.requestPermissions(OpAddBlendedCourseActivity.this,
-                                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, WRITE_PERM_REQUEST_CODE);
+                    if (imageUri == null ||
+                            edtJudul.getText().equals("") ||
+                            edtDeskripsi.getText().equals("") ||
+                            edtHargaKelas.getText().equals("") ||
+                            tagCourseId.equals("") ||
+                            tagCourse.equals("")) {
+                        Toast.makeText(OpAddBlendedCourseActivity.this, getString(R.string.data_not_complete), Toast.LENGTH_SHORT).show();
                     } else {
                         showKonfirmasiDialog();
                     }
@@ -342,7 +359,6 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
         final ArrayAdapter<String> spnArrayAdapterTag = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, tagList) {
             @Override
             public boolean isEnabled(int position) {
-//                return super.isEnabled(position);
                 return true;
             }
 
