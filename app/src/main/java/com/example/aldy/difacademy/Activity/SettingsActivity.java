@@ -21,7 +21,7 @@ import static com.example.aldy.difacademy.Activity.LoginActivity.USERID_PREFS;
 
 public class SettingsActivity extends AppCompatActivity {
 
-    private ConstraintLayout clSunting, clKeluar, clBack;
+    private ConstraintLayout clSunting, clKeluar, clBack, clGantiPass;
     private ImageView imgBack;
     private TextView tvNavBar;
 
@@ -29,12 +29,13 @@ public class SettingsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-        findView();
+        initView();
         onClick();
     }
 
-    private void findView() {
+    private void initView() {
         clSunting = findViewById(R.id.cl_settings_sunting);
+        clGantiPass = findViewById(R.id.cl_settings_ganti_kata_sandi);
         clKeluar = findViewById(R.id.cl_settings_keluar);
         clBack = findViewById(R.id.cl_icon1);
         clBack.setVisibility(View.VISIBLE);
@@ -49,6 +50,13 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(SettingsActivity.this, EditProfileActivity.class);
+                startActivity(intent);
+            }
+        });
+        clGantiPass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SettingsActivity.this, ChangePasswordActivity.class);
                 startActivity(intent);
             }
         });

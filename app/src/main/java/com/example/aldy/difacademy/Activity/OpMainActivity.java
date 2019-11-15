@@ -42,11 +42,11 @@ public class OpMainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_op_main);
 
-        findView();
+        initView();
         onClick();
     }
 
-    private void findView() {
+    private void initView() {
         clLogout = findViewById(R.id.cl_icon3);
         clLogout.setVisibility(View.VISIBLE);
         imgLogout = findViewById(R.id.img_icon3);

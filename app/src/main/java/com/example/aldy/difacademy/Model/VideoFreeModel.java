@@ -3,11 +3,14 @@ package com.example.aldy.difacademy.Model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.firebase.firestore.Exclude;
+
 public class VideoFreeModel implements Parcelable {
     private String thumbnailUrl, videoYoutubeId, title, description, tagId, documentId, tag;
     private long dateCreated;
 
-    public VideoFreeModel(){}
+    public VideoFreeModel() {
+    }
 
     public VideoFreeModel(String thumbnailUrl, String videoYoutubeId, String title, String description, String tagId, String tag, long dateCreated) {
         this.thumbnailUrl = thumbnailUrl;
@@ -60,6 +63,7 @@ public class VideoFreeModel implements Parcelable {
         parcel.writeLong(dateCreated);
     }
 
+    @Exclude
     public String getDocumentId() {
         return documentId;
     }

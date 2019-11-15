@@ -44,7 +44,7 @@ public class OpNewsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_op_news);
-        findView();
+        initView();
         onClick();
         setRecyclerView();
         getData();
@@ -73,7 +73,7 @@ public class OpNewsActivity extends AppCompatActivity {
         opNewsAdapter.notifyDataSetChanged();
     }
 
-    private void findView() {
+    private void initView() {
         TextView tvNavBar = findViewById(R.id.tv_navbar);
         tvNavBar.setText(R.string.berita);
         clTambah = findViewById(R.id.cl_icon3);

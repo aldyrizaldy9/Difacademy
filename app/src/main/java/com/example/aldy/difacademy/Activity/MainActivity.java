@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        findView();
+        initView();
         onClick();
         setRecyclerView();
         loadData();
@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
         }, 2000);
     }
 
-    private void findView() {
+    private void initView() {
         clSettings = findViewById(R.id.cl_main_settings);
         clOngoing = findViewById(R.id.cl_main_ongoing_container);
         imgKelasGratis = findViewById(R.id.img_main_kelas_gratis);

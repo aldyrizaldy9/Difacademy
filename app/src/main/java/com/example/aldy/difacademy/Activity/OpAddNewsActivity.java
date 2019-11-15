@@ -65,7 +65,7 @@ public class OpAddNewsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_op_add_news);
         initFirebaseStorage();
-        findView();
+        initView();
         onClick();
     }
 
@@ -87,7 +87,7 @@ public class OpAddNewsActivity extends AppCompatActivity {
         storageReference = firebaseStorage.getReference();
     }
 
-    private void findView() {
+    private void initView() {
         clAddPhoto = findViewById(R.id.cl_op_add_news_add_photo);
         clBack = findViewById(R.id.cl_icon1);
         clBack.setVisibility(View.VISIBLE);
@@ -266,7 +266,8 @@ public class OpAddNewsActivity extends AppCompatActivity {
         progressDialog.setCancelable(false);
         progressDialog.show();
         final StorageReference ref = storageReference.child("Berita/" + UUID.randomUUID().toString());
-        ref.putFile(imageUri)
+        ref
+                .putFile(imageUri)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -313,7 +314,8 @@ public class OpAddNewsActivity extends AppCompatActivity {
         }
         if (dateCreated != 0) {
             final NewsModel newsModel = new NewsModel(edtJudul.getText().toString(), edtIsi.getText().toString(), downloadURL, dateCreated);
-            newsRef.add(newsModel)
+            newsRef
+                    .add(newsModel)
                     .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                         @Override
                         public void onSuccess(DocumentReference documentReference) {
@@ -342,7 +344,8 @@ public class OpAddNewsActivity extends AppCompatActivity {
         storageReference = firebaseStorage.getReferenceFromUrl(newsModel.getLinkfoto());
         //Jika user mengubah gambar maka gambar di firebase storage akan diupdate
         if (imageUri != null) {
-            storageReference.putFile(imageUri)
+            storageReference
+                    .putFile(imageUri)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -392,8 +395,8 @@ public class OpAddNewsActivity extends AppCompatActivity {
         }
         if (dateCreated != 0) {
             final NewsModel newsModel = new NewsModel(edtJudul.getText().toString(), edtIsi.getText().toString(), downloadURL, dateCreated);
-            DocumentReference documentReference = newsRef.document(this.newsModel.getNewsId());
-            documentReference.set(newsModel)
+            newsRef.document(this.newsModel.getNewsId())
+                    .set(newsModel)
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {

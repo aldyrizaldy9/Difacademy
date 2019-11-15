@@ -1,5 +1,7 @@
 package com.example.aldy.difacademy.Model;
 
+import com.google.firebase.firestore.Exclude;
+
 public class TagModel {
     private String tag, tagid;
 
@@ -15,6 +17,7 @@ public class TagModel {
         this.tagid = tagid;
     }
 
+    @Exclude
     public String getTagid() {
         return tagid;
     }

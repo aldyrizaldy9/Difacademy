@@ -51,11 +51,11 @@ public class RegisterActivity extends AppCompatActivity {
 
         pd = new ProgressDialog(RegisterActivity.this);
 
-        findView();
+        initView();
         onClick();
     }
 
-    private void findView() {
+    private void initView() {
         edtNama = findViewById(R.id.edt_register_nama);
         edtEmail = findViewById(R.id.edt_register_email);
         edtWa = findViewById(R.id.edt_register_wa);
