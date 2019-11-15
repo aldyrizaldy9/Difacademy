@@ -4,7 +4,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class YoutubeApiKeyConfig {
-    public static final String YOUTUBE_API_KEY = "AIzaSyD0PvxvYr5HJ3cumq2JM0RRQoF7gZ-Bpfw";
+    public static final String YOUTUBE_API_KEY = BuildConfig.YOUTUBE_API_KEY;
     public static final String YOUTUBE_API_BASE_URL = "https://www.googleapis.com/youtube/v3/videos/";
 
     public static String getYoutubeVideoId(String url) {
