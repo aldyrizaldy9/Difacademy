@@ -37,7 +37,8 @@
         <activity android:name=".Activity.EditProfileActivity" />
         <activity android:name=".Activity.SettingsActivity" />
         <activity android:name=".Activity.WatchYoutubeVideoActivity"
-            android:configChanges="orientation|keyboard|keyboardHidden|screenSize|screenLayout|uiMode"/>
+            android:configChanges="orientation|keyboard|keyboardHidden|screenSize|screenLayout|uiMode"
+            android:screenOrientation="portrait"/>
         <activity android:name=".Activity.BlendedCourseActivity" />
         <activity android:name=".Activity.FreeCourseActivity" />
         <activity android:name=".Activity.OngoingCourseActivity" />

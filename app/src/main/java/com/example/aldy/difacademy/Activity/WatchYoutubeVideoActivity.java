@@ -74,6 +74,7 @@ public class WatchYoutubeVideoActivity extends YouTubeBaseActivity {
             @Override
             public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean b) {
                 mYouTubePlayer = youTubePlayer;
+                mYouTubePlayer.setFullscreenControlFlags(YouTubePlayer.FULLSCREEN_FLAG_ALWAYS_FULLSCREEN_IN_LANDSCAPE | YouTubePlayer.FULLSCREEN_FLAG_CONTROL_ORIENTATION);
                 youTubePlayer.loadVideo(videoYoutubeId);
             }
 
@@ -84,23 +85,5 @@ public class WatchYoutubeVideoActivity extends YouTubeBaseActivity {
         };
 
         youTubePlayerView.initialize(YOUTUBE_API_KEY, onInitializedListener);
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            if (mYouTubePlayer != null) {
-                mYouTubePlayer.setFullscreen(true);
-            }
-        }
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if (mYouTubePlayer != null){
-            mYouTubePlayer.pause();
-        }
     }
 }
