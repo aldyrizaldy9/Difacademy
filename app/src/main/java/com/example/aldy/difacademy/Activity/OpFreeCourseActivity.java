@@ -28,9 +28,9 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
-import static com.example.aldy.difacademy.Activity.OpAddFreeCourseActivity.ADD_FREE_COURSE_REQUEST_CODE;
-import static com.example.aldy.difacademy.Activity.OpAddFreeCourseActivity.DELETE_FREE_COURSE_REQUEST_CODE;
-import static com.example.aldy.difacademy.Activity.OpAddFreeCourseActivity.UPDATE_FREE_COURSE_REQUEST_CODE;
+import static com.example.aldy.difacademy.Activity.OpMainActivity.ADD_REQUEST_CODE;
+import static com.example.aldy.difacademy.Activity.OpMainActivity.DELETE_REQUEST_CODE;
+import static com.example.aldy.difacademy.Activity.OpMainActivity.UPDATE_REQUEST_CODE;
 
 public class OpFreeCourseActivity extends AppCompatActivity {
 
@@ -69,15 +69,15 @@ public class OpFreeCourseActivity extends AppCompatActivity {
         VideoFreeModel videoFreeModel = intent.getParcelableExtra("videoFreeModel");
         int index = intent.getIntExtra("index", -1);
 
-        if (requestCode == ADD_FREE_COURSE_REQUEST_CODE && resultCode == RESULT_OK) {
+        if (requestCode == ADD_REQUEST_CODE && resultCode == RESULT_OK) {
             if (videoFreeModel != null) {
                 videoFreeModels.add(videoFreeModel);
             }
-        } else if (requestCode == DELETE_FREE_COURSE_REQUEST_CODE && resultCode == RESULT_OK) {
+        } else if (requestCode == DELETE_REQUEST_CODE && resultCode == RESULT_OK) {
             if (index != -1) {
                 videoFreeModels.remove(index);
             }
-        } else if (requestCode == UPDATE_FREE_COURSE_REQUEST_CODE && resultCode == RESULT_OK) {
+        } else if (requestCode == UPDATE_REQUEST_CODE && resultCode == RESULT_OK) {
             if (videoFreeModel != null) {
                 videoFreeModels.set(index, videoFreeModel);
             }

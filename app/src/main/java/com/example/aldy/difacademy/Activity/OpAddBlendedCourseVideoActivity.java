@@ -316,6 +316,7 @@ public class OpAddBlendedCourseVideoActivity extends AppCompatActivity {
                     public void onSuccess(Void aVoid) {
                         Intent intent = new Intent(OpAddBlendedCourseVideoActivity.this, OpBlendedCourseVideoActivity.class);
                         intent.putExtra("blended_video_model", blendedVideoModel);
+                        intent.putExtra("index", index);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivityForResult(intent, UPDATE_REQUEST_CODE);
                     }

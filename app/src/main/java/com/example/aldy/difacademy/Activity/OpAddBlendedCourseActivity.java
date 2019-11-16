@@ -453,7 +453,7 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
                                     Intent intent = new Intent(OpAddBlendedCourseActivity.this, OpBlendedCourseVideoActivity.class);
                                     startActivity(intent);
                                 } else if (wannaAddSoal) {
-                                    Intent intent = new Intent(OpAddBlendedCourseActivity.this, OpAddQuizActivity.class);
+                                    Intent intent = new Intent(OpAddBlendedCourseActivity.this, OpQuizActivity.class);
                                     startActivity(intent);
                                 } else {
                                     Intent intent = new Intent(OpAddBlendedCourseActivity.this, OpBlendedCourseActivity.class);

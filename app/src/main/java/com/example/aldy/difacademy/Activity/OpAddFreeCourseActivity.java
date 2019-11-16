@@ -46,6 +46,9 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import static com.example.aldy.difacademy.Activity.OpMainActivity.ADD_REQUEST_CODE;
+import static com.example.aldy.difacademy.Activity.OpMainActivity.DELETE_REQUEST_CODE;
+import static com.example.aldy.difacademy.Activity.OpMainActivity.UPDATE_REQUEST_CODE;
 import static com.example.aldy.difacademy.YoutubeApiKeyConfig.YOUTUBE_API_BASE_URL;
 import static com.example.aldy.difacademy.YoutubeApiKeyConfig.YOUTUBE_API_KEY;
 
@@ -72,10 +75,6 @@ public class OpAddFreeCourseActivity extends AppCompatActivity {
     ProgressDialog progressDialog;
 
     private int index;
-
-    static final int ADD_FREE_COURSE_REQUEST_CODE = 1;
-    static final int DELETE_FREE_COURSE_REQUEST_CODE = 2;
-    static final int UPDATE_FREE_COURSE_REQUEST_CODE = 3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -240,7 +239,7 @@ public class OpAddFreeCourseActivity extends AppCompatActivity {
                         Intent intent = new Intent(OpAddFreeCourseActivity.this, OpFreeCourseActivity.class);
                         intent.putExtra("index", index);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivityForResult(intent, DELETE_FREE_COURSE_REQUEST_CODE);
+                        startActivityForResult(intent, DELETE_REQUEST_CODE);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -308,7 +307,7 @@ public class OpAddFreeCourseActivity extends AppCompatActivity {
                                             intent.putExtra("index", index);
                                             intent.putExtra("videoFreeModel", videoFreeModel);
                                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                            startActivityForResult(intent, UPDATE_FREE_COURSE_REQUEST_CODE);
+                                            startActivityForResult(intent, UPDATE_REQUEST_CODE);
                                         }
                                     })
                                     .addOnFailureListener(new OnFailureListener() {
@@ -327,7 +326,7 @@ public class OpAddFreeCourseActivity extends AppCompatActivity {
                                             Intent intent = new Intent(OpAddFreeCourseActivity.this, OpFreeCourseActivity.class);
                                             intent.putExtra("videoFreeModel", videoFreeModel);
                                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                            startActivityForResult(intent, ADD_FREE_COURSE_REQUEST_CODE);
+                                            startActivityForResult(intent, ADD_REQUEST_CODE);
                                         }
                                     })
                                     .addOnFailureListener(new OnFailureListener() {
