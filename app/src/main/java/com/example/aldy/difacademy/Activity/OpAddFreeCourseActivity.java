@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -53,7 +54,7 @@ import static com.example.aldy.difacademy.YoutubeApiKeyConfig.YOUTUBE_API_BASE_U
 import static com.example.aldy.difacademy.YoutubeApiKeyConfig.YOUTUBE_API_KEY;
 
 public class OpAddFreeCourseActivity extends AppCompatActivity {
-    private static final String TAG = "OpAddFreeCourseActivity";
+    private static final String TAG = "ganteng";
 
     TextView tvNavber;
     ConstraintLayout clBack;
@@ -66,35 +67,30 @@ public class OpAddFreeCourseActivity extends AppCompatActivity {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     CollectionReference videoFreeRef = db.collection("VideoFree");
 
-    String tagVideo = "";
-    String tagVideoId = "";
+    String tag = "";
+    String tagId = "";
 
     boolean thereIsData = false;
-    VideoFreeModel videoFreeModelIntent;
+    VideoFreeModel videoFreeModel;
 
-    ProgressDialog progressDialog;
+    ProgressDialog pd;
 
-    private int index;
+    int index;
+    long dateCreated = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_op_add_free_course);
 
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Loading...");
+        pd = new ProgressDialog(this);
+        pd.setMessage("Loading...");
+        pd.setCancelable(false);
 
         initView();
         onClick();
+        checkIntent();
         loadTags();
-
-        Intent intent = getIntent();
-        videoFreeModelIntent = intent.getParcelableExtra("video_free_model");
-        if (videoFreeModelIntent != null) {
-            thereIsData = true;
-            btnHapus.setVisibility(View.VISIBLE);
-            edtLink.setText("https://youtu.be/" + videoFreeModelIntent.getVideoYoutubeId());
-        }
     }
 
     private void initView() {
@@ -108,13 +104,18 @@ public class OpAddFreeCourseActivity extends AppCompatActivity {
         btnHapus = findViewById(R.id.btn_op_add_free_hapus);
         edtLink = findViewById(R.id.edt_op_add_free_link);
         spnTag = findViewById(R.id.spn_op_add_free_tags);
+    }
 
+    private void checkIntent() {
         Intent intent = getIntent();
-
-        //Menentukan index apabila ada
-        int index = intent.getIntExtra("index", -1);
-        if (index != -1) {
-            this.index = index;
+        videoFreeModel = intent.getParcelableExtra("video_free_model");
+        if (videoFreeModel != null) {
+            thereIsData = true;
+            btnHapus.setVisibility(View.VISIBLE);
+            edtLink.setText("https://youtu.be/" + videoFreeModel.getVideoYoutubeId());
+            index = intent.getIntExtra("index", -1);
+            tag = videoFreeModel.getTag();
+            tagId = videoFreeModel.getTagId();
         }
     }
 
@@ -134,23 +135,20 @@ public class OpAddFreeCourseActivity extends AppCompatActivity {
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String url = edtLink.getText().toString();
-                if (url.length() != 0) {
-                    if (!tagVideoId.equals("")) {
-                        progressDialog.show();
-                        addOrUpdateData(url);
-                    } else {
-                        Toast.makeText(OpAddFreeCourseActivity.this, "Mohon Pilih Tag", Toast.LENGTH_SHORT).show();
-                    }
+                if (edtLink.getText().toString().equals("") || tagId.equals("")) {
+                    Toast.makeText(OpAddFreeCourseActivity.this, getString(R.string.data_not_complete), Toast.LENGTH_SHORT).show();
+                } else {
+                    showKonfirmasiDialog();
                 }
             }
         });
     }
 
     @Override
-    protected void onPause() {
-        progressDialog.dismiss();
-        super.onPause();
+    protected void onStart() {
+        super.onStart();
+        if (pd.isShowing())
+            pd.dismiss();
     }
 
     private void loadTags() {
@@ -163,7 +161,6 @@ public class OpAddFreeCourseActivity extends AppCompatActivity {
                 R.layout.support_simple_spinner_dropdown_item, tagList) {
             @Override
             public boolean isEnabled(int position) {
-//                return super.isEnabled(position);
                 return true;
             }
 
@@ -188,8 +185,8 @@ public class OpAddFreeCourseActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
                 if (position != 0) {
-                    tagVideo = tagModels.get(position - 1).getTag();
-                    tagVideoId = tagModels.get(position - 1).getTagid();
+                    tag = tagModels.get(position - 1).getTag();
+                    tagId = tagModels.get(position - 1).getTagid();
                 }
             }
 
@@ -199,7 +196,6 @@ public class OpAddFreeCourseActivity extends AppCompatActivity {
             }
         });
 
-//        FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference tagRef = db.collection("Tags");
         tagRef.get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -217,7 +213,7 @@ public class OpAddFreeCourseActivity extends AppCompatActivity {
                         spnArrayAdapterTag.notifyDataSetChanged();
 
                         if (thereIsData) {
-                            String tagId = videoFreeModelIntent.getTagId();
+                            String tagId = videoFreeModel.getTagId();
                             for (int i = 0; i < tagModels.size(); i++) {
                                 if (tagModels.get(i).getTagid().equals(tagId)) {
                                     spnTag.setSelection(i + 1);
@@ -230,12 +226,12 @@ public class OpAddFreeCourseActivity extends AppCompatActivity {
     }
 
     private void hapus() {
-        DocumentReference videoRef = videoFreeRef.document(videoFreeModelIntent.getDocumentId());
+        DocumentReference videoRef = videoFreeRef.document(videoFreeModel.getDocumentId());
         videoRef.delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        progressDialog.dismiss();
+                        pd.dismiss();
                         Intent intent = new Intent(OpAddFreeCourseActivity.this, OpFreeCourseActivity.class);
                         intent.putExtra("index", index);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -245,13 +241,80 @@ public class OpAddFreeCourseActivity extends AppCompatActivity {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        progressDialog.dismiss();
+                        pd.dismiss();
                         Toast.makeText(OpAddFreeCourseActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
                     }
                 });
     }
 
-    private void addOrUpdateData(String url) {
+    private void edit(String title, String description, String thumbnail, String yId) {
+        try {
+            dateCreated = Timestamp.now().getSeconds();
+        } catch (Exception e) {
+            Toast.makeText(OpAddFreeCourseActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        final VideoFreeModel videoFreeModel = new VideoFreeModel(thumbnail, yId, title, description, tagId, tag, dateCreated);
+        DocumentReference docRef = videoFreeRef.document(videoFreeModel.getDocumentId());
+        docRef.set(videoFreeModel)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        pd.dismiss();
+                        Intent intent = new Intent(OpAddFreeCourseActivity.this, OpFreeCourseActivity.class);
+                        intent.putExtra("index", index);
+                        intent.putExtra("videoFreeModel", videoFreeModel);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivityForResult(intent, UPDATE_REQUEST_CODE);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        pd.dismiss();
+                        Toast.makeText(OpAddFreeCourseActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void tambah(String title, String description, String thumbnail, String yId) {
+        Log.d(TAG, "tambah: title : " + title);
+        Log.d(TAG, "tambah: desc : " + description);
+        Log.d(TAG, "tambah: thumbnail : " + thumbnail);
+        Log.d(TAG, "tambah: yid : " + yId);
+        Log.d(TAG, "tambah: tagId : " + tagId);
+        Log.d(TAG, "tambah: tag : " + tag);
+
+        try {
+            dateCreated = Timestamp.now().getSeconds();
+        } catch (Exception e) {
+            Toast.makeText(OpAddFreeCourseActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        final VideoFreeModel videoFreeModel = new VideoFreeModel(thumbnail, yId, title, description, tagId, tag, dateCreated);
+        videoFreeRef.add(videoFreeModel)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        pd.dismiss();
+                        Intent intent = new Intent(OpAddFreeCourseActivity.this, OpFreeCourseActivity.class);
+                        intent.putExtra("videoFreeModel", videoFreeModel);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivityForResult(intent, ADD_REQUEST_CODE);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        pd.dismiss();
+                        Toast.makeText(OpAddFreeCourseActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void getDetailVideo(String url) {
         final String youtubeVideoId = YoutubeApiKeyConfig.getYoutubeVideoId(url);
         if (!youtubeVideoId.equals("")) {
             Retrofit retrofit = new Retrofit.Builder()
@@ -269,8 +332,13 @@ public class OpAddFreeCourseActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(Call<YResponse> call, Response<YResponse> response) {
                     if (!response.isSuccessful()) {
+                        Log.d(TAG, "onResponse: response code : " + response.code());
+                        pd.dismiss();
+                        Toast.makeText(OpAddFreeCourseActivity.this, "Response Code : " + response.code(), Toast.LENGTH_SHORT).show();
                         return;
                     }
+
+                    Log.d(TAG, "onResponse: body : " + response.body().toString());
 
                     YResponse yResponse = response.body();
 
@@ -281,73 +349,22 @@ public class OpAddFreeCourseActivity extends AppCompatActivity {
 
                     String title = yResponse.getItems().get(0).getSnippet().getTitle();
                     String description = yResponse.getItems().get(0).getSnippet().getDescription();
-                    String thumbStandard = yResponse.getItems().get(0).getSnippet().getThumbnails().getStandard().getUrl();
-                    String tagId = tagVideoId;
-                    String tag = tagVideo;
-                    long datecreated = 0;
-
-                    try {
-                        datecreated = Timestamp.now().getSeconds();
-                    } catch (Exception e) {
-                        Toast.makeText(OpAddFreeCourseActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-
-                    if (datecreated > 0) {
-                        final VideoFreeModel videoFreeModel = new VideoFreeModel(thumbStandard, youtubeVideoId,
-                                title, description, tagId, tag, datecreated);
-                        if (thereIsData) {
-                            DocumentReference videoRef = videoFreeRef.document(videoFreeModelIntent.getDocumentId());
-                            videoRef.set(videoFreeModel)
-                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                        @Override
-                                        public void onSuccess(Void aVoid) {
-                                            progressDialog.dismiss();
-                                            Intent intent = new Intent(OpAddFreeCourseActivity.this, OpFreeCourseActivity.class);
-                                            intent.putExtra("index", index);
-                                            intent.putExtra("videoFreeModel", videoFreeModel);
-                                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                            startActivityForResult(intent, UPDATE_REQUEST_CODE);
-                                        }
-                                    })
-                                    .addOnFailureListener(new OnFailureListener() {
-                                        @Override
-                                        public void onFailure(@NonNull Exception e) {
-                                            progressDialog.dismiss();
-                                            Toast.makeText(OpAddFreeCourseActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
-                        } else {
-                            videoFreeRef.add(videoFreeModel)
-                                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                        @Override
-                                        public void onSuccess(DocumentReference documentReference) {
-                                            progressDialog.dismiss();
-                                            Intent intent = new Intent(OpAddFreeCourseActivity.this, OpFreeCourseActivity.class);
-                                            intent.putExtra("videoFreeModel", videoFreeModel);
-                                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                            startActivityForResult(intent, ADD_REQUEST_CODE);
-                                        }
-                                    })
-                                    .addOnFailureListener(new OnFailureListener() {
-                                        @Override
-                                        public void onFailure(@NonNull Exception e) {
-                                            progressDialog.dismiss();
-                                            Toast.makeText(OpAddFreeCourseActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
-                        }
+                    String thumbnail = yResponse.getItems().get(0).getSnippet().getThumbnails().getStandard().getUrl();
+                    if (thereIsData) {
+                        edit(title, description, thumbnail, youtubeVideoId);
+                    } else {
+                        tambah(title, description, thumbnail, youtubeVideoId);
                     }
                 }
 
                 @Override
                 public void onFailure(Call<YResponse> call, Throwable t) {
-                    progressDialog.dismiss();
+                    pd.dismiss();
                     Toast.makeText(OpAddFreeCourseActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
                 }
             });
         } else {
-            progressDialog.dismiss();
+            pd.dismiss();
             Toast.makeText(this, getString(R.string.link_not_valid), Toast.LENGTH_SHORT).show();
         }
     }
@@ -361,8 +378,32 @@ public class OpAddFreeCourseActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
-                progressDialog.show();
+                pd.show();
                 hapus();
+            }
+        });
+
+        builder.setNegativeButton("Tidak", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+
+    private void showKonfirmasiDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Apakah anda yakin ingin menyimpan video ini?");
+        builder.setTitle("Simpan Video");
+        builder.setCancelable(false);
+        builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+                pd.show();
+                getDetailVideo(edtLink.getText().toString());
             }
         });
 

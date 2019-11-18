@@ -16,6 +16,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -29,6 +30,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.aldy.difacademy.Model.BlendedCourseModel;
+import com.example.aldy.difacademy.Model.BlendedVideoModel;
 import com.example.aldy.difacademy.Model.TagModel;
 import com.example.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -56,6 +58,8 @@ import static com.example.aldy.difacademy.Activity.OpMainActivity.WRITE_PERM_REQ
 public class OpAddBlendedCourseActivity extends AppCompatActivity {
     private static final String TAG = "OpAddBlendedCourseActiv";
 
+    public static String blendedCourseDocId = "";
+
     TextView tvNavbar;
     ConstraintLayout clBack;
     ImageView imgBack;
@@ -68,25 +72,18 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     CollectionReference blendedCourseRef = db.collection("BlendedCourse");
-
     String tagCourse = "";
     String tagCourseId = "";
-
     boolean thereIsData = false;
-    boolean wannaAddVideoMateri = false;
-    boolean wannaAddSoal = false;
-    BlendedCourseModel blendedCourseModelIntent;
-
-    ProgressDialog pd;
+    boolean addVideo = false;
+    boolean addQuiz = false;
+    BlendedCourseModel blendedCourseModel;
     Uri imageUri;
-
     String thumbnailUrl = "";
-
-    public static String blendedCourseDocId = "";
-
     FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
-
     int index;
+    long dateCreated = 0;
+    ProgressDialog pd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,40 +94,29 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
         pd.setMessage("Loading...");
         pd.setCancelable(false);
 
-
         initView();
         onClick();
+        checkIntent();
         loadTags();
-
-        Intent intent = getIntent();
-
-        int index = intent.getIntExtra("index", -1);
-        if (index != -1) {
-            this.index = index;
-        }
-
-        blendedCourseModelIntent = intent.getParcelableExtra("blended_course_model");
-        if (blendedCourseModelIntent != null) {
-            thereIsData = true;
-            thumbnailUrl = blendedCourseModelIntent.getThumbnailUrl();
-            btnHapus.setVisibility(View.VISIBLE);
-            Glide.with(this)
-                    .load(blendedCourseModelIntent.getThumbnailUrl())
-                    .into(imgThumbnail);
-            edtJudul.setText(blendedCourseModelIntent.getTitle());
-            edtLinkGDrive.setText(blendedCourseModelIntent.getgDriveUrl());
-            edtHargaKelas.setText(blendedCourseModelIntent.getHarga());
-            edtDeskripsi.setText(blendedCourseModelIntent.getDescription());
-            blendedCourseDocId = blendedCourseModelIntent.getDocumentId();
-        } else {
-            blendedCourseDocId = "";
-        }
     }
 
-    @Override
-    protected void onPause() {
-        pd.dismiss();
-        super.onPause();
+    private void checkIntent() {
+        Intent intent = getIntent();
+        blendedCourseModel = intent.getParcelableExtra("blended_course_model");
+        if (blendedCourseModel != null) {
+            index = intent.getIntExtra("index", -1);
+            thereIsData = true;
+            thumbnailUrl = blendedCourseModel.getThumbnailUrl();
+            btnHapus.setVisibility(View.VISIBLE);
+            Glide.with(this)
+                    .load(blendedCourseModel.getThumbnailUrl())
+                    .into(imgThumbnail);
+            edtJudul.setText(blendedCourseModel.getTitle());
+            edtLinkGDrive.setText(blendedCourseModel.getgDriveUrl());
+            edtHargaKelas.setText(blendedCourseModel.getHarga());
+            edtDeskripsi.setText(blendedCourseModel.getDescription());
+            blendedCourseDocId = blendedCourseModel.getDocumentId();
+        }
     }
 
     @Override
@@ -155,200 +141,11 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
         }
     }
 
-    private void initView() {
-        tvNavbar = findViewById(R.id.tv_navbar);
-        tvNavbar.setText("Add Video Blended");
-        clBack = findViewById(R.id.cl_icon1);
-        clBack.setVisibility(View.VISIBLE);
-        clBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onBackPressed();
-            }
-        });
-        imgBack = findViewById(R.id.img_icon1);
-        imgBack.setImageResource(R.drawable.ic_arrow_back);
-
-        imgThumbnail = findViewById(R.id.img_op_add_blended_thumbnail);
-        clAddPhoto = findViewById(R.id.cl_op_add_blended_course_add_photo);
-        clAddVideo = findViewById(R.id.cl_op_add_blended_video_materi);
-        clAddQuiz = findViewById(R.id.cl_op_add_blended_soal_tes);
-        btnHapus = findViewById(R.id.btn_op_add_blended_hapus);
-        btnSimpan = findViewById(R.id.btn_op_add_blended_simpan);
-        edtJudul = findViewById(R.id.edt_op_add_blended_judul);
-        edtDeskripsi = findViewById(R.id.edt_op_add_blended_isi);
-        edtLinkGDrive = findViewById(R.id.edt_op_add_blended_link);
-        edtHargaKelas = findViewById(R.id.edt_op_add_blended_harga);
-        spnTag = findViewById(R.id.spn_op_add_blended_tag);
-    }
-
     @Override
     protected void onStart() {
         super.onStart();
-        wannaAddSoal = false;
-        wannaAddVideoMateri = false;
-    }
-
-    private void onClick() {
-        clAddPhoto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (ContextCompat.checkSelfPermission(OpAddBlendedCourseActivity.this,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(OpAddBlendedCourseActivity.this,
-                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, WRITE_PERM_REQUEST_CODE);
-                } else {
-                    Intent intent = new Intent(Intent.ACTION_PICK);
-                    intent.setType("image/*");
-                    startActivityForResult(intent, PHOTO_PICK_REQUEST_CODE);
-                }
-            }
-        });
-        clAddVideo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                wannaAddVideoMateri = true;
-                if (thereIsData) {
-                    if (edtJudul.getText().equals("") ||
-                            edtDeskripsi.getText().equals("") ||
-                            edtHargaKelas.getText().equals("") ||
-                            tagCourseId.equals("") ||
-                            tagCourse.equals("")) {
-                        Toast.makeText(OpAddBlendedCourseActivity.this, getString(R.string.data_not_complete), Toast.LENGTH_SHORT).show();
-                    } else {
-                        showKonfirmasiDialog();
-                    }
-                } else {
-                    if (imageUri == null ||
-                            edtJudul.getText().equals("") ||
-                            edtDeskripsi.getText().equals("") ||
-                            edtHargaKelas.getText().equals("") ||
-                            tagCourseId.equals("") ||
-                            tagCourse.equals("")) {
-                        Toast.makeText(OpAddBlendedCourseActivity.this, getString(R.string.data_not_complete), Toast.LENGTH_SHORT).show();
-                    } else {
-                        showKonfirmasiDialog();
-                    }
-                }
-            }
-        });
-        clAddQuiz.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                wannaAddSoal = true;
-                if (thereIsData) {
-                    if (edtJudul.getText().equals("") ||
-                            edtDeskripsi.getText().equals("") ||
-                            edtHargaKelas.getText().equals("") ||
-                            tagCourseId.equals("") ||
-                            tagCourse.equals("")) {
-                        Toast.makeText(OpAddBlendedCourseActivity.this, getString(R.string.data_not_complete), Toast.LENGTH_SHORT).show();
-                    } else {
-                        showKonfirmasiDialog();
-                    }
-                } else {
-                    if (imageUri == null ||
-                            edtJudul.getText().equals("") ||
-                            edtDeskripsi.getText().equals("") ||
-                            edtHargaKelas.getText().equals("") ||
-                            tagCourseId.equals("") ||
-                            tagCourse.equals("")) {
-                        Toast.makeText(OpAddBlendedCourseActivity.this, getString(R.string.data_not_complete), Toast.LENGTH_SHORT).show();
-                    } else {
-                        showKonfirmasiDialog();
-                    }
-                }
-            }
-        });
-        btnSimpan.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (thereIsData) {
-                    if (edtJudul.getText().equals("") ||
-                            edtDeskripsi.getText().equals("") ||
-                            edtHargaKelas.getText().equals("") ||
-                            tagCourseId.equals("") ||
-                            tagCourse.equals("")) {
-                        Toast.makeText(OpAddBlendedCourseActivity.this, getString(R.string.data_not_complete), Toast.LENGTH_SHORT).show();
-                    } else {
-                        showKonfirmasiDialog();
-                    }
-                } else {
-                    if (imageUri == null ||
-                            edtJudul.getText().equals("") ||
-                            edtDeskripsi.getText().equals("") ||
-                            edtHargaKelas.getText().equals("") ||
-                            tagCourseId.equals("") ||
-                            tagCourse.equals("")) {
-                        Toast.makeText(OpAddBlendedCourseActivity.this, getString(R.string.data_not_complete), Toast.LENGTH_SHORT).show();
-                    } else {
-                        showKonfirmasiDialog();
-                    }
-                }
-            }
-        });
-        btnHapus.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showHapusDialog();
-            }
-        });
-    }
-
-    private void checkEditOrAddImage() {
-        pd.show();
-
-        if (thereIsData && imageUri == null) {
-            addOrUpdateData();
-        } else if (thereIsData && imageUri != null) {
-            StorageReference deleteRef = firebaseStorage.getReferenceFromUrl(blendedCourseModelIntent.getThumbnailUrl());
-            deleteRef.delete()
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            uploadImageToFirebase(imageUri);
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            pd.dismiss();
-                            Toast.makeText(OpAddBlendedCourseActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
-                        }
-                    });
-        } else {
-            uploadImageToFirebase(imageUri);
-        }
-    }
-
-    private void uploadImageToFirebase(Uri imageUri) {
-        final StorageReference ref = firebaseStorage.getReference().child("BlendedCourse/" + UUID.randomUUID().toString());
-        ref.putFile(imageUri)
-                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        ref.getDownloadUrl()
-                                .addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                    @Override
-                                    public void onSuccess(Uri uri) {
-                                        thumbnailUrl = uri.toString();
-                                        addOrUpdateData();
-                                    }
-                                })
-                                .addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        Toast.makeText(OpAddBlendedCourseActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(OpAddBlendedCourseActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
-                    }
-                });
+        if (pd.isShowing())
+            pd.dismiss();
     }
 
     private void loadTags() {
@@ -411,7 +208,7 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
                         spnArrayAdapterTag.notifyDataSetChanged();
 
                         if (thereIsData) {
-                            String tagId = blendedCourseModelIntent.getTagId();
+                            String tagId = blendedCourseModel.getTagId();
                             for (int i = 0; i < tagModels.size(); i++) {
                                 if (tagModels.get(i).getTagid().equals(tagId)) {
                                     spnTag.setSelection(i + 1);
@@ -423,102 +220,161 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
                 });
     }
 
-    private void addOrUpdateData() {
-        String title = edtJudul.getText().toString();
-        String description = edtDeskripsi.getText().toString();
-        String gDriveUrl = edtLinkGDrive.getText().toString();
-        String tag = tagCourse;
-        String tagId = tagCourseId;
-        String harga = edtHargaKelas.getText().toString();
+    private void initView() {
+        tvNavbar = findViewById(R.id.tv_navbar);
+        tvNavbar.setText("Add Video Blended");
+        clBack = findViewById(R.id.cl_icon1);
+        clBack.setVisibility(View.VISIBLE);
+        clBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
+        imgBack = findViewById(R.id.img_icon1);
+        imgBack.setImageResource(R.drawable.ic_arrow_back);
 
-        long dataCreated = 0;
-        try {
-            dataCreated = Timestamp.now().getSeconds();
-        } catch (Exception e) {
-            pd.dismiss();
-            Toast.makeText(OpAddBlendedCourseActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
-            return;
+        imgThumbnail = findViewById(R.id.img_op_add_blended_thumbnail);
+        clAddPhoto = findViewById(R.id.cl_op_add_blended_course_add_photo);
+        clAddVideo = findViewById(R.id.cl_op_add_blended_video_materi);
+        clAddQuiz = findViewById(R.id.cl_op_add_blended_soal_tes);
+        btnHapus = findViewById(R.id.btn_op_add_blended_hapus);
+        btnSimpan = findViewById(R.id.btn_op_add_blended_simpan);
+        edtJudul = findViewById(R.id.edt_op_add_blended_judul);
+        edtDeskripsi = findViewById(R.id.edt_op_add_blended_isi);
+        edtLinkGDrive = findViewById(R.id.edt_op_add_blended_link);
+        edtHargaKelas = findViewById(R.id.edt_op_add_blended_harga);
+        spnTag = findViewById(R.id.spn_op_add_blended_tag);
+    }
+
+    private void onClick() {
+        clAddPhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getPhotoFromGallery();
+            }
+        });
+        clAddVideo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                pd.show();
+                addVideo = true;
+                addQuiz = false;
+
+                if (!thumbnailUrl.equals("")) {
+                    thereIsData = true;
+                }
+
+                if (isDataComplete()) {
+                    if (thereIsData) {
+                        if (imageUri == null) {
+                            edit();
+                        } else {
+                            uploadImageToFirebase(imageUri);
+                        }
+                    } else {
+                        uploadImageToFirebase(imageUri);
+                    }
+                } else {
+                    pd.dismiss();
+                    Toast.makeText(OpAddBlendedCourseActivity.this, getString(R.string.data_not_complete), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        clAddQuiz.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                pd.show();
+                addQuiz = true;
+                addVideo = false;
+
+                if (!thumbnailUrl.equals("")) {
+                    thereIsData = true;
+                }
+
+                if (isDataComplete()) {
+                    if (thereIsData) {
+                        if (imageUri == null) {
+                            edit();
+                        } else {
+                            uploadImageToFirebase(imageUri);
+                        }
+                    } else {
+                        uploadImageToFirebase(imageUri);
+                    }
+                } else {
+                    pd.dismiss();
+                    Toast.makeText(OpAddBlendedCourseActivity.this, getString(R.string.data_not_complete), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        btnSimpan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showKonfirmasiDialog();
+            }
+        });
+        btnHapus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showHapusDialog();
+            }
+        });
+    }
+
+    private void getPhotoFromGallery() {
+        if (ContextCompat.checkSelfPermission(OpAddBlendedCourseActivity.this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(OpAddBlendedCourseActivity.this,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, WRITE_PERM_REQUEST_CODE);
+        } else {
+            Intent intent = new Intent(Intent.ACTION_PICK);
+            intent.setType("image/*");
+            startActivityForResult(intent, PHOTO_PICK_REQUEST_CODE);
         }
+    }
 
-        if (dataCreated > 0) {
-            final BlendedCourseModel blendedCourseModel = new BlendedCourseModel(title, description, tagId, tag, thumbnailUrl, gDriveUrl, harga, dataCreated);
-            if (thereIsData) {
-                DocumentReference docRef = blendedCourseRef.document(blendedCourseDocId);
-                docRef.set(blendedCourseModel)
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                pd.dismiss();
-                                if (wannaAddVideoMateri) {
-                                    Intent intent = new Intent(OpAddBlendedCourseActivity.this, OpBlendedCourseVideoActivity.class);
-                                    startActivity(intent);
-                                } else if (wannaAddSoal) {
-                                    Intent intent = new Intent(OpAddBlendedCourseActivity.this, OpQuizActivity.class);
-                                    startActivity(intent);
-                                } else {
-                                    Intent intent = new Intent(OpAddBlendedCourseActivity.this, OpBlendedCourseActivity.class);
-                                    intent.putExtra("blended_course_model", blendedCourseModel);
-                                    intent.putExtra("index", index);
-                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                    startActivityForResult(intent, UPDATE_REQUEST_CODE);
-                                }
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                pd.dismiss();
-                                Toast.makeText(OpAddBlendedCourseActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
-                            }
-                        });
+    private boolean isDataComplete() {
+        if (thereIsData) {
+            if (edtJudul.getText().equals("") ||
+                    edtDeskripsi.getText().equals("") ||
+                    edtHargaKelas.getText().equals("") ||
+                    tagCourseId.equals("") ||
+                    tagCourse.equals("")) {
+                return false;
             } else {
-                blendedCourseRef.add(blendedCourseModel)
-                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                            @Override
-                            public void onSuccess(DocumentReference documentReference) {
-                                pd.dismiss();
-                                blendedCourseDocId = documentReference.getId();
-                                if (wannaAddVideoMateri) {
-                                    Intent intent = new Intent(OpAddBlendedCourseActivity.this, OpBlendedCourseVideoActivity.class);
-                                    startActivity(intent);
-                                } else if (wannaAddSoal) {
-                                    Intent intent = new Intent(OpAddBlendedCourseActivity.this, OpAddQuizActivity.class);
-                                    startActivity(intent);
-                                } else {
-                                    Intent intent = new Intent(OpAddBlendedCourseActivity.this, OpBlendedCourseActivity.class);
-                                    intent.putExtra("blended_course_model", blendedCourseModel);
-                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                    startActivityForResult(intent, ADD_REQUEST_CODE);
-                                }
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                pd.dismiss();
-                                Toast.makeText(OpAddBlendedCourseActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
-                            }
-                        });
+                return true;
+            }
+        } else {
+            if (edtJudul.getText().equals("") ||
+                    edtDeskripsi.getText().equals("") ||
+                    edtHargaKelas.getText().equals("") ||
+                    tagCourseId.equals("") ||
+                    tagCourse.equals("") ||
+                    imageUri == null) {
+                return false;
+            } else {
+                return true;
             }
         }
     }
 
-    private void hapus() {
-        //yang hapus ini belum hapus semua video materi dan semua soalnya
-        StorageReference deleteRef = firebaseStorage.getReferenceFromUrl(blendedCourseModelIntent.getThumbnailUrl());
-        deleteRef.delete()
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
+    private void uploadImageToFirebase(Uri imageUri) {
+        final StorageReference ref = firebaseStorage.getReference().child("BlendedCourse/" + UUID.randomUUID().toString());
+        ref.putFile(imageUri)
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
-                    public void onSuccess(Void aVoid) {
-                        DocumentReference docRef = blendedCourseRef.document(blendedCourseModelIntent.getDocumentId());
-                        docRef.delete()
-                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        ref.getDownloadUrl()
+                                .addOnSuccessListener(new OnSuccessListener<Uri>() {
                                     @Override
-                                    public void onSuccess(Void aVoid) {
-                                        Intent intent = new Intent(OpAddBlendedCourseActivity.this, OpBlendedCourseActivity.class);
-                                        intent.putExtra("index", index);
-                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                        startActivityForResult(intent, DELETE_REQUEST_CODE);
+                                    public void onSuccess(Uri uri) {
+                                        thumbnailUrl = uri.toString();
+                                        if (thereIsData) {
+                                            edit();
+                                        } else {
+                                            tambah();
+                                        }
                                     }
                                 })
                                 .addOnFailureListener(new OnFailureListener() {
@@ -528,6 +384,261 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
                                         Toast.makeText(OpAddBlendedCourseActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
                                     }
                                 });
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        pd.dismiss();
+                        Toast.makeText(OpAddBlendedCourseActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void edit() {
+        String title = edtJudul.getText().toString();
+        String description = edtDeskripsi.getText().toString();
+        String gDriveUrl = edtLinkGDrive.getText().toString();
+        String tag = tagCourse;
+        String tagId = tagCourseId;
+        String harga = edtHargaKelas.getText().toString();
+
+        try {
+            dateCreated = Timestamp.now().getSeconds();
+        } catch (Exception e) {
+            pd.dismiss();
+            Toast.makeText(OpAddBlendedCourseActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        final BlendedCourseModel blendedCourseModel = new BlendedCourseModel(title, description, tagId, tag, thumbnailUrl, gDriveUrl, harga, dateCreated);
+        DocumentReference docRef = blendedCourseRef.document(blendedCourseDocId);
+        docRef.set(blendedCourseModel)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Intent intent;
+                        if (addVideo) {
+                            intent = new Intent(OpAddBlendedCourseActivity.this, OpBlendedCourseVideoActivity.class);
+                            startActivity(intent);
+                        } else if (addQuiz) {
+                            intent = new Intent(OpAddBlendedCourseActivity.this, OpQuizActivity.class);
+                            startActivity(intent);
+                        } else {
+                            intent = new Intent(OpAddBlendedCourseActivity.this, OpBlendedCourseActivity.class);
+                            intent.putExtra("blended_course_model", blendedCourseModel);
+                            intent.putExtra("index", index);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivityForResult(intent, UPDATE_REQUEST_CODE);
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        pd.dismiss();
+                        Toast.makeText(OpAddBlendedCourseActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void tambah() {
+        String title = edtJudul.getText().toString();
+        String description = edtDeskripsi.getText().toString();
+        String gDriveUrl = edtLinkGDrive.getText().toString();
+        String tag = tagCourse;
+        String tagId = tagCourseId;
+        String harga = edtHargaKelas.getText().toString();
+
+        try {
+            dateCreated = Timestamp.now().getSeconds();
+        } catch (Exception e) {
+            pd.dismiss();
+            Toast.makeText(OpAddBlendedCourseActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        final BlendedCourseModel blendedCourseModel = new BlendedCourseModel(title, description, tagId, tag, thumbnailUrl, gDriveUrl, harga, dateCreated);
+        blendedCourseRef.add(blendedCourseModel)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        blendedCourseDocId = documentReference.getId();
+                        Intent intent;
+                        if (addVideo) {
+                            intent = new Intent(OpAddBlendedCourseActivity.this, OpBlendedCourseVideoActivity.class);
+                            startActivity(intent);
+                        } else if (addQuiz) {
+                            intent = new Intent(OpAddBlendedCourseActivity.this, OpQuizActivity.class);
+                            startActivity(intent);
+                        } else {
+                            intent = new Intent(OpAddBlendedCourseActivity.this, OpBlendedCourseActivity.class);
+                            intent.putExtra("blended_course_model", blendedCourseModel);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivityForResult(intent, ADD_REQUEST_CODE);
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        pd.dismiss();
+                        Toast.makeText(OpAddBlendedCourseActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void hapus() {
+        hapusVideoMateri();
+    }
+
+    private void hapusVideoMateri() {
+        //check videonya dulu
+        CollectionReference colRef = blendedCourseRef
+                .document(blendedCourseDocId)
+                .collection("VideoMateri");
+
+        colRef.get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                            BlendedVideoModel blendedVideoModel = documentSnapshot.toObject(BlendedVideoModel.class);
+                            final String urlVideo = blendedVideoModel.getVideoUrl();
+                            StorageReference delVideo = firebaseStorage.getReferenceFromUrl(urlVideo);
+                            delVideo.delete()
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            Log.d(TAG, "onSuccess: " + urlVideo + " berhasil hapus video");
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            pd.dismiss();
+                                            Log.d(TAG, "onFailure: " + e.getMessage());
+                                            return;
+                                        }
+                                    });
+                        }
+
+                        hapusThumbnail();
+                    }
+                });
+    }
+
+    private void hapusThumbnail() {
+        StorageReference deleteRef = firebaseStorage.getReferenceFromUrl(blendedCourseModel.getThumbnailUrl());
+        deleteRef.delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "onSuccess: " + blendedCourseModel.getThumbnailUrl() + " berhasil hapus thumbnail");
+                        hapusDocBlendedCourseVideo();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        pd.dismiss();
+                        Log.d(TAG, "onFailure: " + e.getMessage());
+                    }
+                });
+    }
+
+    private void hapusDocBlendedCourseVideo() {
+        CollectionReference colRef = blendedCourseRef.document(blendedCourseDocId)
+                .collection("VideoMateri");
+
+        colRef.get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for (final QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                            DocumentReference docRef = blendedCourseRef.document(blendedCourseDocId)
+                                    .collection("VideoMateri")
+                                    .document(documentSnapshot.getId());
+                            docRef.delete()
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            Log.d(TAG, "onSuccess: " + documentSnapshot.getId() + " berhasil hapus blendedcoursevideo doc");
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            pd.dismiss();
+                                            Log.d(TAG, "onFailure: " + e.getMessage());
+                                            return;
+                                        }
+                                    });
+                        }
+                        hapusQuiz();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        pd.dismiss();
+                        Log.d(TAG, "onFailure: " + e.getMessage());
+                        return;
+                    }
+                });
+    }
+
+    private void hapusQuiz() {
+        CollectionReference colRef = blendedCourseRef.document(blendedCourseDocId)
+                .collection("VideoMateri");
+
+        colRef.get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for (final QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                            DocumentReference docRef = blendedCourseRef.document(blendedCourseDocId)
+                                    .collection("Quiz")
+                                    .document(documentSnapshot.getId());
+                            docRef.delete()
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            Log.d(TAG, "onSuccess: " + documentSnapshot.getId() + " berhasil hapus quiz doc");
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            pd.dismiss();
+                                            Log.d(TAG, "onFailure: " + e.getMessage());
+                                            return;
+                                        }
+                                    });
+                        }
+                        hapusDocBlendedCourse();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        pd.dismiss();
+                        Log.d(TAG, "onFailure: " + e.getMessage());
+                        return;
+                    }
+                });
+    }
+
+    private void hapusDocBlendedCourse() {
+        DocumentReference docRef = blendedCourseRef.document(blendedCourseDocId);
+        docRef.delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Intent intent = new Intent(OpAddBlendedCourseActivity.this, OpBlendedCourseActivity.class);
+                        intent.putExtra("index", index);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivityForResult(intent, DELETE_REQUEST_CODE);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -573,7 +684,15 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
                 pd.show();
-                checkEditOrAddImage();
+                if (thereIsData) {
+                    if (imageUri != null) {
+                        uploadImageToFirebase(imageUri);
+                    } else {
+                        edit();
+                    }
+                } else {
+                    uploadImageToFirebase(imageUri);
+                }
             }
         });
 
