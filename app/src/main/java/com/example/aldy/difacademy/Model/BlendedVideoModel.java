@@ -3,6 +3,8 @@ package com.example.aldy.difacademy.Model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.firebase.firestore.Exclude;
+
 public class BlendedVideoModel implements Parcelable {
     String title, description, videoUrl, documentId;
     long dateCreated;
@@ -74,6 +76,7 @@ public class BlendedVideoModel implements Parcelable {
         this.videoUrl = videoUrl;
     }
 
+    @Exclude
     public String getDocumentId() {
         return documentId;
     }

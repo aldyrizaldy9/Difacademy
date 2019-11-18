@@ -188,6 +188,7 @@ public class OpAddFreeCourseActivity extends AppCompatActivity {
                     tag = tagModels.get(position - 1).getTag();
                     tagId = tagModels.get(position - 1).getTagid();
                 }
+
             }
 
             @Override
@@ -216,7 +217,7 @@ public class OpAddFreeCourseActivity extends AppCompatActivity {
                             String tagId = videoFreeModel.getTagId();
                             for (int i = 0; i < tagModels.size(); i++) {
                                 if (tagModels.get(i).getTagid().equals(tagId)) {
-                                    spnTag.setSelection(i + 1);
+                                    spnTag.setSelection(i);
                                     break;
                                 }
                             }

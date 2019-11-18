@@ -3,6 +3,8 @@ package com.example.aldy.difacademy.Model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.firebase.firestore.Exclude;
+
 public class QuizModel implements Parcelable {
     long dateCreated;
     String soal, jwbA, jwbB, jwbC, jwbD, jwbE, jawabanBenar, documentId;
@@ -126,6 +128,7 @@ public class QuizModel implements Parcelable {
         this.jawabanBenar = jawabanBenar;
     }
 
+    @Exclude
     public String getDocumentId() {
         return documentId;
     }

@@ -7,9 +7,11 @@
 
     <application
         android:allowBackup="true"
+        android:configChanges="orientation"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
+        android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".Activity.ChangePasswordActivity"></activity>
@@ -36,9 +38,10 @@
         <activity android:name=".Activity.ListNewsActivity" />
         <activity android:name=".Activity.EditProfileActivity" />
         <activity android:name=".Activity.SettingsActivity" />
-        <activity android:name=".Activity.WatchYoutubeVideoActivity"
+        <activity
+            android:name=".Activity.WatchYoutubeVideoActivity"
             android:configChanges="orientation|keyboard|keyboardHidden|screenSize|screenLayout|uiMode"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity android:name=".Activity.BlendedCourseActivity" />
         <activity android:name=".Activity.FreeCourseActivity" />
         <activity android:name=".Activity.OngoingCourseActivity" />

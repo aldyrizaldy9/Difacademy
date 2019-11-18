@@ -32,14 +32,24 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_blended_course_search"
         android:layout_width="0dp"
-        android:layout_height="100dp"
+        android:layout_height="wrap_content"
         android:background="@android:color/white"
         android:elevation="2dp"
+        android:padding="16dp"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/include">
 
+        <Spinner
+            android:id="@+id/spn_blended_course_search"
+            style="@style/Difacademy.Body1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/cl_blended_course_search"
+            app:layout_constraintStart_toStartOf="@id/cl_blended_course_search"
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
