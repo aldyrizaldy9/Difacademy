@@ -114,9 +114,9 @@ public class FreeCourseActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         videoFreeModels.clear();
-                        for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
-                            VideoFreeModel videoFreeModel = queryDocumentSnapshot.toObject(VideoFreeModel.class);
-                            videoFreeModel.setDocumentId(queryDocumentSnapshot.getId());
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                            VideoFreeModel videoFreeModel = documentSnapshot.toObject(VideoFreeModel.class);
+                            videoFreeModel.setDocumentId(documentSnapshot.getId());
 
                             videoFreeModels.add(videoFreeModel);
                         }
