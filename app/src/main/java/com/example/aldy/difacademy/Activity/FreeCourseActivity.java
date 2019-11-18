@@ -38,7 +38,7 @@ public class FreeCourseActivity extends AppCompatActivity {
     private FreeCourseAdapter adapter;
     private ArrayList<VideoFreeModel> videoFreeModels;
     private ArrayList<String> tags;
-    //    private ProgressDialog pd;
+    private ProgressDialog pd;
     private Spinner spnTags;
     private boolean firstClick;
 
