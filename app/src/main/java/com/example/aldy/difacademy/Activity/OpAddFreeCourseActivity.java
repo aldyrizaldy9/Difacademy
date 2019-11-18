@@ -191,6 +191,7 @@ public class OpAddFreeCourseActivity extends AppCompatActivity {
                     tagVideo = tagModels.get(position - 1).getTag();
                     tagVideoId = tagModels.get(position - 1).getTagid();
                 }
+
             }
 
             @Override
@@ -199,7 +200,6 @@ public class OpAddFreeCourseActivity extends AppCompatActivity {
             }
         });
 
-//        FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference tagRef = db.collection("Tags");
         tagRef.get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -220,7 +220,7 @@ public class OpAddFreeCourseActivity extends AppCompatActivity {
                             String tagId = videoFreeModelIntent.getTagId();
                             for (int i = 0; i < tagModels.size(); i++) {
                                 if (tagModels.get(i).getTagid().equals(tagId)) {
-                                    spnTag.setSelection(i + 1);
+                                    spnTag.setSelection(i);
                                     break;
                                 }
                             }

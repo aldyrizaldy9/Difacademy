@@ -1,6 +1,5 @@
 package com.example.aldy.difacademy.Activity;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -39,7 +38,6 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView rvMainBerita;
     private NewsAdapter newsAdapter;
     private ArrayList<NewsModel> newsModels;
-    private ProgressDialog progressDialog;
 
     private boolean doubleBackToExitPressedOnce = false;
     private static final String TAG = "MainActivity";
@@ -86,7 +84,6 @@ public class MainActivity extends AppCompatActivity {
         tvDiikutiSemua = findViewById(R.id.tv_main_diikuti_semua);
         rvMainBerita = findViewById(R.id.rv_main_berita);
         rvMainBerita.setNestedScrollingEnabled(false);
-        progressDialog = new ProgressDialog(this);
     }
 
     private void setRecyclerView() {
@@ -149,9 +146,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadData() {
-        progressDialog.setMessage("Memuat");
-        progressDialog.setCancelable(false);
-        progressDialog.show();
         FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
         CollectionReference newsRef = firebaseFirestore.collection("News");
         newsRef.orderBy("dateCreated", Query.Direction.DESCENDING)
@@ -167,13 +161,11 @@ public class MainActivity extends AppCompatActivity {
                             newsModels.add(newsModel);
                         }
                         newsAdapter.notifyDataSetChanged();
-                        progressDialog.dismiss();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        progressDialog.dismiss();
                         Log.d(TAG, e.toString());
                     }
                 });

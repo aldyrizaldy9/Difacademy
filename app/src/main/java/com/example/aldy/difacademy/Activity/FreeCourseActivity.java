@@ -38,8 +38,9 @@ public class FreeCourseActivity extends AppCompatActivity {
     private FreeCourseAdapter adapter;
     private ArrayList<VideoFreeModel> videoFreeModels;
     private ArrayList<String> tags;
-    //    private ProgressDialog progressDialog;
+    private ProgressDialog progressDialog;
     private Spinner spnTags;
+    private boolean firstClick;
 
     private FirebaseFirestore firebaseFirestore;
     CollectionReference videoFreeRef;
@@ -54,7 +55,8 @@ public class FreeCourseActivity extends AppCompatActivity {
         onClick();
         setRecyclerView();
         loadTagsData();
-        loadVideoFreeData();
+        loadVideoFreeData(false);
+        firstClick = true;
     }
 
     private void initView() {
@@ -71,6 +73,7 @@ public class FreeCourseActivity extends AppCompatActivity {
         tvNavBar.setText("Free Video");
         rvVideo = findViewById(R.id.rv_free_course_video);
         spnTags = findViewById(R.id.spn_free_course_search);
+        progressDialog = new ProgressDialog(this);
     }
 
     private void onClick() {
@@ -99,10 +102,12 @@ public class FreeCourseActivity extends AppCompatActivity {
         rvVideo.setAdapter(adapter);
     }
 
-    private void loadVideoFreeData() {
+    private void loadVideoFreeData(final boolean hide) {
+        progressDialog.setMessage("Memuat");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
         firebaseFirestore = FirebaseFirestore.getInstance();
         videoFreeRef = firebaseFirestore.collection("VideoFree");
-
         videoFreeRef.orderBy("dateCreated", Query.Direction.DESCENDING)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -115,13 +120,19 @@ public class FreeCourseActivity extends AppCompatActivity {
 
                             videoFreeModels.add(videoFreeModel);
                         }
+                        progressDialog.dismiss();
                         adapter.notifyDataSetChanged();
+                        if (hide) {
+                            clSearchContainer.setVisibility(View.GONE);
+                        }
+
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-
+                        progressDialog.dismiss();
+                        Log.d(TAG, e.toString());
                     }
                 });
     }
@@ -148,7 +159,7 @@ public class FreeCourseActivity extends AppCompatActivity {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-
+                        Log.d(TAG, e.toString());
                     }
                 });
     }
@@ -177,8 +188,10 @@ public class FreeCourseActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (position != 0) {
                     loadVideoFreeWithSameTag(tags.get(position));
+                } else if (firstClick) {
+                    firstClick = false;
                 } else {
-                    loadVideoFreeData();
+                    loadVideoFreeData(true);
                 }
             }
 
@@ -189,6 +202,9 @@ public class FreeCourseActivity extends AppCompatActivity {
     }
 
     private void loadVideoFreeWithSameTag(String tag) {
+        progressDialog.setMessage("Memuat");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
         videoFreeRef.whereEqualTo("tag", tag)
                 .orderBy("dateCreated", Query.Direction.DESCENDING)
                 .get()
@@ -202,13 +218,16 @@ public class FreeCourseActivity extends AppCompatActivity {
 
                             videoFreeModels.add(videoFreeModel);
                         }
+                        progressDialog.dismiss();
                         adapter.notifyDataSetChanged();
+                        clSearchContainer.setVisibility(View.GONE);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-
+                        progressDialog.dismiss();
+                        Log.d(TAG, e.toString());
                     }
                 });
     }
