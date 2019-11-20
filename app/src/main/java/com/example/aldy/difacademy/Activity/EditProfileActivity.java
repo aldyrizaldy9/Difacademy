@@ -86,7 +86,7 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
     private void getUserData() {
-        progressDialog.setMessage("Memuat");
+        progressDialog.setMessage("Memuat...");
         progressDialog.setCancelable(false);
         progressDialog.show();
         String userId = sharedPreferences.getString(USERID_PREFS, "");

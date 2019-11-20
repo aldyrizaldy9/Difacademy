@@ -2,6 +2,7 @@ package com.example.aldy.difacademy.Activity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -17,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.aldy.difacademy.Adapter.BlendedCourseVideoAdapter;
 import com.example.aldy.difacademy.Model.BlendedVideoModel;
+import com.example.aldy.difacademy.Model.OngoingKelasBlendedModel;
 import com.example.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -28,6 +30,9 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
+import static com.example.aldy.difacademy.Activity.LoginActivity.SHARE_PREFS;
+import static com.example.aldy.difacademy.Activity.LoginActivity.USERID_PREFS;
+
 public class ListVideoCourseActivity extends AppCompatActivity {
     private TextView tvNavbar;
     private ConstraintLayout clBack;
@@ -37,11 +42,16 @@ public class ListVideoCourseActivity extends AppCompatActivity {
     private BlendedCourseVideoAdapter blendedCourseVideoAdapter;
     private ProgressDialog progressDialog;
     private Button btnQuiz;
+    private String docId, blendedCourseId;
+
+    private SharedPreferences sharedPreferences;
 
     private FirebaseFirestore firebaseFirestore;
     private CollectionReference blendedVideoRef;
 
     private static final String TAG = "ListVideoCourseActivity";
+
+    public static boolean ISPAID = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +60,7 @@ public class ListVideoCourseActivity extends AppCompatActivity {
         initView();
         onClick();
         setRecyclerView();
-        loadData();
+        getUserDocId();
     }
 
     private void initView() {
@@ -63,6 +73,7 @@ public class ListVideoCourseActivity extends AppCompatActivity {
         rvListVideoCourse = findViewById(R.id.rv_list_video_course);
         btnQuiz = findViewById(R.id.btn_list_video_course_quiz);
         progressDialog = new ProgressDialog(this);
+        sharedPreferences = getSharedPreferences(SHARE_PREFS, MODE_PRIVATE);
     }
 
     private void onClick() {
@@ -93,15 +104,15 @@ public class ListVideoCourseActivity extends AppCompatActivity {
     }
 
     private void loadData() {
-        progressDialog.setMessage("Memuat");
+        progressDialog.setMessage("Memuat...");
         progressDialog.setCancelable(false);
         progressDialog.show();
 
         Intent intent = getIntent();
-        firebaseFirestore = FirebaseFirestore.getInstance();
+        blendedCourseId = intent.getStringExtra("blendedCourseId");
         blendedVideoRef = firebaseFirestore
                 .collection("BlendedCourse")
-                .document(intent.getStringExtra("blendedCourseId"))
+                .document(blendedCourseId)
                 .collection("VideoMateri");
         blendedVideoRef
                 .orderBy("dateCreated", Query.Direction.ASCENDING)
@@ -116,7 +127,62 @@ public class ListVideoCourseActivity extends AppCompatActivity {
                             blendedVideoModels.add(blendedVideoModel);
                         }
                         progressDialog.dismiss();
+                        btnQuiz.setVisibility(View.VISIBLE);
                         blendedCourseVideoAdapter.notifyDataSetChanged();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        progressDialog.dismiss();
+                        Log.d(TAG, e.toString());
+                    }
+                });
+    }
+
+    private void getUserDocId() {
+        String userId = sharedPreferences.getString(USERID_PREFS, "");
+        firebaseFirestore = FirebaseFirestore.getInstance();
+        CollectionReference userRef = firebaseFirestore.collection("User");
+        userRef
+                .whereEqualTo("userId", userId)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
+                            docId = queryDocumentSnapshot.getId();
+                        }
+                        checkPayment(docId);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        progressDialog.dismiss();
+                        Log.d(TAG, e.toString());
+                    }
+                });
+    }
+
+    private void checkPayment(String docId) {
+        CollectionReference onGoingRef = firebaseFirestore
+                .collection("User")
+                .document(docId)
+                .collection("Ongoing");
+        onGoingRef
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
+                            OngoingKelasBlendedModel ongoingKelasBlendedModel = queryDocumentSnapshot.toObject(OngoingKelasBlendedModel.class);
+                            if (ongoingKelasBlendedModel.getKelasBlendedId().equals(blendedCourseId)) {
+                                ISPAID = true;
+                                break;
+                            }
+                        }
+                        loadData();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {

@@ -71,7 +71,7 @@ public class RegisterActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (checkText()){
                     pd.setCancelable(false);
-                    pd.setMessage("Loading...");
+                    pd.setMessage("Memuat...");
                     pd.show();
                     String nama = edtNama.getText().toString();
                     String email = edtEmail.getText().toString();

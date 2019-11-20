@@ -123,7 +123,7 @@ public class OpBlendedCourseActivity extends AppCompatActivity {
     }
 
     private void loadData() {
-        progressDialog.setMessage("Memuat");
+        progressDialog.setMessage("Memuat...");
         progressDialog.setCancelable(false);
         progressDialog.show();
         blendedCourseRef.orderBy("dateCreated", Query.Direction.DESCENDING)

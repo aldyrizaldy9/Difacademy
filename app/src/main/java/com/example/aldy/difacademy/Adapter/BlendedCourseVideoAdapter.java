@@ -1,6 +1,7 @@
 package com.example.aldy.difacademy.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,10 +13,13 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.aldy.difacademy.Activity.PaymentActivity;
 import com.example.aldy.difacademy.Model.BlendedVideoModel;
 import com.example.aldy.difacademy.R;
 
 import java.util.ArrayList;
+
+import static com.example.aldy.difacademy.Activity.ListVideoCourseActivity.ISPAID;
 
 public class BlendedCourseVideoAdapter extends RecyclerView.Adapter<BlendedCourseVideoAdapter.ViewHolder> {
     private Context context;
@@ -39,16 +43,29 @@ public class BlendedCourseVideoAdapter extends RecyclerView.Adapter<BlendedCours
         BlendedVideoModel blendedVideoModel = blendedVideoModels.get(position);
         holder.tvJudul.setText(blendedVideoModel.getTitle());
 //        holder.tvPanjangVideo.setText();
-        String episode = "#" + position + 1;
-        holder.tvEpisode.setText(episode);
+        int episode = position + 1;
+        holder.tvEpisode.setText("#" + episode);
         if (position != 0) {
-            holder.imgStatus.setImageResource(R.drawable.ic_lock);
-            holder.clContainer.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Toast.makeText(context, "Belum bayar bos", Toast.LENGTH_SHORT).show();
-                }
-            });
+            if (!ISPAID) {
+                holder.imgStatus.setImageResource(R.drawable.ic_lock);
+                holder.clContainer.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(context, PaymentActivity.class);
+                        context.startActivity(intent);
+                    }
+                });
+            } else {
+                holder.imgStatus.setImageResource(R.drawable.ic_play_arrow);
+                holder.clContainer.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(context, "Udah bayar bos", Toast.LENGTH_SHORT).show();
+//                        Intent intent = new Intent(context, PaymentActivity.class);
+//                        context.startActivity(intent);
+                    }
+                });
+            }
         }
 
     }

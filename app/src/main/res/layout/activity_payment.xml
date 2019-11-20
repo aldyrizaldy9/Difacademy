@@ -3,7 +3,200 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:animateLayoutChanges="true"
     android:layout_height="match_parent"
+    android:background="@android:color/darker_gray"
     tools:context=".Activity.PaymentActivity">
+
+    <include
+        android:id="@+id/include"
+        layout="@layout/nav_bar"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/nav_bar_height"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/include">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/tv_payment_description"
+                style="@style/Difacademy.Subtitle1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:text="Silahkan pilih salah satu metode pembayaran di bawah"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_payment_container_bni"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/rounded_corner_card"
+                android:elevation="1dp"
+                app:layout_constraintEnd_toEndOf="@+id/tv_payment_description"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/tv_payment_description"
+                app:layout_constraintTop_toBottomOf="@+id/tv_payment_description">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cl_payment_expand_bni"
+                    android:layout_width="@dimen/icon_btn_width"
+                    android:layout_height="@dimen/icon_btn_height"
+                    android:background="?android:attr/selectableItemBackground"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:id="@+id/img_payment_expand_bni"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/ic_expand_more" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <ImageView
+                    android:id="@+id/img_payment_logo_bni"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:visibility="visible"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintDimensionRatio="w,16:9"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/cl_payment_expand_bni"
+                    app:srcCompat="@drawable/googleg_standard_color_18" />
+
+                <TextView
+                    android:id="@+id/tv_payment_tata_cara_bni"
+                    style="@style/Difacademy.Body2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:text="1. Pilih kelas yang akan dibeli\n2. Pilih metode pembayaran Bank BNI\n3. Tekan tombol bayar\n4. Admin akan menghubungi anda melalui Whatsapp atau email\n5. Lakukan pembayaran\n6. Kirim bukti transfer\n7. Pembelian kelas akan diproses admin\n8. Silahkan menghubungi admin apabila kelas yang dibeli belum dibuka dalam 1x24 jam"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/cl_payment_expand_bni" />
+
+                <Button
+                    android:id="@+id/btn_payment_bayar_bni"
+                    style="@style/Difacademy.Button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:text="BAYAR"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="@+id/tv_payment_tata_cara_bni"
+                    app:layout_constraintStart_toStartOf="@+id/tv_payment_tata_cara_bni"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_payment_tata_cara_bni" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_payment_container_bri"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/rounded_corner_card"
+                android:elevation="1dp"
+                app:layout_constraintEnd_toEndOf="@+id/tv_payment_description"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/tv_payment_description"
+                app:layout_constraintTop_toBottomOf="@+id/cl_payment_container_bni">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cl_payment_expand_bri"
+                    android:layout_width="@dimen/icon_btn_width"
+                    android:layout_height="@dimen/icon_btn_height"
+                    android:background="?android:attr/selectableItemBackground"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:id="@+id/img_payment_expand_bri"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/ic_expand_more" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <ImageView
+                    android:id="@+id/img_payment_logo_bri"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:visibility="visible"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintDimensionRatio="w,16:9"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/cl_payment_expand_bri"
+                    app:srcCompat="@drawable/googleg_standard_color_18" />
+
+                <TextView
+                    android:id="@+id/tv_payment_tata_cara_bri"
+                    style="@style/Difacademy.Body2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:text="1. Pilih kelas yang akan dibeli\n2. Pilih metode pembayaran Bank BNI\n3. Tekan tombol bayar\n4. Admin akan menghubungi anda melalui Whatsapp atau email\n5. Lakukan pembayaran\n6. Kirim bukti transfer\n7. Pembelian kelas akan diproses admin\n8. Silahkan menghubungi admin apabila kelas yang dibeli belum dibuka dalam 1x24 jam"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/cl_payment_expand_bri" />
+
+                <Button
+                    android:id="@+id/btn_payment_bayar_bri"
+                    style="@style/Difacademy.Button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:text="BAYAR"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="@+id/tv_payment_tata_cara_bri"
+                    app:layout_constraintStart_toStartOf="@+id/tv_payment_tata_cara_bri"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_payment_tata_cara_bri" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

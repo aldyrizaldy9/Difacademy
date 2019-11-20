@@ -103,7 +103,7 @@ public class BlendedCourseActivity extends AppCompatActivity {
     }
 
     private void loadBlendedCourseData(final boolean hide) {
-        progressDialog.setMessage("Memuat");
+        progressDialog.setMessage("Memuat...");
         progressDialog.setCancelable(false);
         progressDialog.show();
         firebaseFirestore = FirebaseFirestore.getInstance();
@@ -201,7 +201,7 @@ public class BlendedCourseActivity extends AppCompatActivity {
     }
 
     private void loadBlendedCourseWithTheSameTag(String tag) {
-        progressDialog.setMessage("Memuat");
+        progressDialog.setMessage("Memuat...");
         progressDialog.setCancelable(false);
         progressDialog.show();
         blendedCourseRef.whereEqualTo("tag", tag)

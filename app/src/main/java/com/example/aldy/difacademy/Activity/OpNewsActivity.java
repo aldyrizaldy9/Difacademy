@@ -112,7 +112,7 @@ public class OpNewsActivity extends AppCompatActivity {
     }
 
     private void getData() {
-        progressDialog.setMessage("Memuat");
+        progressDialog.setMessage("Memuat...");
         progressDialog.setCancelable(false);
         progressDialog.show();
         FirebaseFirestore db = FirebaseFirestore.getInstance();

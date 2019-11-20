@@ -4,6 +4,7 @@
     android:id="@+id/cl_card_video_course_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginBottom="16dp"
     android:background="@drawable/rounded_corner_card"
     android:elevation="1dp">
 

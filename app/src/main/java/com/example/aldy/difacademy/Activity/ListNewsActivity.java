@@ -73,7 +73,7 @@ public class ListNewsActivity extends AppCompatActivity {
     }
 
     private void loadData() {
-        progressDialog.setMessage("Memuat");
+        progressDialog.setMessage("Memuat...");
         progressDialog.setCancelable(false);
         progressDialog.show();
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();

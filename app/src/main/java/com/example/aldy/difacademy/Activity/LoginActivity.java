@@ -69,7 +69,7 @@ public class LoginActivity extends AppCompatActivity {
             //belum login
             setContentView(R.layout.activity_login);
             pd = new ProgressDialog(LoginActivity.this);
-            pd.setMessage("Loading...");
+            pd.setMessage("Memuat...");
             pd.setCancelable(false);
 
             initView();
