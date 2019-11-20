@@ -33,12 +33,14 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.ViewHolder> {
 
     private Context context;
     private ArrayList<TagModel> tagModels;
-    private ProgressDialog progressDialog;
+    private ProgressDialog pd;
+
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     public TagAdapter(Context context, ArrayList<TagModel> tagModels) {
         this.context = context;
         this.tagModels = tagModels;
-        progressDialog = new ProgressDialog(context);
+        pd = new ProgressDialog(context);
     }
 
     @NonNull
@@ -88,49 +90,51 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.ViewHolder> {
     }
 
     private void hapusTag(final String tagId) {
-        progressDialog.setMessage("Menghapus");
-        progressDialog.setCancelable(false);
-        progressDialog.show();
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        pd.setMessage("Menghapus");
+        pd.setCancelable(false);
+        pd.show();
         DocumentReference tagRef = db.collection("Tags").document(tagId);
-
-        final WriteBatch batch = db.batch();
-        final CollectionReference videoFreeRef = db.collection("VideoFree");
 
         tagRef.delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        videoFreeRef.whereEqualTo("tagId", tagId)
-                                .get()
-                                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        hapusTagDiVideoFree(tagId);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        pd.dismiss();
+                        Toast.makeText(context, context.getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void hapusTagDiVideoFree(final String tagId){
+        final WriteBatch batch = db.batch();
+        final CollectionReference videoFreeRef = db.collection("VideoFree");
+        videoFreeRef.whereEqualTo("tagId", tagId)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                            DocumentReference docRef = videoFreeRef.document(documentSnapshot.getId());
+                            batch.update(docRef, "tagId", "");
+                            batch.update(docRef, "tag", "");
+                        }
+                        batch.commit()
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
-                                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                                            DocumentReference docRef = videoFreeRef.document(documentSnapshot.getId());
-                                            batch.update(docRef, "tagId", "");
-                                            batch.update(docRef, "tag", "");
-                                        }
-                                        batch.commit()
-                                                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                    @Override
-                                                    public void onSuccess(Void aVoid) {
-                                                        progressDialog.dismiss();
-                                                    }
-                                                })
-                                                .addOnFailureListener(new OnFailureListener() {
-                                                    @Override
-                                                    public void onFailure(@NonNull Exception e) {
-                                                        progressDialog.dismiss();
-                                                        Toast.makeText(context, context.getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
-                                                    }
-                                                });
+                                    public void onSuccess(Void aVoid) {
+                                        hapusTagDiBlendedCourse(tagId);
                                     }
                                 })
                                 .addOnFailureListener(new OnFailureListener() {
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
-                                        progressDialog.dismiss();
+                                        pd.dismiss();
                                         Toast.makeText(context, context.getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
                                     }
                                 });
@@ -139,7 +143,45 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.ViewHolder> {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        progressDialog.dismiss();
+                        pd.dismiss();
+                        Toast.makeText(context, context.getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void hapusTagDiBlendedCourse(String tagId){
+        final WriteBatch batch = db.batch();
+        final CollectionReference blendedCourseRef = db.collection("BlendedCourse");
+        blendedCourseRef.whereEqualTo("tagId", tagId)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                            DocumentReference docRef = blendedCourseRef.document(documentSnapshot.getId());
+                            batch.update(docRef, "tagId", "");
+                            batch.update(docRef, "tag", "");
+                        }
+                        batch.commit()
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        pd.dismiss();
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        pd.dismiss();
+                                        Toast.makeText(context, context.getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        pd.dismiss();
                         Toast.makeText(context, context.getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
                     }
                 });
