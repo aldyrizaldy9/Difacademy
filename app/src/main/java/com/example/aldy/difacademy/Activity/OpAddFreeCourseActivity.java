@@ -217,7 +217,7 @@ public class OpAddFreeCourseActivity extends AppCompatActivity {
                             String tagId = videoFreeModel.getTagId();
                             for (int i = 0; i < tagModels.size(); i++) {
                                 if (tagModels.get(i).getTagid().equals(tagId)) {
-                                    spnTag.setSelection(i);
+                                    spnTag.setSelection(i + 1);
                                     break;
                                 }
                             }
@@ -257,7 +257,7 @@ public class OpAddFreeCourseActivity extends AppCompatActivity {
         }
 
         final VideoFreeModel videoFreeModel = new VideoFreeModel(thumbnail, yId, title, description, tagId, tag, dateCreated);
-        DocumentReference docRef = videoFreeRef.document(videoFreeModel.getDocumentId());
+        DocumentReference docRef = videoFreeRef.document(this.videoFreeModel.getDocumentId());
         docRef.set(videoFreeModel)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
