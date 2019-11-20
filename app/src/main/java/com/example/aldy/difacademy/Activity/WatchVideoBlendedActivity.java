@@ -1,6 +1,7 @@
 package com.example.aldy.difacademy.Activity;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -14,8 +15,11 @@ import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.view.View;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.example.aldy.difacademy.R;
@@ -25,6 +29,7 @@ public class WatchVideoBlendedActivity extends AppCompatActivity {
 
     PlayerView playerView;
     TextView tvJudul, tvDeskripsi;
+    ScrollView scrollView;
 
     SimpleExoPlayer simpleExoPlayer;
     BlendedVideoModel blendedVideoModel;
@@ -45,6 +50,7 @@ public class WatchVideoBlendedActivity extends AppCompatActivity {
         playerView = findViewById(R.id.pv_watch_video_blended);
         tvJudul = findViewById(R.id.tv_watch_video_blended_judul);
         tvDeskripsi = findViewById(R.id.tv_watch_video_blended_deskripsi);
+        scrollView = findViewById(R.id.sv_watch_video_blended);
     }
 
     private void checkIntent(){
@@ -72,5 +78,15 @@ public class WatchVideoBlendedActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         simpleExoPlayer.release();
+    }
+
+    @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE){
+            scrollView.setVisibility(View.GONE);
+        } else {
+            scrollView.setVisibility(View.VISIBLE);
+        }
     }
 }

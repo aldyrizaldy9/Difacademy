@@ -61,7 +61,6 @@ public class BlendedCourseVideoAdapter extends RecyclerView.Adapter<BlendedCours
                 }
             });
         }
-
     }
 
     @Override
