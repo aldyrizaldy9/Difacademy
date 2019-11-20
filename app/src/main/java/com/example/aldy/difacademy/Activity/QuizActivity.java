@@ -309,12 +309,16 @@ public class QuizActivity extends AppCompatActivity {
 
     @Override
     protected void onPause() {
-        super.onPause();
-        if (countDownTimer != null){
-            countDownTimer.cancel();
-            countDownTimer.onFinish();
-        } else {
-            quizFinish();
+        try {
+            super.onPause();
+            if (countDownTimer != null){
+                countDownTimer.cancel();
+                countDownTimer.onFinish();
+            } else {
+                quizFinish();
+            }
+        } catch (Exception e){
+            
         }
     }
 }
