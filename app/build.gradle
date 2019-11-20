@@ -3,6 +3,9 @@ apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion 28
+    compileOptions {
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
     defaultConfig {
         applicationId "com.example.aldy.difacademy"
         minSdkVersion 21
@@ -43,4 +46,6 @@ dependencies {
     //untuk compress foto
     implementation 'id.zelory:compressor:2.1.0'
     implementation files('libs/YouTubeAndroidPlayerApi.jar')
+    //exoplayer
+    implementation 'com.google.android.exoplayer:exoplayer:2.10.8'
 }

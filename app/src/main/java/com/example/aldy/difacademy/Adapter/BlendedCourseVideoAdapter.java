@@ -14,6 +14,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.aldy.difacademy.Activity.PaymentActivity;
+import com.example.aldy.difacademy.Activity.WatchVideoBlendedActivity;
 import com.example.aldy.difacademy.Model.BlendedVideoModel;
 import com.example.aldy.difacademy.R;
 
@@ -40,7 +41,7 @@ public class BlendedCourseVideoAdapter extends RecyclerView.Adapter<BlendedCours
 
     @Override
     public void onBindViewHolder(@NonNull BlendedCourseVideoAdapter.ViewHolder holder, int position) {
-        BlendedVideoModel blendedVideoModel = blendedVideoModels.get(position);
+        final BlendedVideoModel blendedVideoModel = blendedVideoModels.get(position);
         holder.tvJudul.setText(blendedVideoModel.getTitle());
 //        holder.tvPanjangVideo.setText();
         int episode = position + 1;
@@ -60,14 +61,14 @@ public class BlendedCourseVideoAdapter extends RecyclerView.Adapter<BlendedCours
                 holder.clContainer.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(context, "Udah bayar bos", Toast.LENGTH_SHORT).show();
-//                        Intent intent = new Intent(context, PaymentActivity.class);
-//                        context.startActivity(intent);
+                    Intent intent = new Intent(context, WatchVideoBlendedActivity.class);
+                    intent.putExtra("blended_video_model", blendedVideoModel);
+                    context.startActivity(intent);
                     }
                 });
             }
+                    
         }
-
     }
 
     @Override

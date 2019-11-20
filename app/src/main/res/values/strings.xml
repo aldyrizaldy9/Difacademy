@@ -15,5 +15,6 @@
     <string name="link_not_valid">Link Tidak Valid</string>
     <string name="data_not_complete">Data Tidak Lengkap</string>
     <string name="tambah_berita">Tambah Berita</string>
+    <string name="title_activity_watch_video_blended">WatchVideoBlendedActivity</string>
 
 </resources>
