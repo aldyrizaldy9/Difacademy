@@ -15,4 +15,5 @@
     <dimen name="thumbnail_op_height">60dp</dimen>
 
     <dimen name="layout_tag_search_height">100dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
 </resources>

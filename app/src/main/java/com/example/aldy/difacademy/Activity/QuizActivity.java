@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -48,6 +49,8 @@ public class QuizActivity extends AppCompatActivity {
 
     CountDownTimer countDownTimer;
 
+    ProgressDialog pd;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,6 +59,10 @@ public class QuizActivity extends AppCompatActivity {
         quizModels = new ArrayList<>();
         jawabanBenar = new ArrayList<>();
         jawabanSaya = new ArrayList<>();
+        pd = new ProgressDialog(this);
+        pd.setMessage("Loading...");
+        pd.setCancelable(false);
+        pd.show();
 
         initView();
         loadData();
@@ -111,12 +118,14 @@ public class QuizActivity extends AppCompatActivity {
                             quizModel.setDocumentId(documentSnapshot.getId());
                             quizModels.add(quizModel);
                         }
+                        pd.dismiss();
                         mulaiQuiz();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
+                        pd.dismiss();
                         Toast.makeText(QuizActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
                         onBackPressed();
                     }
@@ -318,7 +327,7 @@ public class QuizActivity extends AppCompatActivity {
                 quizFinish();
             }
         } catch (Exception e){
-            
+
         }
     }
 }

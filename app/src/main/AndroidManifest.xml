@@ -14,7 +14,8 @@
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activity.ChangePasswordActivity"></activity>
+        <activity android:name=".Activity.WatchVideoBlendedActivity" />
+        <activity android:name=".Activity.ChangePasswordActivity" />
         <activity android:name=".Activity.OpNotifGradActivity" />
         <activity android:name=".Activity.OpBlendedCourseVideoActivity" />
         <activity android:name=".Activity.OpNotifActivity" />
