@@ -75,7 +75,11 @@ public class ListVideoCourseActivity extends AppCompatActivity {
         btnQuiz.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent2 = getIntent();
+                String courseId = intent2.getStringExtra("blendedCourseId");
+
                 Intent intent = new Intent(ListVideoCourseActivity.this, QuizActivity.class);
+                intent.putExtra("blendedCourseId", courseId);
                 startActivity(intent);
             }
         });

@@ -22,8 +22,6 @@ import static com.example.aldy.difacademy.YoutubeApiKeyConfig.YOUTUBE_API_KEY;
 
 public class WatchYoutubeVideoActivity extends YouTubeBaseActivity {
 
-    private TextView tvNavBar;
-    private ConstraintLayout clBack;
     VideoFreeModel videoFreeModel;
 
     YouTubePlayerView youTubePlayerView;
@@ -37,30 +35,13 @@ public class WatchYoutubeVideoActivity extends YouTubeBaseActivity {
         setContentView(R.layout.activity_watch_youtube_video);
 
         initView();
-        onClick();
         loadData();
     }
 
     private void initView() {
-        clBack = findViewById(R.id.cl_icon1);
-        clBack.setVisibility(View.VISIBLE);
-        ImageView imgBack = findViewById(R.id.img_icon1);
-        imgBack.setImageResource(R.drawable.ic_arrow_back);
-        tvNavBar = findViewById(R.id.tv_navbar);
-        tvNavBar.setText("Video");
-
         tvJudul = findViewById(R.id.tv_watch_youtube_judul);
         tvDeskripsi = findViewById(R.id.tv_watch_youtube_deskripsi);
         youTubePlayerView = findViewById(R.id.yplayer);
-    }
-
-    private void onClick() {
-        clBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
     }
 
     private void loadData() {
