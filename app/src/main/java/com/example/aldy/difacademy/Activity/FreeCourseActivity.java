@@ -103,7 +103,7 @@ public class FreeCourseActivity extends AppCompatActivity {
     }
 
     private void loadVideoFreeData(final boolean hide) {
-        progressDialog.setMessage("Memuat");
+        progressDialog.setMessage("Memuat...");
         progressDialog.setCancelable(false);
         progressDialog.show();
         firebaseFirestore = FirebaseFirestore.getInstance();
@@ -200,7 +200,7 @@ public class FreeCourseActivity extends AppCompatActivity {
     }
 
     private void loadVideoFreeWithSameTag(String tag) {
-        progressDialog.setMessage("Memuat");
+        progressDialog.setMessage("Memuat...");
         progressDialog.setCancelable(false);
         progressDialog.show();
         videoFreeRef.whereEqualTo("tag", tag)

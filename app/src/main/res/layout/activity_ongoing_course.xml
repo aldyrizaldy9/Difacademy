@@ -11,7 +11,10 @@
         android:id="@+id/include"
         layout="@layout/nav_bar"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/nav_bar_height" />
+        android:layout_height="@dimen/nav_bar_height"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_ongoing_course"

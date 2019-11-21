@@ -7,49 +7,107 @@
 
     <application
         android:allowBackup="true"
-        android:configChanges="orientation"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
-        android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".Activity.WatchVideoBlendedActivity"
             android:configChanges="orientation|screenSize|layoutDirection"/>
-        <activity android:name=".Activity.ChangePasswordActivity" />
-        <activity android:name=".Activity.OpNotifGradActivity" />
-        <activity android:name=".Activity.OpBlendedCourseVideoActivity" />
-        <activity android:name=".Activity.OpNotifActivity" />
-        <activity android:name=".Activity.OpNotifPaymentActivity" />
-        <activity android:name=".Activity.OpAddBlendedCourseVideoActivity" />
-        <activity android:name=".Activity.OpAddQuizActivity" />
-        <activity android:name=".Activity.OpQuizActivity" />
-        <activity android:name=".Activity.OpAddBlendedCourseActivity" />
-        <activity android:name=".Activity.OpBlendedCourseActivity" />
-        <activity android:name=".Activity.OpTagsActivity" />
-        <activity android:name=".Activity.OpAddNewsActivity" />
-        <activity android:name=".Activity.OpNewsActivity" />
-        <activity android:name=".Activity.OpAddFreeCourseActivity" />
-        <activity android:name=".Activity.OpFreeCourseActivity" />
-        <activity android:name=".Activity.OpMainActivity" />
-        <activity android:name=".Activity.QuizActivity" />
-        <activity android:name=".Activity.PaymentActivity" />
-        <activity android:name=".Activity.ListVideoCourseActivity" />
-        <activity android:name=".Activity.DetailCourseActivity" />
-        <activity android:name=".Activity.DetailNewsActivity" />
-        <activity android:name=".Activity.ListNewsActivity" />
-        <activity android:name=".Activity.EditProfileActivity" />
-        <activity android:name=".Activity.SettingsActivity" />
+        <activity
+            android:name=".Activity.ChangePasswordActivity"
+            android:screenOrientation="sensorPortrait" />
+        <activity
+            android:name=".Activity.OpNotifGradActivity"
+            android:screenOrientation="sensorPortrait" />
+        <activity
+            android:name=".Activity.OpBlendedCourseVideoActivity"
+            android:screenOrientation="sensorPortrait" />
+        <activity
+            android:name=".Activity.OpNotifActivity"
+            android:screenOrientation="sensorPortrait" />
+        <activity
+            android:name=".Activity.OpNotifPaymentActivity"
+            android:screenOrientation="sensorPortrait" />
+        <activity
+            android:name=".Activity.OpAddBlendedCourseVideoActivity"
+            android:screenOrientation="sensorPortrait" />
+        <activity
+            android:name=".Activity.OpAddQuizActivity"
+            android:screenOrientation="sensorPortrait" />
+        <activity
+            android:name=".Activity.OpQuizActivity"
+            android:screenOrientation="sensorPortrait" />
+        <activity
+            android:name=".Activity.OpAddBlendedCourseActivity"
+            android:screenOrientation="sensorPortrait" />
+        <activity
+            android:name=".Activity.OpBlendedCourseActivity"
+            android:screenOrientation="sensorPortrait" />
+        <activity
+            android:name=".Activity.OpTagsActivity"
+            android:screenOrientation="sensorPortrait" />
+        <activity
+            android:name=".Activity.OpAddNewsActivity"
+            android:screenOrientation="sensorPortrait" />
+        <activity
+            android:name=".Activity.OpNewsActivity"
+            android:screenOrientation="sensorPortrait" />
+        <activity
+            android:name=".Activity.OpAddFreeCourseActivity"
+            android:screenOrientation="sensorPortrait" />
+        <activity
+            android:name=".Activity.OpFreeCourseActivity"
+            android:screenOrientation="sensorPortrait" />
+        <activity
+            android:name=".Activity.OpMainActivity"
+            android:screenOrientation="sensorPortrait" />
+        <activity
+            android:name=".Activity.QuizActivity"
+            android:screenOrientation="sensorPortrait" />
+        <activity
+            android:name=".Activity.PaymentActivity"
+            android:screenOrientation="sensorPortrait" />
+        <activity
+            android:name=".Activity.ListVideoCourseActivity"
+            android:screenOrientation="sensorPortrait" />
+        <activity
+            android:name=".Activity.DetailCourseActivity"
+            android:screenOrientation="sensorPortrait" />
+        <activity
+            android:name=".Activity.DetailNewsActivity"
+            android:screenOrientation="sensorPortrait" />
+        <activity
+            android:name=".Activity.ListNewsActivity"
+            android:screenOrientation="sensorPortrait" />
+        <activity
+            android:name=".Activity.EditProfileActivity"
+            android:screenOrientation="sensorPortrait" />
+        <activity
+            android:name=".Activity.SettingsActivity"
+            android:screenOrientation="sensorPortrait" />
         <activity
             android:name=".Activity.WatchYoutubeVideoActivity"
             android:configChanges="orientation|keyboard|keyboardHidden|screenSize|screenLayout|uiMode"
-            android:screenOrientation="portrait" />
-        <activity android:name=".Activity.BlendedCourseActivity" />
-        <activity android:name=".Activity.FreeCourseActivity" />
-        <activity android:name=".Activity.OngoingCourseActivity" />
-        <activity android:name=".Activity.ForgetPasswordActivity" />
-        <activity android:name=".Activity.RegisterActivity" />
-        <activity android:name=".Activity.LoginActivity">
+            android:screenOrientation="sensorPortrait" />
+        <activity
+            android:name=".Activity.BlendedCourseActivity"
+            android:screenOrientation="sensorPortrait" />
+        <activity
+            android:name=".Activity.FreeCourseActivity"
+            android:screenOrientation="sensorPortrait" />
+        <activity
+            android:name=".Activity.OngoingCourseActivity"
+            android:screenOrientation="sensorPortrait" />
+        <activity
+            android:name=".Activity.ForgetPasswordActivity"
+            android:screenOrientation="sensorPortrait" />
+        <activity
+            android:name=".Activity.RegisterActivity"
+            android:screenOrientation="sensorPortrait" />
+        <activity
+            android:name=".Activity.LoginActivity"
+            android:screenOrientation="sensorPortrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
