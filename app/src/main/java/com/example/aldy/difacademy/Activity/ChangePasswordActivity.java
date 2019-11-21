@@ -110,7 +110,6 @@ public class ChangePasswordActivity extends AppCompatActivity {
                                             @Override
                                             public void onFailure(@NonNull Exception e) {
                                                 progressDialog.dismiss();
-                                                Log.d(TAG, e.toString());
                                             }
                                         });
                             }
@@ -121,7 +120,6 @@ public class ChangePasswordActivity extends AppCompatActivity {
                         public void onFailure(@NonNull Exception e) {
                             progressDialog.dismiss();
                             Toast.makeText(ChangePasswordActivity.this, "Password lama salah", Toast.LENGTH_SHORT).show();
-                            Log.d(TAG, e.toString());
                         }
                     });
         }

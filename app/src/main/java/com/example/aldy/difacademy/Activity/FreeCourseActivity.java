@@ -132,7 +132,6 @@ public class FreeCourseActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         progressDialog.dismiss();
-                        Log.d(TAG, e.toString());
                     }
                 });
     }
@@ -159,7 +158,6 @@ public class FreeCourseActivity extends AppCompatActivity {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.d(TAG, e.toString());
                     }
                 });
     }
@@ -227,7 +225,6 @@ public class FreeCourseActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         progressDialog.dismiss();
-                        Log.d(TAG, e.toString());
                     }
                 });
     }

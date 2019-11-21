@@ -37,6 +37,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -161,7 +162,11 @@ public class OpAddFreeCourseActivity extends AppCompatActivity {
                 R.layout.support_simple_spinner_dropdown_item, tagList) {
             @Override
             public boolean isEnabled(int position) {
-                return true;
+                if (position == 0) {
+                    return false;
+                } else {
+                    return true;
+                }
             }
 
             @Override
@@ -280,13 +285,6 @@ public class OpAddFreeCourseActivity extends AppCompatActivity {
     }
 
     private void tambah(String title, String description, String thumbnail, String yId) {
-        Log.d(TAG, "tambah: title : " + title);
-        Log.d(TAG, "tambah: desc : " + description);
-        Log.d(TAG, "tambah: thumbnail : " + thumbnail);
-        Log.d(TAG, "tambah: yid : " + yId);
-        Log.d(TAG, "tambah: tagId : " + tagId);
-        Log.d(TAG, "tambah: tag : " + tag);
-
         try {
             dateCreated = Timestamp.now().getSeconds();
         } catch (Exception e) {
@@ -333,13 +331,10 @@ public class OpAddFreeCourseActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(Call<YResponse> call, Response<YResponse> response) {
                     if (!response.isSuccessful()) {
-                        Log.d(TAG, "onResponse: response code : " + response.code());
                         pd.dismiss();
                         Toast.makeText(OpAddFreeCourseActivity.this, "Response Code : " + response.code(), Toast.LENGTH_SHORT).show();
                         return;
                     }
-
-                    Log.d(TAG, "onResponse: body : " + response.body().toString());
 
                     YResponse yResponse = response.body();
 
@@ -350,7 +345,7 @@ public class OpAddFreeCourseActivity extends AppCompatActivity {
 
                     String title = yResponse.getItems().get(0).getSnippet().getTitle();
                     String description = yResponse.getItems().get(0).getSnippet().getDescription();
-                    String thumbnail = yResponse.getItems().get(0).getSnippet().getThumbnails().getStandard().getUrl();
+                    String thumbnail = yResponse.getItems().get(0).getSnippet().getThumbnails().getNormal().getUrl();
                     if (thereIsData) {
                         edit(title, description, thumbnail, youtubeVideoId);
                     } else {

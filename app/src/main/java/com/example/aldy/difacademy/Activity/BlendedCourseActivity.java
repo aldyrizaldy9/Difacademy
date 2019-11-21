@@ -131,7 +131,6 @@ public class BlendedCourseActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         progressDialog.dismiss();
-                        Log.d(TAG, e.toString());
                     }
                 });
     }
@@ -158,7 +157,6 @@ public class BlendedCourseActivity extends AppCompatActivity {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.d(TAG, e.toString());
                     }
                 });
     }
@@ -226,7 +224,6 @@ public class BlendedCourseActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         progressDialog.dismiss();
-                        Log.d(TAG, e.toString());
                     }
                 });
     }

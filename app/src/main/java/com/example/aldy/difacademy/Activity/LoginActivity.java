@@ -125,7 +125,6 @@ public class LoginActivity extends AppCompatActivity {
                     public void onFailure(@NonNull Exception e) {
                         pd.dismiss();
                         Toast.makeText(LoginActivity.this, "Username dan password yang anda masukkan salah", Toast.LENGTH_SHORT).show();
-                        Log.d(TAG, e.toString());
                     }
                 });
     }
