@@ -2,10 +2,10 @@ package com.example.aldy.difacademy.Activity;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,6 +19,7 @@ import com.example.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -30,8 +31,14 @@ public class ListNewsActivity extends AppCompatActivity {
     private ConstraintLayout clBack;
     private RecyclerView rvNews;
     private ArrayList<NewsModel> newsModels;
-    private NewsAdapter newsAdapter;
+    private NewsAdapter adapter;
     private ProgressDialog progressDialog;
+
+    FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+    CollectionReference newsRef = firestore.collection("News");
+
+    DocumentSnapshot lastVisible;
+    boolean loadbaru;
 
     private static final String TAG = "ListNewsActivity";
 
@@ -67,30 +74,96 @@ public class ListNewsActivity extends AppCompatActivity {
 
     private void setRecyclerView() {
         newsModels = new ArrayList<>();
-        newsAdapter = new NewsAdapter(this, newsModels);
-        rvNews.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
-        rvNews.setAdapter(newsAdapter);
+        adapter = new NewsAdapter(this, newsModels);
+
+        final LinearLayoutManager layoutManager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
+        rvNews.setLayoutManager(layoutManager);
+        rvNews.setAdapter(adapter);
+
+        rvNews.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (layoutManager.findLastVisibleItemPosition() >= newsModels.size() - 10) {
+                    if (lastVisible != null) {
+                        if (loadbaru) {
+                            loadbaru = false;
+                            Query load = newsRef
+                                    .orderBy("dateCreated", Query.Direction.DESCENDING)
+                                    .startAfter(lastVisible)
+                                    .limit(20);
+                            load.get()
+                                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                        @Override
+                                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                            if (queryDocumentSnapshots.size() > 0) {
+                                                for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                                                    NewsModel newsModel = documentSnapshot.toObject(NewsModel.class);
+                                                    newsModel.setNewsId(documentSnapshot.getId());
+                                                    newsModels.add(newsModel);
+                                                }
+
+                                                if (queryDocumentSnapshots.size() < 20) {
+                                                    lastVisible = null;
+                                                } else {
+                                                    lastVisible = queryDocumentSnapshots.getDocuments()
+                                                            .get(queryDocumentSnapshots.size() - 1);
+                                                }
+
+                                                adapter.notifyDataSetChanged();
+                                            }
+                                            loadbaru = true;
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            loadbaru = true;
+                                            Toast.makeText(ListNewsActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+            }
+        });
     }
 
     private void loadData() {
         progressDialog.setMessage("Memuat...");
         progressDialog.setCancelable(false);
         progressDialog.show();
-        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-        CollectionReference newsRef = firestore.collection("News");
-        newsRef
+
+        Query first = newsRef
                 .orderBy("dateCreated", Query.Direction.DESCENDING)
-                .get()
+                .limit(20);
+        first.get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
-                            NewsModel newsModel = queryDocumentSnapshot.toObject(NewsModel.class);
-                            newsModel.setNewsId(queryDocumentSnapshot.getId());
+                        newsModels.clear();
 
-                            newsModels.add(newsModel);
+                        if (queryDocumentSnapshots.size() > 0){
+                            for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
+                                NewsModel newsModel = queryDocumentSnapshot.toObject(NewsModel.class);
+                                newsModel.setNewsId(queryDocumentSnapshot.getId());
+                                newsModels.add(newsModel);
+                            }
+
+                            if (queryDocumentSnapshots.size() < 20) {
+                                lastVisible = null;
+                            } else {
+                                lastVisible = queryDocumentSnapshots.getDocuments()
+                                        .get(queryDocumentSnapshots.size() - 1);
+                            }
+
+                            adapter.notifyDataSetChanged();
                         }
-                        newsAdapter.notifyDataSetChanged();
                         progressDialog.dismiss();
                     }
                 })

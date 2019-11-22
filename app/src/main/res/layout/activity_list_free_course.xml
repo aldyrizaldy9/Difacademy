@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
     android:background="@android:color/darker_gray"
-    tools:context=".Activity.BlendedCourseActivity">
+    tools:context=".Activity.ListFreeCourseActivity">
 
     <include
         android:id="@+id/include"
@@ -18,7 +18,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_blended_course_video"
+        android:id="@+id/rv_free_course_video"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginLeft="16dp"
@@ -27,10 +27,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/include"
+        app:layout_constraintVertical_bias="1.0"
         tools:listitem="@layout/card_video_with_thumbnail" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cl_blended_course_search"
+        android:id="@+id/cl_free_course_search"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@android:color/white"
@@ -42,15 +43,14 @@
         app:layout_constraintTop_toBottomOf="@+id/include">
 
         <Spinner
-            android:id="@+id/spn_blended_course_search"
+            android:id="@+id/spn_free_course_search"
             style="@style/Difacademy.Body1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@id/cl_blended_course_search"
-            app:layout_constraintStart_toStartOf="@id/cl_blended_course_search"
+            app:layout_constraintEnd_toEndOf="@id/cl_free_course_search"
+            app:layout_constraintStart_toStartOf="@id/cl_free_course_search"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

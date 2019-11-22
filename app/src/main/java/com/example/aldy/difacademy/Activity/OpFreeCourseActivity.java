@@ -3,7 +3,6 @@ package com.example.aldy.difacademy.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -21,7 +20,6 @@ import com.example.aldy.difacademy.Model.VideoFreeModel;
 import com.example.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -50,7 +48,7 @@ public class OpFreeCourseActivity extends AppCompatActivity {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     CollectionReference videoFreeRef = db.collection("VideoFree");
 
-    ProgressDialog progressDialog;
+    ProgressDialog pd;
 
     DocumentSnapshot lastVisible;
     boolean loadbaru;
@@ -103,7 +101,7 @@ public class OpFreeCourseActivity extends AppCompatActivity {
         imgAdd = findViewById(R.id.img_icon3);
         imgAdd.setImageResource(R.drawable.ic_add);
         rvFree = findViewById(R.id.rv_op_free);
-        progressDialog = new ProgressDialog(this);
+        pd = new ProgressDialog(this);
     }
 
     private void onClick() {
@@ -155,8 +153,12 @@ public class OpFreeCourseActivity extends AppCompatActivity {
                                                     videoFreeModels.add(newVideoFreeModel);
                                                 }
 
-                                                lastVisible = queryDocumentSnapshots.getDocuments()
-                                                        .get(queryDocumentSnapshots.size() - 1);
+                                                if (queryDocumentSnapshots.size() < 20){
+                                                    lastVisible = null;
+                                                } else {
+                                                    lastVisible = queryDocumentSnapshots.getDocuments()
+                                                            .get(queryDocumentSnapshots.size() - 1);
+                                                }
                                                 adapter.notifyDataSetChanged();
                                             }
                                             loadbaru = true;
@@ -165,6 +167,7 @@ public class OpFreeCourseActivity extends AppCompatActivity {
                                     .addOnFailureListener(new OnFailureListener() {
                                         @Override
                                         public void onFailure(@NonNull Exception e) {
+                                            loadbaru = true;
                                             Toast.makeText(OpFreeCourseActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
                                         }
                                     });
@@ -181,9 +184,9 @@ public class OpFreeCourseActivity extends AppCompatActivity {
     }
 
     private void loadData() {
-        progressDialog.setMessage("Memuat...");
-        progressDialog.setCancelable(false);
-        progressDialog.show();
+        pd.setMessage("Memuat...");
+        pd.setCancelable(false);
+        pd.show();
 
         Query first = videoFreeRef
                 .orderBy("dateCreated", Query.Direction.DESCENDING)
@@ -201,18 +204,22 @@ public class OpFreeCourseActivity extends AppCompatActivity {
                                 videoFreeModels.add(newVideoFreeModel);
                             }
 
-                            lastVisible = queryDocumentSnapshots.getDocuments()
-                                    .get(queryDocumentSnapshots.size() - 1);
+                            if (queryDocumentSnapshots.size() < 20){
+                                lastVisible = null;
+                            } else {
+                                lastVisible = queryDocumentSnapshots.getDocuments()
+                                        .get(queryDocumentSnapshots.size() - 1);
+                            }
 
                             adapter.notifyDataSetChanged();
                         }
-                        progressDialog.dismiss();
+                        pd.dismiss();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        progressDialog.dismiss();
+                        pd.dismiss();
                         Toast.makeText(OpFreeCourseActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
                     }
                 });

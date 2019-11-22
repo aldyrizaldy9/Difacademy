@@ -162,11 +162,7 @@ public class OpAddFreeCourseActivity extends AppCompatActivity {
                 R.layout.support_simple_spinner_dropdown_item, tagList) {
             @Override
             public boolean isEnabled(int position) {
-                if (position == 0) {
-                    return false;
-                } else {
-                    return true;
-                }
+                return position != 0;
             }
 
             @Override
@@ -345,7 +341,17 @@ public class OpAddFreeCourseActivity extends AppCompatActivity {
 
                     String title = yResponse.getItems().get(0).getSnippet().getTitle();
                     String description = yResponse.getItems().get(0).getSnippet().getDescription();
-                    String thumbnail = yResponse.getItems().get(0).getSnippet().getThumbnails().getNormal().getUrl();
+                    String thumbnail = "";
+                    if (yResponse.getItems().get(0).getSnippet().getThumbnails().getStandard().getUrl() != null){
+                        thumbnail = yResponse.getItems().get(0).getSnippet().getThumbnails().getStandard().getUrl();
+                    } else if (yResponse.getItems().get(0).getSnippet().getThumbnails().getHigh().getUrl() != null){
+                        thumbnail = yResponse.getItems().get(0).getSnippet().getThumbnails().getHigh().getUrl();
+                    } else if (yResponse.getItems().get(0).getSnippet().getThumbnails().getMedium().getUrl() != null){
+                        thumbnail = yResponse.getItems().get(0).getSnippet().getThumbnails().getMedium().getUrl();
+                    } else if (yResponse.getItems().get(0).getSnippet().getThumbnails().getNormal().getUrl() != null){
+                        thumbnail = yResponse.getItems().get(0).getSnippet().getThumbnails().getNormal().getUrl();
+                    }
+
                     if (thereIsData) {
                         edit(title, description, thumbnail, youtubeVideoId);
                     } else {
