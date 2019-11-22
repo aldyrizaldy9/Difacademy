@@ -3,7 +3,6 @@ package com.example.aldy.difacademy.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -112,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
         imgKelasGratis.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, FreeCourseActivity.class);
+                Intent intent = new Intent(MainActivity.this, ListFreeCourseActivity.class);
                 startActivity(intent);
             }
         });
@@ -125,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
         imgKelasCampuran.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, BlendedCourseActivity.class);
+                Intent intent = new Intent(MainActivity.this, ListBlendedCourseActivity.class);
                 startActivity(intent);
             }
         });
@@ -166,7 +165,6 @@ public class MainActivity extends AppCompatActivity {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.d(TAG, e.toString());
                     }
                 });
     }

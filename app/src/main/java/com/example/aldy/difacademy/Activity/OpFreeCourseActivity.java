@@ -21,6 +21,7 @@ import com.example.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -47,7 +48,10 @@ public class OpFreeCourseActivity extends AppCompatActivity {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     CollectionReference videoFreeRef = db.collection("VideoFree");
 
-    ProgressDialog progressDialog;
+    ProgressDialog pd;
+
+    DocumentSnapshot lastVisible;
+    boolean loadbaru;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,7 +101,7 @@ public class OpFreeCourseActivity extends AppCompatActivity {
         imgAdd = findViewById(R.id.img_icon3);
         imgAdd.setImageResource(R.drawable.ic_add);
         rvFree = findViewById(R.id.rv_op_free);
-        progressDialog = new ProgressDialog(this);
+        pd = new ProgressDialog(this);
     }
 
     private void onClick() {
@@ -116,35 +120,106 @@ public class OpFreeCourseActivity extends AppCompatActivity {
         });
     }
 
+
     private void setRecyclerView() {
-        rvFree.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        final LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        rvFree.setLayoutManager(layoutManager);
         adapter = new OpFreeCourseAdapter(this, videoFreeModels);
         rvFree.setAdapter(adapter);
+
+        loadbaru = true;
+
+        rvFree.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+
+                if (layoutManager.findLastVisibleItemPosition() >= videoFreeModels.size() - 10) {
+                    if (lastVisible != null) {
+                        if (loadbaru) {
+                            loadbaru = false;
+                            Query load = videoFreeRef
+                                    .orderBy("dateCreated", Query.Direction.DESCENDING)
+                                    .startAfter(lastVisible)
+                                    .limit(20);
+                            load.get()
+                                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                        @Override
+                                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                            if (queryDocumentSnapshots.size() > 0) {
+                                                for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                                                    VideoFreeModel newVideoFreeModel = documentSnapshot.toObject(VideoFreeModel.class);
+                                                    newVideoFreeModel.setDocumentId(documentSnapshot.getId());
+                                                    videoFreeModels.add(newVideoFreeModel);
+                                                }
+
+                                                if (queryDocumentSnapshots.size() < 20){
+                                                    lastVisible = null;
+                                                } else {
+                                                    lastVisible = queryDocumentSnapshots.getDocuments()
+                                                            .get(queryDocumentSnapshots.size() - 1);
+                                                }
+                                                adapter.notifyDataSetChanged();
+                                            }
+                                            loadbaru = true;
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            loadbaru = true;
+                                            Toast.makeText(OpFreeCourseActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+            }
+        });
     }
 
     private void loadData() {
-        progressDialog.setMessage("Memuat...");
-        progressDialog.setCancelable(false);
-        progressDialog.show();
-        videoFreeRef.orderBy("dateCreated", Query.Direction.DESCENDING)
-                .get()
+        pd.setMessage("Memuat...");
+        pd.setCancelable(false);
+        pd.show();
+
+        Query first = videoFreeRef
+                .orderBy("dateCreated", Query.Direction.DESCENDING)
+                .limit(20);
+
+        first.get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         videoFreeModels.clear();
-                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                            VideoFreeModel newVideoFreeModel = documentSnapshot.toObject(VideoFreeModel.class);
-                            newVideoFreeModel.setDocumentId(documentSnapshot.getId());
-                            videoFreeModels.add(newVideoFreeModel);
+                        if (queryDocumentSnapshots.size() > 0) {
+                            for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                                VideoFreeModel newVideoFreeModel = documentSnapshot.toObject(VideoFreeModel.class);
+                                newVideoFreeModel.setDocumentId(documentSnapshot.getId());
+                                videoFreeModels.add(newVideoFreeModel);
+                            }
+
+                            if (queryDocumentSnapshots.size() < 20){
+                                lastVisible = null;
+                            } else {
+                                lastVisible = queryDocumentSnapshots.getDocuments()
+                                        .get(queryDocumentSnapshots.size() - 1);
+                            }
+
+                            adapter.notifyDataSetChanged();
                         }
-                        adapter.notifyDataSetChanged();
-                        progressDialog.dismiss();
+                        pd.dismiss();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        progressDialog.dismiss();
+                        pd.dismiss();
                         Toast.makeText(OpFreeCourseActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
                     }
                 });

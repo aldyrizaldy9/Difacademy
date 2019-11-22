@@ -510,14 +510,12 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
                                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void aVoid) {
-                                            Log.d(TAG, "onSuccess: " + urlVideo + " berhasil hapus video");
                                         }
                                     })
                                     .addOnFailureListener(new OnFailureListener() {
                                         @Override
                                         public void onFailure(@NonNull Exception e) {
                                             pd.dismiss();
-                                            Log.d(TAG, "onFailure: " + e.getMessage());
                                             return;
                                         }
                                     });
@@ -534,7 +532,6 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "onSuccess: " + blendedCourseModel.getThumbnailUrl() + " berhasil hapus thumbnail");
                         hapusDocBlendedCourseVideo();
                     }
                 })
@@ -542,7 +539,6 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         pd.dismiss();
-                        Log.d(TAG, "onFailure: " + e.getMessage());
                     }
                 });
     }
@@ -563,14 +559,12 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
                                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void aVoid) {
-                                            Log.d(TAG, "onSuccess: " + documentSnapshot.getId() + " berhasil hapus blendedcoursevideo doc");
                                         }
                                     })
                                     .addOnFailureListener(new OnFailureListener() {
                                         @Override
                                         public void onFailure(@NonNull Exception e) {
                                             pd.dismiss();
-                                            Log.d(TAG, "onFailure: " + e.getMessage());
                                             return;
                                         }
                                     });
@@ -582,7 +576,6 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         pd.dismiss();
-                        Log.d(TAG, "onFailure: " + e.getMessage());
                         return;
                     }
                 });
@@ -604,14 +597,12 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
                                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void aVoid) {
-                                            Log.d(TAG, "onSuccess: " + documentSnapshot.getId() + " berhasil hapus quiz doc");
                                         }
                                     })
                                     .addOnFailureListener(new OnFailureListener() {
                                         @Override
                                         public void onFailure(@NonNull Exception e) {
                                             pd.dismiss();
-                                            Log.d(TAG, "onFailure: " + e.getMessage());
                                             return;
                                         }
                                     });
@@ -623,7 +614,6 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         pd.dismiss();
-                        Log.d(TAG, "onFailure: " + e.getMessage());
                         return;
                     }
                 });

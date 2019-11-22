@@ -91,10 +91,10 @@
             android:configChanges="orientation|keyboard|keyboardHidden|screenSize|screenLayout|uiMode"
             android:screenOrientation="sensorPortrait" />
         <activity
-            android:name=".Activity.BlendedCourseActivity"
+            android:name=".Activity.ListBlendedCourseActivity"
             android:screenOrientation="sensorPortrait" />
         <activity
-            android:name=".Activity.FreeCourseActivity"
+            android:name=".Activity.ListFreeCourseActivity"
             android:screenOrientation="sensorPortrait" />
         <activity
             android:name=".Activity.OngoingCourseActivity"

@@ -3,10 +3,10 @@ package com.example.aldy.difacademy.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,6 +21,7 @@ import com.example.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -36,9 +37,15 @@ public class OpNewsActivity extends AppCompatActivity {
     private ConstraintLayout clTambah, clBack;
     private RecyclerView rvNews;
     private ArrayList<NewsModel> newsModels;
-    private OpNewsAdapter opNewsAdapter;
+    private OpNewsAdapter adapter;
     private static final String TAG = "OpNewsActivity";
     private ProgressDialog progressDialog;
+
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    CollectionReference newsRef = db.collection("News");
+
+    DocumentSnapshot lastVisible;
+    boolean loadbaru;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +77,7 @@ public class OpNewsActivity extends AppCompatActivity {
                 newsModels.set(index, newsModel);
             }
         }
-        opNewsAdapter.notifyDataSetChanged();
+        adapter.notifyDataSetChanged();
     }
 
     private void initView() {
@@ -106,30 +113,96 @@ public class OpNewsActivity extends AppCompatActivity {
 
     private void setRecyclerView() {
         newsModels = new ArrayList<>();
-        opNewsAdapter = new OpNewsAdapter(this, newsModels);
-        rvNews.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        rvNews.setAdapter(opNewsAdapter);
+        adapter = new OpNewsAdapter(this, newsModels);
+
+        final LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        rvNews.setLayoutManager(layoutManager);
+        rvNews.setAdapter(adapter);
+
+        rvNews.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (layoutManager.findLastVisibleItemPosition() >= newsModels.size() - 10) {
+                    if (lastVisible != null) {
+                        if (loadbaru) {
+                            loadbaru = false;
+                            Query load = newsRef
+                                    .orderBy("dateCreated", Query.Direction.DESCENDING)
+                                    .startAfter(lastVisible)
+                                    .limit(20);
+                            load.get()
+                                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                        @Override
+                                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                            if (queryDocumentSnapshots.size() > 0) {
+                                                for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                                                    NewsModel newsModel = documentSnapshot.toObject(NewsModel.class);
+                                                    newsModel.setNewsId(documentSnapshot.getId());
+                                                    newsModels.add(newsModel);
+                                                }
+
+                                                if (queryDocumentSnapshots.size() < 20) {
+                                                    lastVisible = null;
+                                                } else {
+                                                    lastVisible = queryDocumentSnapshots.getDocuments()
+                                                            .get(queryDocumentSnapshots.size() - 1);
+                                                }
+
+                                                adapter.notifyDataSetChanged();
+                                            }
+                                            loadbaru = true;
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            loadbaru = true;
+                                            Toast.makeText(OpNewsActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+            }
+        });
     }
 
     private void getData() {
         progressDialog.setMessage("Memuat...");
         progressDialog.setCancelable(false);
         progressDialog.show();
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference newsRef = db.collection("News");
-        newsRef.orderBy("dateCreated", Query.Direction.DESCENDING)
-                .get()
+
+        Query first = newsRef
+                .orderBy("dateCreated", Query.Direction.DESCENDING)
+                .limit(20);
+        first.get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         newsModels.clear();
-                        for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
-                            NewsModel newsModel = queryDocumentSnapshot.toObject(NewsModel.class);
-                            newsModel.setNewsId(queryDocumentSnapshot.getId());
 
-                            newsModels.add(newsModel);
+                        if (queryDocumentSnapshots.size() > 0){
+                            for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
+                                NewsModel newsModel = queryDocumentSnapshot.toObject(NewsModel.class);
+                                newsModel.setNewsId(queryDocumentSnapshot.getId());
+                                newsModels.add(newsModel);
+                            }
+
+                            if (queryDocumentSnapshots.size() < 20) {
+                                lastVisible = null;
+                            } else {
+                                lastVisible = queryDocumentSnapshots.getDocuments()
+                                        .get(queryDocumentSnapshots.size() - 1);
+                            }
+
+                            adapter.notifyDataSetChanged();
                         }
-                        opNewsAdapter.notifyDataSetChanged();
                         progressDialog.dismiss();
                     }
                 })
@@ -137,7 +210,6 @@ public class OpNewsActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         progressDialog.dismiss();
-                        Log.d(TAG, e.toString());
                     }
                 });
     }

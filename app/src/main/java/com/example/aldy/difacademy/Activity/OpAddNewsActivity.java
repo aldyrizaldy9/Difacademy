@@ -198,7 +198,6 @@ public class OpAddNewsActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         progressDialog.dismiss();
-                        Log.d(TAG, e.toString());
                     }
                 });
     }
@@ -220,7 +219,6 @@ public class OpAddNewsActivity extends AppCompatActivity {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.d(TAG, e.toString());
                     }
                 });
     }
@@ -281,7 +279,6 @@ public class OpAddNewsActivity extends AppCompatActivity {
                                 .addOnFailureListener(new OnFailureListener() {
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
-                                        Log.d(TAG, e.toString());
                                     }
                                 });
 
@@ -309,7 +306,6 @@ public class OpAddNewsActivity extends AppCompatActivity {
             dateCreated = Timestamp.now().getSeconds();
         } catch (Exception e) {
             progressDialog.dismiss();
-            Log.d(TAG, e.toString());
             return;
         }
         if (dateCreated != 0) {
@@ -331,7 +327,6 @@ public class OpAddNewsActivity extends AppCompatActivity {
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             progressDialog.dismiss();
-                            Log.d(TAG, e.toString());
                         }
                     });
         }
@@ -359,7 +354,6 @@ public class OpAddNewsActivity extends AppCompatActivity {
                                     .addOnFailureListener(new OnFailureListener() {
                                         @Override
                                         public void onFailure(@NonNull Exception e) {
-                                            Log.d(TAG, e.toString());
                                         }
                                     });
                         }
@@ -367,7 +361,6 @@ public class OpAddNewsActivity extends AppCompatActivity {
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            Log.d(TAG, e.toString());
                         }
                     })
                     .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
@@ -390,7 +383,6 @@ public class OpAddNewsActivity extends AppCompatActivity {
             dateCreated = Timestamp.now().getSeconds();
         } catch (Exception e) {
             progressDialog.dismiss();
-            Log.d(TAG, e.toString());
             return;
         }
         if (dateCreated != 0) {
@@ -413,7 +405,6 @@ public class OpAddNewsActivity extends AppCompatActivity {
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             progressDialog.dismiss();
-                            Log.d(TAG, e.toString());
                         }
                     });
         }

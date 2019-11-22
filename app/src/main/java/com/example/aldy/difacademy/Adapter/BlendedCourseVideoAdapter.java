@@ -68,7 +68,16 @@ public class BlendedCourseVideoAdapter extends RecyclerView.Adapter<BlendedCours
                     }
                 });
             }
-
+        } else {
+            holder.imgStatus.setImageResource(R.drawable.ic_play_arrow);
+            holder.clContainer.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(context, WatchVideoBlendedActivity.class);
+                    intent.putExtra("blended_video_model", blendedVideoModel);
+                    context.startActivity(intent);
+                }
+            });
         }
     }
 

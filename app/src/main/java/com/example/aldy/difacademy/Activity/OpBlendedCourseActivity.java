@@ -21,6 +21,7 @@ import com.example.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -48,6 +49,9 @@ public class OpBlendedCourseActivity extends AppCompatActivity {
 
     private ProgressDialog progressDialog;
 
+    DocumentSnapshot lastVisible;
+    boolean loadbaru;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,7 +69,7 @@ public class OpBlendedCourseActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Intent intent = getIntent();
-        BlendedCourseModel blendedCourseModel= intent.getParcelableExtra("blended_course_model");
+        BlendedCourseModel blendedCourseModel = intent.getParcelableExtra("blended_course_model");
         int index = intent.getIntExtra("index", -1);
 
         if (requestCode == ADD_REQUEST_CODE && resultCode == RESULT_OK) {
@@ -117,27 +121,95 @@ public class OpBlendedCourseActivity extends AppCompatActivity {
     }
 
     private void setRecyclerView() {
-        rvBlended.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        final LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        rvBlended.setLayoutManager(layoutManager);
         adapter = new OpBlendedCourseAdapter(this, blendedCourseModels);
         rvBlended.setAdapter(adapter);
+
+        rvBlended.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (layoutManager.findLastVisibleItemPosition() >= blendedCourseModels.size() - 10) {
+                    if (lastVisible != null) {
+                        if (loadbaru) {
+                            loadbaru = false;
+                            Query load = blendedCourseRef
+                                    .orderBy("dateCreated", Query.Direction.DESCENDING)
+                                    .startAfter(lastVisible)
+                                    .limit(20);
+                            load.get()
+                                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                        @Override
+                                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                            if (queryDocumentSnapshots.size() > 0) {
+                                                for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                                                    BlendedCourseModel newBlendedCourseModel = documentSnapshot.toObject(BlendedCourseModel.class);
+                                                    newBlendedCourseModel.setDocumentId(documentSnapshot.getId());
+                                                    blendedCourseModels.add(newBlendedCourseModel);
+                                                }
+
+                                                if (queryDocumentSnapshots.size() < 20) {
+                                                    lastVisible = null;
+                                                } else {
+                                                    lastVisible = queryDocumentSnapshots.getDocuments()
+                                                            .get(queryDocumentSnapshots.size() - 1);
+                                                }
+
+                                                adapter.notifyDataSetChanged();
+                                            }
+                                            loadbaru = true;
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            loadbaru = true;
+                                            Toast.makeText(OpBlendedCourseActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+            }
+        });
     }
 
     private void loadData() {
         progressDialog.setMessage("Memuat...");
         progressDialog.setCancelable(false);
         progressDialog.show();
-        blendedCourseRef.orderBy("dateCreated", Query.Direction.DESCENDING)
-                .get()
+
+        Query first = blendedCourseRef
+                .orderBy("dateCreated", Query.Direction.DESCENDING)
+                .limit(20);
+
+        first.get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         blendedCourseModels.clear();
-                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                            BlendedCourseModel newBlendedCourseModel = documentSnapshot.toObject(BlendedCourseModel.class);
-                            newBlendedCourseModel.setDocumentId(documentSnapshot.getId());
-                            blendedCourseModels.add(newBlendedCourseModel);
+                        if (queryDocumentSnapshots.size() > 0) {
+                            for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                                BlendedCourseModel newBlendedCourseModel = documentSnapshot.toObject(BlendedCourseModel.class);
+                                newBlendedCourseModel.setDocumentId(documentSnapshot.getId());
+                                blendedCourseModels.add(newBlendedCourseModel);
+                            }
+
+                            if (queryDocumentSnapshots.size() < 20) {
+                                lastVisible = null;
+                            } else {
+                                lastVisible = queryDocumentSnapshots.getDocuments()
+                                        .get(queryDocumentSnapshots.size() - 1);
+                            }
+
+                            adapter.notifyDataSetChanged();
                         }
-                        adapter.notifyDataSetChanged();
                         progressDialog.dismiss();
                     }
                 })
