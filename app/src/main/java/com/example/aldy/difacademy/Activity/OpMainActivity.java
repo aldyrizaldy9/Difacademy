@@ -11,12 +11,20 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.example.aldy.difacademy.Model.PaymentModel;
 import com.example.aldy.difacademy.R;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import static com.example.aldy.difacademy.Activity.LoginActivity.JENIS_USER_PREFS;
 import static com.example.aldy.difacademy.Activity.LoginActivity.SHARE_PREFS;
@@ -25,17 +33,21 @@ import static com.example.aldy.difacademy.Activity.LoginActivity.USERID_PREFS;
 public class OpMainActivity extends AppCompatActivity {
     private static final String TAG = "OpMainActivity";
 
-    boolean doubleBackToExitPressedOnce = false;
-    ConstraintLayout clLogout;
-    ImageView imgLogout;
-    Button btnFree, btnOnline, btnBlended, btnBerita, btnTags;
-    TextView tvNavbar;
+    private boolean doubleBackToExitPressedOnce = false;
+    private ConstraintLayout clLogout, clNotif;
+    private ImageView imgLogout, imgNotif;
+    private Button btnFree, btnOnline, btnBlended, btnBerita, btnTags;
+    private TextView tvNavbar;
+
+    private FirebaseFirestore firebaseFirestore;
+    private CollectionReference paymentRef, graduationRef;
 
     static final int PHOTO_PICK_REQUEST_CODE = 1;
     static final int ADD_REQUEST_CODE = 2;
     static final int DELETE_REQUEST_CODE = 3;
     static final int UPDATE_REQUEST_CODE = 4;
     static final int WRITE_PERM_REQUEST_CODE = 5;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,11 +58,27 @@ public class OpMainActivity extends AppCompatActivity {
         onClick();
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        firebaseFirestore = FirebaseFirestore.getInstance();
+        paymentRef = firebaseFirestore.collection("Payment");
+        graduationRef = firebaseFirestore.collection("Graduation");
+        checkIfPaymentExist();
+        checkIfGraduationExist();
+
+    }
+
     private void initView() {
         clLogout = findViewById(R.id.cl_icon3);
         clLogout.setVisibility(View.VISIBLE);
         imgLogout = findViewById(R.id.img_icon3);
         imgLogout.setImageResource(R.drawable.ic_power_settings_new);
+        clNotif = findViewById(R.id.cl_icon2);
+        clNotif.setVisibility(View.VISIBLE);
+        imgNotif = findViewById(R.id.img_icon2);
+        imgNotif.setImageResource(R.drawable.ic_notifications);
         btnFree = findViewById(R.id.btn_op_main_free_course);
         btnOnline = findViewById(R.id.btn_op_main_online_course);
         btnBlended = findViewById(R.id.btn_op_main_blended_course);
@@ -72,6 +100,13 @@ public class OpMainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(OpMainActivity.this, OpFreeCourseActivity.class);
+                startActivity(intent);
+            }
+        });
+        clNotif.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(OpMainActivity.this, OpNotifActivity.class);
                 startActivity(intent);
             }
         });
@@ -155,5 +190,50 @@ public class OpMainActivity extends AppCompatActivity {
                 doubleBackToExitPressedOnce = false;
             }
         }, 2000);
+    }
+
+    private void checkIfPaymentExist() {
+        paymentRef.addSnapshotListener(this, new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    return;
+                }
+                for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
+                    PaymentModel paymentModel = queryDocumentSnapshot.toObject(PaymentModel.class);
+                    paymentModel.setPaymentId(queryDocumentSnapshot.getId());
+
+                    if (!paymentModel.isSeen()) {
+                        imgNotif.setImageResource(R.drawable.ic_notifications_active);
+                        return;
+                    } else {
+                        imgNotif.setImageResource(R.drawable.ic_notifications);
+                    }
+                }
+            }
+        });
+    }
+
+    private void checkIfGraduationExist() {
+        graduationRef.addSnapshotListener(this, new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    return;
+                }
+                //PaymentModel diganti GraduationModel
+                for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
+                    PaymentModel paymentModel = queryDocumentSnapshot.toObject(PaymentModel.class);
+                    paymentModel.setPaymentId(queryDocumentSnapshot.getId());
+
+                    if (!paymentModel.isSeen()) {
+                        imgNotif.setImageResource(R.drawable.ic_notifications_active);
+                        return;
+                    } else {
+                        imgNotif.setImageResource(R.drawable.ic_notifications);
+                    }
+                }
+            }
+        });
     }
 }

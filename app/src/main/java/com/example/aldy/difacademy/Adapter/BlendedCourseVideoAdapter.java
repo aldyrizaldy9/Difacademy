@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -20,6 +19,7 @@ import com.example.aldy.difacademy.R;
 
 import java.util.ArrayList;
 
+import static com.example.aldy.difacademy.Activity.ListVideoCourseActivity.BLENDED_COURSE_ID;
 import static com.example.aldy.difacademy.Activity.ListVideoCourseActivity.ISPAID;
 
 public class BlendedCourseVideoAdapter extends RecyclerView.Adapter<BlendedCourseVideoAdapter.ViewHolder> {
@@ -53,6 +53,7 @@ public class BlendedCourseVideoAdapter extends RecyclerView.Adapter<BlendedCours
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(context, PaymentActivity.class);
+                        intent.putExtra("blendedCourseId", BLENDED_COURSE_ID);
                         context.startActivity(intent);
                     }
                 });
@@ -61,13 +62,13 @@ public class BlendedCourseVideoAdapter extends RecyclerView.Adapter<BlendedCours
                 holder.clContainer.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                    Intent intent = new Intent(context, WatchVideoBlendedActivity.class);
-                    intent.putExtra("blended_video_model", blendedVideoModel);
-                    context.startActivity(intent);
+                        Intent intent = new Intent(context, WatchVideoBlendedActivity.class);
+                        intent.putExtra("blended_video_model", blendedVideoModel);
+                        context.startActivity(intent);
                     }
                 });
             }
-                    
+
         }
     }
 

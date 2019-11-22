@@ -42,7 +42,7 @@ public class ListVideoCourseActivity extends AppCompatActivity {
     private BlendedCourseVideoAdapter blendedCourseVideoAdapter;
     private ProgressDialog progressDialog;
     private Button btnQuiz;
-    private String docId, blendedCourseId;
+    private String docId;
 
     private SharedPreferences sharedPreferences;
 
@@ -51,6 +51,7 @@ public class ListVideoCourseActivity extends AppCompatActivity {
 
     private static final String TAG = "ListVideoCourseActivity";
 
+    public static String BLENDED_COURSE_ID;
     public static boolean ISPAID = false;
 
     @Override
@@ -87,10 +88,10 @@ public class ListVideoCourseActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent2 = getIntent();
-                String courseId = intent2.getStringExtra("blendedCourseId");
+                String courseId = intent2.getStringExtra("BLENDED_COURSE_ID");
 
                 Intent intent = new Intent(ListVideoCourseActivity.this, QuizActivity.class);
-                intent.putExtra("blendedCourseId", courseId);
+                intent.putExtra("BLENDED_COURSE_ID", courseId);
                 startActivity(intent);
             }
         });
@@ -109,10 +110,10 @@ public class ListVideoCourseActivity extends AppCompatActivity {
         progressDialog.show();
 
         Intent intent = getIntent();
-        blendedCourseId = intent.getStringExtra("blendedCourseId");
+        BLENDED_COURSE_ID = intent.getStringExtra("BLENDED_COURSE_ID");
         blendedVideoRef = firebaseFirestore
                 .collection("BlendedCourse")
-                .document(blendedCourseId)
+                .document(BLENDED_COURSE_ID)
                 .collection("VideoMateri");
         blendedVideoRef
                 .orderBy("dateCreated", Query.Direction.ASCENDING)
@@ -177,7 +178,7 @@ public class ListVideoCourseActivity extends AppCompatActivity {
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
                             OngoingKelasBlendedModel ongoingKelasBlendedModel = queryDocumentSnapshot.toObject(OngoingKelasBlendedModel.class);
-                            if (ongoingKelasBlendedModel.getKelasBlendedId().equals(blendedCourseId)) {
+                            if (ongoingKelasBlendedModel.getKelasBlendedId().equals(BLENDED_COURSE_ID)) {
                                 ISPAID = true;
                                 break;
                             }

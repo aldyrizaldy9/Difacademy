@@ -69,7 +69,7 @@ public class DetailCourseActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(DetailCourseActivity.this, ListVideoCourseActivity.class);
-                intent.putExtra("blendedCourseId", blendedCourseModel.getDocumentId());
+                intent.putExtra("BLENDED_COURSE_ID", blendedCourseModel.getDocumentId());
                 startActivity(intent);
             }
         });

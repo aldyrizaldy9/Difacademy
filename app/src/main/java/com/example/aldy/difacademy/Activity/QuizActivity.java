@@ -104,7 +104,7 @@ public class QuizActivity extends AppCompatActivity {
 
     private void loadData() {
         Intent intent = getIntent();
-        String courseId = intent.getStringExtra("blendedCourseId");
+        String courseId = intent.getStringExtra("BLENDED_COURSE_ID");
         CollectionReference colRef = db.collection("BlendedCourse")
                 .document(courseId)
                 .collection("Quiz");
