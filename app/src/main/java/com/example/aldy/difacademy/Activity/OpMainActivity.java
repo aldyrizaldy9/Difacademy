@@ -16,6 +16,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.example.aldy.difacademy.Model.GraduateModel;
 import com.example.aldy.difacademy.Model.PaymentModel;
 import com.example.aldy.difacademy.R;
 import com.google.firebase.auth.FirebaseAuth;
@@ -223,10 +224,10 @@ public class OpMainActivity extends AppCompatActivity {
                 }
                 //PaymentModel diganti GraduationModel
                 for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
-                    PaymentModel paymentModel = queryDocumentSnapshot.toObject(PaymentModel.class);
-                    paymentModel.setPaymentId(queryDocumentSnapshot.getId());
+                    GraduateModel graduateModel = queryDocumentSnapshot.toObject(GraduateModel.class);
+                    graduateModel.setDocumentId(queryDocumentSnapshot.getId());
 
-                    if (!paymentModel.isSeen()) {
+                    if (!graduateModel.isSeen()) {
                         imgNotif.setImageResource(R.drawable.ic_notifications_active);
                         return;
                     } else {

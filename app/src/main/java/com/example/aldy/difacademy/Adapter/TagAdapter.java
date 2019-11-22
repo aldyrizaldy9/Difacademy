@@ -21,12 +21,16 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.WriteBatch;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class TagAdapter extends RecyclerView.Adapter<TagAdapter.ViewHolder> {
     private static final String TAG = "TagAdapter";
@@ -150,8 +154,9 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.ViewHolder> {
     }
 
     private void hapusTagDiBlendedCourse(String tagId){
-        final WriteBatch batch = db.batch();
+//        final WriteBatch batch = db.batch();
         final CollectionReference blendedCourseRef = db.collection("BlendedCourse");
+
         blendedCourseRef.whereEqualTo("tagId", tagId)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -159,23 +164,12 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.ViewHolder> {
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                             DocumentReference docRef = blendedCourseRef.document(documentSnapshot.getId());
-                            batch.update(docRef, "tagId", "");
-                            batch.update(docRef, "tag", "");
+                            Map<String, Object> updates = new HashMap<>();
+                            updates.put("tagId", "");
+                            updates.put("tag", "");
+                            docRef.update(updates);
                         }
-                        batch.commit()
-                                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void aVoid) {
-                                        pd.dismiss();
-                                    }
-                                })
-                                .addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        pd.dismiss();
-                                        Toast.makeText(context, context.getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
-                                    }
-                                });
+                        pd.dismiss();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
