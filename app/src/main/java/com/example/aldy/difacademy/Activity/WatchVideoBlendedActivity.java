@@ -7,6 +7,7 @@ import android.os.Bundle;
 
 import com.example.aldy.difacademy.Model.BlendedVideoModel;
 import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
@@ -19,6 +20,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -71,6 +73,17 @@ public class WatchVideoBlendedActivity extends AppCompatActivity {
         MediaSource mediaSource = new ExtractorMediaSource.Factory(dataSourceFactory)
                 .createMediaSource(Uri.parse(videoUrl));
         simpleExoPlayer.prepare(mediaSource);
+        simpleExoPlayer.addListener(new Player.EventListener() {
+            @Override
+            public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
+                if (playbackState == Player.STATE_READY){
+                    ViewGroup.LayoutParams layoutParams = playerView.getLayoutParams();
+                    layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
+                    layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+                    playerView.setLayoutParams(layoutParams);
+                }
+            }
+        });
         simpleExoPlayer.setPlayWhenReady(true);
     }
 
