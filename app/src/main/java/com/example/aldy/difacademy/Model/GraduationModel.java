@@ -3,22 +3,25 @@ package com.example.aldy.difacademy.Model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class GraduateModel implements Parcelable {
-    String documentId, userId, kelasId;
-    long dateCreated;
-    boolean isSeen;
+import com.google.firebase.firestore.Exclude;
 
-    public GraduateModel(){}
+public class GraduationModel implements Parcelable {
+    private String graduationId, userId, kelasId;
+    private long dateCreated;
+    private boolean isSeen;
 
-    public GraduateModel(String userId, String kelasId, long dateCreated, boolean isSeen) {
+    public GraduationModel() {
+    }
+
+    public GraduationModel(String userId, String kelasId, long dateCreated, boolean isSeen) {
         this.userId = userId;
         this.kelasId = kelasId;
         this.dateCreated = dateCreated;
         this.isSeen = isSeen;
     }
 
-    protected GraduateModel(Parcel in) {
-        documentId = in.readString();
+    protected GraduationModel(Parcel in) {
+        graduationId = in.readString();
         userId = in.readString();
         kelasId = in.readString();
         dateCreated = in.readLong();
@@ -27,7 +30,7 @@ public class GraduateModel implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(documentId);
+        dest.writeString(graduationId);
         dest.writeString(userId);
         dest.writeString(kelasId);
         dest.writeLong(dateCreated);
@@ -39,24 +42,25 @@ public class GraduateModel implements Parcelable {
         return 0;
     }
 
-    public static final Creator<GraduateModel> CREATOR = new Creator<GraduateModel>() {
+    public static final Creator<GraduationModel> CREATOR = new Creator<GraduationModel>() {
         @Override
-        public GraduateModel createFromParcel(Parcel in) {
-            return new GraduateModel(in);
+        public GraduationModel createFromParcel(Parcel in) {
+            return new GraduationModel(in);
         }
 
         @Override
-        public GraduateModel[] newArray(int size) {
-            return new GraduateModel[size];
+        public GraduationModel[] newArray(int size) {
+            return new GraduationModel[size];
         }
     };
 
-    public String getDocumentId() {
-        return documentId;
+    @Exclude
+    public String getGraduationId() {
+        return graduationId;
     }
 
-    public void setDocumentId(String documentId) {
-        this.documentId = documentId;
+    public void setGraduationId(String graduationId) {
+        this.graduationId = graduationId;
     }
 
     public String getUserId() {
@@ -77,10 +81,6 @@ public class GraduateModel implements Parcelable {
 
     public long getDateCreated() {
         return dateCreated;
-    }
-
-    public void setDateCreated(long dateCreated) {
-        this.dateCreated = dateCreated;
     }
 
     public boolean isSeen() {

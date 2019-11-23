@@ -68,10 +68,6 @@ public class QuizModel implements Parcelable {
         return dateCreated;
     }
 
-    public void setDateCreated(long dateCreated) {
-        this.dateCreated = dateCreated;
-    }
-
     public String getSoal() {
         return soal;
     }

@@ -89,7 +89,4 @@ public class BlendedVideoModel implements Parcelable {
         return dateCreated;
     }
 
-    public void setDateCreated(long dateCreated) {
-        this.dateCreated = dateCreated;
-    }
 }
