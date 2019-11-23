@@ -12,14 +12,21 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/nav_bar_height" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_op_notif"
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tl_op_notif"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/include"></com.google.android.material.tabs.TabLayout>
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/vp_op_notif"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/include"
-        tools:listitem="@layout/card_op_notif_graduation" />
+        app:layout_constraintTop_toBottomOf="@+id/tl_op_notif" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

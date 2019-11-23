@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -18,16 +19,22 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.aldy.difacademy.Model.GraduateModel;
 import com.example.aldy.difacademy.Model.QuizModel;
 import com.example.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+
+import static com.example.aldy.difacademy.Activity.LoginActivity.SHARE_PREFS;
+import static com.example.aldy.difacademy.Activity.LoginActivity.USERID_PREFS;
 
 public class QuizActivity extends AppCompatActivity {
     private static final String TAG = "QuizActivity";
@@ -50,6 +57,7 @@ public class QuizActivity extends AppCompatActivity {
     CountDownTimer countDownTimer;
 
     ProgressDialog pd;
+    String courseId = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,7 +112,7 @@ public class QuizActivity extends AppCompatActivity {
 
     private void loadData() {
         Intent intent = getIntent();
-        String courseId = intent.getStringExtra("BLENDED_COURSE_ID");
+        courseId = intent.getStringExtra("BLENDED_COURSE_ID");
         CollectionReference colRef = db.collection("BlendedCourse")
                 .document(courseId)
                 .collection("Quiz");
@@ -137,19 +145,19 @@ public class QuizActivity extends AppCompatActivity {
         countDownTimer = new CountDownTimer(600000, 1000) {
             @Override
             public void onTick(long l) {
-                int menit = (int) ((l / (1000*60)) % 60);
+                int menit = (int) ((l / (1000 * 60)) % 60);
                 int detik = (int) (l / 1000) % 60;
-                if (menit < 10){
-                    if (detik < 10){
-                        tvWaktu.setText( "0" + menit + " : 0" + detik);
+                if (menit < 10) {
+                    if (detik < 10) {
+                        tvWaktu.setText("0" + menit + " : 0" + detik);
                     } else {
-                        tvWaktu.setText( "0" + menit + " : " + detik);
+                        tvWaktu.setText("0" + menit + " : " + detik);
                     }
                 } else {
-                    if (detik < 10){
-                        tvWaktu.setText( menit + " : 0" + detik);
+                    if (detik < 10) {
+                        tvWaktu.setText(menit + " : 0" + detik);
                     } else {
-                        tvWaktu.setText( menit + " : " + detik);
+                        tvWaktu.setText(menit + " : " + detik);
                     }
                 }
             }
@@ -226,8 +234,8 @@ public class QuizActivity extends AppCompatActivity {
         }
     }
 
-    private void quizNext() {
-        switch (radioGroup.getCheckedRadioButtonId()){
+    private void setJawaban(){
+        switch (radioGroup.getCheckedRadioButtonId()) {
             case R.id.rb_quiz_jawaban_a:
                 jawabanSaya.set(nomor - 1, "A");
                 break;
@@ -244,33 +252,23 @@ public class QuizActivity extends AppCompatActivity {
                 jawabanSaya.set(nomor - 1, "E");
                 break;
         }
+    }
+
+    private void quizNext() {
+        setJawaban();
         nomor++;
         loadSoal(nomor);
     }
 
     private void quizBack() {
-        switch (radioGroup.getCheckedRadioButtonId()){
-            case R.id.rb_quiz_jawaban_a:
-                jawabanSaya.set(nomor - 1, "A");
-                break;
-            case R.id.rb_quiz_jawaban_b:
-                jawabanSaya.set(nomor - 1, "B");
-                break;
-            case R.id.rb_quiz_jawaban_c:
-                jawabanSaya.set(nomor - 1, "C");
-                break;
-            case R.id.rb_quiz_jawaban_d:
-                jawabanSaya.set(nomor - 1, "D");
-                break;
-            case R.id.rb_quiz_jawaban_e:
-                jawabanSaya.set(nomor - 1, "E");
-                break;
-        }
+        setJawaban();
         nomor--;
         loadSoal(nomor);
     }
 
     private void quizFinish() {
+        setJawaban();
+
         int benar = 0;
         for (String jawabanBenar : jawabanBenar) {
             for (String jawabanSaya : jawabanSaya) {
@@ -279,7 +277,7 @@ public class QuizActivity extends AppCompatActivity {
             }
         }
 
-        nilai = (int) benar / totalNomor * 100;
+        nilai = (int) (benar / totalNomor) * 100;
 
         String message = "";
         String title = "";
@@ -300,7 +298,7 @@ public class QuizActivity extends AppCompatActivity {
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
+//                dialog.cancel();
                 if (nilai >= 80) {
                     sendNotifToOp();
                 }
@@ -313,20 +311,38 @@ public class QuizActivity extends AppCompatActivity {
     }
 
     private void sendNotifToOp() {
-        Toast.makeText(this, "sendNotifToOp", Toast.LENGTH_SHORT).show();
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARE_PREFS, MODE_PRIVATE);
+        String userId = sharedPreferences.getString(USERID_PREFS, "");
+        String kelasId = courseId;
+        long dateCreated = 0;
+        try {
+            dateCreated = Timestamp.now().getSeconds();
+        } catch (Exception e){
+            Toast.makeText(this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+        }
+
+        GraduateModel graduateModel = new GraduateModel(userId, kelasId, dateCreated, false);
+        CollectionReference graduation = db.collection("Graduation");
+        graduation.add(graduateModel)
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(QuizActivity.this, "Gagal submit quiz karena koneksi", Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     @Override
     protected void onPause() {
         try {
             super.onPause();
-            if (countDownTimer != null){
+            if (countDownTimer != null) {
                 countDownTimer.cancel();
                 countDownTimer.onFinish();
             } else {
                 quizFinish();
             }
-        } catch (Exception e){
+        } catch (Exception e) {
 
         }
     }
