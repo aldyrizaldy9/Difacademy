@@ -6,17 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".Activity.OpNotifPaymentActivity">
 
-    <TextView
-        android:id="@+id/textView16"
-        style="@style/Difacademy.Subtitle2"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Kelas yang Dibeli"
-        app:layout_constraintEnd_toEndOf="@+id/tv_nowa"
-        app:layout_constraintStart_toStartOf="@+id/tv_nowa"
-        app:layout_constraintTop_toBottomOf="@+id/tv_nowa" />
-
     <include
         android:id="@+id/include"
         layout="@layout/nav_bar"
@@ -24,42 +13,18 @@
         android:layout_height="@dimen/nav_bar_height" />
 
     <TextView
-        android:id="@+id/textView6"
-        style="@style/Difacademy.Subtitle2"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:text="UserId"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/include" />
-
-    <TextView
-        android:id="@+id/tv_op_notif_pay_userid"
-        style="@style/Difacademy.Body1"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="34h5if3f4fsadfjojo"
-        app:layout_constraintEnd_toEndOf="@+id/textView6"
-        app:layout_constraintStart_toStartOf="@+id/textView6"
-        app:layout_constraintTop_toBottomOf="@+id/textView6" />
-
-    <TextView
         android:id="@+id/textView8"
         style="@style/Difacademy.Subtitle2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="KelasId"
-        app:layout_constraintEnd_toEndOf="@+id/tv_op_notif_pay_userid"
-        app:layout_constraintStart_toStartOf="@+id/tv_op_notif_pay_userid"
-        app:layout_constraintTop_toBottomOf="@+id/tv_op_notif_pay_userid" />
+        android:text="Kelas yang ingin dibeli"
+        app:layout_constraintEnd_toEndOf="@+id/tv_op_notif_pay_nowa"
+        app:layout_constraintStart_toStartOf="@+id/tv_op_notif_pay_nowa"
+        app:layout_constraintTop_toBottomOf="@+id/tv_op_notif_pay_nowa" />
 
     <TextView
-        android:id="@+id/tv_op_notif_pay_kelasid"
+        android:id="@+id/tv_op_notif_pay_nama_kelas"
         style="@style/Difacademy.Body1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -73,11 +38,14 @@
         style="@style/Difacademy.Subtitle2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
         android:text="Nama"
-        app:layout_constraintEnd_toEndOf="@+id/tv_op_notif_pay_kelasid"
-        app:layout_constraintStart_toStartOf="@+id/tv_op_notif_pay_kelasid"
-        app:layout_constraintTop_toBottomOf="@+id/tv_op_notif_pay_kelasid" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/include" />
 
     <TextView
         android:id="@+id/tv_op_notif_pay_nama"
@@ -131,16 +99,6 @@
         app:layout_constraintStart_toStartOf="@+id/textView14"
         app:layout_constraintTop_toBottomOf="@+id/textView14" />
 
-    <TextView
-        android:id="@+id/tv_op_notif_pay_kelas"
-        style="@style/Difacademy.Body1"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Belajar UI/UX"
-        app:layout_constraintEnd_toEndOf="@+id/textView16"
-        app:layout_constraintStart_toStartOf="@+id/textView16"
-        app:layout_constraintTop_toBottomOf="@+id/textView16" />
-
     <Button
         android:id="@+id/btn_op_notif_pay_hapus"
         style="@style/Difacademy.Button"
@@ -148,9 +106,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="32dp"
         android:text="@string/hapus"
-        app:layout_constraintBottom_toTopOf="@+id/btn_op_notif_pay_tandai"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -161,11 +119,33 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="8dp"
         android:text="@string/buka_kelas"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/btn_op_notif_pay_hapus"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/textView6"
+        style="@style/Difacademy.Subtitle2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Bank yang dipilih"
+        app:layout_constraintEnd_toEndOf="@+id/textView8"
+        app:layout_constraintStart_toStartOf="@+id/textView8"
+        app:layout_constraintTop_toBottomOf="@+id/tv_op_notif_pay_nama_kelas" />
+
+    <TextView
+        android:id="@+id/textView7"
+        style="@style/Difacademy.Body1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="BRI"
+        app:layout_constraintEnd_toEndOf="@+id/textView6"
+        app:layout_constraintStart_toStartOf="@+id/textView6"
+        app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

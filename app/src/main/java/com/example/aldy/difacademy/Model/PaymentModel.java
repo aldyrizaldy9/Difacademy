@@ -21,7 +21,6 @@ public class PaymentModel implements Parcelable {
         this.isSeen = isSeen;
     }
 
-
     protected PaymentModel(Parcel in) {
         userId = in.readString();
         blendedCourseId = in.readString();

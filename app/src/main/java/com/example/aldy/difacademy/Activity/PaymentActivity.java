@@ -186,7 +186,7 @@ public class PaymentActivity extends AppCompatActivity {
 
         long dateCreated = Timestamp.now().getSeconds();
         String userId = sharedPreferences.getString(USERID_PREFS, "");
-        PaymentModel paymentModel = new PaymentModel(blendedCourseId, userId, bankName, dateCreated, false);
+        PaymentModel paymentModel = new PaymentModel(userId, blendedCourseId, bankName, dateCreated, false);
 
         firebaseFirestore = FirebaseFirestore.getInstance();
         CollectionReference paymentRef = firebaseFirestore.collection("Payment");

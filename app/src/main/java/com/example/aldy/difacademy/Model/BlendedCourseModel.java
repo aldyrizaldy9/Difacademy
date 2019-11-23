@@ -133,7 +133,4 @@ public class BlendedCourseModel implements Parcelable {
         return dateCreated;
     }
 
-    public void setDateCreated(long dateCreated) {
-        this.dateCreated = dateCreated;
-    }
 }
