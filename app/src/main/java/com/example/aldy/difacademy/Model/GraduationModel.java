@@ -6,35 +6,58 @@ import android.os.Parcelable;
 import com.google.firebase.firestore.Exclude;
 
 public class GraduationModel implements Parcelable {
-    private String graduationId, userId, kelasId;
+    private String userId, namaUser, email, noWa, blendedCourseId, namaKelas, graduationId;
     private long dateCreated;
-    private boolean isSeen;
+    private boolean isSeen, isDone;
 
     public GraduationModel() {
     }
 
-    public GraduationModel(String userId, String kelasId, long dateCreated, boolean isSeen) {
+    public GraduationModel(String userId,
+                           String namaUser,
+                           String email,
+                           String noWa,
+                           String blendedCourseId,
+                           String namaKelas,
+                           long dateCreated,
+                           boolean isSeen,
+                           boolean isDone) {
         this.userId = userId;
-        this.kelasId = kelasId;
+        this.namaUser = namaUser;
+        this.email = email;
+        this.noWa = noWa;
+        this.blendedCourseId = blendedCourseId;
+        this.namaKelas = namaKelas;
         this.dateCreated = dateCreated;
         this.isSeen = isSeen;
+        this.isDone = isDone;
     }
 
     protected GraduationModel(Parcel in) {
-        graduationId = in.readString();
         userId = in.readString();
-        kelasId = in.readString();
+        namaUser = in.readString();
+        email = in.readString();
+        noWa = in.readString();
+        blendedCourseId = in.readString();
+        namaKelas = in.readString();
+        graduationId = in.readString();
         dateCreated = in.readLong();
         isSeen = in.readByte() != 0;
+        isDone = in.readByte() != 0;
     }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(graduationId);
         dest.writeString(userId);
-        dest.writeString(kelasId);
+        dest.writeString(namaUser);
+        dest.writeString(email);
+        dest.writeString(noWa);
+        dest.writeString(blendedCourseId);
+        dest.writeString(namaKelas);
+        dest.writeString(graduationId);
         dest.writeLong(dateCreated);
         dest.writeByte((byte) (isSeen ? 1 : 0));
+        dest.writeByte((byte) (isDone ? 1 : 0));
     }
 
     @Override
@@ -54,6 +77,30 @@ public class GraduationModel implements Parcelable {
         }
     };
 
+    public String getUserId() {
+        return userId;
+    }
+
+    public String getNamaUser() {
+        return namaUser;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getNoWa() {
+        return noWa;
+    }
+
+    public String getBlendedCourseId() {
+        return blendedCourseId;
+    }
+
+    public String getNamaKelas() {
+        return namaKelas;
+    }
+
     @Exclude
     public String getGraduationId() {
         return graduationId;
@@ -61,22 +108,6 @@ public class GraduationModel implements Parcelable {
 
     public void setGraduationId(String graduationId) {
         this.graduationId = graduationId;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public String getKelasId() {
-        return kelasId;
-    }
-
-    public void setKelasId(String kelasId) {
-        this.kelasId = kelasId;
     }
 
     public long getDateCreated() {
@@ -89,5 +120,13 @@ public class GraduationModel implements Parcelable {
 
     public void setSeen(boolean seen) {
         isSeen = seen;
+    }
+
+    public boolean isDone() {
+        return isDone;
+    }
+
+    public void setDone(boolean done) {
+        isDone = done;
     }
 }

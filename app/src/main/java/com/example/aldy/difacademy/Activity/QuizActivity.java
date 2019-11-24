@@ -19,7 +19,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.aldy.difacademy.Model.GraduateModel;
+import com.example.aldy.difacademy.Model.GraduationModel;
 import com.example.aldy.difacademy.Model.QuizModel;
 import com.example.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -321,15 +321,15 @@ public class QuizActivity extends AppCompatActivity {
             Toast.makeText(this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
         }
 
-        GraduateModel graduateModel = new GraduateModel(userId, kelasId, dateCreated, false);
-        CollectionReference graduation = db.collection("Graduation");
-        graduation.add(graduateModel)
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(QuizActivity.this, "Gagal submit quiz karena koneksi", Toast.LENGTH_SHORT).show();
-                    }
-                });
+//        GraduationModel graduationModel = new GraduationModel(userId, kelasId, dateCreated, false);
+//        CollectionReference graduation = db.collection("Graduation");
+//        graduation.add(graduationModel)
+//                .addOnFailureListener(new OnFailureListener() {
+//                    @Override
+//                    public void onFailure(@NonNull Exception e) {
+//                        Toast.makeText(QuizActivity.this, "Gagal submit quiz karena koneksi", Toast.LENGTH_SHORT).show();
+//                    }
+//                });
     }
 
     @Override

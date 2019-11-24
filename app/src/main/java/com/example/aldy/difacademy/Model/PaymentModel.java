@@ -6,28 +6,67 @@ import android.os.Parcelable;
 import com.google.firebase.firestore.Exclude;
 
 public class PaymentModel implements Parcelable {
-    private String userId, blendedCourseId, bankName, paymentId;
+    private String userId, namaUser, email, noWa, blendedCourseId, namaKelas, namaBank, paymentId;
     private long dateCreated;
-    private boolean isSeen;
+    private boolean isSeen, isPaid;
 
     public PaymentModel() {
     }
 
-    public PaymentModel(String userId, String blendedCourseId, String bankName, long dateCreated, boolean isSeen) {
+    public PaymentModel(String userId,
+                        String namaUser,
+                        String email,
+                        String noWa,
+                        String blendedCourseId,
+                        String namaKelas,
+                        String namaBank,
+                        long dateCreated,
+                        boolean isSeen,
+                        boolean isPaid) {
         this.userId = userId;
+        this.namaUser = namaUser;
+        this.email = email;
+        this.noWa = noWa;
         this.blendedCourseId = blendedCourseId;
-        this.bankName = bankName;
+        this.namaKelas = namaKelas;
+        this.namaBank = namaBank;
         this.dateCreated = dateCreated;
         this.isSeen = isSeen;
+        this.isPaid = isPaid;
     }
 
     protected PaymentModel(Parcel in) {
         userId = in.readString();
+        namaUser = in.readString();
+        email = in.readString();
+        noWa = in.readString();
         blendedCourseId = in.readString();
-        bankName = in.readString();
+        namaKelas = in.readString();
+        namaBank = in.readString();
         paymentId = in.readString();
         dateCreated = in.readLong();
         isSeen = in.readByte() != 0;
+        isPaid = in.readByte() != 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(userId);
+        dest.writeString(namaUser);
+        dest.writeString(email);
+        dest.writeString(noWa);
+        dest.writeString(blendedCourseId);
+        dest.writeString(namaKelas);
+        dest.writeString(namaBank);
+        dest.writeString(paymentId);
+        dest.writeLong(dateCreated);
+        dest.writeByte((byte) (isSeen ? 1 : 0));
+        dest.writeByte((byte) (isPaid ? 1 : 0));
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
     public static final Creator<PaymentModel> CREATOR = new Creator<PaymentModel>() {
@@ -46,12 +85,28 @@ public class PaymentModel implements Parcelable {
         return userId;
     }
 
+    public String getNamaUser() {
+        return namaUser;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getNoWa() {
+        return noWa;
+    }
+
     public String getBlendedCourseId() {
         return blendedCourseId;
     }
 
-    public String getBankName() {
-        return bankName;
+    public String getNamaKelas() {
+        return namaKelas;
+    }
+
+    public String getNamaBank() {
+        return namaBank;
     }
 
     @Exclude
@@ -75,18 +130,11 @@ public class PaymentModel implements Parcelable {
         isSeen = seen;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
+    public boolean isPaid() {
+        return isPaid;
     }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(userId);
-        dest.writeString(blendedCourseId);
-        dest.writeString(bankName);
-        dest.writeString(paymentId);
-        dest.writeLong(dateCreated);
-        dest.writeByte((byte) (isSeen ? 1 : 0));
+    public void setPaid(boolean paid) {
+        isPaid = paid;
     }
 }

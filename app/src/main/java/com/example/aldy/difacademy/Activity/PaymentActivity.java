@@ -17,14 +17,19 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.example.aldy.difacademy.Model.BlendedCourseModel;
 import com.example.aldy.difacademy.Model.PaymentModel;
+import com.example.aldy.difacademy.Model.UserModel;
 import com.example.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import static com.example.aldy.difacademy.Activity.LoginActivity.SHARE_PREFS;
 import static com.example.aldy.difacademy.Activity.LoginActivity.USERID_PREFS;
@@ -35,7 +40,7 @@ public class PaymentActivity extends AppCompatActivity {
     private TextView tvNavBar, tvTataCaraBni, tvTataCaraBri;
     private Button btnBayarBni, btnBayarBri;
     private boolean isBniActive = false, isBriActive = false;
-    private String blendedCourseId;
+    private String userId, blendedCourseId, namaUser, email, noWa, namaKelas, namaBank;
     private ProgressDialog progressDialog;
 
     private SharedPreferences sharedPreferences;
@@ -82,6 +87,7 @@ public class PaymentActivity extends AppCompatActivity {
         Intent intent = getIntent();
         blendedCourseId = intent.getStringExtra("blendedCourseId");
         sharedPreferences = getSharedPreferences(SHARE_PREFS, MODE_PRIVATE);
+        userId = sharedPreferences.getString(USERID_PREFS, "");
         progressDialog = new ProgressDialog(this);
     }
 
@@ -115,14 +121,16 @@ public class PaymentActivity extends AppCompatActivity {
         btnBayarBni.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                konfirmasiPembayaran("BNI");
+                namaBank = "BNI";
+                konfirmasiPembayaran();
             }
         });
 
         btnBayarBri.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                konfirmasiPembayaran("BRI");
+                namaBank = "BRI";
+                konfirmasiPembayaran();
             }
         });
     }
@@ -155,7 +163,7 @@ public class PaymentActivity extends AppCompatActivity {
         }
     }
 
-    private void konfirmasiPembayaran(final String bankName) {
+    private void konfirmasiPembayaran() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Apakah anda yakin ingin membeli course ini?");
         builder.setTitle("Beli");
@@ -164,7 +172,7 @@ public class PaymentActivity extends AppCompatActivity {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                sentPaymentDetailsToAdmin(bankName);
+                getUserData();
             }
         });
 
@@ -179,16 +187,11 @@ public class PaymentActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
-    private void sentPaymentDetailsToAdmin(String bankName) {
-        progressDialog.setMessage("Memuat...");
-        progressDialog.setCancelable(false);
-        progressDialog.show();
+    private void sentPaymentDetailsToAdmin() {
 
         long dateCreated = Timestamp.now().getSeconds();
-        String userId = sharedPreferences.getString(USERID_PREFS, "");
-        PaymentModel paymentModel = new PaymentModel(userId, blendedCourseId, bankName, dateCreated, false);
+        PaymentModel paymentModel = new PaymentModel(userId, namaUser, email, noWa, blendedCourseId, namaKelas, namaBank, dateCreated, false, false);
 
-        firebaseFirestore = FirebaseFirestore.getInstance();
         CollectionReference paymentRef = firebaseFirestore.collection("Payment");
         paymentRef
                 .add(paymentModel)
@@ -196,7 +199,64 @@ public class PaymentActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
                         progressDialog.dismiss();
-                        Toast.makeText(PaymentActivity.this, "Detail pembayaran telah dikirim ke operator", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(PaymentActivity.this, "Detail pembelian telah dikirim ke operator", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        progressDialog.dismiss();
+                        Log.d(TAG, e.toString());
+                    }
+                });
+    }
+
+    private void getUserData() {
+        progressDialog.setMessage("Memuat...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+
+        firebaseFirestore = FirebaseFirestore.getInstance();
+        CollectionReference userRef = firebaseFirestore.collection("User");
+        userRef
+                .whereEqualTo("userId", userId)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        UserModel userModel = new UserModel();
+                        for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
+                            userModel = queryDocumentSnapshot.toObject(UserModel.class);
+                            userModel.setUserDocId(queryDocumentSnapshot.getId());
+                        }
+                        namaUser = userModel.getNama();
+                        email = userModel.getEmail();
+                        noWa = userModel.getNoTelp();
+                        getCourseData();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        progressDialog.dismiss();
+                        Log.d(TAG, e.toString());
+                    }
+                });
+
+    }
+
+    private void getCourseData() {
+        DocumentReference courseRef = firebaseFirestore.collection("BlendedCourse").document(blendedCourseId);
+        courseRef
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        BlendedCourseModel blendedCourseModel = documentSnapshot.toObject(BlendedCourseModel.class);
+                        if (blendedCourseModel != null) {
+                            namaKelas = blendedCourseModel.getTitle();
+                        }
+                        sentPaymentDetailsToAdmin();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
