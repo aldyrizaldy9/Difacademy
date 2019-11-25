@@ -11,6 +11,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_op_notif_grad"
         android:layout_width="0dp"
+        tools:listitem="@layout/card_op_notif_graduation"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

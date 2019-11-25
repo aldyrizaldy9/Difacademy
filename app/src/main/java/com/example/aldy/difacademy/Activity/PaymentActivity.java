@@ -187,7 +187,7 @@ public class PaymentActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
-    private void sentPaymentDetailsToAdmin() {
+    private void sendPaymentDetailsToAdmin() {
 
         long dateCreated = Timestamp.now().getSeconds();
         PaymentModel paymentModel = new PaymentModel(userId, namaUser, email, noWa, blendedCourseId, namaKelas, namaBank, dateCreated, false, false);
@@ -256,7 +256,7 @@ public class PaymentActivity extends AppCompatActivity {
                         if (blendedCourseModel != null) {
                             namaKelas = blendedCourseModel.getTitle();
                         }
-                        sentPaymentDetailsToAdmin();
+                        sendPaymentDetailsToAdmin();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {

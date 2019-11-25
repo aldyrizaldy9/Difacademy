@@ -1,16 +1,11 @@
 package com.example.aldy.difacademy.Activity;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -19,14 +14,21 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.aldy.difacademy.Model.BlendedCourseModel;
 import com.example.aldy.difacademy.Model.GraduationModel;
 import com.example.aldy.difacademy.Model.QuizModel;
+import com.example.aldy.difacademy.Model.UserModel;
 import com.example.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -58,6 +60,8 @@ public class QuizActivity extends AppCompatActivity {
 
     ProgressDialog pd;
     String courseId = "";
+    String userId, namaUser, noWa, email, namaKelas;
+    SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +93,8 @@ public class QuizActivity extends AppCompatActivity {
         rbJawabanE = findViewById(R.id.rb_quiz_jawaban_e);
         imgPrev = findViewById(R.id.img_quiz_prev);
         imgNextOrFinish = findViewById(R.id.img_quiz_next_or_finish);
+        sharedPreferences = getSharedPreferences(SHARE_PREFS, MODE_PRIVATE);
+        userId = sharedPreferences.getString(USERID_PREFS, "");
     }
 
     private void onClick() {
@@ -234,7 +240,7 @@ public class QuizActivity extends AppCompatActivity {
         }
     }
 
-    private void setJawaban(){
+    private void setJawaban() {
         switch (radioGroup.getCheckedRadioButtonId()) {
             case R.id.rb_quiz_jawaban_a:
                 jawabanSaya.set(nomor - 1, "A");
@@ -300,7 +306,7 @@ public class QuizActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
 //                dialog.cancel();
                 if (nilai >= 80) {
-                    sendNotifToOp();
+                    getUserData();
                 }
                 onBackPressed();
             }
@@ -310,26 +316,83 @@ public class QuizActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
-    private void sendNotifToOp() {
-        SharedPreferences sharedPreferences = getSharedPreferences(SHARE_PREFS, MODE_PRIVATE);
-        String userId = sharedPreferences.getString(USERID_PREFS, "");
-        String kelasId = courseId;
-        long dateCreated = 0;
-        try {
-            dateCreated = Timestamp.now().getSeconds();
-        } catch (Exception e){
-            Toast.makeText(this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
-        }
+    private void getUserData() {
+        pd.setMessage("Memuat...");
+        pd.setCancelable(false);
+        pd.show();
 
-//        GraduationModel graduationModel = new GraduationModel(userId, kelasId, dateCreated, false);
-//        CollectionReference graduation = db.collection("Graduation");
-//        graduation.add(graduationModel)
-//                .addOnFailureListener(new OnFailureListener() {
-//                    @Override
-//                    public void onFailure(@NonNull Exception e) {
-//                        Toast.makeText(QuizActivity.this, "Gagal submit quiz karena koneksi", Toast.LENGTH_SHORT).show();
-//                    }
-//                });
+        CollectionReference userRef = db.collection("User");
+        userRef
+                .whereEqualTo("userId", userId)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        UserModel userModel = new UserModel();
+                        for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
+                            userModel = queryDocumentSnapshot.toObject(UserModel.class);
+                            userModel.setUserDocId(queryDocumentSnapshot.getId());
+                        }
+                        namaUser = userModel.getNama();
+                        email = userModel.getEmail();
+                        noWa = userModel.getNoTelp();
+                        getCourseData();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        pd.dismiss();
+                        Log.d(TAG, e.toString());
+                    }
+                });
+
+    }
+
+    private void getCourseData() {
+        DocumentReference courseRef = db.collection("BlendedCourse").document(courseId);
+        courseRef
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        BlendedCourseModel blendedCourseModel = documentSnapshot.toObject(BlendedCourseModel.class);
+                        if (blendedCourseModel != null) {
+                            namaKelas = blendedCourseModel.getTitle();
+                        }
+                        sendGraduationDetailsToAdmin();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        pd.dismiss();
+                        Log.d(TAG, e.toString());
+                    }
+                });
+    }
+
+    private void sendGraduationDetailsToAdmin() {
+
+        long dateCreated = Timestamp.now().getSeconds();
+        GraduationModel graduationModel = new GraduationModel(userId, namaUser, email, noWa, courseId, namaKelas, dateCreated, false, false);
+
+        CollectionReference gradRef = db.collection("Graduation");
+        gradRef
+                .add(graduationModel)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        pd.dismiss();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        pd.dismiss();
+                        Log.d(TAG, e.toString());
+                    }
+                });
     }
 
     @Override
