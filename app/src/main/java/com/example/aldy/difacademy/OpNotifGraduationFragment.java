@@ -57,8 +57,8 @@ public class OpNotifGraduationFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    public void onResume() {
+        super.onResume();
         loadData();
     }
 
@@ -88,6 +88,7 @@ public class OpNotifGraduationFragment extends Fragment {
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        graduationModels.clear();
                         for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
                             GraduationModel graduationModel = queryDocumentSnapshot.toObject(GraduationModel.class);
                             graduationModel.setGraduationId(queryDocumentSnapshot.getId());

@@ -28,6 +28,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class OpNotifPaymentActivity extends AppCompatActivity {
     private TextView tvNavBar, tvNama, tvEmail, tvNoWa, tvNamaKelas, tvNamaBank;
     private ConstraintLayout clBack;
@@ -173,7 +176,7 @@ public class OpNotifPaymentActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
-                        setPaid();
+                        getPaymentDocuments();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -185,16 +188,47 @@ public class OpNotifPaymentActivity extends AppCompatActivity {
                 });
     }
 
-    private void setPaid() {
-        DocumentReference paymentRef = firebaseFirestore.collection("Payment").document(paymentModel.getPaymentId());
+    private void getPaymentDocuments() {
+        CollectionReference paymentRef = firebaseFirestore.collection("Payment");
         paymentRef
-                .update("paid", true)
+                .whereEqualTo("blendedCourseId", paymentModel.getBlendedCourseId())
+                .whereEqualTo("userId", paymentModel.getUserId())
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
+                            setPaid(queryDocumentSnapshot);
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        progressDialog.dismiss();
+                        Log.d(TAG, e.toString());
+                    }
+                });
+
+    }
+
+    private void setPaid(QueryDocumentSnapshot queryDocumentSnapshot) {
+        DocumentReference paymentRef = firebaseFirestore
+                .collection("Payment")
+                .document(queryDocumentSnapshot.getId());
+        Map<String, Object> payment = new HashMap<>();
+        payment.put("paid", true);
+        payment.put("seen", true);
+        paymentRef
+                .update(payment)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         progressDialog.dismiss();
                         onBackPressed();
-                        Toast.makeText(OpNotifPaymentActivity.this, "Kelas telah dibuka untuk user " + paymentModel.getNamaUser(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(OpNotifPaymentActivity.this,
+                                "Kelas telah dibuka untuk user "
+                                        + paymentModel.getNamaUser(), Toast.LENGTH_SHORT).show();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -206,5 +240,4 @@ public class OpNotifPaymentActivity extends AppCompatActivity {
                 });
 
     }
-
 }

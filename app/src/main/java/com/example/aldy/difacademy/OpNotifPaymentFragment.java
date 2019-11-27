@@ -57,8 +57,8 @@ public class OpNotifPaymentFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    public void onResume() {
+        super.onResume();
         loadData();
     }
 
@@ -81,13 +81,13 @@ public class OpNotifPaymentFragment extends Fragment {
         progressDialog.setCancelable(false);
         progressDialog.show();
 
-
         paymentRef
                 .orderBy("dateCreated", Query.Direction.DESCENDING)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        paymentModels.clear();
                         for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
                             PaymentModel paymentModel = queryDocumentSnapshot.toObject(PaymentModel.class);
                             paymentModel.setPaymentId(queryDocumentSnapshot.getId());

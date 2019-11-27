@@ -22,10 +22,14 @@ import com.example.aldy.difacademy.Model.UserModel;
 import com.example.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
-import static com.example.aldy.difacademy.OpNotifGraduationFragment.OP_NOTIF_GRADUATION_ADAPTER;
+import java.util.HashMap;
+import java.util.Map;
 
 public class OpNotifGradActivity extends AppCompatActivity {
     private TextView tvNavBar, tvNama, tvEmail, tvNoWa, tvNamaKelas;
@@ -121,7 +125,7 @@ public class OpNotifGradActivity extends AppCompatActivity {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                setDone();
+                getGraduationDocuments();
             }
         });
 
@@ -136,19 +140,49 @@ public class OpNotifGradActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
-    private void setDone() {
-        progressDialog.setMessage("Memproses...");
-        progressDialog.setCancelable(false);
-        progressDialog.show();
-        final DocumentReference graduationRef = firebaseFirestore.collection("Graduation").document(graduationModel.getGraduationId());
-        graduationRef
-                .update("done", true)
+    private void getGraduationDocuments() {
+        CollectionReference gradRef = firebaseFirestore.collection("Graduation");
+        gradRef
+                .whereEqualTo("blendedCourseId", graduationModel.getBlendedCourseId())
+                .whereEqualTo("userId", graduationModel.getUserId())
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
+                            setDone(queryDocumentSnapshot);
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        progressDialog.dismiss();
+                        Log.d(TAG, e.toString());
+                    }
+                });
+
+    }
+
+    private void setDone(QueryDocumentSnapshot queryDocumentSnapshot) {
+        DocumentReference gradRef = firebaseFirestore
+                .collection("Graduation")
+                .document(queryDocumentSnapshot.getId());
+        Map<String, Object> grad = new HashMap<>();
+        grad.put("done", true);
+        grad.put("seen", true);
+        gradRef
+                .update(grad)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         progressDialog.dismiss();
                         onBackPressed();
-                        Toast.makeText(OpNotifGradActivity.this, "Kelulusan user " + graduationModel.getNamaUser() + " sudah ditandai", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(OpNotifGradActivity.this,
+                                "Kelulusan user "
+                                        + graduationModel.getNamaUser()
+                                        + " sudah ditandai", Toast.LENGTH_SHORT).show();
+
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {

@@ -71,7 +71,7 @@ public class QuizActivity extends AppCompatActivity {
         quizModels = new ArrayList<>();
         jawabanBenar = new ArrayList<>();
         jawabanSaya = new ArrayList<>();
-        pd = new ProgressDialog(this);
+        pd = new ProgressDialog(QuizActivity.this);
         pd.setMessage("Loading...");
         pd.setCancelable(false);
         pd.show();
@@ -308,7 +308,6 @@ public class QuizActivity extends AppCompatActivity {
                 if (nilai >= 80) {
                     getUserData();
                 }
-                onBackPressed();
             }
         });
 
@@ -384,6 +383,7 @@ public class QuizActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
                         pd.dismiss();
+                        onBackPressed();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
