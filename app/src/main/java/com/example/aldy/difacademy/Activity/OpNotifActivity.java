@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -18,6 +19,8 @@ import com.example.aldy.difacademy.OpNotifGraduationFragment;
 import com.example.aldy.difacademy.OpNotifPaymentFragment;
 import com.example.aldy.difacademy.R;
 import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 
@@ -34,8 +37,24 @@ public class OpNotifActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_op_notif);
-        initView();
-        setViewPager();
+
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (firebaseUser != null){
+
+            initView();
+            setViewPager();
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = getIntent();
+        String fromNotif = "" + intent.getStringExtra("fromNotif");
+        if (fromNotif.equals("ya")){
+            startActivity(new Intent(OpNotifActivity.this, OpMainActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+        } else {
+            super.onBackPressed();
+        }
     }
 
     private void initView(){

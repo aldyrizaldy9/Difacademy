@@ -55,6 +55,7 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
 //        Bundle bundle = new Bundle();
 //        bundle.putString("userId", user);
 //        intent.putExtras(bundle);
+        intent.putExtra("fromNotif", "ya");
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, (int) j, intent, PendingIntent.FLAG_ONE_SHOT);
 
@@ -83,6 +84,7 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
 //        Bundle bundle = new Bundle();
 //        bundle.putString("userId", user);
 //        intent.putExtras(bundle);
+        intent.putExtra("fromNotif", "ya");
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, j, intent, PendingIntent.FLAG_ONE_SHOT);
 
