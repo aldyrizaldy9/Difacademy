@@ -442,7 +442,6 @@ public class QuizActivity extends AppCompatActivity {
                                     @Override
                                     public void onResponse(Call<MyResponse> call, Response<MyResponse> response) {
                                         if (!response.isSuccessful()) {
-                                            Toast.makeText(QuizActivity.this, "gagal muncul notif", Toast.LENGTH_SHORT).show();
                                             return;
                                         }
                                         onBackPressed();

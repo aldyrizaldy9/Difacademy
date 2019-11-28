@@ -49,12 +49,8 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
         String title = remoteMessage.getData().get("title");
         String body = remoteMessage.getData().get("body");
 
-//        RemoteMessage.Notification notification = remoteMessage.getNotification();
         double j = Double.valueOf(user.replaceAll("[\\D]", ""));
         Intent intent = new Intent(this, OpNotifActivity.class);
-//        Bundle bundle = new Bundle();
-//        bundle.putString("userId", user);
-//        intent.putExtras(bundle);
         intent.putExtra("fromNotif", "ya");
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, (int) j, intent, PendingIntent.FLAG_ONE_SHOT);
@@ -78,12 +74,8 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
         String title = remoteMessage.getData().get("title");
         String body = remoteMessage.getData().get("body");
 
-//        RemoteMessage.Notification notification = remoteMessage.getNotification();
         int j = Integer.parseInt(user.replaceAll("[\\D]", ""));
         Intent intent = new Intent(this, OpNotifActivity.class);
-//        Bundle bundle = new Bundle();
-//        bundle.putString("userId", user);
-//        intent.putExtras(bundle);
         intent.putExtra("fromNotif", "ya");
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, j, intent, PendingIntent.FLAG_ONE_SHOT);

@@ -20,6 +20,11 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import com.example.aldy.difacademy.Model.BlendedCourseModel;
 import com.example.aldy.difacademy.Model.PaymentModel;
 import com.example.aldy.difacademy.Model.UserModel;
+import com.example.aldy.difacademy.Notification.APIService;
+import com.example.aldy.difacademy.Notification.Data;
+import com.example.aldy.difacademy.Notification.MyResponse;
+import com.example.aldy.difacademy.Notification.Sender;
+import com.example.aldy.difacademy.Notification.Token;
 import com.example.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -31,8 +36,15 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
 import static com.example.aldy.difacademy.Activity.LoginActivity.SHARE_PREFS;
 import static com.example.aldy.difacademy.Activity.LoginActivity.USERID_PREFS;
+import static com.example.aldy.difacademy.Activity.OpMainActivity.ADMIN_USER_ID;
 
 public class PaymentActivity extends AppCompatActivity {
     private ConstraintLayout clBack, clContainerBni, clContainerBri, clExpandBni, clExpandBri;
@@ -199,6 +211,7 @@ public class PaymentActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
                         progressDialog.dismiss();
+                        sendNotificationPayment();
                         Toast.makeText(PaymentActivity.this, "Detail pembelian telah dikirim ke operator", Toast.LENGTH_SHORT).show();
                     }
                 })
@@ -207,6 +220,41 @@ public class PaymentActivity extends AppCompatActivity {
                     public void onFailure(@NonNull Exception e) {
                         progressDialog.dismiss();
                         Log.d(TAG, e.toString());
+                    }
+                });
+    }
+
+    private void sendNotificationPayment(){
+        DocumentReference docRef = firebaseFirestore.collection("Tokens").document(ADMIN_USER_ID);
+        docRef.get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        Token token = documentSnapshot.toObject(Token.class);
+                        String tokenAdmin = token.getToken();
+                        Data data = new Data(userId, R.mipmap.ic_launcher, "Ada yang mau bayar", "Peserta ingin beli", ADMIN_USER_ID);
+                        Sender sender = new Sender(data, tokenAdmin);
+                        Retrofit retrofit = new Retrofit.Builder()
+                                .baseUrl("https://fcm.googleapis.com/")
+                                .addConverterFactory(GsonConverterFactory.create())
+                                .build();
+
+                        APIService apiService = retrofit.create(APIService.class);
+                        apiService.sendNotification(sender)
+                                .enqueue(new Callback<MyResponse>() {
+                                    @Override
+                                    public void onResponse(Call<MyResponse> call, Response<MyResponse> response) {
+                                        if (!response.isSuccessful()) {
+                                            return;
+                                        }
+                                        onBackPressed();
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<MyResponse> call, Throwable t) {
+
+                                    }
+                                });
                     }
                 });
     }
