@@ -43,12 +43,13 @@ public class OpMainActivity extends AppCompatActivity {
     private FirebaseFirestore firebaseFirestore;
     private CollectionReference paymentRef, graduationRef;
 
-    static final int PHOTO_PICK_REQUEST_CODE = 1;
-    static final int ADD_REQUEST_CODE = 2;
-    static final int DELETE_REQUEST_CODE = 3;
-    static final int UPDATE_REQUEST_CODE = 4;
-    static final int WRITE_PERM_REQUEST_CODE = 5;
+    public static final int PHOTO_PICK_REQUEST_CODE = 1;
+    public static final int ADD_REQUEST_CODE = 2;
+    public static final int DELETE_REQUEST_CODE = 3;
+    public static final int UPDATE_REQUEST_CODE = 4;
+    public static final int WRITE_PERM_REQUEST_CODE = 5;
 
+    public static final String ADMIN_USER_ID = "tgnQJBLhBKRzGBUnk58AtzjrZw12";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

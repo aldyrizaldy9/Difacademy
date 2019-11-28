@@ -19,23 +19,42 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.aldy.difacademy.Model.GraduateModel;
+import com.example.aldy.difacademy.Model.GraduationModel;
 import com.example.aldy.difacademy.Model.QuizModel;
+import com.example.aldy.difacademy.Notification.APIService;
+import com.example.aldy.difacademy.Notification.Data;
+import com.example.aldy.difacademy.Notification.MyResponse;
+import com.example.aldy.difacademy.Notification.Sender;
+import com.example.aldy.difacademy.Notification.Token;
 import com.example.aldy.difacademy.R;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.Source;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 import java.util.ArrayList;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
 import static com.example.aldy.difacademy.Activity.LoginActivity.SHARE_PREFS;
 import static com.example.aldy.difacademy.Activity.LoginActivity.USERID_PREFS;
+import static com.example.aldy.difacademy.Activity.OpMainActivity.ADMIN_USER_ID;
 
 public class QuizActivity extends AppCompatActivity {
     private static final String TAG = "QuizActivity";
@@ -139,6 +158,22 @@ public class QuizActivity extends AppCompatActivity {
                         onBackPressed();
                     }
                 });
+
+        //update token
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        final DocumentReference docRef = db.collection("Tokens").document(firebaseUser.getUid());
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                        if (!task.isSuccessful()) {
+                            return;
+                        }
+
+                        Token token = new Token(task.getResult().getToken());
+                        docRef.set(token);
+                    }
+                });
     }
 
     private void mulaiQuiz() {
@@ -148,13 +183,20 @@ public class QuizActivity extends AppCompatActivity {
             public void onTick(long l) {
                 int menit = (int) ((l / (1000 * 60)) % 60);
                 int detik = (int) (l / 1000) % 60;
-                if (menit < 10) {
+
+                if (menit < 1) {
+                    if (detik < 10) {
+                        tvWaktu.setText("00 : 0" + detik);
+                    } else {
+                        tvWaktu.setText("00 : " + detik);
+                    }
+                } else if (menit < 10) {
                     if (detik < 10) {
                         tvWaktu.setText("0" + menit + " : 0" + detik);
                     } else {
                         tvWaktu.setText("0" + menit + " : " + detik);
                     }
-                } else {
+                } else if (menit > 10) {
                     if (detik < 10) {
                         tvWaktu.setText(menit + " : 0" + detik);
                     } else {
@@ -235,7 +277,7 @@ public class QuizActivity extends AppCompatActivity {
         }
     }
 
-    private void setJawaban(){
+    private void setJawaban() {
         switch (radioGroup.getCheckedRadioButtonId()) {
             case R.id.rb_quiz_jawaban_a:
                 jawabanSaya.set(nomor - 1, "A");
@@ -303,7 +345,6 @@ public class QuizActivity extends AppCompatActivity {
                 if (nilai >= 80) {
                     sendNotifToOp();
                 }
-                onBackPressed();
             }
         });
 
@@ -313,22 +354,56 @@ public class QuizActivity extends AppCompatActivity {
 
     private void sendNotifToOp() {
         SharedPreferences sharedPreferences = getSharedPreferences(SHARE_PREFS, MODE_PRIVATE);
-        String userId = sharedPreferences.getString(USERID_PREFS, "");
+        final String userId = sharedPreferences.getString(USERID_PREFS, "");
         String kelasId = courseId;
         long dateCreated = 0;
         try {
             dateCreated = Timestamp.now().getSeconds();
-        } catch (Exception e){
+        } catch (Exception e) {
             Toast.makeText(this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
         }
 
-        GraduateModel graduateModel = new GraduateModel(userId, kelasId, dateCreated, false);
+        GraduationModel graduateModel = new GraduationModel(userId, kelasId, dateCreated, false);
         CollectionReference graduation = db.collection("Graduation");
         graduation.add(graduateModel)
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Toast.makeText(QuizActivity.this, "Gagal submit quiz karena koneksi", Toast.LENGTH_SHORT).show();
+                        pd.dismiss();
+                    }
+                });
+
+        DocumentReference docRef = db.collection("Tokens").document(ADMIN_USER_ID);
+        docRef.get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        Token token = documentSnapshot.toObject(Token.class);
+                        String tokenAdmin = token.getToken();
+                        Data data = new Data(userId, R.mipmap.ic_launcher, "Ada yang lulus", "Peserta lulus", ADMIN_USER_ID);
+                        Sender sender = new Sender(data, tokenAdmin);
+                        Retrofit retrofit = new Retrofit.Builder()
+                                .baseUrl("https://fcm.googleapis.com/")
+                                .addConverterFactory(GsonConverterFactory.create())
+                                .build();
+
+                        APIService apiService = retrofit.create(APIService.class);
+                        apiService.sendNotification(sender)
+                                .enqueue(new Callback<MyResponse>() {
+                                    @Override
+                                    public void onResponse(Call<MyResponse> call, Response<MyResponse> response) {
+                                        if (!response.isSuccessful()){
+                                            Toast.makeText(QuizActivity.this, "gagal muncul notif", Toast.LENGTH_SHORT).show();
+                                            return;
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<MyResponse> call, Throwable t) {
+
+                                    }
+                                });
                     }
                 });
     }
