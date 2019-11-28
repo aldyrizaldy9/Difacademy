@@ -1,8 +1,10 @@
 package com.example.aldy.difacademy.Activity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -15,12 +17,19 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.aldy.difacademy.Adapter.NewsAdapter;
+import com.example.aldy.difacademy.Model.BlendedCourseModel;
 import com.example.aldy.difacademy.Model.NewsModel;
+import com.example.aldy.difacademy.Model.OngoingKelasBlendedModel;
 import com.example.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -31,12 +40,15 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     private ConstraintLayout clSettings, clOngoing;
-    private ImageView imgKelasGratis, imgKelasOnline, imgKelasCampuran;
+    private ImageView imgKelasGratis, imgKelasOnline, imgKelasCampuran, imgOngoing;
     private Button btnBeritaLainnya;
-    private TextView tvDiikutiSemua;
+    private TextView tvDiikutiSemua, tvJudulOngoing, tvTagOngoing;
     private RecyclerView rvMainBerita;
     private NewsAdapter newsAdapter;
     private ArrayList<NewsModel> newsModels;
+    private FirebaseFirestore firebaseFirestore;
+    private BlendedCourseModel blendedCourseModel;
+    private ProgressDialog progressDialog;
 
     private boolean doubleBackToExitPressedOnce = false;
     private static final String TAG = "MainActivity";
@@ -48,7 +60,8 @@ public class MainActivity extends AppCompatActivity {
         initView();
         onClick();
         setRecyclerView();
-        loadData();
+        getUserDocId();
+        loadNews();
     }
 
     @Override
@@ -79,10 +92,16 @@ public class MainActivity extends AppCompatActivity {
         imgKelasGratis = findViewById(R.id.img_main_kelas_gratis);
         imgKelasOnline = findViewById(R.id.img_main_kelas_online);
         imgKelasCampuran = findViewById(R.id.img_main_kelas_campuran);
+        imgOngoing = findViewById(R.id.img_main_ongoing_thumbnail);
         btnBeritaLainnya = findViewById(R.id.btn_main_berita_lainnya);
         tvDiikutiSemua = findViewById(R.id.tv_main_diikuti_semua);
+        tvJudulOngoing = findViewById(R.id.tv_main_ongoing_judul);
+        tvTagOngoing = findViewById(R.id.tv_main_ongoing_tag);
         rvMainBerita = findViewById(R.id.rv_main_berita);
+        progressDialog = new ProgressDialog(this);
+
         rvMainBerita.setNestedScrollingEnabled(false);
+        firebaseFirestore = FirebaseFirestore.getInstance();
     }
 
     private void setRecyclerView() {
@@ -105,6 +124,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, ListVideoCourseActivity.class);
+                intent.putExtra("BLENDED_COURSE_ID", blendedCourseModel.getDocumentId());
                 startActivity(intent);
             }
         });
@@ -144,8 +164,91 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void loadData() {
-        FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+    private void getUserDocId() {
+        progressDialog.setMessage("Memuat...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+
+        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        CollectionReference userRef = firebaseFirestore.collection("User");
+        if (user != null) {
+            userRef
+                    .whereEqualTo("userId", user.getUid())
+                    .get()
+                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        @Override
+                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                            for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
+                                getOngoingCourseId(queryDocumentSnapshot.getId());
+                            }
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            progressDialog.dismiss();
+                            Log.d(TAG, e.toString());
+                        }
+                    });
+        }
+    }
+
+    private void getOngoingCourseId(String userDocId) {
+        CollectionReference ongoingRef = firebaseFirestore
+                .collection("User")
+                .document(userDocId)
+                .collection("OngoingBlendedCourse");
+        ongoingRef
+                .limit(1)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
+                            OngoingKelasBlendedModel ongoingKelasBlendedModel = queryDocumentSnapshot.toObject(OngoingKelasBlendedModel.class);
+                            getOngoingCourse(ongoingKelasBlendedModel.getKelasBlendedId());
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        progressDialog.dismiss();
+                        Log.d(TAG, e.toString());
+                    }
+                });
+    }
+
+    private void getOngoingCourse(String courseId) {
+        DocumentReference ongoingRef = firebaseFirestore
+                .collection("BlendedCourse")
+                .document(courseId);
+        ongoingRef.get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        blendedCourseModel = documentSnapshot.toObject(BlendedCourseModel.class);
+                        if (blendedCourseModel != null) {
+                            blendedCourseModel.setDocumentId(documentSnapshot.getId());
+
+                            Glide.with(MainActivity.this).load(blendedCourseModel.getThumbnailUrl()).into(imgOngoing);
+                            tvJudulOngoing.setText(blendedCourseModel.getTitle());
+                            tvTagOngoing.setText(blendedCourseModel.getTag());
+
+                            progressDialog.dismiss();
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        progressDialog.dismiss();
+                        Log.d(TAG, e.toString());
+                    }
+                });
+    }
+
+    private void loadNews() {
         CollectionReference newsRef = firebaseFirestore.collection("News");
         newsRef.orderBy("dateCreated", Query.Direction.DESCENDING)
                 .limit(5)
@@ -165,6 +268,7 @@ public class MainActivity extends AppCompatActivity {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, e.toString());
                     }
                 });
     }
