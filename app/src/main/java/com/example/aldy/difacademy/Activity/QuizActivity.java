@@ -163,22 +163,6 @@ public class QuizActivity extends AppCompatActivity {
                         onBackPressed();
                     }
                 });
-
-        //update token
-        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        final DocumentReference docRef = db.collection("Tokens").document(firebaseUser.getUid());
-        FirebaseInstanceId.getInstance().getInstanceId()
-                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
-                        if (!task.isSuccessful()) {
-                            return;
-                        }
-
-                        Token token = new Token(task.getResult().getToken());
-                        docRef.set(token);
-                    }
-                });
     }
 
     private void mulaiQuiz() {

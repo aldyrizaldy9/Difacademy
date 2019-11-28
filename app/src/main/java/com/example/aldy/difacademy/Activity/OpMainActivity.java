@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,14 +19,21 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.aldy.difacademy.Model.GraduationModel;
 import com.example.aldy.difacademy.Model.PaymentModel;
+import com.example.aldy.difacademy.Notification.Token;
 import com.example.aldy.difacademy.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 import static com.example.aldy.difacademy.Activity.LoginActivity.JENIS_USER_PREFS;
 import static com.example.aldy.difacademy.Activity.LoginActivity.SHARE_PREFS;
@@ -68,6 +76,22 @@ public class OpMainActivity extends AppCompatActivity {
         paymentRef = firebaseFirestore.collection("Payment");
         graduationRef = firebaseFirestore.collection("Graduation");
         checkIfPaymentExist();
+
+        //update token
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        final DocumentReference docRef = firebaseFirestore.collection("Tokens").document(firebaseUser.getUid());
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                        if (!task.isSuccessful()) {
+                            return;
+                        }
+
+                        Token token = new Token(task.getResult().getToken());
+                        docRef.set(token);
+                    }
+                });
     }
 
     private void initView() {
