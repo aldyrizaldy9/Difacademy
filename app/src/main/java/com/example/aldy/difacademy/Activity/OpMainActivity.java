@@ -68,8 +68,6 @@ public class OpMainActivity extends AppCompatActivity {
         paymentRef = firebaseFirestore.collection("Payment");
         graduationRef = firebaseFirestore.collection("Graduation");
         checkIfPaymentExist();
-        checkIfGraduationExist();
-
     }
 
     private void initView() {
@@ -210,10 +208,9 @@ public class OpMainActivity extends AppCompatActivity {
                         if (!paymentModel.isSeen()) {
                             imgNotif.setImageResource(R.drawable.ic_notifications_active);
                             return;
-                        } else {
-                            imgNotif.setImageResource(R.drawable.ic_notifications);
                         }
                     }
+                    checkIfGraduationExist();
                 }
             }
         });
@@ -232,14 +229,12 @@ public class OpMainActivity extends AppCompatActivity {
                     for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
                         GraduationModel graduationModel = queryDocumentSnapshot.toObject(GraduationModel.class);
                         graduationModel.setGraduationId(queryDocumentSnapshot.getId());
-
                         if (!graduationModel.isSeen()) {
                             imgNotif.setImageResource(R.drawable.ic_notifications_active);
                             return;
-                        } else {
-                            imgNotif.setImageResource(R.drawable.ic_notifications);
                         }
                     }
+                    imgNotif.setImageResource(R.drawable.ic_notifications);
                 }
             }
         });

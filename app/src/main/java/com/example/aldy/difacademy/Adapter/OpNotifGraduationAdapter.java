@@ -2,7 +2,7 @@ package com.example.aldy.difacademy.Adapter;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.util.Log;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,36 +12,20 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.aldy.difacademy.Model.BlendedCourseModel;
+import com.example.aldy.difacademy.Activity.OpNotifGradActivity;
 import com.example.aldy.difacademy.Model.GraduationModel;
-import com.example.aldy.difacademy.Model.UserModel;
 import com.example.aldy.difacademy.R;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
 public class OpNotifGraduationAdapter extends RecyclerView.Adapter<OpNotifGraduationAdapter.ViewHolder> {
     private Context context;
     private ArrayList<GraduationModel> graduationModels;
-    private FirebaseFirestore firebaseFirestore;
-    private ProgressDialog progressDialog;
-    private static final String TAG = "OpNotifGraduationAdapte";
-    private String namaUser, namaKelas;
 
     public OpNotifGraduationAdapter(Context context, ArrayList<GraduationModel> graduationModels) {
         this.context = context;
         this.graduationModels = graduationModels;
-        this.context = context;
-        this.graduationModels = graduationModels;
-        firebaseFirestore = FirebaseFirestore.getInstance();
-        progressDialog = new ProgressDialog(context);
     }
 
     @NonNull
@@ -54,13 +38,20 @@ public class OpNotifGraduationAdapter extends RecyclerView.Adapter<OpNotifGradua
 
     @Override
     public void onBindViewHolder(@NonNull OpNotifGraduationAdapter.ViewHolder holder, int position) {
-        holder.tvNama.setText(getUserData(position));
-        holder.tvKelas.setText(getCourseData(position));
-//        holder.tvStatus.setText();
+        final GraduationModel graduationModel = graduationModels.get(position);
+        holder.tvNama.setText(graduationModel.getNamaUser());
+        holder.tvKelas.setText(graduationModel.getNamaKelas());
+        if (graduationModel.isDone()) {
+            holder.tvStatus.setText("SUDAH DIHUBUNGI");
+        } else {
+            holder.tvStatus.setText("BELUM DIHUBUNGI");
+        }
         holder.clContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(context, OpNotifGradActivity.class);
+                intent.putExtra("graduationModel", graduationModel);
+                context.startActivity(intent);
             }
         });
     }
@@ -76,58 +67,10 @@ public class OpNotifGraduationAdapter extends RecyclerView.Adapter<OpNotifGradua
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvNama = itemView.findViewById(R.id.tv_c_op_notif_payment_nama);
-            tvKelas = itemView.findViewById(R.id.tv_c_op_notif_payment_kelas);
-            tvStatus = itemView.findViewById(R.id.tv_c_op_notif_status_beli);
+            tvNama = itemView.findViewById(R.id.tv_c_op_notif_hubungi_nama);
+            tvKelas = itemView.findViewById(R.id.tv_c_op_notif_hubungi_kelas);
+            tvStatus = itemView.findViewById(R.id.tv_c_op_notif_status_hubungi);
             clContainer = itemView.findViewById(R.id.cl_c_op_notif_hubungi);
         }
-    }
-
-    private String getUserData(int index) {
-        CollectionReference userRef = firebaseFirestore.collection("User");
-        userRef
-                .whereEqualTo("userId", graduationModels.get(index).getUserId())
-                .get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        UserModel userModel = new UserModel();
-                        for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
-                            userModel = queryDocumentSnapshot.toObject(UserModel.class);
-                        }
-                        namaUser = userModel.getNama();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d(TAG, e.toString());
-                    }
-                });
-        return namaUser;
-    }
-
-    private String getCourseData(int index) {
-        DocumentReference courseRef = firebaseFirestore
-                .collection("BlendedCourse")
-                .document(graduationModels.get(index).getKelasId());
-        courseRef
-                .get()
-                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                    @Override
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        BlendedCourseModel blendedCourseModel = documentSnapshot.toObject(BlendedCourseModel.class);
-                        if (blendedCourseModel != null) {
-                            namaKelas = blendedCourseModel.getTitle();
-                        }
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d(TAG, e.toString());
-                    }
-                });
-        return namaKelas;
     }
 }

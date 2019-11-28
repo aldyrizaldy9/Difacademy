@@ -100,28 +100,15 @@
         app:layout_constraintTop_toBottomOf="@+id/textView14" />
 
     <Button
-        android:id="@+id/btn_op_notif_pay_hapus"
+        android:id="@+id/btn_op_notif_pay_buka_kelas"
         style="@style/Difacademy.Button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="32dp"
-        android:text="@string/hapus"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/btn_op_notif_pay_tandai"
-        style="@style/Difacademy.Button"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="8dp"
         android:text="@string/buka_kelas"
-        app:layout_constraintBottom_toTopOf="@+id/btn_op_notif_pay_hapus"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
@@ -138,7 +125,7 @@
         app:layout_constraintTop_toBottomOf="@+id/tv_op_notif_pay_nama_kelas" />
 
     <TextView
-        android:id="@+id/textView7"
+        android:id="@+id/tv_op_notif_pay_nama_bank"
         style="@style/Difacademy.Body1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

@@ -1,16 +1,11 @@
 package com.example.aldy.difacademy.Activity;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -19,13 +14,14 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.aldy.difacademy.Model.BlendedCourseModel;
 import com.example.aldy.difacademy.Model.GraduationModel;
 import com.example.aldy.difacademy.Model.QuizModel;
-import com.example.aldy.difacademy.Notification.APIService;
-import com.example.aldy.difacademy.Notification.Data;
-import com.example.aldy.difacademy.Notification.MyResponse;
-import com.example.aldy.difacademy.Notification.Sender;
-import com.example.aldy.difacademy.Notification.Token;
+import com.example.aldy.difacademy.Model.UserModel;
 import com.example.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -78,6 +74,8 @@ public class QuizActivity extends AppCompatActivity {
 
     ProgressDialog pd;
     String courseId = "";
+    String userId, namaUser, noWa, email, namaKelas;
+    SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,7 +85,7 @@ public class QuizActivity extends AppCompatActivity {
         quizModels = new ArrayList<>();
         jawabanBenar = new ArrayList<>();
         jawabanSaya = new ArrayList<>();
-        pd = new ProgressDialog(this);
+        pd = new ProgressDialog(QuizActivity.this);
         pd.setMessage("Loading...");
         pd.setCancelable(false);
         pd.show();
@@ -109,6 +107,8 @@ public class QuizActivity extends AppCompatActivity {
         rbJawabanE = findViewById(R.id.rb_quiz_jawaban_e);
         imgPrev = findViewById(R.id.img_quiz_prev);
         imgNextOrFinish = findViewById(R.id.img_quiz_next_or_finish);
+        sharedPreferences = getSharedPreferences(SHARE_PREFS, MODE_PRIVATE);
+        userId = sharedPreferences.getString(USERID_PREFS, "");
     }
 
     private void onClick() {
@@ -343,7 +343,7 @@ public class QuizActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
 //                dialog.cancel();
                 if (nilai >= 80) {
-                    sendNotifToOp();
+                    getUserData();
                 }
             }
         });
@@ -352,58 +352,82 @@ public class QuizActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
-    private void sendNotifToOp() {
-        SharedPreferences sharedPreferences = getSharedPreferences(SHARE_PREFS, MODE_PRIVATE);
-        final String userId = sharedPreferences.getString(USERID_PREFS, "");
-        String kelasId = courseId;
-        long dateCreated = 0;
-        try {
-            dateCreated = Timestamp.now().getSeconds();
-        } catch (Exception e) {
-            Toast.makeText(this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
-        }
+    private void getUserData() {
+        pd.setMessage("Memuat...");
+        pd.setCancelable(false);
+        pd.show();
 
-        GraduationModel graduateModel = new GraduationModel(userId, kelasId, dateCreated, false);
-        CollectionReference graduation = db.collection("Graduation");
-        graduation.add(graduateModel)
+        CollectionReference userRef = db.collection("User");
+        userRef
+                .whereEqualTo("userId", userId)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        UserModel userModel = new UserModel();
+                        for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
+                            userModel = queryDocumentSnapshot.toObject(UserModel.class);
+                            userModel.setUserDocId(queryDocumentSnapshot.getId());
+                        }
+                        namaUser = userModel.getNama();
+                        email = userModel.getEmail();
+                        noWa = userModel.getNoTelp();
+                        getCourseData();
+                    }
+                })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(QuizActivity.this, "Gagal submit quiz karena koneksi", Toast.LENGTH_SHORT).show();
                         pd.dismiss();
+                        Log.d(TAG, e.toString());
                     }
                 });
 
-        DocumentReference docRef = db.collection("Tokens").document(ADMIN_USER_ID);
-        docRef.get()
+    }
+
+    private void getCourseData() {
+        DocumentReference courseRef = db.collection("BlendedCourse").document(courseId);
+        courseRef
+                .get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        Token token = documentSnapshot.toObject(Token.class);
-                        String tokenAdmin = token.getToken();
-                        Data data = new Data(userId, R.mipmap.ic_launcher, "Ada yang lulus", "Peserta lulus", ADMIN_USER_ID);
-                        Sender sender = new Sender(data, tokenAdmin);
-                        Retrofit retrofit = new Retrofit.Builder()
-                                .baseUrl("https://fcm.googleapis.com/")
-                                .addConverterFactory(GsonConverterFactory.create())
-                                .build();
+                        BlendedCourseModel blendedCourseModel = documentSnapshot.toObject(BlendedCourseModel.class);
+                        if (blendedCourseModel != null) {
+                            namaKelas = blendedCourseModel.getTitle();
+                        }
+                        sendGraduationDetailsToAdmin();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        pd.dismiss();
+                        Log.d(TAG, e.toString());
+                    }
+                });
+    }
 
-                        APIService apiService = retrofit.create(APIService.class);
-                        apiService.sendNotification(sender)
-                                .enqueue(new Callback<MyResponse>() {
-                                    @Override
-                                    public void onResponse(Call<MyResponse> call, Response<MyResponse> response) {
-                                        if (!response.isSuccessful()){
-                                            Toast.makeText(QuizActivity.this, "gagal muncul notif", Toast.LENGTH_SHORT).show();
-                                            return;
-                                        }
-                                    }
+    private void sendGraduationDetailsToAdmin() {
 
-                                    @Override
-                                    public void onFailure(Call<MyResponse> call, Throwable t) {
+        long dateCreated = Timestamp.now().getSeconds();
+        GraduationModel graduationModel = new GraduationModel(userId, namaUser, email, noWa, courseId, namaKelas, dateCreated, false, false);
 
-                                    }
-                                });
+        CollectionReference gradRef = db.collection("Graduation");
+        gradRef
+                .add(graduationModel)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        pd.dismiss();
+                        onBackPressed();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        pd.dismiss();
+                        Log.d(TAG, e.toString());
                     }
                 });
     }

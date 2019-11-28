@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -75,6 +76,8 @@ public class ListVideoCourseActivity extends AppCompatActivity {
         btnQuiz = findViewById(R.id.btn_list_video_course_quiz);
         progressDialog = new ProgressDialog(this);
         sharedPreferences = getSharedPreferences(SHARE_PREFS, MODE_PRIVATE);
+        Intent intent = getIntent();
+        BLENDED_COURSE_ID = intent.getStringExtra("BLENDED_COURSE_ID");
     }
 
     private void onClick() {
@@ -87,12 +90,13 @@ public class ListVideoCourseActivity extends AppCompatActivity {
         btnQuiz.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent2 = getIntent();
-                String courseId = intent2.getStringExtra("BLENDED_COURSE_ID");
-
-                Intent intent = new Intent(ListVideoCourseActivity.this, QuizActivity.class);
-                intent.putExtra("BLENDED_COURSE_ID", courseId);
-                startActivity(intent);
+                if (ISPAID) {
+                    Intent intent = new Intent(ListVideoCourseActivity.this, QuizActivity.class);
+                    intent.putExtra("BLENDED_COURSE_ID", BLENDED_COURSE_ID);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(ListVideoCourseActivity.this, "Anda belum membeli course ini", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
@@ -109,8 +113,6 @@ public class ListVideoCourseActivity extends AppCompatActivity {
         progressDialog.setCancelable(false);
         progressDialog.show();
 
-        Intent intent = getIntent();
-        BLENDED_COURSE_ID = intent.getStringExtra("BLENDED_COURSE_ID");
         blendedVideoRef = firebaseFirestore
                 .collection("BlendedCourse")
                 .document(BLENDED_COURSE_ID)
@@ -169,7 +171,7 @@ public class ListVideoCourseActivity extends AppCompatActivity {
         CollectionReference onGoingRef = firebaseFirestore
                 .collection("User")
                 .document(docId)
-                .collection("Ongoing");
+                .collection("OngoingBlendedCourse");
         onGoingRef
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
