@@ -22,6 +22,11 @@ import com.example.aldy.difacademy.Model.BlendedCourseModel;
 import com.example.aldy.difacademy.Model.GraduationModel;
 import com.example.aldy.difacademy.Model.QuizModel;
 import com.example.aldy.difacademy.Model.UserModel;
+import com.example.aldy.difacademy.Notification.APIService;
+import com.example.aldy.difacademy.Notification.Data;
+import com.example.aldy.difacademy.Notification.MyResponse;
+import com.example.aldy.difacademy.Notification.Sender;
+import com.example.aldy.difacademy.Notification.Token;
 import com.example.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -420,7 +425,7 @@ public class QuizActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
                         pd.dismiss();
-                        onBackPressed();
+                        sendOpNotification();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -428,6 +433,42 @@ public class QuizActivity extends AppCompatActivity {
                     public void onFailure(@NonNull Exception e) {
                         pd.dismiss();
                         Log.d(TAG, e.toString());
+                    }
+                });
+    }
+
+    private void sendOpNotification() {
+        DocumentReference docRef = db.collection("Tokens").document(ADMIN_USER_ID);
+        docRef.get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        Token token = documentSnapshot.toObject(Token.class);
+                        String tokenAdmin = token.getToken();
+                        Data data = new Data(userId, R.mipmap.ic_launcher, "Ada yang lulus", "Peserta lulus", ADMIN_USER_ID);
+                        Sender sender = new Sender(data, tokenAdmin);
+                        Retrofit retrofit = new Retrofit.Builder()
+                                .baseUrl("https://fcm.googleapis.com/")
+                                .addConverterFactory(GsonConverterFactory.create())
+                                .build();
+
+                        APIService apiService = retrofit.create(APIService.class);
+                        apiService.sendNotification(sender)
+                                .enqueue(new Callback<MyResponse>() {
+                                    @Override
+                                    public void onResponse(Call<MyResponse> call, Response<MyResponse> response) {
+                                        if (!response.isSuccessful()) {
+                                            Toast.makeText(QuizActivity.this, "gagal muncul notif", Toast.LENGTH_SHORT).show();
+                                            return;
+                                        }
+                                        onBackPressed();
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<MyResponse> call, Throwable t) {
+
+                                    }
+                                });
                     }
                 });
     }
