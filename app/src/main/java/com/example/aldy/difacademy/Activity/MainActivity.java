@@ -1,6 +1,5 @@
 package com.example.aldy.difacademy.Activity;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -48,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<NewsModel> newsModels;
     private FirebaseFirestore firebaseFirestore;
     private BlendedCourseModel blendedCourseModel;
-    private ProgressDialog progressDialog;
+    private String userDocId;
 
     private boolean doubleBackToExitPressedOnce = false;
     private static final String TAG = "MainActivity";
@@ -88,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void initView() {
         clSettings = findViewById(R.id.cl_main_settings);
-        clOngoing = findViewById(R.id.cl_main_ongoing_container);
+        clOngoing = findViewById(R.id.cl_main_ongoing_class);
         imgKelasGratis = findViewById(R.id.img_main_kelas_gratis);
         imgKelasOnline = findViewById(R.id.img_main_kelas_online);
         imgKelasCampuran = findViewById(R.id.img_main_kelas_campuran);
@@ -98,7 +97,6 @@ public class MainActivity extends AppCompatActivity {
         tvJudulOngoing = findViewById(R.id.tv_main_ongoing_judul);
         tvTagOngoing = findViewById(R.id.tv_main_ongoing_tag);
         rvMainBerita = findViewById(R.id.rv_main_berita);
-        progressDialog = new ProgressDialog(this);
 
         rvMainBerita.setNestedScrollingEnabled(false);
         firebaseFirestore = FirebaseFirestore.getInstance();
@@ -158,16 +156,12 @@ public class MainActivity extends AppCompatActivity {
         tvDiikutiSemua.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, OngoingCourseActivity.class);
-                startActivity(intent);
+                Toast.makeText(MainActivity.this, "Anda belum memiliki course", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     private void getUserDocId() {
-        progressDialog.setMessage("Memuat...");
-        progressDialog.setCancelable(false);
-        progressDialog.show();
 
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         CollectionReference userRef = firebaseFirestore.collection("User");
@@ -180,13 +174,13 @@ public class MainActivity extends AppCompatActivity {
                         public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                             for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
                                 getOngoingCourseId(queryDocumentSnapshot.getId());
+                                userDocId = queryDocumentSnapshot.getId();
                             }
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            progressDialog.dismiss();
                             Log.d(TAG, e.toString());
                         }
                     });
@@ -213,7 +207,6 @@ public class MainActivity extends AppCompatActivity {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        progressDialog.dismiss();
                         Log.d(TAG, e.toString());
                     }
                 });
@@ -235,14 +228,22 @@ public class MainActivity extends AppCompatActivity {
                             tvJudulOngoing.setText(blendedCourseModel.getTitle());
                             tvTagOngoing.setText(blendedCourseModel.getTag());
 
-                            progressDialog.dismiss();
+                            clOngoing.setVisibility(View.VISIBLE);
+
+                            tvDiikutiSemua.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Intent intent = new Intent(MainActivity.this, OngoingCourseActivity.class);
+                                    intent.putExtra("userDocId", userDocId);
+                                    startActivity(intent);
+                                }
+                            });
                         }
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        progressDialog.dismiss();
                         Log.d(TAG, e.toString());
                     }
                 });

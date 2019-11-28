@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:focusable="false"
+    android:animateLayoutChanges="true"
     tools:context=".Activity.MainActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -35,8 +36,10 @@
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -47,7 +50,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:visibility="visible"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="@+id/tv_main_diikuti_semua"
                 app:layout_constraintStart_toStartOf="@+id/tv_main_kelas_diikuti"
                 app:layout_constraintTop_toBottomOf="@+id/tv_main_kelas_diikuti">
@@ -59,7 +62,7 @@
                     android:layout_marginStart="16dp"
                     android:background="@drawable/rounded_corner_card_border"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintHorizontal_bias="1.0"
                     app:layout_constraintStart_toStartOf="@+id/img_main_ongoing_thumbnail"
                     app:layout_constraintTop_toTopOf="parent">
 
@@ -256,6 +259,7 @@
                 app:layout_constraintLeft_toLeftOf="@id/rv_main_berita"
                 app:layout_constraintRight_toRightOf="@id/rv_main_berita"
                 app:layout_constraintTop_toBottomOf="@id/rv_main_berita" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 
