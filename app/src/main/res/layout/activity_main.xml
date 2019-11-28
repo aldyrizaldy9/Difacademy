@@ -47,6 +47,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
+                android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="@+id/tv_main_diikuti_semua"
                 app:layout_constraintStart_toStartOf="@+id/tv_main_kelas_diikuti"
                 app:layout_constraintTop_toBottomOf="@+id/tv_main_kelas_diikuti">
@@ -85,9 +86,12 @@
                     android:layout_marginEnd="16dp"
                     android:maxLines="2"
                     android:text="Judul"
+                    app:layout_constraintBottom_toTopOf="@+id/tv_main_ongoing_tag"
                     app:layout_constraintEnd_toEndOf="@+id/cl_main_ongoing_container"
                     app:layout_constraintStart_toEndOf="@+id/img_main_ongoing_thumbnail"
-                    app:layout_constraintTop_toTopOf="@+id/img_main_ongoing_thumbnail" />
+                    app:layout_constraintTop_toTopOf="@+id/img_main_ongoing_thumbnail"
+                    app:layout_constraintVertical_bias="0.0"
+                    app:layout_constraintVertical_chainStyle="packed" />
 
                 <TextView
                     android:id="@+id/tv_main_ongoing_tag"
@@ -95,20 +99,11 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:text="Tag"
+                    app:layout_constraintBottom_toBottomOf="@+id/img_main_ongoing_thumbnail"
                     app:layout_constraintEnd_toEndOf="@+id/tv_main_ongoing_judul"
                     app:layout_constraintStart_toStartOf="@+id/tv_main_ongoing_judul"
                     app:layout_constraintTop_toBottomOf="@+id/tv_main_ongoing_judul" />
 
-                <TextView
-                    android:id="@+id/tv_main_ongoing_status"
-                    style="@style/Difacademy.Subtitle1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginBottom="8dp"
-                    android:text="4/8"
-                    app:layout_constraintBottom_toBottomOf="@+id/cl_main_ongoing_container"
-                    app:layout_constraintEnd_toEndOf="@+id/cl_main_ongoing_container" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <ImageView
@@ -130,6 +125,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:text="Kelas sedang diikuti"
+                android:visibility="visible"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/img_main_banner" />
 
@@ -139,8 +135,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
-                android:textColor="@android:color/holo_blue_bright"
                 android:text="Semua"
+                android:textColor="@android:color/holo_blue_bright"
+                android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/tv_main_kelas_diikuti" />
 
@@ -151,7 +148,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="Pilihan kelas"
-                app:layout_constraintStart_toStartOf="@+id/cl_main_ongoing_class"
+                app:layout_constraintStart_toStartOf="@+id/tv_main_kelas_diikuti"
                 app:layout_constraintTop_toBottomOf="@+id/cl_main_ongoing_class" />
 
             <ImageView
