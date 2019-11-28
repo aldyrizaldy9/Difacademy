@@ -22,6 +22,7 @@ import com.example.aldy.difacademy.Model.UserModel;
 import com.example.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -169,7 +170,8 @@ public class OpNotifPaymentActivity extends AppCompatActivity {
                 .document(userModel.getUserDocId())
                 .collection("OngoingBlendedCourse");
 
-        OngoingKelasBlendedModel ongoingKelasBlendedModel = new OngoingKelasBlendedModel(paymentModel.getBlendedCourseId());
+        long dateCreated = Timestamp.now().getSeconds();
+        OngoingKelasBlendedModel ongoingKelasBlendedModel = new OngoingKelasBlendedModel(paymentModel.getBlendedCourseId(), dateCreated);
 
         onGoingRef
                 .add(ongoingKelasBlendedModel)
