@@ -130,43 +130,45 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void checkJenisUser(final String userId) {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference adminRef = db.collection("Admin");
-        DocumentReference docAdminRef = adminRef.document(userId);
-        docAdminRef.get()
-                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                    @Override
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        if (documentSnapshot.exists()) {
-                            //admin
+        if (userId.equals(OpMainActivity.ADMIN_USER_ID)) {
+            //admin
 
-                            SharedPreferences sharedPreferences = getSharedPreferences(SHARE_PREFS, MODE_PRIVATE);
-                            SharedPreferences.Editor editor = sharedPreferences.edit();
-                            editor.putString(JENIS_USER_PREFS, JENIS_USER_ADMIN);
-                            editor.putString(USERID_PREFS, userId);
-                            editor.apply();
+            SharedPreferences sharedPreferences = getSharedPreferences(SHARE_PREFS, MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString(JENIS_USER_PREFS, JENIS_USER_ADMIN);
+            editor.putString(USERID_PREFS, userId);
+            editor.apply();
 
-                            pd.dismiss();
-                            Intent intent = new Intent(LoginActivity.this, OpMainActivity.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            startActivity(intent);
-                        } else {
-                            //user
+            pd.dismiss();
+            Intent intent = new Intent(LoginActivity.this, OpMainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+        } else {
+            //user
 
-                            SharedPreferences sharedPreferences = getSharedPreferences(SHARE_PREFS, MODE_PRIVATE);
-                            SharedPreferences.Editor editor = sharedPreferences.edit();
-                            editor.putString(JENIS_USER_PREFS, JENIS_USER_USER);
-                            editor.putString(USERID_PREFS, userId);
-                            editor.putString(EMAIL_PREFS, edtEmail.getText().toString());
-                            editor.apply();
+            SharedPreferences sharedPreferences = getSharedPreferences(SHARE_PREFS, MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString(JENIS_USER_PREFS, JENIS_USER_USER);
+            editor.putString(USERID_PREFS, userId);
+            editor.putString(EMAIL_PREFS, edtEmail.getText().toString());
+            editor.apply();
 
-                            pd.dismiss();
-                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            startActivity(intent);
-                        }
-                    }
-                });
+            pd.dismiss();
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+        }
+
+//        FirebaseFirestore db = FirebaseFirestore.getInstance();
+//        CollectionReference adminRef = db.collection("Admin");
+//        DocumentReference docAdminRef = adminRef.document(userId);
+//        docAdminRef.get()
+//                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+//                    @Override
+//                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+//
+//                    }
+//                });
     }
 
     @Override
