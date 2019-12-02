@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -30,8 +31,8 @@ public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
 
     private ImageView imgLogin;
-    private TextView tvDaftar, tvLupaKataSandi;
     private EditText edtEmail, edtKataSandi;
+    private ConstraintLayout clDaftar, clLupaKataSandi;
 
     boolean doubleBackToExitPressedOnce = false;
     ProgressDialog pd;
@@ -79,8 +80,8 @@ public class LoginActivity extends AppCompatActivity {
 
     private void initView() {
         imgLogin = findViewById(R.id.img_login_tombol_masuk);
-        tvDaftar = findViewById(R.id.tv_login_daftar);
-        tvLupaKataSandi = findViewById(R.id.tv_login_lupa_sandi);
+        clDaftar = findViewById(R.id.cl_login_daftar);
+        clLupaKataSandi = findViewById(R.id.cl_login_lupa_sandi);
         edtEmail = findViewById(R.id.edt_login_email);
         edtKataSandi = findViewById(R.id.edt_login_kata_sandi);
     }
@@ -94,14 +95,14 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         });
-        tvDaftar.setOnClickListener(new View.OnClickListener() {
+        clDaftar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
                 startActivity(intent);
             }
         });
-        tvLupaKataSandi.setOnClickListener(new View.OnClickListener() {
+        clLupaKataSandi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(LoginActivity.this, ForgetPasswordActivity.class);
@@ -158,17 +159,6 @@ public class LoginActivity extends AppCompatActivity {
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
         }
-
-//        FirebaseFirestore db = FirebaseFirestore.getInstance();
-//        CollectionReference adminRef = db.collection("Admin");
-//        DocumentReference docAdminRef = adminRef.document(userId);
-//        docAdminRef.get()
-//                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-//                    @Override
-//                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-//
-//                    }
-//                });
     }
 
     @Override

@@ -6,39 +6,12 @@
     android:layout_height="match_parent"
     tools:context=".Activity.LoginActivity">
 
-<!--    <ImageView-->
-<!--        android:id="@+id/img_login_wave_2"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:scaleType="fitStart"-->
-<!--        android:src="@drawable/login_wave_2"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="@+id/img_login_wave_1" />-->
-
-<!--    <ImageView-->
-<!--        android:id="@+id/img_login_wave_3"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:scaleType="fitStart"-->
-<!--        android:src="@drawable/login_wave_3"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="@+id/img_login_wave_2" />-->
-
-<!--    <ImageView-->
-<!--        android:id="@+id/img_login_wave_1"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:scaleType="fitStart"-->
-<!--        android:src="@drawable/login_wave_1"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent" />-->
     <ScrollView
+        android:id="@+id/scrollView2"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:fillViewport="true"
+        android:overScrollMode="never"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -48,15 +21,25 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+            <ImageView
+                android:id="@+id/imageView4"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:scaleType="fitStart"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/wave" />
+
             <TextView
                 android:id="@+id/tv_login_selamat_datang"
                 style="@style/Difacademy.Headline3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="36dp"
-                android:layout_marginTop="80dp"
+                android:layout_marginTop="68dp"
                 android:text="Selamat\nDatang"
-                android:textColor="@android:color/black"
+                android:textColor="@android:color/white"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -64,7 +47,7 @@
                 android:id="@+id/til_login_email"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"
                 android:paddingLeft="36dp"
                 android:paddingRight="36dp"
                 app:layout_constraintBottom_toTopOf="@+id/til_login_kata_sandi"
@@ -80,12 +63,14 @@
                     android:layout_height="match_parent"
                     android:hint="Email"
                     android:inputType="textAutoComplete|textEmailAddress" />
+
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/til_login_kata_sandi"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
                 android:paddingLeft="36dp"
                 android:paddingRight="32dp"
                 app:layout_constraintBottom_toTopOf="@+id/img_login_tombol_masuk"
@@ -104,35 +89,14 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
-                android:id="@+id/tv_login_daftar"
-                style="@style/Difacademy.Headline6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="36dp"
-                android:layout_marginBottom="36dp"
-                android:text="Daftar"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
-
-            <TextView
-                android:id="@+id/tv_login_lupa_sandi"
-                style="@style/Difacademy.Headline6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="36dp"
-                android:text="Lupa kata sandi"
-                app:layout_constraintBottom_toBottomOf="@+id/tv_login_daftar"
-                app:layout_constraintEnd_toEndOf="parent" />
-
-            <TextView
                 android:id="@+id/tv_login_masuk"
                 style="@style/Difacademy.Headline4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="36dp"
-                android:layout_marginBottom="100dp"
+                android:layout_marginBottom="80dp"
                 android:text="Masuk"
-                app:layout_constraintBottom_toTopOf="@+id/tv_login_daftar"
+                app:layout_constraintBottom_toTopOf="@+id/cl_login_daftar"
                 app:layout_constraintStart_toStartOf="parent" />
 
             <ImageView
@@ -153,7 +117,60 @@
                 app:layout_constraintEnd_toEndOf="@+id/img_login_tombol_masuk"
                 app:layout_constraintStart_toStartOf="@+id/img_login_tombol_masuk"
                 app:layout_constraintTop_toTopOf="@+id/img_login_tombol_masuk"
-                app:srcCompat="@drawable/ic_arrow_forward" />
+                app:srcCompat="@drawable/ic_arrow_forward_white" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_login_daftar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="36dp"
+                android:layout_marginBottom="36dp"
+                android:background="?android:attr/selectableItemBackground"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <TextView
+                    android:id="@+id/tv_login_daftar"
+                    style="@style/Difacademy.Headline6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="Daftar"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_login_lupa_sandi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="36dp"
+                android:layout_marginBottom="36dp"
+                android:background="?android:attr/selectableItemBackground"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <TextView
+                    android:id="@+id/tv_login_lupa_sandi"
+                    style="@style/Difacademy.Headline6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="Lupa kata sandi"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 

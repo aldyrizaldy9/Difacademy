@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.aldy.difacademy.Model.UserModel;
 import com.example.aldy.difacademy.R;
@@ -36,7 +37,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     private EditText edtNama, edtEmail, edtWa, edtSandi, edtKonfSandi;
     private ImageView imgDaftar;
-    private TextView tvMasuk;
+    private ConstraintLayout clMasuk;
 
     FirebaseAuth auth = FirebaseAuth.getInstance();;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -62,7 +63,7 @@ public class RegisterActivity extends AppCompatActivity {
         edtSandi = findViewById(R.id.edt_register_kata_sandi);
         edtKonfSandi = findViewById(R.id.edt_register_konf_kata_sandi);
         imgDaftar = findViewById(R.id.img_register_tombol_daftar);
-        tvMasuk = findViewById(R.id.tv_register_masuk);
+        clMasuk = findViewById(R.id.cl_register_masuk);
     }
 
     private void onClick() {
@@ -81,7 +82,7 @@ public class RegisterActivity extends AppCompatActivity {
                 }
             }
         });
-        tvMasuk.setOnClickListener(new View.OnClickListener() {
+        clMasuk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
