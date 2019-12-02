@@ -166,7 +166,7 @@
                 app:layout_constraintHorizontal_chainStyle="spread_inside"
                 app:layout_constraintStart_toStartOf="@+id/tv_main_pilihan_kelas"
                 app:layout_constraintTop_toBottomOf="@+id/tv_main_pilihan_kelas"
-                app:srcCompat="@color/colorAccent" />
+                android:src="@drawable/logo_free_course"/>
 
             <ImageView
                 android:id="@+id/img_main_kelas_online"
@@ -178,7 +178,7 @@
                 app:layout_constraintEnd_toStartOf="@+id/img_main_kelas_campuran"
                 app:layout_constraintStart_toEndOf="@+id/img_main_kelas_gratis"
                 app:layout_constraintTop_toTopOf="@+id/img_main_kelas_gratis"
-                app:srcCompat="@color/colorPrimary" />
+                android:src="@drawable/logo_online_course"/>
 
             <ImageView
                 android:id="@+id/img_main_kelas_campuran"
@@ -190,43 +190,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/img_main_kelas_online"
                 app:layout_constraintTop_toTopOf="@+id/img_main_kelas_online"
-                app:srcCompat="@color/colorPrimaryDark" />
-
-            <TextView
-                android:id="@+id/tv_main_kelas_gratis"
-                style="@style/Difacademy.Subtitle2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:text="Kelas\nGratis"
-                android:textAlignment="center"
-                app:layout_constraintBottom_toBottomOf="@+id/img_main_kelas_gratis"
-                app:layout_constraintEnd_toEndOf="@+id/img_main_kelas_gratis"
-                app:layout_constraintStart_toStartOf="@+id/img_main_kelas_gratis" />
-
-            <TextView
-                android:id="@+id/tv_main_kelas_online"
-                style="@style/Difacademy.Subtitle2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:text="Kelas\nOnline"
-                android:textAlignment="center"
-                app:layout_constraintBottom_toBottomOf="@+id/img_main_kelas_online"
-                app:layout_constraintEnd_toEndOf="@+id/img_main_kelas_online"
-                app:layout_constraintStart_toStartOf="@+id/img_main_kelas_online" />
-
-            <TextView
-                android:id="@+id/tv_main_kelas_campuran"
-                style="@style/Difacademy.Subtitle2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:text="Kelas\nCampuran"
-                android:textAlignment="center"
-                app:layout_constraintBottom_toBottomOf="@+id/img_main_kelas_campuran"
-                app:layout_constraintEnd_toEndOf="@+id/img_main_kelas_campuran"
-                app:layout_constraintStart_toStartOf="@+id/img_main_kelas_campuran" />
+                android:src="@drawable/logo_blended_course"/>
 
             <TextView
                 android:id="@+id/tv_main_berita"
