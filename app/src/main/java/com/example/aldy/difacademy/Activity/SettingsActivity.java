@@ -21,7 +21,7 @@ import static com.example.aldy.difacademy.Activity.LoginActivity.USERID_PREFS;
 
 public class SettingsActivity extends AppCompatActivity {
 
-    private ConstraintLayout clSunting, clKeluar, clBack, clGantiPass;
+    private ConstraintLayout clSunting, clKeluar, clBack, clGantiPass,clNavbar;
     private ImageView imgBack;
     private TextView tvNavBar;
 
@@ -34,6 +34,8 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     private void initView() {
+        clNavbar = findViewById(R.id.cl_navbar);
+        clNavbar.setBackgroundColor(getResources().getColor(R.color.navCream));
         clSunting = findViewById(R.id.cl_settings_sunting);
         clGantiPass = findViewById(R.id.cl_settings_ganti_kata_sandi);
         clKeluar = findViewById(R.id.cl_settings_keluar);

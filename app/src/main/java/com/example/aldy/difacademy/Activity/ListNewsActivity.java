@@ -28,7 +28,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 
 public class ListNewsActivity extends AppCompatActivity {
-    private ConstraintLayout clBack;
+    private ConstraintLayout clBack, clNavbar;
     private RecyclerView rvNews;
     private ArrayList<NewsModel> newsModels;
     private NewsAdapter adapter;
@@ -54,6 +54,8 @@ public class ListNewsActivity extends AppCompatActivity {
 
     private void initView() {
         TextView tvNavbar = findViewById(R.id.tv_navbar);
+        clNavbar = findViewById(R.id.cl_navbar);
+        clNavbar.setBackgroundColor(getResources().getColor(R.color.navKuning));
         tvNavbar.setText(R.string.berita);
         clBack = findViewById(R.id.cl_icon1);
         clBack.setVisibility(View.VISIBLE);
@@ -148,7 +150,7 @@ public class ListNewsActivity extends AppCompatActivity {
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         newsModels.clear();
 
-                        if (queryDocumentSnapshots.size() > 0){
+                        if (queryDocumentSnapshots.size() > 0) {
                             for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
                                 NewsModel newsModel = queryDocumentSnapshot.toObject(NewsModel.class);
                                 newsModel.setNewsId(queryDocumentSnapshot.getId());

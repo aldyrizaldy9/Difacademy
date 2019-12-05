@@ -47,7 +47,7 @@ import static com.example.aldy.difacademy.Activity.LoginActivity.USERID_PREFS;
 import static com.example.aldy.difacademy.Activity.OpMainActivity.ADMIN_USER_ID;
 
 public class PaymentActivity extends AppCompatActivity {
-    private ConstraintLayout clBack, clContainerBni, clContainerBri, clExpandBni, clExpandBri;
+    private ConstraintLayout clBack, clContainerBni, clContainerBri, clExpandBni, clExpandBri, clNavbar;
     private ImageView imgBack, imgLogoBni, imgLogoBri, imgExpandBni, imgExpandBri;
     private TextView tvNavBar, tvTataCaraBni, tvTataCaraBri;
     private Button btnBayarBni, btnBayarBri;
@@ -74,6 +74,8 @@ public class PaymentActivity extends AppCompatActivity {
     }
 
     private void initView() {
+        clNavbar = findViewById(R.id.cl_navbar);
+        clNavbar.setBackgroundColor(getResources().getColor(R.color.navKuning));
         clBack = findViewById(R.id.cl_icon1);
         clBack.setVisibility(View.VISIBLE);
         clContainerBni = findViewById(R.id.cl_payment_container_bni);

@@ -3,7 +3,6 @@ package com.example.aldy.difacademy.Activity;
 import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -35,7 +34,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 
 public class ListFreeCourseActivity extends AppCompatActivity {
-    private ConstraintLayout clBack, clSearch, clSearchContainer;
+    private ConstraintLayout clBack, clSearch, clSearchContainer, clNavbar;
     private RecyclerView rvVideo;
     private FreeCourseAdapter adapter;
     private ArrayList<VideoFreeModel> videoFreeModels;
@@ -67,6 +66,8 @@ public class ListFreeCourseActivity extends AppCompatActivity {
     }
 
     private void initView() {
+        clNavbar = findViewById(R.id.cl_navbar);
+        clNavbar.setBackgroundColor(getResources().getColor(R.color.navHijau));
         clBack = findViewById(R.id.cl_icon1);
         clBack.setVisibility(View.VISIBLE);
         clSearch = findViewById(R.id.cl_icon3);

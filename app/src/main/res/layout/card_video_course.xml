@@ -4,7 +4,8 @@
     android:id="@+id/cl_card_video_course_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="16dp"
+    android:layout_marginTop="16dp"
+
     android:background="@drawable/rounded_corner_card"
     android:elevation="1dp">
 
@@ -15,7 +16,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
-        android:background="@color/colorAccent"
+        android:background="@color/navCoklat"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -37,35 +38,42 @@
 
     <TextView
         android:id="@+id/tv_judul"
-        style="@style/Difacademy.Subtitle2"
-        android:layout_width="wrap_content"
+        style="@style/Difacademy.Headline5"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:ellipsize="end"
+        android:maxLines="2"
         android:text="Pengenalan"
+        app:layout_constraintBottom_toBottomOf="@+id/constraintLayout2"
+        app:layout_constraintEnd_toStartOf="@+id/tv_card_video_episode"
         app:layout_constraintStart_toEndOf="@+id/constraintLayout2"
         app:layout_constraintTop_toTopOf="@+id/constraintLayout2" />
 
-    <ImageView
-        android:id="@+id/img_card_video_thumbnail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toBottomOf="@+id/constraintLayout2"
-        app:layout_constraintStart_toStartOf="@+id/tv_judul"
-        app:layout_constraintTop_toBottomOf="@+id/tv_judul"
-        app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@drawable/ic_play_circle_outline" />
+    <!--    <ImageView-->
+    <!--        android:id="@+id/img_card_video_thumbnail"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:visibility="invisible"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginTop="8dp"-->
+    <!--        app:layout_constraintBottom_toBottomOf="@+id/constraintLayout2"-->
+    <!--        app:layout_constraintStart_toStartOf="@+id/tv_judul"-->
+    <!--        app:layout_constraintTop_toBottomOf="@+id/tv_judul"-->
+    <!--        app:layout_constraintVertical_bias="0.0"-->
+    <!--        app:srcCompat="@drawable/ic_play_circle_outline" />-->
 
-    <TextView
-        android:id="@+id/tv_panjang_video"
-        style="@style/Difacademy.Body1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:text="10:30"
-        app:layout_constraintBottom_toBottomOf="@+id/img_card_video_thumbnail"
-        app:layout_constraintStart_toEndOf="@+id/img_card_video_thumbnail"
-        app:layout_constraintTop_toTopOf="@+id/img_card_video_thumbnail" />
+    <!--    <TextView-->
+    <!--        android:id="@+id/tv_panjang_video"-->
+    <!--        style="@style/Difacademy.Body1"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:visibility="invisible"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginStart="8dp"-->
+    <!--        android:text="10:30"-->
+    <!--        app:layout_constraintBottom_toBottomOf="@+id/img_card_video_thumbnail"-->
+    <!--        app:layout_constraintStart_toEndOf="@+id/img_card_video_thumbnail"-->
+    <!--        app:layout_constraintTop_toTopOf="@+id/img_card_video_thumbnail" />-->
 
     <TextView
         android:id="@+id/tv_card_video_episode"

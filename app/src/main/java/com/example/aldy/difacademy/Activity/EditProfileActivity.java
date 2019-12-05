@@ -31,7 +31,7 @@ import static com.example.aldy.difacademy.Activity.LoginActivity.USERID_PREFS;
 
 public class EditProfileActivity extends AppCompatActivity {
 
-    private ConstraintLayout clBack, clSave;
+    private ConstraintLayout clBack, clSave, clNavbar;
     private EditText edtNama, edtNoWa;
     private ProgressDialog progressDialog;
 
@@ -54,6 +54,8 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
     private void initView() {
+        clNavbar = findViewById(R.id.cl_navbar);
+        clNavbar.setBackgroundColor(getResources().getColor(R.color.navKuning));
         clBack = findViewById(R.id.cl_icon1);
         clBack.setVisibility(View.VISIBLE);
         clSave = findViewById(R.id.cl_icon3);

@@ -28,7 +28,7 @@ import static com.example.aldy.difacademy.Activity.LoginActivity.SHARE_PREFS;
 
 public class ChangePasswordActivity extends AppCompatActivity {
 
-    private ConstraintLayout clBack, clSave;
+    private ConstraintLayout clBack, clSave,clNavbar;
     private ImageView imgBack, imgSave;
     private TextView tvNavBar;
     private EditText edtOldPass, edtNewPass, edtNewPassConfirm;
@@ -50,6 +50,8 @@ public class ChangePasswordActivity extends AppCompatActivity {
     }
 
     private void initView() {
+        clNavbar = findViewById(R.id.cl_navbar);
+        clNavbar.setBackgroundColor(getResources().getColor(R.color.navKuning));
         clBack = findViewById(R.id.cl_icon1);
         clBack.setVisibility(View.VISIBLE);
         clSave = findViewById(R.id.cl_icon3);

@@ -8,79 +8,87 @@
     android:elevation="4dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cl_icon1"
-        android:layout_width="@dimen/icon_btn_width"
-        android:layout_height="@dimen/icon_btn_height"
-        android:layout_marginStart="8dp"
-        android:background="?android:attr/selectableItemBackground"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:id="@+id/cl_navbar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/img_icon1"
-            android:layout_width="@dimen/icon_width"
-            android:layout_height="@dimen/icon_height"
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_icon1"
+            android:layout_width="@dimen/icon_btn_width"
+            android:layout_height="@dimen/icon_btn_height"
+            android:layout_marginStart="8dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/img_icon1"
+                android:layout_width="@dimen/icon_width"
+                android:layout_height="@dimen/icon_height"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:srcCompat="@tools:sample/avatars" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_icon2"
+            android:layout_width="@dimen/icon_btn_width"
+            android:layout_height="@dimen/icon_btn_height"
+            android:layout_marginEnd="8dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="@+id/cl_icon3"
+            app:layout_constraintEnd_toStartOf="@+id/cl_icon3"
+            app:layout_constraintTop_toTopOf="@+id/cl_icon3">
+
+            <ImageView
+                android:id="@+id/img_icon2"
+                android:layout_width="@dimen/icon_width"
+                android:layout_height="@dimen/icon_height"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:srcCompat="@tools:sample/avatars" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_icon3"
+            android:layout_width="@dimen/icon_btn_width"
+            android:layout_height="@dimen/icon_btn_height"
+            android:layout_marginEnd="8dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/img_icon3"
+                android:layout_width="@dimen/icon_width"
+                android:layout_height="@dimen/icon_height"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:srcCompat="@tools:sample/avatars" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/tv_navbar"
+            style="@style/Difacademy.Headline6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="tv_navbar"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:srcCompat="@tools:sample/avatars" />
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cl_icon2"
-        android:layout_width="@dimen/icon_btn_width"
-        android:layout_height="@dimen/icon_btn_height"
-        android:layout_marginEnd="8dp"
-        android:background="?android:attr/selectableItemBackground"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="@+id/cl_icon3"
-        app:layout_constraintEnd_toStartOf="@+id/cl_icon3"
-        app:layout_constraintTop_toTopOf="@+id/cl_icon3">
-
-        <ImageView
-            android:id="@+id/img_icon2"
-            android:layout_width="@dimen/icon_width"
-            android:layout_height="@dimen/icon_height"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:srcCompat="@tools:sample/avatars" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cl_icon3"
-        android:layout_width="@dimen/icon_btn_width"
-        android:layout_height="@dimen/icon_btn_height"
-        android:layout_marginEnd="8dp"
-        android:background="?android:attr/selectableItemBackground"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <ImageView
-            android:id="@+id/img_icon3"
-            android:layout_width="@dimen/icon_width"
-            android:layout_height="@dimen/icon_height"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:srcCompat="@tools:sample/avatars" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <TextView
-        android:id="@+id/tv_navbar"
-        style="@style/Difacademy.Headline6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="tv_navbar"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

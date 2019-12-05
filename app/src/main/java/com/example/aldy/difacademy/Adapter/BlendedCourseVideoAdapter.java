@@ -94,7 +94,7 @@ public class BlendedCourseVideoAdapter extends RecyclerView.Adapter<BlendedCours
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tvJudul = itemView.findViewById(R.id.tv_judul);
-            tvPanjangVideo = itemView.findViewById(R.id.tv_panjang_video);
+//            tvPanjangVideo = itemView.findViewById(R.id.tv_panjang_video);
             tvEpisode = itemView.findViewById(R.id.tv_card_video_episode);
             imgStatus = itemView.findViewById(R.id.img_video_course_status);
             clContainer = itemView.findViewById(R.id.cl_card_video_course_container);

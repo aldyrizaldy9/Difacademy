@@ -4,6 +4,6 @@
     <size
         android:width="48dp"
         android:height="48dp" />
-    <solid android:color="@android:color/darker_gray" />
+    <solid android:color="@color/navCoklat" />
     <corners android:topLeftRadius="48dp" />
 </shape>

@@ -1,5 +1,11 @@
 package com.example.aldy.difacademy.Activity;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -8,12 +14,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
-
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.example.aldy.difacademy.OngoingBlendedFragment;
 import com.example.aldy.difacademy.OngoingOnlineFragment;
@@ -25,7 +25,7 @@ import java.util.ArrayList;
 public class OngoingCourseActivity extends AppCompatActivity {
 
     TextView tvNavbar;
-    ConstraintLayout clBack;
+    ConstraintLayout clBack, clNavbar;
     ImageView imgBack;
 
     TabLayout tabLayout;
@@ -45,7 +45,9 @@ public class OngoingCourseActivity extends AppCompatActivity {
         userDocId = intent.getStringExtra("userDocId");
     }
 
-    private void initView(){
+    private void initView() {
+        clNavbar = findViewById(R.id.cl_navbar);
+        clNavbar.setBackgroundColor(getResources().getColor(R.color.navCream));
         tvNavbar = findViewById(R.id.tv_navbar);
         tvNavbar.setText("OnGoing Course");
         clBack = findViewById(R.id.cl_icon1);
@@ -62,7 +64,7 @@ public class OngoingCourseActivity extends AppCompatActivity {
         viewPager = findViewById(R.id.vp_ongoing);
     }
 
-    private void setViewPager(){
+    private void setViewPager() {
         final OngoingCourseActivity.ViewPagerAdapter viewPagerAdapter = new OngoingCourseActivity.ViewPagerAdapter(getSupportFragmentManager());
         viewPagerAdapter.addFragment(new OngoingBlendedFragment(), "Blended");
         viewPagerAdapter.addFragment(new OngoingOnlineFragment(), "Online");
@@ -75,13 +77,13 @@ public class OngoingCourseActivity extends AppCompatActivity {
         private ArrayList<Fragment> fragments;
         private ArrayList<String> titles;
 
-        ViewPagerAdapter(FragmentManager fm){
+        ViewPagerAdapter(FragmentManager fm) {
             super(fm);
             this.fragments = new ArrayList<>();
             this.titles = new ArrayList<>();
         }
 
-        public void addFragment(Fragment fragment, String title){
+        public void addFragment(Fragment fragment, String title) {
             fragments.add(fragment);
             titles.add(title);
         }

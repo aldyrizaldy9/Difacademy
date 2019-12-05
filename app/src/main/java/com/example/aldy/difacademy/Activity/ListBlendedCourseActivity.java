@@ -34,7 +34,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 
 public class ListBlendedCourseActivity extends AppCompatActivity {
-    private ConstraintLayout clBack, clSearch, clSearchContainer;
+    private ConstraintLayout clBack, clSearch, clSearchContainer,clNavbar;
     private RecyclerView rvVideo;
     private BlendedCourseAdapter adapter;
     private ArrayList<BlendedCourseModel> blendedCourseModels;
@@ -66,6 +66,8 @@ public class ListBlendedCourseActivity extends AppCompatActivity {
     }
 
     private void initView() {
+        clNavbar = findViewById(R.id.cl_navbar);
+        clNavbar.setBackgroundColor(getResources().getColor(R.color.navCoklat));
         clBack = findViewById(R.id.cl_icon1);
         clBack.setVisibility(View.VISIBLE);
         clSearch = findViewById(R.id.cl_icon3);

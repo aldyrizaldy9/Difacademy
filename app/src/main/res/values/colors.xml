@@ -3,5 +3,18 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#40444D</color>
     <color name="colorAccent">#58BEE7</color>
-<!--    <color name="colorAccent">#FEAD47</color>-->
+
+    <color name="navKuning">#FFDD59</color>
+    <color name="backgroundKuning">#FFFAA7</color>
+
+    <color name="navCoklat">#FEB46C</color>
+    <color name="backgroundCoklat">#FFE2C7</color>
+
+    <color name="navHijau">#A3FE6C</color>
+    <color name="backgroundHijau">#CEFFB1</color>
+
+    <color name="navCream">#FDF9BC</color>
+    <color name="backgroundCream">#FFFDE1</color>
+
+    <!--    <color name="colorAccent">#FEAD47</color>-->
 </resources>

@@ -37,7 +37,7 @@ import static com.example.aldy.difacademy.Activity.LoginActivity.USERID_PREFS;
 
 public class ListVideoCourseActivity extends AppCompatActivity {
     private TextView tvNavbar;
-    private ConstraintLayout clBack;
+    private ConstraintLayout clBack, clNavbar;
     private ImageView imgBack;
     private RecyclerView rvListVideoCourse;
     private ArrayList<BlendedVideoModel> blendedVideoModels;
@@ -67,6 +67,8 @@ public class ListVideoCourseActivity extends AppCompatActivity {
     }
 
     private void initView() {
+        clNavbar = findViewById(R.id.cl_navbar);
+        clNavbar.setBackgroundColor(getResources().getColor(R.color.navCoklat));
         tvNavbar = findViewById(R.id.tv_navbar);
         tvNavbar.setText("Daftar Video");
         clBack = findViewById(R.id.cl_icon1);

@@ -16,7 +16,7 @@ import com.example.aldy.difacademy.R;
 public class DetailNewsActivity extends AppCompatActivity {
     private TextView tvJudul, tvIsi;
     private ImageView imgThumbnail;
-    private ConstraintLayout clBack;
+    private ConstraintLayout clBack,clNavbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +28,8 @@ public class DetailNewsActivity extends AppCompatActivity {
     }
 
     private void initView() {
+        clNavbar = findViewById(R.id.cl_navbar);
+        clNavbar.setBackgroundColor(getResources().getColor(R.color.navKuning));
         tvJudul = findViewById(R.id.tv_detail_news_judul);
         tvIsi = findViewById(R.id.tv_detail_news_isi);
         TextView tvNavBar = findViewById(R.id.tv_navbar);

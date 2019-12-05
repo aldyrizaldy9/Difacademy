@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/backgroundKuning"
     android:animateLayoutChanges="true"
     tools:context=".Activity.PaymentActivity">
 
@@ -76,13 +77,12 @@
                 <ImageView
                     android:id="@+id/img_payment_logo_bni"
                     android:layout_width="0dp"
-                    android:layout_height="0dp"
+                    android:layout_height="80dp"
                     android:layout_marginStart="16dp"
                     android:layout_marginEnd="16dp"
                     android:layout_marginBottom="16dp"
                     android:visibility="visible"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintDimensionRatio="w,16:9"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/cl_payment_expand_bni"
@@ -152,13 +152,12 @@
                 <ImageView
                     android:id="@+id/img_payment_logo_bri"
                     android:layout_width="0dp"
-                    android:layout_height="0dp"
+                    android:layout_height="80dp"
                     android:layout_marginStart="16dp"
                     android:layout_marginEnd="16dp"
                     android:layout_marginBottom="16dp"
                     android:visibility="visible"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintDimensionRatio="w,16:9"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/cl_payment_expand_bri"
