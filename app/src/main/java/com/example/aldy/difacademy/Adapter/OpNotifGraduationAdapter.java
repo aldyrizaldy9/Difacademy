@@ -1,6 +1,5 @@
 package com.example.aldy.difacademy.Adapter;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -15,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.aldy.difacademy.Activity.OpNotifGradActivity;
 import com.example.aldy.difacademy.Model.GraduationModel;
 import com.example.aldy.difacademy.R;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 

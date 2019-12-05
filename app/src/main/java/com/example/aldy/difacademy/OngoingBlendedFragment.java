@@ -3,16 +3,15 @@ package com.example.aldy.difacademy;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.example.aldy.difacademy.Activity.OngoingCourseActivity;
 import com.example.aldy.difacademy.Adapter.BlendedCourseAdapter;

@@ -6,10 +6,22 @@ import android.os.Parcelable;
 import com.google.firebase.firestore.Exclude;
 
 public class BlendedCourseModel implements Parcelable {
+    public static final Creator<BlendedCourseModel> CREATOR = new Creator<BlendedCourseModel>() {
+        @Override
+        public BlendedCourseModel createFromParcel(Parcel in) {
+            return new BlendedCourseModel(in);
+        }
+
+        @Override
+        public BlendedCourseModel[] newArray(int size) {
+            return new BlendedCourseModel[size];
+        }
+    };
     String documentId, title, description, tagId, tag, thumbnailUrl, gDriveUrl, harga;
     long dateCreated;
 
-    public BlendedCourseModel(){}
+    public BlendedCourseModel() {
+    }
 
     public BlendedCourseModel(String title, String description, String tagId, String tag, String thumbnailUrl, String gDriveUrl, String harga, long dateCreated) {
         this.title = title;
@@ -51,18 +63,6 @@ public class BlendedCourseModel implements Parcelable {
     public int describeContents() {
         return 0;
     }
-
-    public static final Creator<BlendedCourseModel> CREATOR = new Creator<BlendedCourseModel>() {
-        @Override
-        public BlendedCourseModel createFromParcel(Parcel in) {
-            return new BlendedCourseModel(in);
-        }
-
-        @Override
-        public BlendedCourseModel[] newArray(int size) {
-            return new BlendedCourseModel[size];
-        }
-    };
 
     @Exclude
     public String getDocumentId() {

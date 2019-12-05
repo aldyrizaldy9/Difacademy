@@ -8,11 +8,9 @@ import android.content.SharedPreferences;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Bundle;
 
 import androidx.core.app.NotificationCompat;
 
-import com.example.aldy.difacademy.Activity.LoginActivity;
 import com.example.aldy.difacademy.Activity.OpNotifActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;

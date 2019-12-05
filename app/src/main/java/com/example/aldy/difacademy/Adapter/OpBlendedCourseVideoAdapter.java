@@ -18,7 +18,7 @@ import com.example.aldy.difacademy.R;
 
 import java.util.ArrayList;
 
-public class OpBlendedCourseVideoAdapter extends RecyclerView.Adapter<OpBlendedCourseVideoAdapter.ViewHolder>{
+public class OpBlendedCourseVideoAdapter extends RecyclerView.Adapter<OpBlendedCourseVideoAdapter.ViewHolder> {
 
     private Context context;
     private ArrayList<BlendedVideoModel> blendedVideoModels;

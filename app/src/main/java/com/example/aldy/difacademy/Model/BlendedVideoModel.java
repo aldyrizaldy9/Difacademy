@@ -6,10 +6,22 @@ import android.os.Parcelable;
 import com.google.firebase.firestore.Exclude;
 
 public class BlendedVideoModel implements Parcelable {
+    public static final Creator<BlendedVideoModel> CREATOR = new Creator<BlendedVideoModel>() {
+        @Override
+        public BlendedVideoModel createFromParcel(Parcel in) {
+            return new BlendedVideoModel(in);
+        }
+
+        @Override
+        public BlendedVideoModel[] newArray(int size) {
+            return new BlendedVideoModel[size];
+        }
+    };
     String title, description, videoUrl, documentId;
     long dateCreated;
 
-    public BlendedVideoModel(){}
+    public BlendedVideoModel() {
+    }
 
     public BlendedVideoModel(String title, String description, String videoUrl, long dateCreated) {
         this.title = title;
@@ -39,18 +51,6 @@ public class BlendedVideoModel implements Parcelable {
     public int describeContents() {
         return 0;
     }
-
-    public static final Creator<BlendedVideoModel> CREATOR = new Creator<BlendedVideoModel>() {
-        @Override
-        public BlendedVideoModel createFromParcel(Parcel in) {
-            return new BlendedVideoModel(in);
-        }
-
-        @Override
-        public BlendedVideoModel[] newArray(int size) {
-            return new BlendedVideoModel[size];
-        }
-    };
 
     public String getTitle() {
         return title;

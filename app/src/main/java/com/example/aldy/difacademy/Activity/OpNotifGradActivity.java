@@ -32,6 +32,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class OpNotifGradActivity extends AppCompatActivity {
+    private static final String TAG = "OpNotifPaymentActivity";
     private TextView tvNavBar, tvNama, tvEmail, tvNoWa, tvNamaKelas;
     private ConstraintLayout clBack;
     private ImageView imgBack;
@@ -39,10 +40,7 @@ public class OpNotifGradActivity extends AppCompatActivity {
     private GraduationModel graduationModel;
     private ProgressDialog progressDialog;
     private UserModel userModel;
-
     private FirebaseFirestore firebaseFirestore;
-
-    private static final String TAG = "OpNotifPaymentActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

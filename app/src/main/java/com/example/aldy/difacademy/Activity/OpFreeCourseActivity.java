@@ -153,7 +153,7 @@ public class OpFreeCourseActivity extends AppCompatActivity {
                                                     videoFreeModels.add(newVideoFreeModel);
                                                 }
 
-                                                if (queryDocumentSnapshots.size() < 20){
+                                                if (queryDocumentSnapshots.size() < 20) {
                                                     lastVisible = null;
                                                 } else {
                                                     lastVisible = queryDocumentSnapshots.getDocuments()
@@ -204,7 +204,7 @@ public class OpFreeCourseActivity extends AppCompatActivity {
                                 videoFreeModels.add(newVideoFreeModel);
                             }
 
-                            if (queryDocumentSnapshots.size() < 20){
+                            if (queryDocumentSnapshots.size() < 20) {
                                 lastVisible = null;
                             } else {
                                 lastVisible = queryDocumentSnapshots.getDocuments()

@@ -2,8 +2,6 @@ package com.example.aldy.difacademy.Model;
 
 import com.google.firebase.firestore.Exclude;
 
-import java.util.ArrayList;
-
 public class UserModel {
     private String userId, nama, email, noTelp, userDocId;
 

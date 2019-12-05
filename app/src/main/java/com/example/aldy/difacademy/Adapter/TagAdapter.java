@@ -21,8 +21,6 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -34,12 +32,10 @@ import java.util.Map;
 
 public class TagAdapter extends RecyclerView.Adapter<TagAdapter.ViewHolder> {
     private static final String TAG = "TagAdapter";
-
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
     private Context context;
     private ArrayList<TagModel> tagModels;
     private ProgressDialog pd;
-
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     public TagAdapter(Context context, ArrayList<TagModel> tagModels) {
         this.context = context;
@@ -77,22 +73,6 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.ViewHolder> {
         return tagModels.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        private ImageView imgThumbnail;
-        private ConstraintLayout clDelete, clEdit;
-        private TextView tvJudul, tvTag, tvDeskripsi;
-
-        public ViewHolder(@NonNull View v) {
-            super(v);
-            imgThumbnail = v.findViewById(R.id.img_c_op_thumbnail);
-            clDelete = v.findViewById(R.id.cl_c_op_delete);
-            clEdit = v.findViewById(R.id.cl_c_op_edit);
-            tvJudul = v.findViewById(R.id.tv_c_op_judul);
-            tvTag = v.findViewById(R.id.tv_c_op_tag);
-            tvDeskripsi = v.findViewById(R.id.tv_c_op_deskripsi);
-        }
-    }
-
     private void hapusTag(final String tagId) {
         pd.setMessage("Menghapus");
         pd.setCancelable(false);
@@ -115,7 +95,7 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.ViewHolder> {
                 });
     }
 
-    private void hapusTagDiVideoFree(final String tagId){
+    private void hapusTagDiVideoFree(final String tagId) {
         final WriteBatch batch = db.batch();
         final CollectionReference videoFreeRef = db.collection("VideoFree");
         videoFreeRef.whereEqualTo("tagId", tagId)
@@ -153,7 +133,7 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.ViewHolder> {
                 });
     }
 
-    private void hapusTagDiBlendedCourse(String tagId){
+    private void hapusTagDiBlendedCourse(String tagId) {
 //        final WriteBatch batch = db.batch();
         final CollectionReference blendedCourseRef = db.collection("BlendedCourse");
 
@@ -206,5 +186,21 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.ViewHolder> {
         });
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        private ImageView imgThumbnail;
+        private ConstraintLayout clDelete, clEdit;
+        private TextView tvJudul, tvTag, tvDeskripsi;
+
+        public ViewHolder(@NonNull View v) {
+            super(v);
+            imgThumbnail = v.findViewById(R.id.img_c_op_thumbnail);
+            clDelete = v.findViewById(R.id.cl_c_op_delete);
+            clEdit = v.findViewById(R.id.cl_c_op_edit);
+            tvJudul = v.findViewById(R.id.tv_c_op_judul);
+            tvTag = v.findViewById(R.id.tv_c_op_tag);
+            tvDeskripsi = v.findViewById(R.id.tv_c_op_deskripsi);
+        }
     }
 }

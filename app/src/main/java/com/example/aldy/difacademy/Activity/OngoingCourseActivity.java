@@ -24,14 +24,12 @@ import java.util.ArrayList;
 
 public class OngoingCourseActivity extends AppCompatActivity {
 
+    public static String userDocId = "";
     TextView tvNavbar;
     ConstraintLayout clBack, clNavbar;
     ImageView imgBack;
-
     TabLayout tabLayout;
     ViewPager viewPager;
-
-    public static String userDocId = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

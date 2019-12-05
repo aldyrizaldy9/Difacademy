@@ -4,7 +4,6 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -28,18 +27,15 @@ import static com.example.aldy.difacademy.Activity.LoginActivity.SHARE_PREFS;
 
 public class ChangePasswordActivity extends AppCompatActivity {
 
-    private ConstraintLayout clBack, clSave,clNavbar;
+    private static final String TAG = "ChangePasswordActivity";
+    private ConstraintLayout clBack, clSave, clNavbar;
     private ImageView imgBack, imgSave;
     private TextView tvNavBar;
     private EditText edtOldPass, edtNewPass, edtNewPassConfirm;
     private ProgressDialog progressDialog;
-
     private FirebaseAuth firebaseAuth;
     private FirebaseUser user;
-
     private SharedPreferences sharedPreferences;
-
-    private static final String TAG = "ChangePasswordActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

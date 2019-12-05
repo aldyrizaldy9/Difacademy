@@ -21,7 +21,7 @@ import static com.example.aldy.difacademy.Activity.LoginActivity.USERID_PREFS;
 
 public class SettingsActivity extends AppCompatActivity {
 
-    private ConstraintLayout clSunting, clKeluar, clBack, clGantiPass,clNavbar;
+    private ConstraintLayout clSunting, clKeluar, clBack, clGantiPass, clNavbar;
     private ImageView imgBack;
     private TextView tvNavBar;
 

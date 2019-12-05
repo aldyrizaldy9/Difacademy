@@ -34,25 +34,21 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 
 public class ListBlendedCourseActivity extends AppCompatActivity {
-    private ConstraintLayout clBack, clSearch, clSearchContainer,clNavbar;
+    private static final String TAG = "ListBlendedCourseActivity";
+    DocumentSnapshot lastVisible;
+    boolean loadbaru;
+    boolean loadFromTag = false;
+    boolean firstClick = true;
+    String tag = "";
+    private ConstraintLayout clBack, clSearch, clSearchContainer, clNavbar;
     private RecyclerView rvVideo;
     private BlendedCourseAdapter adapter;
     private ArrayList<BlendedCourseModel> blendedCourseModels;
     private ArrayList<String> tags;
     private ProgressDialog pd;
     private Spinner spnTags;
-
     private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
     CollectionReference blendedCourseRef = firebaseFirestore.collection("BlendedCourse");
-
-    DocumentSnapshot lastVisible;
-    boolean loadbaru;
-    boolean loadFromTag = false;
-    boolean firstClick = true;
-
-    String tag = "";
-
-    private static final String TAG = "ListBlendedCourseActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -182,7 +178,7 @@ public class ListBlendedCourseActivity extends AppCompatActivity {
     private void loadBlendedCourseData() {
         pd.show();
 
-        Query first  = blendedCourseRef
+        Query first = blendedCourseRef
                 .orderBy("dateCreated", Query.Direction.DESCENDING)
                 .limit(20);
 
@@ -222,7 +218,7 @@ public class ListBlendedCourseActivity extends AppCompatActivity {
     private void loadBlendedCourseWithTheSameTag() {
         pd.show();
 
-        Query first  = blendedCourseRef
+        Query first = blendedCourseRef
                 .whereEqualTo("tag", tag)
                 .orderBy("dateCreated", Query.Direction.DESCENDING)
                 .limit(20);

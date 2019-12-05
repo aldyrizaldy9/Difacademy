@@ -1,17 +1,16 @@
 package com.example.aldy.difacademy.Activity;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.example.aldy.difacademy.Adapter.OpBlendedCourseVideoAdapter;
 import com.example.aldy.difacademy.Model.BlendedVideoModel;
@@ -74,7 +73,7 @@ public class OpBlendedCourseVideoActivity extends AppCompatActivity {
         adapter.notifyDataSetChanged();
     }
 
-    private void initView(){
+    private void initView() {
         tvNavbar = findViewById(R.id.tv_navbar);
         tvNavbar.setText("Add Video Blended");
         clBack = findViewById(R.id.cl_icon1);
@@ -102,7 +101,7 @@ public class OpBlendedCourseVideoActivity extends AppCompatActivity {
         rvVideoMateri = findViewById(R.id.rv_op_video_blended);
     }
 
-    private void loadData(){
+    private void loadData() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference collRef = db.collection("BlendedCourse")
                 .document(blendedCourseDocId)
@@ -114,7 +113,7 @@ public class OpBlendedCourseVideoActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         blendedVideoModels.clear();
-                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                             BlendedVideoModel blendedVideoModel = documentSnapshot.toObject(BlendedVideoModel.class);
                             blendedVideoModel.setDocumentId(documentSnapshot.getId());
                             blendedVideoModels.add(blendedVideoModel);
@@ -124,7 +123,7 @@ public class OpBlendedCourseVideoActivity extends AppCompatActivity {
                 });
     }
 
-    private void setRecyclerView(){
+    private void setRecyclerView() {
         blendedVideoModels = new ArrayList<>();
         adapter = new OpBlendedCourseVideoAdapter(this, blendedVideoModels);
         rvVideoMateri.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));

@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -31,15 +30,13 @@ import java.util.ArrayList;
  * A simple {@link Fragment} subclass.
  */
 public class OpNotifGraduationFragment extends Fragment {
+    private static final String TAG = "OpNotifGraduationFragme";
+    public static OpNotifGraduationAdapter OP_NOTIF_GRADUATION_ADAPTER;
     private View rootView;
     private RecyclerView rvNotifGrad;
     private ArrayList<GraduationModel> graduationModels;
-    public static OpNotifGraduationAdapter OP_NOTIF_GRADUATION_ADAPTER;
     private ProgressDialog progressDialog;
-
     private CollectionReference graduationRef;
-
-    private static final String TAG = "OpNotifGraduationFragme";
 
     public OpNotifGraduationFragment() {
         // Required empty public constructor

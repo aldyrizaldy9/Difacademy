@@ -18,7 +18,7 @@ import com.example.aldy.difacademy.R;
 
 import java.util.ArrayList;
 
-public class OpQuizAdapter extends RecyclerView.Adapter<OpQuizAdapter.ViewHolder>{
+public class OpQuizAdapter extends RecyclerView.Adapter<OpQuizAdapter.ViewHolder> {
     private static final String TAG = "OpQuizAdapter";
 
     private Context context;

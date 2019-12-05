@@ -34,18 +34,16 @@ import static com.example.aldy.difacademy.Activity.OpMainActivity.DELETE_REQUEST
 import static com.example.aldy.difacademy.Activity.OpMainActivity.UPDATE_REQUEST_CODE;
 
 public class OpNewsActivity extends AppCompatActivity {
+    private static final String TAG = "OpNewsActivity";
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    CollectionReference newsRef = db.collection("News");
+    DocumentSnapshot lastVisible;
+    boolean loadbaru;
     private ConstraintLayout clTambah, clBack;
     private RecyclerView rvNews;
     private ArrayList<NewsModel> newsModels;
     private OpNewsAdapter adapter;
-    private static final String TAG = "OpNewsActivity";
     private ProgressDialog progressDialog;
-
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
-    CollectionReference newsRef = db.collection("News");
-
-    DocumentSnapshot lastVisible;
-    boolean loadbaru;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -187,7 +185,7 @@ public class OpNewsActivity extends AppCompatActivity {
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         newsModels.clear();
 
-                        if (queryDocumentSnapshots.size() > 0){
+                        if (queryDocumentSnapshots.size() > 0) {
                             for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
                                 NewsModel newsModel = queryDocumentSnapshot.toObject(NewsModel.class);
                                 newsModel.setNewsId(queryDocumentSnapshot.getId());

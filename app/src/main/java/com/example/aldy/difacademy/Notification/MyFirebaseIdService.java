@@ -2,7 +2,6 @@ package com.example.aldy.difacademy.Notification;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -15,12 +14,12 @@ public class MyFirebaseIdService extends FirebaseMessagingService {
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
         String refreshToken = FirebaseInstanceId.getInstance().getToken();
-        if (firebaseUser != null){
+        if (firebaseUser != null) {
             updateToken(refreshToken);
         }
     }
 
-    private void updateToken(String refreshToken){
+    private void updateToken(String refreshToken) {
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         //set tokennya di database
         FirebaseFirestore db = FirebaseFirestore.getInstance();

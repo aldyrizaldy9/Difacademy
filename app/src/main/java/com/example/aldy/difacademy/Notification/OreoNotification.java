@@ -16,16 +16,16 @@ public class OreoNotification extends ContextWrapper {
 
     private NotificationManager notificationManager;
 
-    public OreoNotification(Context context){
+    public OreoNotification(Context context) {
         super(context);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             createChannel();
         }
     }
 
     @TargetApi(Build.VERSION_CODES.O)
-    private void createChannel(){
+    private void createChannel() {
         NotificationChannel channel = new NotificationChannel(CHANNEL_ID,
                 CHANNEL_NAME,
                 NotificationManager.IMPORTANCE_DEFAULT);
@@ -36,9 +36,9 @@ public class OreoNotification extends ContextWrapper {
         getManager().createNotificationChannel(channel);
     }
 
-    public NotificationManager getManager(){
-        if (notificationManager == null){
-            notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+    public NotificationManager getManager() {
+        if (notificationManager == null) {
+            notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         }
 
         return notificationManager;
@@ -49,7 +49,7 @@ public class OreoNotification extends ContextWrapper {
                                                     String body,
                                                     PendingIntent pendingIntent,
                                                     Uri soundUri,
-                                                    String icon){
+                                                    String icon) {
         return new Notification.Builder(getApplicationContext(), CHANNEL_ID)
                 .setContentIntent(pendingIntent)
                 .setContentTitle(title)

@@ -5,7 +5,7 @@ import com.google.firebase.firestore.Exclude;
 public class TagModel {
     private String tag, tagid;
 
-    public TagModel(){
+    public TagModel() {
     }
 
     public TagModel(String tag) {

@@ -40,6 +40,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final String TAG = "MainActivity";
     private ConstraintLayout clSettings, clOngoing;
     private ImageView imgKelasGratis, imgKelasOnline, imgKelasCampuran, imgOngoing;
     private Button btnBeritaLainnya;
@@ -53,9 +54,7 @@ public class MainActivity extends AppCompatActivity {
     private String userDocId;
     private OngoingKelasBlendedModel ongoingKelasBlendedModel;
     private OngoingKelasOnlineModel ongoingKelasOnlineModel;
-
     private boolean doubleBackToExitPressedOnce = false;
-    private static final String TAG = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

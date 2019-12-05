@@ -1,11 +1,5 @@
 package com.example.aldy.difacademy.Activity;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -19,6 +13,12 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.aldy.difacademy.Model.BlendedVideoModel;
 import com.example.aldy.difacademy.R;
@@ -171,7 +171,7 @@ public class OpAddBlendedCourseVideoActivity extends AppCompatActivity {
         btnHapus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (isUploading){
+                if (isUploading) {
                     showCancelUploadDialog();
                 } else {
                     showHapusDialog();

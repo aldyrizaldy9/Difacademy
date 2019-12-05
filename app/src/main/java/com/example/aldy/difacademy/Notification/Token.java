@@ -7,7 +7,8 @@ public class Token {
         this.token = token;
     }
 
-    public Token(){}
+    public Token() {
+    }
 
     public String getToken() {
         return token;

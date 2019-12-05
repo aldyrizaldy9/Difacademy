@@ -5,11 +5,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -22,30 +20,22 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 public class LoginActivity extends AppCompatActivity {
-    private static final String TAG = "LoginActivity";
-
-    private ImageView imgLogin;
-    private EditText edtEmail, edtKataSandi;
-    private ConstraintLayout clDaftar, clLupaKataSandi;
-
-    boolean doubleBackToExitPressedOnce = false;
-    ProgressDialog pd;
-
-    FirebaseAuth auth;
-    FirebaseUser firebaseUser;
-
     public static final String SHARE_PREFS = "share_prefs";
     public static final String USERID_PREFS = "userid_prefs";
     public static final String EMAIL_PREFS = "email_prefs";
     public static final String JENIS_USER_PREFS = "jenis_user_prefs";
     public static final String JENIS_USER_ADMIN = "admin";
     public static final String JENIS_USER_USER = "user";
+    private static final String TAG = "LoginActivity";
+    boolean doubleBackToExitPressedOnce = false;
+    ProgressDialog pd;
+    FirebaseAuth auth;
+    FirebaseUser firebaseUser;
+    private ImageView imgLogin;
+    private EditText edtEmail, edtKataSandi;
+    private ConstraintLayout clDaftar, clLupaKataSandi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

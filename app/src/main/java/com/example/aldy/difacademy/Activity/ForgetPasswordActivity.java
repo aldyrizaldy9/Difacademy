@@ -2,7 +2,6 @@ package com.example.aldy.difacademy.Activity;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,12 +18,11 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class ForgetPasswordActivity extends AppCompatActivity {
 
+    private static final String TAG = "ForgetPasswordActivity";
     private ConstraintLayout clBack;
     private EditText edtEmail;
     private Button btnLupaSandi;
     private ProgressDialog progressDialog;
-
-    private static final String TAG = "ForgetPasswordActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

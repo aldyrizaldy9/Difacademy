@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -37,7 +36,6 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -342,13 +340,13 @@ public class OpAddFreeCourseActivity extends AppCompatActivity {
                     String title = yResponse.getItems().get(0).getSnippet().getTitle();
                     String description = yResponse.getItems().get(0).getSnippet().getDescription();
                     String thumbnail = "";
-                    if (yResponse.getItems().get(0).getSnippet().getThumbnails().getStandard().getUrl() != null){
+                    if (yResponse.getItems().get(0).getSnippet().getThumbnails().getStandard().getUrl() != null) {
                         thumbnail = yResponse.getItems().get(0).getSnippet().getThumbnails().getStandard().getUrl();
-                    } else if (yResponse.getItems().get(0).getSnippet().getThumbnails().getHigh().getUrl() != null){
+                    } else if (yResponse.getItems().get(0).getSnippet().getThumbnails().getHigh().getUrl() != null) {
                         thumbnail = yResponse.getItems().get(0).getSnippet().getThumbnails().getHigh().getUrl();
-                    } else if (yResponse.getItems().get(0).getSnippet().getThumbnails().getMedium().getUrl() != null){
+                    } else if (yResponse.getItems().get(0).getSnippet().getThumbnails().getMedium().getUrl() != null) {
                         thumbnail = yResponse.getItems().get(0).getSnippet().getThumbnails().getMedium().getUrl();
-                    } else if (yResponse.getItems().get(0).getSnippet().getThumbnails().getNormal().getUrl() != null){
+                    } else if (yResponse.getItems().get(0).getSnippet().getThumbnails().getNormal().getUrl() != null) {
                         thumbnail = yResponse.getItems().get(0).getSnippet().getThumbnails().getNormal().getUrl();
                     }
 

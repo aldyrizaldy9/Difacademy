@@ -34,6 +34,12 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 
 public class ListFreeCourseActivity extends AppCompatActivity {
+    private static final String TAG = "ListFreeCourseActivity";
+    DocumentSnapshot lastVisible;
+    boolean loadbaru;
+    boolean loadFromTag = false;
+    boolean firstClick = true;
+    String tag = "";
     private ConstraintLayout clBack, clSearch, clSearchContainer, clNavbar;
     private RecyclerView rvVideo;
     private FreeCourseAdapter adapter;
@@ -41,18 +47,8 @@ public class ListFreeCourseActivity extends AppCompatActivity {
     private ArrayList<String> tags;
     private ProgressDialog pd;
     private Spinner spnTags;
-
     private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
     CollectionReference videoFreeRef = firebaseFirestore.collection("VideoFree");
-
-    private static final String TAG = "ListFreeCourseActivity";
-
-    DocumentSnapshot lastVisible;
-    boolean loadbaru;
-    boolean loadFromTag = false;
-    boolean firstClick = true;
-
-    String tag = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -36,6 +36,9 @@ import static com.example.aldy.difacademy.Activity.LoginActivity.SHARE_PREFS;
 import static com.example.aldy.difacademy.Activity.LoginActivity.USERID_PREFS;
 
 public class ListVideoCourseActivity extends AppCompatActivity {
+    private static final String TAG = "ListVideoCourseActivity";
+    public static String BLENDED_COURSE_ID;
+    public static boolean ISPAID = false;
     private TextView tvNavbar;
     private ConstraintLayout clBack, clNavbar;
     private ImageView imgBack;
@@ -45,16 +48,9 @@ public class ListVideoCourseActivity extends AppCompatActivity {
     private ProgressDialog progressDialog;
     private Button btnQuiz;
     private String docId;
-
     private SharedPreferences sharedPreferences;
-
     private FirebaseFirestore firebaseFirestore;
     private CollectionReference blendedVideoRef;
-
-    private static final String TAG = "ListVideoCourseActivity";
-
-    public static String BLENDED_COURSE_ID;
-    public static boolean ISPAID = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

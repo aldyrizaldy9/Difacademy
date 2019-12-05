@@ -47,6 +47,9 @@ import static com.example.aldy.difacademy.Activity.LoginActivity.USERID_PREFS;
 import static com.example.aldy.difacademy.Activity.OpMainActivity.ADMIN_USER_ID;
 
 public class PaymentActivity extends AppCompatActivity {
+    private static final String TAG = "PaymentActivity";
+    View.OnClickListener bniClickListener;
+    View.OnClickListener briClickListener;
     private ConstraintLayout clBack, clContainerBni, clContainerBri, clExpandBni, clExpandBri, clNavbar;
     private ImageView imgBack, imgLogoBni, imgLogoBri, imgExpandBni, imgExpandBri;
     private TextView tvNavBar, tvTataCaraBni, tvTataCaraBri;
@@ -54,15 +57,8 @@ public class PaymentActivity extends AppCompatActivity {
     private boolean isBniActive = false, isBriActive = false;
     private String userId, blendedCourseId, namaUser, email, noWa, namaKelas, namaBank;
     private ProgressDialog progressDialog;
-
     private SharedPreferences sharedPreferences;
-
-    View.OnClickListener bniClickListener;
-    View.OnClickListener briClickListener;
-
     private FirebaseFirestore firebaseFirestore;
-
-    private static final String TAG = "PaymentActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -226,7 +222,7 @@ public class PaymentActivity extends AppCompatActivity {
                 });
     }
 
-    private void sendNotificationPayment(){
+    private void sendNotificationPayment() {
         DocumentReference docRef = firebaseFirestore.collection("Tokens").document(ADMIN_USER_ID);
         docRef.get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {

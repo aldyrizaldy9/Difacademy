@@ -1,16 +1,16 @@
 package com.example.aldy.difacademy.Activity;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.aldy.difacademy.Adapter.OpQuizAdapter;
 import com.example.aldy.difacademy.Model.QuizModel;
@@ -73,7 +73,7 @@ public class OpQuizActivity extends AppCompatActivity {
         adapter.notifyDataSetChanged();
     }
 
-    private void initView(){
+    private void initView() {
         tvNavbar = findViewById(R.id.tv_navbar);
         tvNavbar.setText("Add Quiz");
         clBack = findViewById(R.id.cl_icon1);
@@ -101,7 +101,7 @@ public class OpQuizActivity extends AppCompatActivity {
         rvQuiz = findViewById(R.id.rv_op_quiz);
     }
 
-    private void loadData(){
+    private void loadData() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference collRef = db.collection("BlendedCourse")
                 .document(blendedCourseDocId)
@@ -113,7 +113,7 @@ public class OpQuizActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         quizModels.clear();
-                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                             QuizModel quizModel = documentSnapshot.toObject(QuizModel.class);
                             quizModel.setDocumentId(documentSnapshot.getId());
                             quizModels.add(quizModel);
@@ -123,7 +123,7 @@ public class OpQuizActivity extends AppCompatActivity {
                 });
     }
 
-    private void setRecyclerView(){
+    private void setRecyclerView() {
         quizModels = new ArrayList<>();
         adapter = new OpQuizAdapter(this, quizModels);
         rvQuiz.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));

@@ -28,19 +28,16 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 
 public class ListNewsActivity extends AppCompatActivity {
+    private static final String TAG = "ListNewsActivity";
+    FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+    CollectionReference newsRef = firestore.collection("News");
+    DocumentSnapshot lastVisible;
+    boolean loadbaru;
     private ConstraintLayout clBack, clNavbar;
     private RecyclerView rvNews;
     private ArrayList<NewsModel> newsModels;
     private NewsAdapter adapter;
     private ProgressDialog progressDialog;
-
-    FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-    CollectionReference newsRef = firestore.collection("News");
-
-    DocumentSnapshot lastVisible;
-    boolean loadbaru;
-
-    private static final String TAG = "ListNewsActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

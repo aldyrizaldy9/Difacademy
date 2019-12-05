@@ -6,34 +6,6 @@ import android.os.Parcelable;
 import com.google.firebase.firestore.Exclude;
 
 public class VideoFreeModel implements Parcelable {
-    private String thumbnailUrl, videoYoutubeId, title, description, tagId, documentId, tag;
-    private long dateCreated;
-
-    public VideoFreeModel() {
-    }
-
-    public VideoFreeModel(String thumbnailUrl, String videoYoutubeId, String title, String description, String tagId, String tag, long dateCreated) {
-        this.thumbnailUrl = thumbnailUrl;
-        this.videoYoutubeId = videoYoutubeId;
-        this.title = title;
-        this.description = description;
-        this.tagId = tagId;
-        this.tag = tag;
-        this.dateCreated = dateCreated;
-    }
-
-
-    protected VideoFreeModel(Parcel in) {
-        thumbnailUrl = in.readString();
-        videoYoutubeId = in.readString();
-        title = in.readString();
-        description = in.readString();
-        tagId = in.readString();
-        documentId = in.readString();
-        tag = in.readString();
-        dateCreated = in.readLong();
-    }
-
     public static final Creator<VideoFreeModel> CREATOR = new Creator<VideoFreeModel>() {
         @Override
         public VideoFreeModel createFromParcel(Parcel in) {
@@ -45,6 +17,33 @@ public class VideoFreeModel implements Parcelable {
             return new VideoFreeModel[size];
         }
     };
+    private String thumbnailUrl, videoYoutubeId, title, description, tagId, documentId, tag;
+    private long dateCreated;
+
+    public VideoFreeModel() {
+    }
+
+
+    public VideoFreeModel(String thumbnailUrl, String videoYoutubeId, String title, String description, String tagId, String tag, long dateCreated) {
+        this.thumbnailUrl = thumbnailUrl;
+        this.videoYoutubeId = videoYoutubeId;
+        this.title = title;
+        this.description = description;
+        this.tagId = tagId;
+        this.tag = tag;
+        this.dateCreated = dateCreated;
+    }
+
+    protected VideoFreeModel(Parcel in) {
+        thumbnailUrl = in.readString();
+        videoYoutubeId = in.readString();
+        title = in.readString();
+        description = in.readString();
+        tagId = in.readString();
+        documentId = in.readString();
+        tag = in.readString();
+        dateCreated = in.readLong();
+    }
 
     @Override
     public int describeContents() {

@@ -1,5 +1,11 @@
 package com.example.aldy.difacademy.Activity;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -8,12 +14,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
-
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.example.aldy.difacademy.OpNotifGraduationFragment;
 import com.example.aldy.difacademy.OpNotifPaymentFragment;
@@ -39,7 +39,7 @@ public class OpNotifActivity extends AppCompatActivity {
         setContentView(R.layout.activity_op_notif);
 
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        if (firebaseUser != null){
+        if (firebaseUser != null) {
 
             initView();
             setViewPager();
@@ -50,14 +50,14 @@ public class OpNotifActivity extends AppCompatActivity {
     public void onBackPressed() {
         Intent intent = getIntent();
         String fromNotif = "" + intent.getStringExtra("fromNotif");
-        if (fromNotif.equals("ya")){
+        if (fromNotif.equals("ya")) {
             startActivity(new Intent(OpNotifActivity.this, OpMainActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
         } else {
             super.onBackPressed();
         }
     }
 
-    private void initView(){
+    private void initView() {
         tvNavbar = findViewById(R.id.tv_navbar);
         tvNavbar.setText("Notification");
         clBack = findViewById(R.id.cl_icon1);
@@ -74,7 +74,7 @@ public class OpNotifActivity extends AppCompatActivity {
         viewPager = findViewById(R.id.vp_op_notif);
     }
 
-    private void setViewPager(){
+    private void setViewPager() {
         final ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         viewPagerAdapter.addFragment(new OpNotifPaymentFragment(), "Payment");
         viewPagerAdapter.addFragment(new OpNotifGraduationFragment(), "Graduation");
@@ -83,17 +83,17 @@ public class OpNotifActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
     }
 
-    class ViewPagerAdapter extends FragmentPagerAdapter{
+    class ViewPagerAdapter extends FragmentPagerAdapter {
         private ArrayList<Fragment> fragments;
         private ArrayList<String> titles;
 
-        ViewPagerAdapter(FragmentManager fm){
+        ViewPagerAdapter(FragmentManager fm) {
             super(fm);
             this.fragments = new ArrayList<>();
             this.titles = new ArrayList<>();
         }
 
-        public void addFragment(Fragment fragment, String title){
+        public void addFragment(Fragment fragment, String title) {
             fragments.add(fragment);
             titles.add(title);
         }

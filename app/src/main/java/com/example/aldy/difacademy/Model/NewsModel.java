@@ -6,28 +6,6 @@ import android.os.Parcelable;
 import com.google.firebase.firestore.Exclude;
 
 public class NewsModel implements Parcelable {
-    private String newsId, judul, isi, linkfoto;
-    private long dateCreated;
-
-    public NewsModel() {
-    }
-
-    public NewsModel(String judul, String isi, String linkfoto, long dateCreated) {
-        this.judul = judul;
-        this.isi = isi;
-        this.linkfoto = linkfoto;
-        this.dateCreated = dateCreated;
-    }
-
-
-    protected NewsModel(Parcel in) {
-        newsId = in.readString();
-        judul = in.readString();
-        isi = in.readString();
-        linkfoto = in.readString();
-        dateCreated = in.readLong();
-    }
-
     public static final Creator<NewsModel> CREATOR = new Creator<NewsModel>() {
         @Override
         public NewsModel createFromParcel(Parcel in) {
@@ -39,6 +17,27 @@ public class NewsModel implements Parcelable {
             return new NewsModel[size];
         }
     };
+    private String newsId, judul, isi, linkfoto;
+    private long dateCreated;
+
+    public NewsModel() {
+    }
+
+
+    public NewsModel(String judul, String isi, String linkfoto, long dateCreated) {
+        this.judul = judul;
+        this.isi = isi;
+        this.linkfoto = linkfoto;
+        this.dateCreated = dateCreated;
+    }
+
+    protected NewsModel(Parcel in) {
+        newsId = in.readString();
+        judul = in.readString();
+        isi = in.readString();
+        linkfoto = in.readString();
+        dateCreated = in.readLong();
+    }
 
     @Exclude
     public String getNewsId() {

@@ -1,15 +1,8 @@
 package com.example.aldy.difacademy.Activity;
 
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.Bundle;
-import android.view.View;
-import android.view.WindowManager;
-import android.widget.ImageView;
 import android.widget.TextView;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.aldy.difacademy.Model.VideoFreeModel;
 import com.example.aldy.difacademy.R;

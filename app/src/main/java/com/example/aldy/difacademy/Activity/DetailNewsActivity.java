@@ -16,7 +16,7 @@ import com.example.aldy.difacademy.R;
 public class DetailNewsActivity extends AppCompatActivity {
     private TextView tvJudul, tvIsi;
     private ImageView imgThumbnail;
-    private ConstraintLayout clBack,clNavbar;
+    private ConstraintLayout clBack, clNavbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

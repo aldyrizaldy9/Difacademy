@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -31,15 +30,13 @@ import java.util.ArrayList;
  * A simple {@link Fragment} subclass.
  */
 public class OpNotifPaymentFragment extends Fragment {
+    private static final String TAG = "OpNotifPaymentFragment";
+    public static OpNotifPaymentAdapter OP_NOTIF_PAYMENT_ADAPTER;
     private View rootView;
     private RecyclerView rvNotifPayment;
     private ArrayList<PaymentModel> paymentModels;
-    public static OpNotifPaymentAdapter OP_NOTIF_PAYMENT_ADAPTER;
     private ProgressDialog progressDialog;
-
     private CollectionReference paymentRef;
-
-    private static final String TAG = "OpNotifPaymentFragment";
 
     public OpNotifPaymentFragment() {
         // Required empty public constructor

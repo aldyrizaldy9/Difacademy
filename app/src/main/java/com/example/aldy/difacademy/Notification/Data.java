@@ -15,7 +15,8 @@ public class Data {
         this.sented = sented;
     }
 
-    public Data(){}
+    public Data() {
+    }
 
     public String getUser() {
         return user;

@@ -4,7 +4,6 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -31,18 +30,14 @@ import static com.example.aldy.difacademy.Activity.LoginActivity.USERID_PREFS;
 
 public class EditProfileActivity extends AppCompatActivity {
 
+    private static final String TAG = "EditProfileActivity";
     private ConstraintLayout clBack, clSave, clNavbar;
     private EditText edtNama, edtNoWa;
     private ProgressDialog progressDialog;
-
     private CollectionReference userRef;
     private DocumentReference userDocRef;
-
     private UserModel userModel;
-
     private SharedPreferences sharedPreferences;
-
-    private static final String TAG = "EditProfileActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

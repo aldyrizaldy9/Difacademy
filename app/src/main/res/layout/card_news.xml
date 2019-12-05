@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cl_card_news_container"
     android:layout_width="match_parent"
-    android:background="?android:attr/selectableItemBackground"
     android:layout_height="100dp"
+    android:background="?android:attr/selectableItemBackground"
     android:orientation="vertical">
 
     <View
@@ -13,9 +13,9 @@
         android:layout_width="0dp"
         android:layout_height="1dp"
         android:background="@android:color/darker_gray"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
         android:id="@+id/img_c_berita_thumbnail"

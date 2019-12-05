@@ -46,11 +46,9 @@ public class OpBlendedCourseActivity extends AppCompatActivity {
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     CollectionReference blendedCourseRef = db.collection("BlendedCourse");
-
-    private ProgressDialog progressDialog;
-
     DocumentSnapshot lastVisible;
     boolean loadbaru;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

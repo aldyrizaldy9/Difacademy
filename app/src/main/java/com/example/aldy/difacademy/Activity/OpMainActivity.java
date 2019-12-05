@@ -40,24 +40,20 @@ import static com.example.aldy.difacademy.Activity.LoginActivity.SHARE_PREFS;
 import static com.example.aldy.difacademy.Activity.LoginActivity.USERID_PREFS;
 
 public class OpMainActivity extends AppCompatActivity {
-    private static final String TAG = "OpMainActivity";
-
-    private boolean doubleBackToExitPressedOnce = false;
-    private ConstraintLayout clLogout, clNotif;
-    private ImageView imgLogout, imgNotif;
-    private Button btnFree, btnOnline, btnBlended, btnBerita, btnTags;
-    private TextView tvNavbar;
-
-    private FirebaseFirestore firebaseFirestore;
-    private CollectionReference paymentRef, graduationRef;
-
     public static final int PHOTO_PICK_REQUEST_CODE = 1;
     public static final int ADD_REQUEST_CODE = 2;
     public static final int DELETE_REQUEST_CODE = 3;
     public static final int UPDATE_REQUEST_CODE = 4;
     public static final int WRITE_PERM_REQUEST_CODE = 5;
-
     public static final String ADMIN_USER_ID = "tgnQJBLhBKRzGBUnk58AtzjrZw12";
+    private static final String TAG = "OpMainActivity";
+    private boolean doubleBackToExitPressedOnce = false;
+    private ConstraintLayout clLogout, clNotif;
+    private ImageView imgLogout, imgNotif;
+    private Button btnFree, btnOnline, btnBlended, btnBerita, btnTags;
+    private TextView tvNavbar;
+    private FirebaseFirestore firebaseFirestore;
+    private CollectionReference paymentRef, graduationRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

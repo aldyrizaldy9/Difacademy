@@ -10,7 +10,7 @@
         android:id="@+id/include"
         layout="@layout/nav_bar"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/nav_bar_height"/>
+        android:layout_height="@dimen/nav_bar_height" />
 
     <ScrollView
         android:layout_width="0dp"

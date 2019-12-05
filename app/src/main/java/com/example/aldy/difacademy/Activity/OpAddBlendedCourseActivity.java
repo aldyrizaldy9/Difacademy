@@ -1,13 +1,5 @@
 package com.example.aldy.difacademy.Activity;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
 import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -16,7 +8,6 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -27,6 +18,14 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
 import com.example.aldy.difacademy.Model.BlendedCourseModel;
@@ -336,26 +335,18 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
 
     private boolean isDataComplete() {
         if (thereIsData) {
-            if (edtJudul.getText().equals("") ||
-                    edtDeskripsi.getText().equals("") ||
-                    edtHargaKelas.getText().equals("") ||
-                    tagCourseId.equals("") ||
-                    tagCourse.equals("")) {
-                return false;
-            } else {
-                return true;
-            }
+            return !edtJudul.getText().equals("") &&
+                    !edtDeskripsi.getText().equals("") &&
+                    !edtHargaKelas.getText().equals("") &&
+                    !tagCourseId.equals("") &&
+                    !tagCourse.equals("");
         } else {
-            if (edtJudul.getText().equals("") ||
-                    edtDeskripsi.getText().equals("") ||
-                    edtHargaKelas.getText().equals("") ||
-                    tagCourseId.equals("") ||
-                    tagCourse.equals("") ||
-                    imageUri == null) {
-                return false;
-            } else {
-                return true;
-            }
+            return !edtJudul.getText().equals("") &&
+                    !edtDeskripsi.getText().equals("") &&
+                    !edtHargaKelas.getText().equals("") &&
+                    !tagCourseId.equals("") &&
+                    !tagCourse.equals("") &&
+                    imageUri != null;
         }
     }
 

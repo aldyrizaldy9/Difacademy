@@ -6,6 +6,17 @@ import android.os.Parcelable;
 import com.google.firebase.firestore.Exclude;
 
 public class PaymentModel implements Parcelable {
+    public static final Creator<PaymentModel> CREATOR = new Creator<PaymentModel>() {
+        @Override
+        public PaymentModel createFromParcel(Parcel in) {
+            return new PaymentModel(in);
+        }
+
+        @Override
+        public PaymentModel[] newArray(int size) {
+            return new PaymentModel[size];
+        }
+    };
     private String userId, namaUser, email, noWa, blendedCourseId, namaKelas, namaBank, paymentId;
     private long dateCreated;
     private boolean isSeen, isPaid;
@@ -68,18 +79,6 @@ public class PaymentModel implements Parcelable {
     public int describeContents() {
         return 0;
     }
-
-    public static final Creator<PaymentModel> CREATOR = new Creator<PaymentModel>() {
-        @Override
-        public PaymentModel createFromParcel(Parcel in) {
-            return new PaymentModel(in);
-        }
-
-        @Override
-        public PaymentModel[] newArray(int size) {
-            return new PaymentModel[size];
-        }
-    };
 
     public String getUserId() {
         return userId;

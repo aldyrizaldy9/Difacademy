@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -42,12 +41,12 @@ import static com.example.aldy.difacademy.Activity.OpMainActivity.UPDATE_REQUEST
 
 public class OpAddNewsActivity extends AppCompatActivity {
 
+    private static final String TAG = "OpAddNewsActivity";
     private ConstraintLayout clAddPhoto, clBack;
     private ImageView imgThumbnail;
     private EditText edtJudul, edtIsi;
     private Button btnHapus, btnSimpan;
     private Uri imageUri;
-    private static final String TAG = "OpAddNewsActivity";
     private ProgressDialog progressDialog;
 
     private FirebaseStorage firebaseStorage;

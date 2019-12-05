@@ -1,11 +1,5 @@
 package com.example.aldy.difacademy.Activity;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -20,6 +14,12 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.aldy.difacademy.Model.QuizModel;
 import com.example.aldy.difacademy.R;
@@ -251,14 +251,14 @@ public class OpAddQuizActivity extends AppCompatActivity {
             Toast.makeText(this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
             return;
         }
-        
+
         String soal = edtSoal.getText().toString();
         String jwbA = edtA.getText().toString();
         String jwbB = edtB.getText().toString();
         String jwbC = edtC.getText().toString();
         String jwbD = edtD.getText().toString();
         String jwbE = edtE.getText().toString();
-        
+
         final QuizModel quizModel = new QuizModel(dateCreated, soal, jwbA, jwbB, jwbC, jwbD, jwbE, jawabanBenar);
         collRef.add(quizModel)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {

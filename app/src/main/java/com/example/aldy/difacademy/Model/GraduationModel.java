@@ -6,6 +6,17 @@ import android.os.Parcelable;
 import com.google.firebase.firestore.Exclude;
 
 public class GraduationModel implements Parcelable {
+    public static final Creator<GraduationModel> CREATOR = new Creator<GraduationModel>() {
+        @Override
+        public GraduationModel createFromParcel(Parcel in) {
+            return new GraduationModel(in);
+        }
+
+        @Override
+        public GraduationModel[] newArray(int size) {
+            return new GraduationModel[size];
+        }
+    };
     private String userId, namaUser, email, noWa, blendedCourseId, namaKelas, graduationId;
     private long dateCreated;
     private boolean isSeen, isDone;
@@ -64,18 +75,6 @@ public class GraduationModel implements Parcelable {
     public int describeContents() {
         return 0;
     }
-
-    public static final Creator<GraduationModel> CREATOR = new Creator<GraduationModel>() {
-        @Override
-        public GraduationModel createFromParcel(Parcel in) {
-            return new GraduationModel(in);
-        }
-
-        @Override
-        public GraduationModel[] newArray(int size) {
-            return new GraduationModel[size];
-        }
-    };
 
     public String getUserId() {
         return userId;

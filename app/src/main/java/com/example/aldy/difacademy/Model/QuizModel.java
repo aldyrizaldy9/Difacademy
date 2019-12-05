@@ -6,10 +6,22 @@ import android.os.Parcelable;
 import com.google.firebase.firestore.Exclude;
 
 public class QuizModel implements Parcelable {
+    public static final Creator<QuizModel> CREATOR = new Creator<QuizModel>() {
+        @Override
+        public QuizModel createFromParcel(Parcel in) {
+            return new QuizModel(in);
+        }
+
+        @Override
+        public QuizModel[] newArray(int size) {
+            return new QuizModel[size];
+        }
+    };
     long dateCreated;
     String soal, jwbA, jwbB, jwbC, jwbD, jwbE, jawabanBenar, documentId;
 
-    public QuizModel(){}
+    public QuizModel() {
+    }
 
     public QuizModel(long dateCreated, String soal, String jwbA, String jwbB, String jwbC, String jwbD, String jwbE, String jawabanBenar) {
         this.dateCreated = dateCreated;
@@ -51,18 +63,6 @@ public class QuizModel implements Parcelable {
     public int describeContents() {
         return 0;
     }
-
-    public static final Creator<QuizModel> CREATOR = new Creator<QuizModel>() {
-        @Override
-        public QuizModel createFromParcel(Parcel in) {
-            return new QuizModel(in);
-        }
-
-        @Override
-        public QuizModel[] newArray(int size) {
-            return new QuizModel[size];
-        }
-    };
 
     public long getDateCreated() {
         return dateCreated;
