@@ -263,6 +263,8 @@ public class MainActivity extends AppCompatActivity {
                         if (blendedCourseModel != null) {
                             blendedCourseModel.setDocumentId(documentSnapshot.getId());
 
+                            imgOngoing.setClipToOutline(true);
+
                             Glide.with(MainActivity.this).load(blendedCourseModel.getThumbnailUrl()).into(imgOngoing);
                             tvJudulOngoing.setText(blendedCourseModel.getTitle());
                             tvTagOngoing.setText(blendedCourseModel.getTag());

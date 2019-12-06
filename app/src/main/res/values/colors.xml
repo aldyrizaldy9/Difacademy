@@ -16,5 +16,8 @@
     <color name="navCream">#FDF9BC</color>
     <color name="backgroundCream">#FFFDE1</color>
 
+    <color name="garis">#dbdbdb</color>
+    <color name="biruGelap">#0E79B2</color>
+
     <!--    <color name="colorAccent">#FEAD47</color>-->
 </resources>

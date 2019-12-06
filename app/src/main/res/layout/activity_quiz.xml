@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#093145"
     tools:context=".Activity.QuizActivity">
 
     <!--    <include-->
@@ -14,20 +15,24 @@
 
     <TextView
         android:id="@+id/tv_quiz_nomor"
+        style="@style/Difacademy.Headline5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="32dp"
+        android:textColor="@android:color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="1/10" />
 
     <TextView
         android:id="@+id/tv_quiz_waktu"
+        style="@style/Difacademy.Headline5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="24dp"
+        android:textColor="@android:color/white"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="10:00" />
@@ -35,8 +40,9 @@
     <ScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="24dp"
         android:layout_marginBottom="16dp"
+        android:background="@android:color/white"
         android:fillViewport="true"
         app:layout_constraintBottom_toTopOf="@+id/img_quiz_prev"
         app:layout_constraintEnd_toEndOf="parent"
@@ -50,10 +56,12 @@
 
             <TextView
                 android:id="@+id/tv_quiz_soal"
+                style="@style/Difacademy.Headline6"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="32dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -63,9 +71,9 @@
                 android:id="@+id/rg_quiz"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="32dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -74,6 +82,7 @@
 
                 <RadioButton
                     android:id="@+id/rb_quiz_jawaban_a"
+                    style="@style/Difacademy.Headline6"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="16dp"
@@ -84,6 +93,7 @@
 
                 <RadioButton
                     android:id="@+id/rb_quiz_jawaban_b"
+                    style="@style/Difacademy.Headline6"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="16dp"
@@ -94,6 +104,7 @@
 
                 <RadioButton
                     android:id="@+id/rb_quiz_jawaban_c"
+                    style="@style/Difacademy.Headline6"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="16dp"
@@ -104,6 +115,7 @@
 
                 <RadioButton
                     android:id="@+id/rb_quiz_jawaban_d"
+                    style="@style/Difacademy.Headline6"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="16dp"
@@ -114,6 +126,7 @@
 
                 <RadioButton
                     android:id="@+id/rb_quiz_jawaban_e"
+                    style="@style/Difacademy.Headline6"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingLeft="8dp"
@@ -133,7 +146,7 @@
         android:layout_height="60dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
-        android:src="@drawable/ic_arrow_forward"
+        android:src="@drawable/ic_arrow_forward_white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -143,7 +156,7 @@
         android:layout_height="60dp"
         android:layout_marginStart="16dp"
         android:layout_marginBottom="16dp"
-        android:src="@drawable/ic_arrow_back"
+        android:src="@drawable/ic_arrow_back_white"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

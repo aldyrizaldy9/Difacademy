@@ -87,8 +87,7 @@
             android:screenOrientation="sensorPortrait" />
         <activity
             android:name=".Activity.WatchYoutubeVideoActivity"
-            android:configChanges="orientation|keyboard|keyboardHidden|screenSize|screenLayout|uiMode"
-            android:screenOrientation="sensorPortrait" />
+            android:configChanges="orientation|keyboard|keyboardHidden|screenSize|screenLayout|uiMode"/>
         <activity
             android:name=".Activity.ListBlendedCourseActivity"
             android:screenOrientation="sensorPortrait" />

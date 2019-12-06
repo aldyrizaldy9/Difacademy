@@ -246,9 +246,9 @@ public class QuizActivity extends AppCompatActivity {
 
         if (nomor == totalNomor) {
             imgPrev.setVisibility(View.INVISIBLE);
-            imgNextOrFinish.setImageResource(R.drawable.ic_check);
+            imgNextOrFinish.setImageResource(R.drawable.ic_check_white);
         } else {
-            imgNextOrFinish.setImageResource(R.drawable.ic_arrow_forward);
+            imgNextOrFinish.setImageResource(R.drawable.ic_arrow_forward_white);
         }
 
         if (nomor == 1) {
@@ -324,9 +324,10 @@ public class QuizActivity extends AppCompatActivity {
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-//                dialog.cancel();
                 if (nilai >= 80) {
                     getUserData();
+                } else {
+                    onBackPressed();
                 }
             }
         });

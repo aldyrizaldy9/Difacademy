@@ -72,7 +72,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="Lampiran"
-                android:textColor="@android:color/holo_blue_bright"
+                android:textColor="@color/biruGelap"
                 app:layout_constraintEnd_toEndOf="@+id/tv_detail_course_detail"
                 app:layout_constraintStart_toStartOf="@+id/tv_detail_course_detail"
                 app:layout_constraintTop_toBottomOf="@+id/tv_detail_course_detail" />
@@ -81,8 +81,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_detail_course_list_video"
-        android:layout_width="@dimen/icon_btn_width"
-        android:layout_height="@dimen/icon_btn_height"
+        android:layout_width="58dp"
+        android:layout_height="58dp"
         android:background="@drawable/btn_detail_course_video"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -91,8 +91,8 @@
             android:id="@+id/img_detail_course_list_video"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginBottom="12dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:srcCompat="@drawable/ic_menu" />

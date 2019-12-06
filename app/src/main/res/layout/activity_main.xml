@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
     android:focusable="false"
+    android:background="@android:color/white"
     tools:context=".Activity.MainActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -34,6 +35,7 @@
     <ScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:overScrollMode="never"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
@@ -74,11 +76,12 @@
                     android:layout_height="0dp"
                     android:layout_marginTop="16dp"
                     android:layout_marginBottom="16dp"
+                    android:background="@drawable/bg_img_round"
+                    android:src="@color/colorAccent"
                     app:layout_constraintBottom_toBottomOf="@+id/cl_main_ongoing_container"
                     app:layout_constraintDimensionRatio="16:9"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/cl_main_ongoing_container"
-                    app:srcCompat="@color/colorAccent" />
+                    app:layout_constraintTop_toTopOf="@+id/cl_main_ongoing_container" />
 
                 <TextView
                     android:id="@+id/tv_main_ongoing_judul"
@@ -113,12 +116,14 @@
                 android:id="@+id/img_main_banner"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:scaleType="centerCrop"
+                android:background="@android:color/white"
+                android:elevation="1dp"
+                android:padding="20dp"
+                android:src="@drawable/logo_aplikasi_trans"
                 app:layout_constraintDimensionRatio="16:9"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@color/design_default_color_primary" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/tv_main_kelas_diikuti"
@@ -139,7 +144,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 android:text="Semua"
-                android:textColor="@android:color/holo_blue_bright"
+                android:textColor="@color/biruGelap"
                 android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/tv_main_kelas_diikuti" />
@@ -218,6 +223,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
+                android:backgroundTint="@color/backgroundHijau"
                 android:text="lainnya"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="@id/rv_main_berita"
