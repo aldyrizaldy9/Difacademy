@@ -22,8 +22,10 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.aldy.difacademy.Model.BlendedVideoModel;
 import com.example.aldy.difacademy.R;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
@@ -128,15 +130,15 @@ public class OpAddBlendedCourseVideoActivity extends AppCompatActivity {
                 videoUri = data.getData();
                 tvFileName.setText(getFileName(videoUri));
                 btnUpload.setVisibility(View.VISIBLE);
+                btnUpload.setText("UPLOAD");
             }
         }
     }
 
     private void getVideoFromGallery() {
-        Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_PICK);
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("video/*");
-        startActivityForResult(intent, PICK_VIDEO_REQUEST_CODE);
+        startActivityForResult(Intent.createChooser(intent, "Pilih Video"), PICK_VIDEO_REQUEST_CODE);
     }
 
     private String getFileName(Uri uri) {
@@ -165,7 +167,11 @@ public class OpAddBlendedCourseVideoActivity extends AppCompatActivity {
         btnPilihFile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getVideoFromGallery();
+                if (isUploading) {
+                    showCancelUploadDialog();
+                } else {
+                    getVideoFromGallery();
+                }
             }
         });
         btnHapus.setOnClickListener(new View.OnClickListener() {
@@ -271,6 +277,20 @@ public class OpAddBlendedCourseVideoActivity extends AppCompatActivity {
                 pbUploadProses.setProgress((int) progress);
                 tvUploadProses.setText("Uploading " + (int) progress + "%");
             }
+        }).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                if (task.isCanceled()) {
+                    videoUri = null;
+                    tvFileName.setText("Belum Pilih Video");
+                    tvUploadProses.setText("");
+                    pbUploadProses.setProgress(0);
+                    isUploading = false;
+                    btnUpload.setVisibility(View.GONE);
+                    btnUpload.setText("UPLOAD");
+                    btnUpload.setEnabled(true);
+                }
+            }
         });
     }
 
@@ -349,14 +369,6 @@ public class OpAddBlendedCourseVideoActivity extends AppCompatActivity {
                 });
     }
 
-    private void cancelUpload() {
-        videoUri = null;
-        tvFileName.setText("Belum Pilih Video");
-        btnSimpan.setText("SIMPAN");
-        isUploading = false;
-        uploadTask.cancel();
-    }
-
     private void showHapusDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Apakah anda yakin ingin menghapus video ini?");
@@ -388,7 +400,9 @@ public class OpAddBlendedCourseVideoActivity extends AppCompatActivity {
         builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                cancelUpload();
+//                cancelUpload();
+                uploadTask.cancel();
+                btnUpload.setEnabled(false);
                 dialog.cancel();
             }
         });

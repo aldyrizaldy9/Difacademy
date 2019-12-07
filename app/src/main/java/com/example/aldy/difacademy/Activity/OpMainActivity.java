@@ -60,6 +60,7 @@ public class OpMainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_op_main);
 
+        checkAdmin();
         initView();
         onClick();
     }
@@ -88,6 +89,14 @@ public class OpMainActivity extends AppCompatActivity {
                         docRef.set(token);
                     }
                 });
+    }
+
+    private void checkAdmin(){
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (!firebaseUser.getUid().equals(ADMIN_USER_ID)){
+            Intent intent = new Intent(OpMainActivity.this, LoginActivity.class);
+            startActivity(intent);
+        }
     }
 
     private void initView() {

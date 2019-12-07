@@ -135,7 +135,9 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == WRITE_PERM_REQUEST_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                showKonfirmasiDialog();
+                Intent intent = new Intent(Intent.ACTION_PICK);
+                intent.setType("image/*");
+                startActivityForResult(intent, PHOTO_PICK_REQUEST_CODE);
             }
         }
     }
@@ -310,7 +312,11 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
         btnSimpan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showKonfirmasiDialog();
+                if (isDataComplete()) {
+                    showKonfirmasiDialog();
+                } else {
+                    Toast.makeText(OpAddBlendedCourseActivity.this, getString(R.string.data_not_complete), Toast.LENGTH_SHORT).show();
+                }
             }
         });
         btnHapus.setOnClickListener(new View.OnClickListener() {
@@ -411,9 +417,11 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
                         Intent intent;
                         if (addVideo) {
                             intent = new Intent(OpAddBlendedCourseActivity.this, OpBlendedCourseVideoActivity.class);
+                            addVideo = false;
                             startActivity(intent);
                         } else if (addQuiz) {
                             intent = new Intent(OpAddBlendedCourseActivity.this, OpQuizActivity.class);
+                            addQuiz = false;
                             startActivity(intent);
                         } else {
                             intent = new Intent(OpAddBlendedCourseActivity.this, OpBlendedCourseActivity.class);
@@ -456,11 +464,14 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
                     public void onSuccess(DocumentReference documentReference) {
                         blendedCourseDocId = documentReference.getId();
                         Intent intent;
+                        thereIsData = true;
                         if (addVideo) {
                             intent = new Intent(OpAddBlendedCourseActivity.this, OpBlendedCourseVideoActivity.class);
+                            addVideo = false;
                             startActivity(intent);
                         } else if (addQuiz) {
                             intent = new Intent(OpAddBlendedCourseActivity.this, OpQuizActivity.class);
+                            addQuiz = false;
                             startActivity(intent);
                         } else {
                             intent = new Intent(OpAddBlendedCourseActivity.this, OpBlendedCourseActivity.class);

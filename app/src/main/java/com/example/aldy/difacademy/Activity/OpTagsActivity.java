@@ -89,6 +89,8 @@ public class OpTagsActivity extends AppCompatActivity {
                 if (tag.length() != 0) {
                     edtAddTag.setText("");
                     tambahTag(tag);
+                } else {
+                    Toast.makeText(OpTagsActivity.this, getString(R.string.data_not_complete), Toast.LENGTH_SHORT).show();
                 }
             }
         });
