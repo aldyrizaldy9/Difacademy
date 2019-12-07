@@ -40,13 +40,12 @@ public class ListVideoCourseActivity extends AppCompatActivity {
     public static String BLENDED_COURSE_ID;
     public static boolean ISPAID = false;
     private TextView tvNavbar;
-    private ConstraintLayout clBack, clNavbar;
+    private ConstraintLayout clBack, clNavbar, clQuiz;
     private ImageView imgBack;
     private RecyclerView rvListVideoCourse;
     private ArrayList<BlendedVideoModel> blendedVideoModels;
     private BlendedCourseVideoAdapter blendedCourseVideoAdapter;
     private ProgressDialog progressDialog;
-    private Button btnQuiz;
     private String docId;
     private SharedPreferences sharedPreferences;
     private FirebaseFirestore firebaseFirestore;
@@ -72,7 +71,7 @@ public class ListVideoCourseActivity extends AppCompatActivity {
         imgBack = findViewById(R.id.img_icon1);
         imgBack.setImageResource(R.drawable.ic_arrow_back);
         rvListVideoCourse = findViewById(R.id.rv_list_video_course);
-        btnQuiz = findViewById(R.id.btn_list_video_course_quiz);
+        clQuiz = findViewById(R.id.cl_list_video_course_quiz);
         progressDialog = new ProgressDialog(this);
         sharedPreferences = getSharedPreferences(SHARE_PREFS, MODE_PRIVATE);
         Intent intent = getIntent();
@@ -86,7 +85,7 @@ public class ListVideoCourseActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
-        btnQuiz.setOnClickListener(new View.OnClickListener() {
+        clQuiz.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (ISPAID) {
@@ -129,7 +128,7 @@ public class ListVideoCourseActivity extends AppCompatActivity {
                             blendedVideoModels.add(blendedVideoModel);
                         }
                         progressDialog.dismiss();
-                        btnQuiz.setVisibility(View.VISIBLE);
+                        clQuiz.setVisibility(View.VISIBLE);
                         blendedCourseVideoAdapter.notifyDataSetChanged();
                     }
                 })

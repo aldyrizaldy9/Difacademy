@@ -104,11 +104,13 @@ public class WatchVideoBlendedActivity extends AppCompatActivity {
 
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
-            scrollView.setVisibility(View.GONE);
+            tvJudul.setVisibility(View.GONE);
+            tvDeskripsi.setVisibility(View.GONE);
         } else {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-            scrollView.setVisibility(View.VISIBLE);
+            tvJudul.setVisibility(View.VISIBLE);
+            tvDeskripsi.setVisibility(View.VISIBLE);
         }
     }
 }

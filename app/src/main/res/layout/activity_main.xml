@@ -117,7 +117,6 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:background="@android:color/white"
-                android:elevation="1dp"
                 android:padding="20dp"
                 android:src="@drawable/logo_aplikasi_trans"
                 app:layout_constraintDimensionRatio="16:9"
@@ -229,6 +228,15 @@
                 app:layout_constraintLeft_toLeftOf="@id/rv_main_berita"
                 app:layout_constraintRight_toRightOf="@id/rv_main_berita"
                 app:layout_constraintTop_toBottomOf="@id/rv_main_berita" />
+
+            <View
+                android:id="@+id/view2"
+                android:layout_width="wrap_content"
+                android:layout_height="3dp"
+                android:background="@color/biruGelap"
+                app:layout_constraintBottom_toBottomOf="@+id/img_main_banner"
+                app:layout_constraintEnd_toEndOf="@+id/img_main_banner"
+                app:layout_constraintStart_toStartOf="@+id/img_main_banner" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

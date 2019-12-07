@@ -50,21 +50,25 @@ public class DetailCourseActivity extends AppCompatActivity {
     }
 
     private void onClick() {
-        tvLampiran.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    Intent intent = new Intent(Intent.ACTION_VIEW);
-                    intent.setData(Uri.parse(blendedCourseModel.getgDriveUrl()));
-                    startActivity(intent);
-                } catch (ActivityNotFoundException e) {
-                    Intent intent = new Intent(Intent.ACTION_VIEW);
-                    String urlNew = "http://" + blendedCourseModel.getgDriveUrl();
-                    intent.setData(Uri.parse(urlNew));
-                    startActivity(intent);
+        if (blendedCourseModel.getgDriveUrl() == null || blendedCourseModel.getgDriveUrl().equals("")){
+            tvLampiran.setVisibility(View.GONE);
+        } else {
+            tvLampiran.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        Intent intent = new Intent(Intent.ACTION_VIEW);
+                        intent.setData(Uri.parse(blendedCourseModel.getgDriveUrl()));
+                        startActivity(intent);
+                    } catch (ActivityNotFoundException e) {
+                        Intent intent = new Intent(Intent.ACTION_VIEW);
+                        String urlNew = "http://" + blendedCourseModel.getgDriveUrl();
+                        intent.setData(Uri.parse(urlNew));
+                        startActivity(intent);
+                    }
                 }
-            }
-        });
+            });
+        }
         clListVideo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
