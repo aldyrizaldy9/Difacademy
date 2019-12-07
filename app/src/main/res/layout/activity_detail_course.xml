@@ -51,6 +51,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/tags"
+                android:textColor="@color/colorAccent"
                 app:layout_constraintEnd_toEndOf="@+id/tv_detail_course_judul"
                 app:layout_constraintStart_toStartOf="@+id/tv_detail_course_judul"
                 app:layout_constraintTop_toBottomOf="@+id/tv_detail_course_judul" />

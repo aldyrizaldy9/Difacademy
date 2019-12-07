@@ -5,7 +5,7 @@
     android:id="@+id/cl_c_op"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="8dp"
+    android:layout_marginBottom="16dp"
     android:minHeight="80dp"
     android:orientation="vertical">
 
@@ -57,6 +57,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:text="@string/tags"
+        android:textColor="@color/colorAccent"
         app:layout_constraintBottom_toTopOf="@+id/tv_c_op_deskripsi"
         app:layout_constraintEnd_toStartOf="@+id/cl_c_op_delete"
         app:layout_constraintStart_toEndOf="@+id/img_c_op_thumbnail"

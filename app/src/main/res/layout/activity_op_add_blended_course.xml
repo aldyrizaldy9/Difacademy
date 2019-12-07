@@ -32,7 +32,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:srcCompat="@android:color/holo_blue_bright" />
+                android:src="@android:color/black"/>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/cl_op_add_blended_video_materi"
@@ -235,6 +235,11 @@
                 android:id="@+id/cl_op_add_blended_course_add_photo"
                 android:layout_width="@dimen/icon_btn_width"
                 android:layout_height="@dimen/icon_btn_width"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/btn_login"
+                android:backgroundTint="@android:color/white"
+                android:elevation="8dp"
                 app:layout_constraintBottom_toBottomOf="@+id/img_op_add_blended_thumbnail"
                 app:layout_constraintEnd_toEndOf="@+id/img_op_add_blended_thumbnail">
 
