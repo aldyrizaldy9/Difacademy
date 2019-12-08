@@ -6,7 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="16dp"
-    android:minHeight="80dp"
     android:orientation="vertical">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -80,7 +79,7 @@
 
     <ImageView
         android:id="@+id/img_c_op_thumbnail"
-        android:layout_width="0dp"
+        android:layout_width="140dp"
         android:layout_height="0dp"
         android:scaleType="centerCrop"
         android:visibility="visible"

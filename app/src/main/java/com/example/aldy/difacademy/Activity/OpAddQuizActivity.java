@@ -1,5 +1,6 @@
 package com.example.aldy.difacademy.Activity;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -61,6 +62,8 @@ public class OpAddQuizActivity extends AppCompatActivity {
     long dateCreated = 0;
     int index;
 
+    ProgressDialog pd;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,6 +76,10 @@ public class OpAddQuizActivity extends AppCompatActivity {
     }
 
     private void initView() {
+        pd = new ProgressDialog(this);
+        pd.setMessage("Loading...");
+        pd.setCancelable(false);
+
         tvNavbar = findViewById(R.id.tv_navbar);
         tvNavbar.setText("Detail Quiz");
         clBack = findViewById(R.id.cl_icon1);
@@ -186,7 +193,7 @@ public class OpAddQuizActivity extends AppCompatActivity {
                         edtC.getText().toString().equals("") ||
                         edtD.getText().toString().equals("") ||
                         edtE.getText().toString().equals("") ||
-                        jawabanBenar.equals("")) {
+                        jawabanBenar.equals("") || spnJawaban.getSelectedItemPosition() == 0) {
                     Toast.makeText(OpAddQuizActivity.this, getString(R.string.data_not_complete), Toast.LENGTH_SHORT).show();
                 } else {
                     showKonfirmasiDialog();
@@ -201,6 +208,7 @@ public class OpAddQuizActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
+                        pd.dismiss();
                         Intent intent = new Intent(OpAddQuizActivity.this, OpQuizActivity.class);
                         intent.putExtra("index", index);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -210,7 +218,8 @@ public class OpAddQuizActivity extends AppCompatActivity {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-
+                        pd.dismiss();
+                        Toast.makeText(OpAddQuizActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -229,6 +238,7 @@ public class OpAddQuizActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
+                        pd.dismiss();
                         Intent intent = new Intent(OpAddQuizActivity.this, OpQuizActivity.class);
                         intent.putExtra("index", index);
                         intent.putExtra("quiz_model", quizModel);
@@ -239,6 +249,7 @@ public class OpAddQuizActivity extends AppCompatActivity {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
+                        pd.dismiss();
                         Toast.makeText(OpAddQuizActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -264,6 +275,7 @@ public class OpAddQuizActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
+                        pd.dismiss();
                         Intent intent = new Intent(OpAddQuizActivity.this, OpQuizActivity.class);
                         intent.putExtra("quiz_model", quizModel);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -273,6 +285,7 @@ public class OpAddQuizActivity extends AppCompatActivity {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
+                        pd.dismiss();
                         Toast.makeText(OpAddQuizActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -287,6 +300,7 @@ public class OpAddQuizActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
+                pd.show();
                 hapus();
             }
         });
@@ -310,6 +324,7 @@ public class OpAddQuizActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
+                pd.show();
                 if (thereIsData) {
                     edit();
                 } else {

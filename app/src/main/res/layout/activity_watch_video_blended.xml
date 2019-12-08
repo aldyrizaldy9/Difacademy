@@ -15,7 +15,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/pv_watch_video_blended">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -32,7 +32,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/pv_watch_video_blended"
+                app:layout_constraintTop_toTopOf="parent"
                 tools:text="judul" />
 
             <TextView
@@ -49,14 +49,15 @@
                 app:layout_constraintTop_toBottomOf="@+id/tv_watch_video_blended_judul"
                 tools:text="deskripsi" />
 
-            <com.google.android.exoplayer2.ui.PlayerView
-                android:id="@+id/pv_watch_video_blended"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:layout_editor_absoluteX="6dp" />
-
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
+
+    <com.google.android.exoplayer2.ui.PlayerView
+        android:id="@+id/pv_watch_video_blended"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

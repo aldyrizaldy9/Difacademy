@@ -28,10 +28,11 @@
             <ImageView
                 android:id="@+id/img_op_add_blended_thumbnail"
                 android:layout_width="0dp"
-                android:layout_height="200dp"
+                android:layout_height="0dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintDimensionRatio="16:9"
                 android:src="@android:color/black"/>
 
             <androidx.constraintlayout.widget.ConstraintLayout

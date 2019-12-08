@@ -43,7 +43,7 @@ public class OpQuizAdapter extends RecyclerView.Adapter<OpQuizAdapter.ViewHolder
         holder.tvDeskripsi.setVisibility(View.GONE);
         holder.imgThumbnail.setVisibility(View.GONE);
         holder.tvTag.setVisibility(View.GONE);
-        holder.tvJudul.setText(quizModel.getSoal());
+        holder.tvJudul.setText(position + 1 + ". " + quizModel.getSoal());
         holder.clContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

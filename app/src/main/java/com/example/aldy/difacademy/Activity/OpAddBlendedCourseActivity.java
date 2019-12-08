@@ -357,6 +357,20 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
     }
 
     private void uploadImageToFirebase(Uri imageUri) {
+        FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
+        if (!thumbnailUrl.equals("")) {
+            StorageReference deleteRef = firebaseStorage.getReferenceFromUrl(thumbnailUrl);
+            deleteRef.delete()
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(OpAddBlendedCourseActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                    });
+        }
+
+
         final StorageReference ref = firebaseStorage.getReference().child("BlendedCourse/" + UUID.randomUUID().toString());
         ref.putFile(imageUri)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {

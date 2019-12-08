@@ -1,5 +1,6 @@
 package com.example.aldy.difacademy.Activity;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -53,7 +54,7 @@ public class OpAddBlendedCourseVideoActivity extends AppCompatActivity {
 
     EditText edtJudul, edtDeskripsi;
     ProgressBar pbUploadProses;
-    Button btnPilihFile, btnHapus, btnSimpan, btnUpload;
+    Button btnPilihFile, btnHapus, btnSimpan, btnCancelUpload;
     TextView tvUploadProses, tvFileName;
 
     BlendedVideoModel blendedVideoModel;
@@ -70,6 +71,8 @@ public class OpAddBlendedCourseVideoActivity extends AppCompatActivity {
     UploadTask uploadTask;
     int index;
 
+    ProgressDialog pd;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,6 +84,9 @@ public class OpAddBlendedCourseVideoActivity extends AppCompatActivity {
     }
 
     private void initView() {
+        pd = new ProgressDialog(this);
+        pd.setCancelable(false);
+
         tvNavbar = findViewById(R.id.tv_navbar);
         tvNavbar.setText("Detail Video Materi");
         clBack = findViewById(R.id.cl_icon1);
@@ -100,7 +106,7 @@ public class OpAddBlendedCourseVideoActivity extends AppCompatActivity {
         btnPilihFile = findViewById(R.id.btn_op_add_blended_video_pilih_file);
         btnHapus = findViewById(R.id.btn_op_add_blended_video_hapus);
         btnSimpan = findViewById(R.id.btn_op_add_blended_video_simpan);
-        btnUpload = findViewById(R.id.btn_op_add_blended_video_upload);
+        btnCancelUpload = findViewById(R.id.btn_op_add_blended_video_upload);
         tvFileName = findViewById(R.id.tv_op_add_blended_video_pilih_file);
         tvUploadProses = findViewById(R.id.tv_op_add_blended_video_upload_process);
     }
@@ -129,8 +135,6 @@ public class OpAddBlendedCourseVideoActivity extends AppCompatActivity {
             if (requestCode == PICK_VIDEO_REQUEST_CODE) {
                 videoUri = data.getData();
                 tvFileName.setText(getFileName(videoUri));
-                btnUpload.setVisibility(View.VISIBLE);
-                btnUpload.setText("UPLOAD");
             }
         }
     }
@@ -184,14 +188,10 @@ public class OpAddBlendedCourseVideoActivity extends AppCompatActivity {
                 }
             }
         });
-        btnUpload.setOnClickListener(new View.OnClickListener() {
+        btnCancelUpload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (isUploading) {
-                    showCancelUploadDialog();
-                } else {
-                    uploadvideo();
-                }
+                showCancelUploadDialog();
             }
         });
         btnSimpan.setOnClickListener(new View.OnClickListener() {
@@ -207,7 +207,7 @@ public class OpAddBlendedCourseVideoActivity extends AppCompatActivity {
                             showTambahDialog();
                         }
                     } else {
-                        if (edtJudul.getText().toString().equals("") || edtDeskripsi.getText().toString().equals("") || videoUri == null || urlVideo.equals("")) {
+                        if (edtJudul.getText().toString().equals("") || edtDeskripsi.getText().toString().equals("") || videoUri == null) {
                             Toast.makeText(OpAddBlendedCourseVideoActivity.this, getString(R.string.data_not_complete), Toast.LENGTH_SHORT).show();
                         } else {
                             showTambahDialog();
@@ -234,6 +234,7 @@ public class OpAddBlendedCourseVideoActivity extends AppCompatActivity {
 
         final StorageReference storageReference = firebaseStorage.getReference()
                 .child("VideoMateriBlended/" + UUID.randomUUID().toString());
+
         uploadTask = storageReference.putFile(videoUri);
         uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
@@ -245,8 +246,15 @@ public class OpAddBlendedCourseVideoActivity extends AppCompatActivity {
                                 urlVideo = uri.toString();
                                 isUploading = false;
                                 pbUploadProses.setProgress(0);
-                                tvUploadProses.setText("Upload Complete");
-                                btnUpload.setVisibility(View.GONE);
+                                tvUploadProses.setText("Loading...");
+                                btnCancelUpload.setVisibility(View.GONE);
+                                btnSimpan.setVisibility(View.GONE);
+
+                                if (thereIsData) {
+                                    edit();
+                                } else {
+                                    tambah();
+                                }
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {
@@ -260,7 +268,16 @@ public class OpAddBlendedCourseVideoActivity extends AppCompatActivity {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
+                tvUploadProses.setText("");
+                pbUploadProses.setProgress(0);
                 isUploading = false;
+                btnCancelUpload.setVisibility(View.GONE);
+
+                btnCancelUpload.setEnabled(true);
+                edtDeskripsi.setEnabled(true);
+                edtJudul.setEnabled(true);
+                btnSimpan.setEnabled(true);
+                btnHapus.setEnabled(true);
                 Toast.makeText(OpAddBlendedCourseVideoActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
             }
         }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
@@ -271,7 +288,6 @@ public class OpAddBlendedCourseVideoActivity extends AppCompatActivity {
 
                 if (progress >= 0) {
                     isUploading = true;
-                    btnUpload.setText("CANCEL UPLOAD");
                 }
 
                 pbUploadProses.setProgress((int) progress);
@@ -286,9 +302,13 @@ public class OpAddBlendedCourseVideoActivity extends AppCompatActivity {
                     tvUploadProses.setText("");
                     pbUploadProses.setProgress(0);
                     isUploading = false;
-                    btnUpload.setVisibility(View.GONE);
-                    btnUpload.setText("UPLOAD");
-                    btnUpload.setEnabled(true);
+                    btnCancelUpload.setVisibility(View.GONE);
+
+                    edtDeskripsi.setEnabled(true);
+                    edtJudul.setEnabled(true);
+                    btnCancelUpload.setEnabled(true);
+                    btnSimpan.setEnabled(true);
+                    btnHapus.setEnabled(true);
                 }
             }
         });
@@ -310,6 +330,7 @@ public class OpAddBlendedCourseVideoActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
+                        Toast.makeText(OpAddBlendedCourseVideoActivity.this, "Video berhasil ditambahkan", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(OpAddBlendedCourseVideoActivity.this, OpBlendedCourseVideoActivity.class);
                         intent.putExtra("blended_video_model", blendedVideoModel);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -334,6 +355,8 @@ public class OpAddBlendedCourseVideoActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
+                        pd.dismiss();
+                        Toast.makeText(OpAddBlendedCourseVideoActivity.this, "Video berhasil disimpan", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(OpAddBlendedCourseVideoActivity.this, OpBlendedCourseVideoActivity.class);
                         intent.putExtra("blended_video_model", blendedVideoModel);
                         intent.putExtra("index", index);
@@ -344,6 +367,7 @@ public class OpAddBlendedCourseVideoActivity extends AppCompatActivity {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
+                        pd.dismiss();
                         Toast.makeText(OpAddBlendedCourseVideoActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -355,6 +379,8 @@ public class OpAddBlendedCourseVideoActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
+                        pd.dismiss();
+                        Toast.makeText(OpAddBlendedCourseVideoActivity.this, "Video berhasil dihapus", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(OpAddBlendedCourseVideoActivity.this, OpBlendedCourseVideoActivity.class);
                         intent.putExtra("index", index);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -364,6 +390,7 @@ public class OpAddBlendedCourseVideoActivity extends AppCompatActivity {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
+                        pd.dismiss();
                         Toast.makeText(OpAddBlendedCourseVideoActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -377,6 +404,8 @@ public class OpAddBlendedCourseVideoActivity extends AppCompatActivity {
         builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                pd.setMessage("Menghapus...");
+                pd.show();
                 hapus();
                 dialog.cancel();
             }
@@ -400,9 +429,11 @@ public class OpAddBlendedCourseVideoActivity extends AppCompatActivity {
         builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-//                cancelUpload();
                 uploadTask.cancel();
-                btnUpload.setEnabled(false);
+                Toast.makeText(OpAddBlendedCourseVideoActivity.this, "Cancelling...", Toast.LENGTH_SHORT).show();
+                btnCancelUpload.setEnabled(false);
+                btnSimpan.setEnabled(false);
+                btnHapus.setEnabled(false);
                 dialog.cancel();
             }
         });
@@ -425,10 +456,15 @@ public class OpAddBlendedCourseVideoActivity extends AppCompatActivity {
         builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if (thereIsData) {
+                if (thereIsData && videoUri == null){
+                    pd.setMessage("Loading...");
+                    pd.show();
                     edit();
                 } else {
-                    tambah();
+                    edtDeskripsi.setEnabled(false);
+                    edtJudul.setEnabled(false);
+                    btnCancelUpload.setVisibility(View.VISIBLE);
+                    uploadvideo();
                 }
                 dialog.cancel();
             }
@@ -446,9 +482,10 @@ public class OpAddBlendedCourseVideoActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
         if (isUploading) {
             showCancelUploadDialog();
+        } else {
+            super.onBackPressed();
         }
     }
 
