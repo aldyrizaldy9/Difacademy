@@ -116,7 +116,7 @@ public class OpAddQuizActivity extends AppCompatActivity {
         ArrayAdapter<String> spnArrayAdapter = new ArrayAdapter<String>(OpAddQuizActivity.this, R.layout.support_simple_spinner_dropdown_item, listJawabanBenar) {
             @Override
             public boolean isEnabled(int position) {
-                return true;
+                return position != 0;
             }
 
             @Override

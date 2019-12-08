@@ -157,7 +157,7 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
         final ArrayAdapter<String> spnArrayAdapterTag = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, tagList) {
             @Override
             public boolean isEnabled(int position) {
-                return true;
+                return position != 0;
             }
 
             @Override
