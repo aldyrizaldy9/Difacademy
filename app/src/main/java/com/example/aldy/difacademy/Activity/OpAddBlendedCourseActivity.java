@@ -365,45 +365,44 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             Toast.makeText(OpAddBlendedCourseActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
-                            return;
+                        }
+                    });
+        } else {
+            final StorageReference ref = firebaseStorage.getReference().child("BlendedCourse/" + UUID.randomUUID().toString());
+            ref.putFile(imageUri)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            ref.getDownloadUrl()
+                                    .addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                        @Override
+                                        public void onSuccess(Uri uri) {
+                                            thumbnailUrl = uri.toString();
+                                            if (thereIsData) {
+                                                edit();
+                                            } else {
+                                                tambah();
+                                            }
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            pd.dismiss();
+                                            Toast.makeText(OpAddBlendedCourseActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            pd.dismiss();
+                            Toast.makeText(OpAddBlendedCourseActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
                         }
                     });
         }
 
-
-        final StorageReference ref = firebaseStorage.getReference().child("BlendedCourse/" + UUID.randomUUID().toString());
-        ref.putFile(imageUri)
-                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        ref.getDownloadUrl()
-                                .addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                    @Override
-                                    public void onSuccess(Uri uri) {
-                                        thumbnailUrl = uri.toString();
-                                        if (thereIsData) {
-                                            edit();
-                                        } else {
-                                            tambah();
-                                        }
-                                    }
-                                })
-                                .addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        pd.dismiss();
-                                        Toast.makeText(OpAddBlendedCourseActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        pd.dismiss();
-                        Toast.makeText(OpAddBlendedCourseActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
-                    }
-                });
     }
 
     private void edit() {

@@ -1,8 +1,10 @@
 package com.example.aldy.difacademy.Activity;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -41,6 +43,9 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        if(!isNetworkConnected()){
+            Toast.makeText(this, "Tidak ada koneksi internet!", Toast.LENGTH_SHORT).show();
+        }
         auth = FirebaseAuth.getInstance();
         firebaseUser = auth.getCurrentUser();
         if (firebaseUser != null) {
@@ -171,5 +176,11 @@ public class LoginActivity extends AppCompatActivity {
                 doubleBackToExitPressedOnce = false;
             }
         }, 2000);
+    }
+
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
     }
 }
