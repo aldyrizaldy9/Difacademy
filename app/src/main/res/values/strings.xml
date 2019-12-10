@@ -12,7 +12,7 @@
     <string name="tambah">tambah</string>
     <string name="buka_kelas">buka kelas</string>
 
-    <string name="no_internet">Check Your Network Connection</string>
+    <string name="no_internet">Tidak ada koneksi internet!</string>
     <string name="link_not_valid">Link Tidak Valid</string>
     <string name="data_not_complete">Data Tidak Lengkap</string>
     <string name="tambah_berita">Tambah Berita</string>

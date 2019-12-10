@@ -1,8 +1,10 @@
 package com.example.aldy.difacademy.Activity;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -165,7 +167,11 @@ public class OpAddNewsActivity extends AppCompatActivity {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                deleteImageFromFirebaseStorage();
+                if (!isNetworkConnected()) {
+                    Toast.makeText(OpAddNewsActivity.this, "Tidak ada koneksi internet!", Toast.LENGTH_SHORT).show();
+                } else {
+                    deleteImageFromFirebaseStorage();
+                }
             }
         });
 
@@ -239,10 +245,14 @@ public class OpAddNewsActivity extends AppCompatActivity {
 
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    if (newsModel == null) {
-                        uploadImageToFirebaseStorage();
+                    if (!isNetworkConnected()) {
+                        Toast.makeText(OpAddNewsActivity.this, "Tidak ada koneksi internet!", Toast.LENGTH_SHORT).show();
                     } else {
-                        updateImageToFirebaseStorage();
+                        if (newsModel == null) {
+                            uploadImageToFirebaseStorage();
+                        } else {
+                            updateImageToFirebaseStorage();
+                        }
                     }
                 }
             });
@@ -409,4 +419,9 @@ public class OpAddNewsActivity extends AppCompatActivity {
         }
     }
 
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
+    }
 }

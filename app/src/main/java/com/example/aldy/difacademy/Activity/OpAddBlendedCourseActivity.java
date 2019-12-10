@@ -2,10 +2,12 @@ package com.example.aldy.difacademy.Activity;
 
 import android.Manifest;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -258,54 +260,62 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
         clAddVideo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                pd.show();
-                addVideo = true;
-                addQuiz = false;
+                if (!isNetworkConnected()) {
+                    Toast.makeText(OpAddBlendedCourseActivity.this, "Tidak ada koneksi internet!", Toast.LENGTH_SHORT).show();
+                } else {
+                    pd.show();
+                    addVideo = true;
+                    addQuiz = false;
 
-                if (!thumbnailUrl.equals("")) {
-                    thereIsData = true;
-                }
+                    if (!thumbnailUrl.equals("")) {
+                        thereIsData = true;
+                    }
 
-                if (isDataComplete()) {
-                    if (thereIsData) {
-                        if (imageUri == null) {
-                            edit();
+                    if (isDataComplete()) {
+                        if (thereIsData) {
+                            if (imageUri == null) {
+                                edit();
+                            } else {
+                                uploadImageToFirebase(imageUri);
+                            }
                         } else {
                             uploadImageToFirebase(imageUri);
                         }
                     } else {
-                        uploadImageToFirebase(imageUri);
+                        pd.dismiss();
+                        Toast.makeText(OpAddBlendedCourseActivity.this, getString(R.string.data_not_complete), Toast.LENGTH_SHORT).show();
                     }
-                } else {
-                    pd.dismiss();
-                    Toast.makeText(OpAddBlendedCourseActivity.this, getString(R.string.data_not_complete), Toast.LENGTH_SHORT).show();
                 }
             }
         });
         clAddQuiz.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                pd.show();
-                addQuiz = true;
-                addVideo = false;
+                if (!isNetworkConnected()) {
+                    Toast.makeText(OpAddBlendedCourseActivity.this, "Tidak ada koneksi interne!", Toast.LENGTH_SHORT).show();
+                } else {
+                    pd.show();
+                    addQuiz = true;
+                    addVideo = false;
 
-                if (!thumbnailUrl.equals("")) {
-                    thereIsData = true;
-                }
+                    if (!thumbnailUrl.equals("")) {
+                        thereIsData = true;
+                    }
 
-                if (isDataComplete()) {
-                    if (thereIsData) {
-                        if (imageUri == null) {
-                            edit();
+                    if (isDataComplete()) {
+                        if (thereIsData) {
+                            if (imageUri == null) {
+                                edit();
+                            } else {
+                                uploadImageToFirebase(imageUri);
+                            }
                         } else {
                             uploadImageToFirebase(imageUri);
                         }
                     } else {
-                        uploadImageToFirebase(imageUri);
+                        pd.dismiss();
+                        Toast.makeText(OpAddBlendedCourseActivity.this, getString(R.string.data_not_complete), Toast.LENGTH_SHORT).show();
                     }
-                } else {
-                    pd.dismiss();
-                    Toast.makeText(OpAddBlendedCourseActivity.this, getString(R.string.data_not_complete), Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -663,9 +673,12 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
         builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-                pd.show();
-                hapus();
+                if (!isNetworkConnected()) {
+                    Toast.makeText(OpAddBlendedCourseActivity.this, "Tidak ada koneksi intenet!", Toast.LENGTH_SHORT).show();
+                } else {
+                    pd.show();
+                    hapus();
+                }
             }
         });
 
@@ -687,16 +700,19 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
         builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-                pd.show();
-                if (thereIsData) {
-                    if (imageUri != null) {
-                        uploadImageToFirebase(imageUri);
-                    } else {
-                        edit();
-                    }
+                if (!isNetworkConnected()) {
+                    Toast.makeText(OpAddBlendedCourseActivity.this, "Tidak ada koneksi internet!", Toast.LENGTH_SHORT).show();
                 } else {
-                    uploadImageToFirebase(imageUri);
+                    pd.show();
+                    if (thereIsData) {
+                        if (imageUri != null) {
+                            uploadImageToFirebase(imageUri);
+                        } else {
+                            edit();
+                        }
+                    } else {
+                        uploadImageToFirebase(imageUri);
+                    }
                 }
             }
         });
@@ -709,5 +725,11 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
         });
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
+    }
+
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
     }
 }

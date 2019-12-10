@@ -1,9 +1,11 @@
 package com.example.aldy.difacademy.Activity;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.OpenableColumns;
@@ -404,10 +406,13 @@ public class OpAddBlendedCourseVideoActivity extends AppCompatActivity {
         builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                pd.setMessage("Menghapus...");
-                pd.show();
-                hapus();
-                dialog.cancel();
+                if (!isNetworkConnected()) {
+                    Toast.makeText(OpAddBlendedCourseVideoActivity.this, "Tidak ada koneksi internet!", Toast.LENGTH_SHORT).show();
+                } else {
+                    pd.setMessage("Menghapus...");
+                    pd.show();
+                    hapus();
+                }
             }
         });
 
@@ -429,12 +434,15 @@ public class OpAddBlendedCourseVideoActivity extends AppCompatActivity {
         builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                uploadTask.cancel();
-                Toast.makeText(OpAddBlendedCourseVideoActivity.this, "Cancelling...", Toast.LENGTH_SHORT).show();
-                btnCancelUpload.setEnabled(false);
-                btnSimpan.setEnabled(false);
-                btnHapus.setEnabled(false);
-                dialog.cancel();
+                if (!isNetworkConnected()) {
+                    Toast.makeText(OpAddBlendedCourseVideoActivity.this, "Tidak ada koneksi internet", Toast.LENGTH_SHORT).show();
+                } else {
+                    uploadTask.cancel();
+                    Toast.makeText(OpAddBlendedCourseVideoActivity.this, "Cancelling...", Toast.LENGTH_SHORT).show();
+                    btnCancelUpload.setEnabled(false);
+                    btnSimpan.setEnabled(false);
+                    btnHapus.setEnabled(false);
+                }
             }
         });
 
@@ -456,17 +464,20 @@ public class OpAddBlendedCourseVideoActivity extends AppCompatActivity {
         builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if (thereIsData && videoUri == null){
-                    pd.setMessage("Loading...");
-                    pd.show();
-                    edit();
+                if (!isNetworkConnected()) {
+                    Toast.makeText(OpAddBlendedCourseVideoActivity.this, "Tidak ada koneksi internet!", Toast.LENGTH_SHORT).show();
                 } else {
-                    edtDeskripsi.setEnabled(false);
-                    edtJudul.setEnabled(false);
-                    btnCancelUpload.setVisibility(View.VISIBLE);
-                    uploadvideo();
+                    if (thereIsData && videoUri == null) {
+                        pd.setMessage("Loading...");
+                        pd.show();
+                        edit();
+                    } else {
+                        edtDeskripsi.setEnabled(false);
+                        edtJudul.setEnabled(false);
+                        btnCancelUpload.setVisibility(View.VISIBLE);
+                        uploadvideo();
+                    }
                 }
-                dialog.cancel();
             }
         });
 
@@ -495,5 +506,11 @@ public class OpAddBlendedCourseVideoActivity extends AppCompatActivity {
         if (isUploading) {
             uploadTask.cancel();
         }
+    }
+
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
     }
 }

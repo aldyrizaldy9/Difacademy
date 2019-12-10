@@ -1,8 +1,10 @@
 package com.example.aldy.difacademy.Activity;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -145,7 +147,11 @@ public class OpNotifPaymentActivity extends AppCompatActivity {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                getUserDocId();
+                if (!isNetworkConnected()) {
+                    Toast.makeText(OpNotifPaymentActivity.this, "Tidak ada koneksi internet!", Toast.LENGTH_SHORT).show();
+                } else {
+                    getUserDocId();
+                }
             }
         });
 
@@ -264,5 +270,11 @@ public class OpNotifPaymentActivity extends AppCompatActivity {
                     }
                 });
 
+    }
+
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
     }
 }

@@ -1,8 +1,10 @@
 package com.example.aldy.difacademy.Activity;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -133,12 +135,16 @@ public class ChangePasswordActivity extends AppCompatActivity {
         builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if (!edtNewPass.getText().toString().equals(edtNewPassConfirm.getText().toString())) {
-                    Toast.makeText(ChangePasswordActivity.this, "Kata sandi baru tidak cocok", Toast.LENGTH_SHORT).show();
-                } else if (edtNewPass.length() < 8) {
-                    Toast.makeText(ChangePasswordActivity.this, "Kata sandi baru minimal 8 karakter", Toast.LENGTH_SHORT).show();
+                if (!isNetworkConnected()) {
+                    Toast.makeText(ChangePasswordActivity.this, "Tidak ada koneksi internet!", Toast.LENGTH_SHORT).show();
                 } else {
-                    updatePassword();
+                    if (!edtNewPass.getText().toString().equals(edtNewPassConfirm.getText().toString())) {
+                        Toast.makeText(ChangePasswordActivity.this, "Kata sandi baru tidak cocok", Toast.LENGTH_SHORT).show();
+                    } else if (edtNewPass.length() < 8) {
+                        Toast.makeText(ChangePasswordActivity.this, "Kata sandi baru minimal 8 karakter", Toast.LENGTH_SHORT).show();
+                    } else {
+                        updatePassword();
+                    }
                 }
             }
         });
@@ -151,5 +157,11 @@ public class ChangePasswordActivity extends AppCompatActivity {
         });
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
+    }
+
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
     }
 }

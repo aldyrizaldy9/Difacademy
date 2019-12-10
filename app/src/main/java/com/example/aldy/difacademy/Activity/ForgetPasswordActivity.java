@@ -1,6 +1,8 @@
 package com.example.aldy.difacademy.Activity;
 
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -49,10 +51,14 @@ public class ForgetPasswordActivity extends AppCompatActivity {
         btnLupaSandi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (edtEmail.getText().length() != 0) {
-                    resetPassword(edtEmail.getText().toString());
+                if (!isNetworkConnected()) {
+                    Toast.makeText(ForgetPasswordActivity.this, "Tidak ada koneksi internet!", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(ForgetPasswordActivity.this, "Email tidak boleh kosong", Toast.LENGTH_SHORT).show();
+                    if (edtEmail.getText().length() != 0) {
+                        resetPassword(edtEmail.getText().toString());
+                    } else {
+                        Toast.makeText(ForgetPasswordActivity.this, "Email tidak boleh kosong", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });
@@ -76,5 +82,11 @@ public class ForgetPasswordActivity extends AppCompatActivity {
                     public void onFailure(@NonNull Exception e) {
                     }
                 });
+    }
+
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
     }
 }

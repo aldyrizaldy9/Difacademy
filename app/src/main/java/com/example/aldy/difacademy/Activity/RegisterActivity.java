@@ -1,7 +1,9 @@
 package com.example.aldy.difacademy.Activity;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -64,15 +66,19 @@ public class RegisterActivity extends AppCompatActivity {
         imgDaftar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (checkText()) {
-                    pd.setCancelable(false);
-                    pd.setMessage("Memuat...");
-                    pd.show();
-                    String nama = edtNama.getText().toString();
-                    String email = edtEmail.getText().toString();
-                    String wa = edtWa.getText().toString();
-                    String sandi = edtSandi.getText().toString();
-                    register(nama, email, wa, sandi);
+                if (!isNetworkConnected()) {
+                    Toast.makeText(RegisterActivity.this, "Tidak ada koneksi internet!", Toast.LENGTH_SHORT).show();
+                } else {
+                    if (checkText()) {
+                        pd.setCancelable(false);
+                        pd.setMessage("Memuat...");
+                        pd.show();
+                        String nama = edtNama.getText().toString();
+                        String email = edtEmail.getText().toString();
+                        String wa = edtWa.getText().toString();
+                        String sandi = edtSandi.getText().toString();
+                        register(nama, email, wa, sandi);
+                    }
                 }
             }
         });
@@ -149,5 +155,11 @@ public class RegisterActivity extends AppCompatActivity {
                         }
                     }
                 });
+    }
+
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
     }
 }

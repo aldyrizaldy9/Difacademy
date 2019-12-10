@@ -1,8 +1,10 @@
 package com.example.aldy.difacademy.Activity;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -132,7 +134,11 @@ public class OpNotifGradActivity extends AppCompatActivity {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                getGraduationDocuments();
+                if (!isNetworkConnected()) {
+                    Toast.makeText(OpNotifGradActivity.this, "Tidak ada koneksi internet!", Toast.LENGTH_SHORT).show();
+                } else {
+                    getGraduationDocuments();
+                }
             }
         });
 
@@ -200,6 +206,12 @@ public class OpNotifGradActivity extends AppCompatActivity {
                     }
                 });
 
+    }
+
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
     }
 
 }

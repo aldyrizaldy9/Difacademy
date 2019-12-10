@@ -1,6 +1,8 @@
 package com.example.aldy.difacademy.Activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -363,6 +365,11 @@ public class MainActivity extends AppCompatActivity {
                         Log.d(TAG, e.toString());
                     }
                 });
+    }
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
     }
 
 }

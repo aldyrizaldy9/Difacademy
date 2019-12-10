@@ -1,9 +1,11 @@
 package com.example.aldy.difacademy.Activity;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -299,9 +301,12 @@ public class OpAddQuizActivity extends AppCompatActivity {
         builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-                pd.show();
-                hapus();
+                if (!isNetworkConnected()) {
+                    Toast.makeText(OpAddQuizActivity.this, "Tidak ada koneksi internet!", Toast.LENGTH_SHORT).show();
+                } else {
+                    pd.show();
+                    hapus();
+                }
             }
         });
 
@@ -323,12 +328,15 @@ public class OpAddQuizActivity extends AppCompatActivity {
         builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-                pd.show();
-                if (thereIsData) {
-                    edit();
+                if (!isNetworkConnected()) {
+                    Toast.makeText(OpAddQuizActivity.this, "Tidak ada koneksi internet!", Toast.LENGTH_SHORT).show();
                 } else {
-                    tambah();
+                    pd.show();
+                    if (thereIsData) {
+                        edit();
+                    } else {
+                        tambah();
+                    }
                 }
             }
         });
@@ -341,5 +349,11 @@ public class OpAddQuizActivity extends AppCompatActivity {
         });
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
+    }
+
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
     }
 }

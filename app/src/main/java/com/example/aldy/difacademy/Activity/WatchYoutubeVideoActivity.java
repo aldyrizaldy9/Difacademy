@@ -1,8 +1,11 @@
 package com.example.aldy.difacademy.Activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.aldy.difacademy.Model.VideoFreeModel;
 import com.example.aldy.difacademy.R;
@@ -59,5 +62,11 @@ public class WatchYoutubeVideoActivity extends YouTubeBaseActivity {
         };
 
         youTubePlayerView.initialize(YOUTUBE_API_KEY, onInitializedListener);
+    }
+
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
     }
 }

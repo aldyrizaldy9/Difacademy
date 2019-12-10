@@ -1,10 +1,13 @@
 package com.example.aldy.difacademy.Activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -47,7 +50,7 @@ public class OngoingCourseActivity extends AppCompatActivity {
         clNavbar = findViewById(R.id.cl_navbar);
         clNavbar.setBackgroundColor(getResources().getColor(R.color.navCream));
         tvNavbar = findViewById(R.id.tv_navbar);
-        tvNavbar.setText("OnGoing Course");
+        tvNavbar.setText("Ongoing Course");
         clBack = findViewById(R.id.cl_icon1);
         clBack.setVisibility(View.VISIBLE);
         clBack.setOnClickListener(new View.OnClickListener() {
@@ -102,5 +105,11 @@ public class OngoingCourseActivity extends AppCompatActivity {
         public CharSequence getPageTitle(int position) {
             return titles.get(position);
         }
+    }
+
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
     }
 }

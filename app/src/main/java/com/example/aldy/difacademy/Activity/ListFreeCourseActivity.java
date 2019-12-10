@@ -1,7 +1,9 @@
 package com.example.aldy.difacademy.Activity;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -254,6 +256,7 @@ public class ListFreeCourseActivity extends AppCompatActivity {
                         pd.dismiss();
                     }
                 });
+
     }
 
     private void loadTagsData() {
@@ -308,14 +311,22 @@ public class ListFreeCourseActivity extends AppCompatActivity {
                     tag = tags.get(position);
                     clSearchContainer.setVisibility(View.GONE);
                     loadFromTag = true;
-                    loadVideoFreeWithSameTag();
+                    if (!isNetworkConnected()) {
+                        Toast.makeText(ListFreeCourseActivity.this, "Tidak ada koneksi internet!", Toast.LENGTH_SHORT).show();
+                    } else {
+                        loadVideoFreeWithSameTag();
+                    }
                 } else if (firstClick) {
                     firstClick = false;
                 } else {
                     tag = "";
                     clSearchContainer.setVisibility(View.GONE);
                     loadFromTag = false;
-                    loadVideoFreeData();
+                    if (!isNetworkConnected()) {
+                        Toast.makeText(ListFreeCourseActivity.this, "Tidak ada koneksi internet!", Toast.LENGTH_SHORT).show();
+                    } else {
+                        loadVideoFreeData();
+                    }
                 }
             }
 
@@ -323,5 +334,11 @@ public class ListFreeCourseActivity extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
+    }
+
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
     }
 }

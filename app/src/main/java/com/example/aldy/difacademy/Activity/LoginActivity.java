@@ -43,9 +43,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if(!isNetworkConnected()){
-            Toast.makeText(this, "Tidak ada koneksi internet!", Toast.LENGTH_SHORT).show();
-        }
+
         auth = FirebaseAuth.getInstance();
         firebaseUser = auth.getCurrentUser();
         if (firebaseUser != null) {
@@ -71,6 +69,9 @@ public class LoginActivity extends AppCompatActivity {
             initView();
             onClick();
         }
+        if (!isNetworkConnected()) {
+            Toast.makeText(this, "Tidak ada koneksi internet!", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void initView() {
@@ -82,12 +83,18 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void onClick() {
+
         imgLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (edtEmail.getText().length() != 0 || edtKataSandi.getText().length() != 0) {
-                    login(edtEmail.getText().toString(), edtKataSandi.getText().toString());
+                if (!isNetworkConnected()) {
+                    Toast.makeText(LoginActivity.this, "Tidak ada koneksi internet!", Toast.LENGTH_SHORT).show();
+                } else {
+                    if (edtEmail.getText().length() != 0 || edtKataSandi.getText().length() != 0) {
+                        login(edtEmail.getText().toString(), edtKataSandi.getText().toString());
+                    }
                 }
+
             }
         });
         clDaftar.setOnClickListener(new View.OnClickListener() {

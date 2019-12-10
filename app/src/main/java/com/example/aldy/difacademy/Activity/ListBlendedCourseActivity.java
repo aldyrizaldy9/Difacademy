@@ -1,7 +1,9 @@
 package com.example.aldy.difacademy.Activity;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -254,6 +256,7 @@ public class ListBlendedCourseActivity extends AppCompatActivity {
                         pd.dismiss();
                     }
                 });
+
     }
 
     private void loadTagsData() {
@@ -304,18 +307,28 @@ public class ListBlendedCourseActivity extends AppCompatActivity {
         spnTags.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
                 if (position != 0) {
                     tag = tags.get(position);
                     clSearchContainer.setVisibility(View.GONE);
                     loadFromTag = true;
-                    loadBlendedCourseWithTheSameTag();
+                    if (!isNetworkConnected()) {
+                        Toast.makeText(ListBlendedCourseActivity.this, "Tidak ada koneksi internet!", Toast.LENGTH_SHORT).show();
+                    } else {
+                        loadBlendedCourseWithTheSameTag();
+                    }
                 } else if (firstClick) {
                     firstClick = false;
                 } else {
                     tag = "";
                     clSearchContainer.setVisibility(View.GONE);
                     loadFromTag = false;
-                    loadBlendedCourseData();
+                    if (!isNetworkConnected()) {
+                        Toast.makeText(ListBlendedCourseActivity.this, "Tidak ada koneksi internet!", Toast.LENGTH_SHORT).show();
+                    } else {
+                        loadBlendedCourseData();
+                    }
+
                 }
             }
 
@@ -323,5 +336,11 @@ public class ListBlendedCourseActivity extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
+    }
+
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
     }
 }

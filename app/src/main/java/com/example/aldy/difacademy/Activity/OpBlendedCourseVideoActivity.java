@@ -1,10 +1,13 @@
 package com.example.aldy.difacademy.Activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -128,5 +131,10 @@ public class OpBlendedCourseVideoActivity extends AppCompatActivity {
         adapter = new OpBlendedCourseVideoAdapter(this, blendedVideoModels);
         rvVideoMateri.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         rvVideoMateri.setAdapter(adapter);
+    }
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
     }
 }

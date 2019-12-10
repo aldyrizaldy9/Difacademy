@@ -1,8 +1,10 @@
 package com.example.aldy.difacademy.Activity;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -146,12 +148,16 @@ public class EditProfileActivity extends AppCompatActivity {
         builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if (edtNama.length() == 0 || edtNoWa.length() == 0) {
-                    Toast.makeText(EditProfileActivity.this, "Form tidak boleh kosong", Toast.LENGTH_SHORT).show();
-                } else if (edtNoWa.length() < 8) {
-                    Toast.makeText(EditProfileActivity.this, "Nomor Whatsapp minimal 8 digit", Toast.LENGTH_SHORT).show();
+                if (!isNetworkConnected()) {
+                    Toast.makeText(EditProfileActivity.this, "Tidak ada koneksi internet!", Toast.LENGTH_SHORT).show();
                 } else {
-                    updateProfile();
+                    if (edtNama.length() == 0 || edtNoWa.length() == 0) {
+                        Toast.makeText(EditProfileActivity.this, "Form tidak boleh kosong", Toast.LENGTH_SHORT).show();
+                    } else if (edtNoWa.length() < 8) {
+                        Toast.makeText(EditProfileActivity.this, "Nomor Whatsapp minimal 8 digit", Toast.LENGTH_SHORT).show();
+                    } else {
+                        updateProfile();
+                    }
                 }
             }
         });
@@ -166,4 +172,9 @@ public class EditProfileActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
+    }
 }

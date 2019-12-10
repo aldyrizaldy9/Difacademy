@@ -1,12 +1,13 @@
 package com.example.aldy.difacademy.Activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -112,5 +113,11 @@ public class WatchVideoBlendedActivity extends AppCompatActivity {
             tvJudul.setVisibility(View.VISIBLE);
             tvDeskripsi.setVisibility(View.VISIBLE);
         }
+    }
+
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
     }
 }

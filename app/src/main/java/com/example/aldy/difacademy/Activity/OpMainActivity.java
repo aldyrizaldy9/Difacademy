@@ -1,8 +1,10 @@
 package com.example.aldy.difacademy.Activity;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -91,9 +93,9 @@ public class OpMainActivity extends AppCompatActivity {
                 });
     }
 
-    private void checkAdmin(){
+    private void checkAdmin() {
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        if (!firebaseUser.getUid().equals(ADMIN_USER_ID)){
+        if (!firebaseUser.getUid().equals(ADMIN_USER_ID)) {
             Intent intent = new Intent(OpMainActivity.this, LoginActivity.class);
             startActivity(intent);
         }
@@ -267,5 +269,11 @@ public class OpMainActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
     }
 }

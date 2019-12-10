@@ -1,6 +1,8 @@
 package com.example.aldy.difacademy.Activity;
 
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -87,12 +89,16 @@ public class OpTagsActivity extends AppCompatActivity {
         btnTambah.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String tag = edtAddTag.getText().toString();
-                if (tag.length() != 0) {
-                    edtAddTag.setText("");
-                    tambahTag(tag);
+                if (!isNetworkConnected()) {
+                    Toast.makeText(OpTagsActivity.this, "Tidak ada koneksi internet!", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(OpTagsActivity.this, getString(R.string.data_not_complete), Toast.LENGTH_SHORT).show();
+                    String tag = edtAddTag.getText().toString();
+                    if (tag.length() != 0) {
+                        edtAddTag.setText("");
+                        tambahTag(tag);
+                    } else {
+                        Toast.makeText(OpTagsActivity.this, getString(R.string.data_not_complete), Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });
@@ -155,5 +161,11 @@ public class OpTagsActivity extends AppCompatActivity {
                         Toast.makeText(OpTagsActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
                     }
                 });
+    }
+
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
     }
 }

@@ -1,7 +1,9 @@
 package com.example.aldy.difacademy.Activity;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -223,5 +225,10 @@ public class OpFreeCourseActivity extends AppCompatActivity {
                         Toast.makeText(OpFreeCourseActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
                     }
                 });
+    }
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
     }
 }
