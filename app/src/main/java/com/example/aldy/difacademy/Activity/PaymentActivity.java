@@ -55,7 +55,8 @@ public class PaymentActivity extends AppCompatActivity {
     private TextView tvNavBar, tvTataCaraBni, tvTataCaraBri;
     private Button btnBayarBni, btnBayarBri;
     private boolean isBniActive = false, isBriActive = false;
-    private String userId, blendedCourseId, namaUser, email, noWa, namaKelas, namaBank;
+
+    private String userId, blendedCourseId, namaUser, email, noWa, namaKelas, hargaKelas, namaBank;
     private ProgressDialog progressDialog;
     private SharedPreferences sharedPreferences;
     private FirebaseFirestore firebaseFirestore;
@@ -200,7 +201,7 @@ public class PaymentActivity extends AppCompatActivity {
     private void sendPaymentDetailsToAdmin() {
 
         long dateCreated = Timestamp.now().getSeconds();
-        PaymentModel paymentModel = new PaymentModel(userId, namaUser, email, noWa, blendedCourseId, namaKelas, namaBank, dateCreated, false, false);
+        PaymentModel paymentModel = new PaymentModel(userId, namaUser, email, noWa, blendedCourseId, namaKelas, hargaKelas, namaBank, dateCreated, false, false);
 
         CollectionReference paymentRef = firebaseFirestore.collection("Payment");
         paymentRef
@@ -210,7 +211,7 @@ public class PaymentActivity extends AppCompatActivity {
                     public void onSuccess(DocumentReference documentReference) {
                         progressDialog.dismiss();
                         sendNotificationPayment();
-                        Toast.makeText(PaymentActivity.this, "Detail pembelian telah dikirim ke operator", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(PaymentActivity.this, "Detail pembelian telah dikirim ke admin", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -301,6 +302,7 @@ public class PaymentActivity extends AppCompatActivity {
                         BlendedCourseModel blendedCourseModel = documentSnapshot.toObject(BlendedCourseModel.class);
                         if (blendedCourseModel != null) {
                             namaKelas = blendedCourseModel.getTitle();
+                            hargaKelas = blendedCourseModel.getHarga();
                         }
                         sendPaymentDetailsToAdmin();
                     }

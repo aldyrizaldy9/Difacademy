@@ -18,7 +18,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.aldy.difacademy.Model.GraduationModel;
-import com.example.aldy.difacademy.Model.UserModel;
 import com.example.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -31,15 +30,16 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.HashMap;
 import java.util.Map;
 
+import de.cketti.mailto.EmailIntentBuilder;
+
 public class OpNotifGradActivity extends AppCompatActivity {
     private static final String TAG = "OpNotifPaymentActivity";
     private TextView tvNavBar, tvNama, tvEmail, tvNoWa, tvNamaKelas;
     private ConstraintLayout clBack;
     private ImageView imgBack;
-    private Button btnHubungi, btnTandai;
+    private Button btnTandai;
     private GraduationModel graduationModel;
     private ProgressDialog progressDialog;
-    private UserModel userModel;
     private FirebaseFirestore firebaseFirestore;
 
     @Override
@@ -63,7 +63,6 @@ public class OpNotifGradActivity extends AppCompatActivity {
         clBack.setVisibility(View.VISIBLE);
         imgBack = findViewById(R.id.img_icon1);
         imgBack.setImageResource(R.drawable.ic_arrow_back);
-        btnHubungi = findViewById(R.id.btn_op_notif_grad_hubungi);
         btnTandai = findViewById(R.id.btn_op_notif_grad_tandai);
         progressDialog = new ProgressDialog(this);
         firebaseFirestore = FirebaseFirestore.getInstance();
@@ -85,19 +84,29 @@ public class OpNotifGradActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
-        btnHubungi.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_VIEW);
-                String urlNew = "http://wa.me/" + "0" + graduationModel.getNoWa().substring(1);
-                intent.setData(Uri.parse(urlNew));
-                startActivity(intent);
-            }
-        });
         btnTandai.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 konfirmasiTandai();
+            }
+        });
+        tvEmail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = EmailIntentBuilder.from(OpNotifGradActivity.this)
+                        .to(graduationModel.getEmail())
+                        .subject("Kelulusan Course Taman Pelajar")
+                        .build();
+                startActivity(intent);
+            }
+        });
+        tvNoWa.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                String urlNew = "http://wa.me/" + "+62" + graduationModel.getNoWa().substring(1);
+                intent.setData(Uri.parse(urlNew));
+                startActivity(intent);
             }
         });
     }

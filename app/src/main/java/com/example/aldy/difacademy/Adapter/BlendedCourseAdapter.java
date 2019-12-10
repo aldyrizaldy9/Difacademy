@@ -42,7 +42,8 @@ public class BlendedCourseAdapter extends RecyclerView.Adapter<BlendedCourseAdap
         holder.tvJudul.setText(blendedCourseModel.getTitle());
         holder.tvTag.setText(blendedCourseModel.getTag());
         //Nanti tvEpisode diganti dengan jumlah video pada blended course
-        holder.tvEpisode.setVisibility(View.GONE);
+        String harga = "Rp" + blendedCourseModel.getHarga();
+        holder.tvEpisode.setText(harga);
         Glide.with(context)
                 .load(blendedCourseModel.getThumbnailUrl())
                 .into(holder.imgThumbnail);
@@ -72,7 +73,7 @@ public class BlendedCourseAdapter extends RecyclerView.Adapter<BlendedCourseAdap
             tvJudul = itemView.findViewById(R.id.tv_card_video_thumbnail_judul);
             tvTag = itemView.findViewById(R.id.tv_card_video_thumbnail_tag);
             clContainer = itemView.findViewById(R.id.cl_card_video_thumbnail_container);
-            tvEpisode = itemView.findViewById(R.id.tv_card_video_thumbnail_status_ongoing);
+            tvEpisode = itemView.findViewById(R.id.tv_card_video_thumbnail_harga);
         }
     }
 }

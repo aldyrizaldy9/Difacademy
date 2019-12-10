@@ -50,4 +50,6 @@ dependencies {
     implementation files('libs/YouTubeAndroidPlayerApi.jar')
     //exoplayer
     implementation 'com.google.android.exoplayer:exoplayer:2.10.8'
+    //Kirim email
+    implementation 'de.cketti.mailto:email-intent-builder:2.0.0'
 }

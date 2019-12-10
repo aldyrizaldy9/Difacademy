@@ -17,7 +17,6 @@
         style="@style/Difacademy.Subtitle2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:text="Kelas yang ingin dibeli"
         app:layout_constraintEnd_toEndOf="@+id/tv_op_notif_pay_nowa"
         app:layout_constraintStart_toStartOf="@+id/tv_op_notif_pay_nowa"
@@ -73,7 +72,10 @@
         style="@style/Difacademy.Body1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:paddingBottom="16dp"
         android:text="rizaldy.ilham@gmail.com"
+        android:textColor="@color/colorAccent"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@+id/textView12"
         app:layout_constraintStart_toStartOf="@+id/textView12"
         app:layout_constraintTop_toBottomOf="@+id/textView12" />
@@ -83,7 +85,6 @@
         style="@style/Difacademy.Subtitle2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:text="No. WA"
         app:layout_constraintEnd_toEndOf="@+id/tv_op_notif_pay_email"
         app:layout_constraintStart_toStartOf="@+id/tv_op_notif_pay_email"
@@ -94,7 +95,10 @@
         style="@style/Difacademy.Body1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:paddingBottom="16dp"
         android:text="082245289390"
+        android:textColor="@color/colorAccent"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@+id/textView14"
         app:layout_constraintStart_toStartOf="@+id/textView14"
         app:layout_constraintTop_toBottomOf="@+id/textView14" />
@@ -120,9 +124,10 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="Bank yang dipilih"
-        app:layout_constraintEnd_toEndOf="@+id/textView8"
-        app:layout_constraintStart_toStartOf="@+id/textView8"
-        app:layout_constraintTop_toBottomOf="@+id/tv_op_notif_pay_nama_kelas" />
+        app:layout_constraintEnd_toEndOf="@+id/tv_op_notif_pay_harga_kelas"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/tv_op_notif_pay_harga_kelas"
+        app:layout_constraintTop_toBottomOf="@+id/tv_op_notif_pay_harga_kelas" />
 
     <TextView
         android:id="@+id/tv_op_notif_pay_nama_bank"
@@ -133,6 +138,27 @@
         app:layout_constraintEnd_toEndOf="@+id/textView6"
         app:layout_constraintStart_toStartOf="@+id/textView6"
         app:layout_constraintTop_toBottomOf="@+id/textView6" />
+
+    <TextView
+        android:id="@+id/textView4"
+        style="@style/Difacademy.Subtitle2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Harga kelas"
+        app:layout_constraintEnd_toEndOf="@+id/tv_op_notif_pay_nama_kelas"
+        app:layout_constraintStart_toStartOf="@+id/tv_op_notif_pay_nama_kelas"
+        app:layout_constraintTop_toBottomOf="@+id/tv_op_notif_pay_nama_kelas" />
+
+    <TextView
+        android:id="@+id/tv_op_notif_pay_harga_kelas"
+        style="@style/Difacademy.Body1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Rp500000"
+        app:layout_constraintEnd_toEndOf="@+id/textView4"
+        app:layout_constraintStart_toStartOf="@+id/textView4"
+        app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -71,7 +71,7 @@ public class FreeCourseAdapter extends RecyclerView.Adapter<FreeCourseAdapter.Vi
             tvJudul = itemView.findViewById(R.id.tv_card_video_thumbnail_judul);
             tvTag = itemView.findViewById(R.id.tv_card_video_thumbnail_tag);
             clContainer = itemView.findViewById(R.id.cl_card_video_thumbnail_container);
-            tvEpisode = itemView.findViewById(R.id.tv_card_video_thumbnail_status_ongoing);
+            tvEpisode = itemView.findViewById(R.id.tv_card_video_thumbnail_harga);
         }
     }
 }

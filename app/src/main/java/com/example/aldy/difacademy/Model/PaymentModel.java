@@ -6,18 +6,8 @@ import android.os.Parcelable;
 import com.google.firebase.firestore.Exclude;
 
 public class PaymentModel implements Parcelable {
-    public static final Creator<PaymentModel> CREATOR = new Creator<PaymentModel>() {
-        @Override
-        public PaymentModel createFromParcel(Parcel in) {
-            return new PaymentModel(in);
-        }
 
-        @Override
-        public PaymentModel[] newArray(int size) {
-            return new PaymentModel[size];
-        }
-    };
-    private String userId, namaUser, email, noWa, blendedCourseId, namaKelas, namaBank, paymentId;
+    private String userId, namaUser, email, noWa, blendedCourseId, namaKelas, hargaKelas, namaBank, paymentId;
     private long dateCreated;
     private boolean isSeen, isPaid;
 
@@ -30,6 +20,7 @@ public class PaymentModel implements Parcelable {
                         String noWa,
                         String blendedCourseId,
                         String namaKelas,
+                        String hargaKelas,
                         String namaBank,
                         long dateCreated,
                         boolean isSeen,
@@ -40,6 +31,7 @@ public class PaymentModel implements Parcelable {
         this.noWa = noWa;
         this.blendedCourseId = blendedCourseId;
         this.namaKelas = namaKelas;
+        this.hargaKelas = hargaKelas;
         this.namaBank = namaBank;
         this.dateCreated = dateCreated;
         this.isSeen = isSeen;
@@ -53,12 +45,25 @@ public class PaymentModel implements Parcelable {
         noWa = in.readString();
         blendedCourseId = in.readString();
         namaKelas = in.readString();
+        hargaKelas = in.readString();
         namaBank = in.readString();
         paymentId = in.readString();
         dateCreated = in.readLong();
         isSeen = in.readByte() != 0;
         isPaid = in.readByte() != 0;
     }
+
+    public static final Creator<PaymentModel> CREATOR = new Creator<PaymentModel>() {
+        @Override
+        public PaymentModel createFromParcel(Parcel in) {
+            return new PaymentModel(in);
+        }
+
+        @Override
+        public PaymentModel[] newArray(int size) {
+            return new PaymentModel[size];
+        }
+    };
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
@@ -68,6 +73,7 @@ public class PaymentModel implements Parcelable {
         dest.writeString(noWa);
         dest.writeString(blendedCourseId);
         dest.writeString(namaKelas);
+        dest.writeString(hargaKelas);
         dest.writeString(namaBank);
         dest.writeString(paymentId);
         dest.writeLong(dateCreated);
@@ -102,6 +108,10 @@ public class PaymentModel implements Parcelable {
 
     public String getNamaKelas() {
         return namaKelas;
+    }
+
+    public String getHargaKelas() {
+        return hargaKelas;
     }
 
     public String getNamaBank() {

@@ -2,6 +2,7 @@ package com.example.aldy.difacademy.Activity;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,6 +24,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -102,7 +104,9 @@ public class OpTagsActivity extends AppCompatActivity {
         progressDialog.show();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference tagRef = db.collection("Tags");
-        tagRef.get()
+        tagRef
+                .orderBy("tag", Query.Direction.ASCENDING)
+                .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
@@ -120,6 +124,7 @@ public class OpTagsActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         progressDialog.dismiss();
+                        Log.d(TAG, e.toString());
                     }
                 });
     }

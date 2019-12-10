@@ -3,6 +3,7 @@ package com.example.aldy.difacademy.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -32,9 +33,11 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.HashMap;
 import java.util.Map;
 
+import de.cketti.mailto.EmailIntentBuilder;
+
 public class OpNotifPaymentActivity extends AppCompatActivity {
     private static final String TAG = "OpNotifPaymentActivity";
-    private TextView tvNavBar, tvNama, tvEmail, tvNoWa, tvNamaKelas, tvNamaBank;
+    private TextView tvNavBar, tvNama, tvEmail, tvNoWa, tvNamaKelas, tvHargaKelas, tvNamaBank;
     private ConstraintLayout clBack;
     private ImageView imgBack;
     private Button btnBukaKelas;
@@ -60,6 +63,7 @@ public class OpNotifPaymentActivity extends AppCompatActivity {
         tvEmail = findViewById(R.id.tv_op_notif_pay_email);
         tvNoWa = findViewById(R.id.tv_op_notif_pay_nowa);
         tvNamaKelas = findViewById(R.id.tv_op_notif_pay_nama_kelas);
+        tvHargaKelas = findViewById(R.id.tv_op_notif_pay_harga_kelas);
         tvNamaBank = findViewById(R.id.tv_op_notif_pay_nama_bank);
         clBack = findViewById(R.id.cl_icon1);
         clBack.setVisibility(View.VISIBLE);
@@ -77,6 +81,8 @@ public class OpNotifPaymentActivity extends AppCompatActivity {
         tvEmail.setText(paymentModel.getEmail());
         tvNoWa.setText(paymentModel.getNoWa());
         tvNamaKelas.setText(paymentModel.getNamaKelas());
+        String harga = "Rp" + paymentModel.getHargaKelas();
+        tvHargaKelas.setText(harga);
         tvNamaBank.setText(paymentModel.getNamaBank());
         if (paymentModel.isPaid()) {
             //Kalo sudah bayar tombol buka kelas jadi disabled
@@ -95,6 +101,25 @@ public class OpNotifPaymentActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 konfirmasiBukaKelas();
+            }
+        });
+        tvEmail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = EmailIntentBuilder.from(OpNotifPaymentActivity.this)
+                        .to(paymentModel.getEmail())
+                        .subject("Pembayaran Course Taman Pelajar")
+                        .build();
+                startActivity(intent);
+            }
+        });
+        tvNoWa.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                String urlNew = "http://wa.me/" + "+62" + paymentModel.getNoWa().substring(1);
+                intent.setData(Uri.parse(urlNew));
+                startActivity(intent);
             }
         });
     }
