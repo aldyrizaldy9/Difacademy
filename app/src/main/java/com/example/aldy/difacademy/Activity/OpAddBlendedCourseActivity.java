@@ -95,6 +95,8 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
         pd.setMessage("Loading...");
         pd.setCancelable(false);
 
+        firebaseStorage.setMaxUploadRetryTimeMillis(60000);
+
         initView();
         onClick();
         checkIntent();
@@ -368,6 +370,7 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
 
     private void uploadImageToFirebase(Uri imageUri) {
         FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
+        firebaseStorage.setMaxUploadRetryTimeMillis(60000);
         if (!thumbnailUrl.equals("")) {
             StorageReference deleteRef = firebaseStorage.getReferenceFromUrl(thumbnailUrl);
             deleteRef.delete()

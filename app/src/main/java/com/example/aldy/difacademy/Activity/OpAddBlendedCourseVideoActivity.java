@@ -222,6 +222,7 @@ public class OpAddBlendedCourseVideoActivity extends AppCompatActivity {
 
     private void uploadvideo() {
         FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
+        firebaseStorage.setMaxUploadRetryTimeMillis(60000);
         if (!urlVideo.equals("")) {
             StorageReference deleteRef = firebaseStorage.getReferenceFromUrl(urlVideo);
             deleteRef.delete()

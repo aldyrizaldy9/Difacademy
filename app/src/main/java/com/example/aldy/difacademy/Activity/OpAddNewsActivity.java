@@ -85,6 +85,7 @@ public class OpAddNewsActivity extends AppCompatActivity {
 
     private void initFirebaseStorage() {
         firebaseStorage = FirebaseStorage.getInstance();
+        firebaseStorage.setMaxUploadRetryTimeMillis(60000);
         storageReference = firebaseStorage.getReference();
     }
 
