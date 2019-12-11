@@ -38,7 +38,7 @@ import java.util.Map;
 import de.cketti.mailto.EmailIntentBuilder;
 
 public class OpNotifPaymentActivity extends AppCompatActivity {
-    private static final String TAG = "OpNotifPaymentActivity";
+    private static final String TAG = "MANTAP";
     private TextView tvNavBar, tvNama, tvEmail, tvNoWa, tvNamaKelas, tvHargaKelas, tvNamaBank;
     private ConstraintLayout clBack;
     private ImageView imgBack;
@@ -178,10 +178,12 @@ public class OpNotifPaymentActivity extends AppCompatActivity {
 
         CollectionReference userRef = firebaseFirestore.collection("User");
         userRef
+                .whereEqualTo("userId",paymentModel.getUserId())
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        Log.d(TAG, "get userdoc id success");
                         for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
                             userModel = queryDocumentSnapshot.toObject(UserModel.class);
                             userModel.setUserDocId(queryDocumentSnapshot.getId());
@@ -212,6 +214,7 @@ public class OpNotifPaymentActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
+                        Log.d(TAG, "buka kelas success");
                         getPaymentDocuments();
                     }
                 })
@@ -236,6 +239,7 @@ public class OpNotifPaymentActivity extends AppCompatActivity {
                         for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
                             setPaid(queryDocumentSnapshot);
                         }
+                        Log.d(TAG, "get payment doc sucess");
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -260,6 +264,7 @@ public class OpNotifPaymentActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "set paid success");
                         progressDialog.dismiss();
                         onBackPressed();
                         Toast.makeText(OpNotifPaymentActivity.this,

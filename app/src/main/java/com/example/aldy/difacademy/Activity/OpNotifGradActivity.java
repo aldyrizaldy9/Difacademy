@@ -77,6 +77,9 @@ public class OpNotifGradActivity extends AppCompatActivity {
         tvEmail.setText(graduationModel.getEmail());
         tvNoWa.setText(graduationModel.getNoWa());
         tvNamaKelas.setText(graduationModel.getNamaKelas());
+        if(graduationModel.isDone()){
+            btnTandai.setEnabled(false);
+        }
     }
 
     private void onClick() {
