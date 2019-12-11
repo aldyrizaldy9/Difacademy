@@ -132,9 +132,5 @@ public class OpBlendedCourseVideoActivity extends AppCompatActivity {
         rvVideoMateri.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         rvVideoMateri.setAdapter(adapter);
     }
-    private boolean isNetworkConnected() {
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 
-        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
-    }
 }
