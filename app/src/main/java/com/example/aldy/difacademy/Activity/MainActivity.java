@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.aldy.difacademy.Adapter.NewsAdapter;
 import com.example.aldy.difacademy.Model.BlendedCourseModel;
 import com.example.aldy.difacademy.Model.NewsModel;
@@ -267,7 +268,10 @@ public class MainActivity extends AppCompatActivity {
 
                             imgOngoing.setClipToOutline(true);
 
-                            Glide.with(MainActivity.this).load(blendedCourseModel.getThumbnailUrl()).into(imgOngoing);
+                            Glide.with(MainActivity.this)
+                                    .load(blendedCourseModel.getThumbnailUrl())
+                                    .apply(new RequestOptions().centerCrop())
+                                    .into(imgOngoing);
                             tvJudulOngoing.setText(blendedCourseModel.getTitle());
                             tvTagOngoing.setText(blendedCourseModel.getTag());
 
