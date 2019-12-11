@@ -106,7 +106,12 @@ public class OpNotifGradActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_VIEW);
-                String urlNew = "http://wa.me/" + "+62" + graduationModel.getNoWa().substring(1);
+                String urlNew = graduationModel.getNoWa();
+                if (urlNew.substring(0,3).equals("+62")){
+                    urlNew = "http://wa.me/" + urlNew;
+                } else {
+                    urlNew = "http://wa.me/+62" + urlNew.substring(1);
+                }
                 intent.setData(Uri.parse(urlNew));
                 startActivity(intent);
             }

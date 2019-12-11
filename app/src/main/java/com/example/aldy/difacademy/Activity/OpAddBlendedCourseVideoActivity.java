@@ -230,7 +230,6 @@ public class OpAddBlendedCourseVideoActivity extends AppCompatActivity {
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             Toast.makeText(OpAddBlendedCourseVideoActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
-                            return;
                         }
                     });
         }
@@ -377,17 +376,33 @@ public class OpAddBlendedCourseVideoActivity extends AppCompatActivity {
     }
 
     private void hapus() {
-        DocumentReference documentReference = blendedCourseVideoRef.document(blendedCourseVideoId);
-        documentReference.delete()
+        FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
+        firebaseStorage.setMaxUploadRetryTimeMillis(60000);
+        StorageReference deleteRef = firebaseStorage.getReferenceFromUrl(urlVideo);
+        deleteRef.delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        pd.dismiss();
-                        Toast.makeText(OpAddBlendedCourseVideoActivity.this, "Video berhasil dihapus", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(OpAddBlendedCourseVideoActivity.this, OpBlendedCourseVideoActivity.class);
-                        intent.putExtra("index", index);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivityForResult(intent, DELETE_REQUEST_CODE);
+                        DocumentReference documentReference = blendedCourseVideoRef.document(blendedCourseVideoId);
+                        documentReference.delete()
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        pd.dismiss();
+                                        Toast.makeText(OpAddBlendedCourseVideoActivity.this, "Video berhasil dihapus", Toast.LENGTH_SHORT).show();
+                                        Intent intent = new Intent(OpAddBlendedCourseVideoActivity.this, OpBlendedCourseVideoActivity.class);
+                                        intent.putExtra("index", index);
+                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                        startActivityForResult(intent, DELETE_REQUEST_CODE);
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        pd.dismiss();
+                                        Toast.makeText(OpAddBlendedCourseVideoActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+                                    }
+                                });
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
