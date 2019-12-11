@@ -1,12 +1,17 @@
 package com.example.aldy.difacademy.Activity;
 
+import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -18,6 +23,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.example.aldy.difacademy.Model.GraduationModel;
 import com.example.aldy.difacademy.Model.PaymentModel;
@@ -62,15 +69,60 @@ public class OpMainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_op_main);
 
-        checkAdmin();
         initView();
+        askPermission();
+        checkAdmin();
+        updateToken();
         onClick();
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == WRITE_PERM_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
+            } else {
+                showDialogAskPermission();
+            }
+        }
+    }
+
+    private void showDialogAskPermission(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Wajib Untuk Memberikan Permission Pada Aplikasi");
+        builder.setTitle("Write Permission");
+        builder.setCancelable(false);
+        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                askPermission();
+            }
+        });
+
+        builder.setNegativeButton("Open Setting", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Intent intent = new Intent();
+                intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                Uri uri = Uri.fromParts("package", getPackageName(), null);
+                intent.setData(uri);
+                startActivity(intent);
+            }
+        });
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+
+    private void askPermission() {
+        if (ContextCompat.checkSelfPermission(OpMainActivity.this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(OpMainActivity.this,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, WRITE_PERM_REQUEST_CODE);
+        }
+    }
+
+    private void updateToken() {
         firebaseFirestore = FirebaseFirestore.getInstance();
         paymentRef = firebaseFirestore.collection("Payment");
         graduationRef = firebaseFirestore.collection("Graduation");

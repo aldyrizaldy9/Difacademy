@@ -136,17 +136,6 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == WRITE_PERM_REQUEST_CODE) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Intent intent = new Intent(Intent.ACTION_PICK);
-                intent.setType("image/*");
-                startActivityForResult(intent, PHOTO_PICK_REQUEST_CODE);
-            }
-        }
-    }
-
-    @Override
     protected void onStart() {
         super.onStart();
         if (pd.isShowing())
@@ -340,15 +329,9 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
     }
 
     private void getPhotoFromGallery() {
-        if (ContextCompat.checkSelfPermission(OpAddBlendedCourseActivity.this,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(OpAddBlendedCourseActivity.this,
-                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, WRITE_PERM_REQUEST_CODE);
-        } else {
-            Intent intent = new Intent(Intent.ACTION_PICK);
-            intent.setType("image/*");
-            startActivityForResult(intent, PHOTO_PICK_REQUEST_CODE);
-        }
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType("image/*");
+        startActivityForResult(intent, PHOTO_PICK_REQUEST_CODE);
     }
 
     private boolean isDataComplete() {
