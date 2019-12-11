@@ -426,7 +426,7 @@ public class QuizActivity extends AppCompatActivity {
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         Token token = documentSnapshot.toObject(Token.class);
                         String tokenAdmin = token.getToken();
-                        Data data = new Data(userId, R.mipmap.ic_launcher, "Ada yang lulus", "Peserta lulus", ADMIN_USER_ID);
+                        Data data = new Data(userId, R.mipmap.ic_launcher, "Ketuk untuk menuju ke daftar kelulusan", "Kelulusan peserta", ADMIN_USER_ID);
                         Sender sender = new Sender(data, tokenAdmin);
                         Retrofit retrofit = new Retrofit.Builder()
                                 .baseUrl("https://fcm.googleapis.com/")

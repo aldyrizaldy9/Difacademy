@@ -162,6 +162,9 @@ public class OpNotifGradActivity extends AppCompatActivity {
     }
 
     private void getGraduationDocuments() {
+        progressDialog.setMessage("Memuat...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
         CollectionReference gradRef = firebaseFirestore.collection("Graduation");
         gradRef
                 .whereEqualTo("blendedCourseId", graduationModel.getBlendedCourseId())
