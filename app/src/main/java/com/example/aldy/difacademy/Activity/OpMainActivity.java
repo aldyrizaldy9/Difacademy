@@ -89,7 +89,7 @@ public class OpMainActivity extends AppCompatActivity {
 
     private void showDialogAskPermission(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Wajib Untuk Memberikan Permission Pada Aplikasi");
+        builder.setMessage("Wajib Untuk Memberikan Storage Permission Pada Aplikasi");
         builder.setTitle("Write Permission");
         builder.setCancelable(false);
         builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
