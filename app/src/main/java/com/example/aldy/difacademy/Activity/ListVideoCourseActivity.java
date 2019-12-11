@@ -61,6 +61,18 @@ public class ListVideoCourseActivity extends AppCompatActivity {
         getUserDocId();
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        ISPAID = false;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ISPAID = false;
+    }
+
     private void initView() {
         clNavbar = findViewById(R.id.cl_navbar);
         clNavbar.setBackgroundColor(getResources().getColor(R.color.navCoklat));
@@ -146,7 +158,7 @@ public class ListVideoCourseActivity extends AppCompatActivity {
         CollectionReference userRef = firebaseFirestore.collection("User");
         userRef
                 .whereEqualTo("userId", userId)
-                .get()
+                .get(Source.SERVER)
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
@@ -171,7 +183,7 @@ public class ListVideoCourseActivity extends AppCompatActivity {
                 .document(docId)
                 .collection("OngoingBlendedCourse");
         onGoingRef
-                .get()
+                .get(Source.SERVER)
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
