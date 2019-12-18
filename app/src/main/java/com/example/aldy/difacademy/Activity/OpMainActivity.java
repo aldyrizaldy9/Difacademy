@@ -54,7 +54,7 @@ public class OpMainActivity extends AppCompatActivity {
     public static final int DELETE_REQUEST_CODE = 3;
     public static final int UPDATE_REQUEST_CODE = 4;
     public static final int WRITE_PERM_REQUEST_CODE = 5;
-    public static final String ADMIN_USER_ID = "tgnQJBLhBKRzGBUnk58AtzjrZw12";
+    public static final String ADMIN_USER_ID = "4TOu1jtLjWYcPbRzFYZ9PhZRZs22";
     private static final String TAG = "OpMainActivity";
     private boolean doubleBackToExitPressedOnce = false;
     private ConstraintLayout clLogout, clNotif;
