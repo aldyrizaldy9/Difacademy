@@ -115,11 +115,10 @@
             <ImageView
                 android:id="@+id/img_main_banner"
                 android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
                 android:background="@android:color/white"
-                android:padding="20dp"
-                android:src="@drawable/logo_aplikasi_trans"
-                app:layout_constraintDimensionRatio="16:9"
+                android:src="@drawable/logo_banner"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
