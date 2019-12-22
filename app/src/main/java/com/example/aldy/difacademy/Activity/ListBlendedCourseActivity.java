@@ -245,9 +245,9 @@ public class ListBlendedCourseActivity extends AppCompatActivity {
                                         .get(queryDocumentSnapshots.size() - 1);
                             }
 
-                            adapter.notifyDataSetChanged();
                         }
                         pd.dismiss();
+                        adapter.notifyDataSetChanged();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
