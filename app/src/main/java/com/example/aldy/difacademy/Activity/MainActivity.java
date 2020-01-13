@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.aldy.difacademy.Adapter.NewsAdapter;
+import com.example.aldy.difacademy.Model.BannerUrlModel;
 import com.example.aldy.difacademy.Model.BlendedCourseModel;
 import com.example.aldy.difacademy.Model.NewsModel;
 import com.example.aldy.difacademy.Model.OngoingKelasBlendedModel;
@@ -45,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
     private ConstraintLayout clSettings, clOngoing;
-    private ImageView imgKelasGratis, imgKelasOnline, imgKelasCampuran, imgOngoing;
+    private ImageView imgKelasGratis, imgKelasOnline, imgKelasCampuran, imgOngoing, imgBanner;
     private Button btnBeritaLainnya;
     private TextView tvDiikutiSemua, tvJudulOngoing, tvTagOngoing;
     private RecyclerView rvMainBerita;
@@ -64,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initView();
+        setBanner();
         onClick();
         setRecyclerView();
         getUserDocId();
@@ -99,6 +101,7 @@ public class MainActivity extends AppCompatActivity {
         imgKelasOnline = findViewById(R.id.img_main_kelas_online);
         imgKelasCampuran = findViewById(R.id.img_main_kelas_campuran);
         imgOngoing = findViewById(R.id.img_main_ongoing_thumbnail);
+        imgBanner = findViewById(R.id.img_main_banner);
         btnBeritaLainnya = findViewById(R.id.btn_main_berita_lainnya);
         tvDiikutiSemua = findViewById(R.id.tv_main_diikuti_semua);
         tvJudulOngoing = findViewById(R.id.tv_main_ongoing_judul);
@@ -107,6 +110,23 @@ public class MainActivity extends AppCompatActivity {
 
         rvMainBerita.setNestedScrollingEnabled(false);
         firebaseFirestore = FirebaseFirestore.getInstance();
+    }
+
+    private void setBanner(){
+        DocumentReference docRef = firebaseFirestore.collection("BannerPhotoUrl").document("bannerphotourl");
+        docRef.get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot != null){
+                            BannerUrlModel bannerUrlModel = documentSnapshot.toObject(BannerUrlModel.class);
+                            String url = bannerUrlModel.getUrl();
+                            Glide.with(MainActivity.this)
+                                    .load(url)
+                                    .into(imgBanner);
+                        }
+                    }
+                });
     }
 
     private void setRecyclerView() {

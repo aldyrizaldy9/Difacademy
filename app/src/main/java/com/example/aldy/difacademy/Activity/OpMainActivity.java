@@ -59,7 +59,7 @@ public class OpMainActivity extends AppCompatActivity {
     private boolean doubleBackToExitPressedOnce = false;
     private ConstraintLayout clLogout, clNotif;
     private ImageView imgLogout, imgNotif;
-    private Button btnFree, btnOnline, btnBlended, btnBerita, btnTags;
+    private Button btnFree, btnOnline, btnBlended, btnBerita, btnTags, btnBanner;
     private TextView tvNavbar;
     private FirebaseFirestore firebaseFirestore;
     private CollectionReference paymentRef, graduationRef;
@@ -167,6 +167,7 @@ public class OpMainActivity extends AppCompatActivity {
         btnBlended = findViewById(R.id.btn_op_main_blended_course);
         btnBerita = findViewById(R.id.btn_op_main_news);
         btnTags = findViewById(R.id.btn_op_main_tags);
+        btnBanner = findViewById(R.id.btn_op_main_banner);
         tvNavbar = findViewById(R.id.tv_navbar);
 
         tvNavbar.setText("Welcome, Admin");
@@ -217,6 +218,13 @@ public class OpMainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(OpMainActivity.this, OpTagsActivity.class);
+                startActivity(intent);
+            }
+        });
+        btnBanner.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(OpMainActivity.this, OpBannerActivity.class);
                 startActivity(intent);
             }
         });
