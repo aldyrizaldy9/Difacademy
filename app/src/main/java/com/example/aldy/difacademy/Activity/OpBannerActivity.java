@@ -5,7 +5,9 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -110,8 +112,12 @@ public class OpBannerActivity extends AppCompatActivity {
         btnSimpan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                pd.show();
-                uploadImageToFirebase();
+                if (isNetworkConnected()){
+                    pd.show();
+                    uploadImageToFirebase();
+                } else {
+                    Toast.makeText(OpBannerActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
@@ -171,5 +177,11 @@ public class OpBannerActivity extends AppCompatActivity {
                         deleteCurrentImage();
                     }
                 });
+    }
+
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
     }
 }
