@@ -1,8 +1,6 @@
 package com.example.aldy.difacademy.Activity;
 
-import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -21,7 +19,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.aldy.difacademy.Adapter.NewsAdapter;
-import com.example.aldy.difacademy.Model.BannerUrlModel;
 import com.example.aldy.difacademy.Model.BlendedCourseModel;
 import com.example.aldy.difacademy.Model.NewsModel;
 import com.example.aldy.difacademy.Model.OngoingKelasBlendedModel;
@@ -119,8 +116,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         if (documentSnapshot != null){
-                            BannerUrlModel bannerUrlModel = documentSnapshot.toObject(BannerUrlModel.class);
-                            String url = bannerUrlModel.getUrl();
+                            String url = documentSnapshot.getString("url");
                             Glide.with(MainActivity.this)
                                     .load(url)
                                     .into(imgBanner);

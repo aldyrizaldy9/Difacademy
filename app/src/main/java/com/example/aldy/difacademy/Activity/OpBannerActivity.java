@@ -17,7 +17,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.example.aldy.difacademy.Model.BannerUrlModel;
 import com.example.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -28,6 +27,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.util.HashMap;
 import java.util.UUID;
 
 import static com.example.aldy.difacademy.Activity.OpMainActivity.PHOTO_PICK_REQUEST_CODE;
@@ -91,8 +91,8 @@ public class OpBannerActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         if (documentSnapshot != null){
-                            BannerUrlModel bannerUrlModel = documentSnapshot.toObject(BannerUrlModel.class);
-                            bannerUrl = bannerUrlModel.getUrl();
+                            String coba = documentSnapshot.getString("url");
+                            bannerUrl = coba;
                             Glide.with(OpBannerActivity.this)
                                     .load(bannerUrl)
                                     .into(imgBanner);
@@ -166,11 +166,12 @@ public class OpBannerActivity extends AppCompatActivity {
     }
 
     private void updateBannerUrl(String bannerUrl){
-        BannerUrlModel bannerUrlModel = new BannerUrlModel();
-        bannerUrlModel.setUrl(bannerUrl);
+        HashMap<String, Object> update = new HashMap<>();
+        update.put("url", bannerUrl);
+
         DocumentReference docRef = db.collection("BannerPhotoUrl")
                 .document("bannerphotourl");
-        docRef.set(bannerUrlModel)
+        docRef.set(update)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
