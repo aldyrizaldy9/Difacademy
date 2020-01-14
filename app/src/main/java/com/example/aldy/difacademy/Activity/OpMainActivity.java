@@ -204,7 +204,8 @@ public class OpMainActivity extends AppCompatActivity {
         btnOnline.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(OpMainActivity.this, "Fitur ini belum tersedia, stay tune :)", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(OpMainActivity.this, OpOnlineCourseActivity.class);
+                startActivity(intent);
             }
         });
         btnBerita.setOnClickListener(new View.OnClickListener() {

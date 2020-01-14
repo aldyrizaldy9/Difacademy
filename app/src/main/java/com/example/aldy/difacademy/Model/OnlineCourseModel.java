@@ -3,9 +3,53 @@ package com.example.aldy.difacademy.Model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.google.firebase.firestore.Exclude;
-
 public class OnlineCourseModel implements Parcelable {
+    String documentId, title, description, thumbnailUrl, googleDrive, tagId, tag, harga;
+    long dateCreated;
+
+    public OnlineCourseModel() {}
+
+    public OnlineCourseModel(String title, String description, String thumbnailUrl, String googleDrive, String tagId, String tag, String harga, long dateCreated) {
+        this.title = title;
+        this.description = description;
+        this.thumbnailUrl = thumbnailUrl;
+        this.googleDrive = googleDrive;
+        this.tagId = tagId;
+        this.tag = tag;
+        this.harga = harga;
+        this.dateCreated = dateCreated;
+    }
+
+    protected OnlineCourseModel(Parcel in) {
+        documentId = in.readString();
+        title = in.readString();
+        description = in.readString();
+        thumbnailUrl = in.readString();
+        googleDrive = in.readString();
+        tagId = in.readString();
+        tag = in.readString();
+        harga = in.readString();
+        dateCreated = in.readLong();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(documentId);
+        dest.writeString(title);
+        dest.writeString(description);
+        dest.writeString(thumbnailUrl);
+        dest.writeString(googleDrive);
+        dest.writeString(tagId);
+        dest.writeString(tag);
+        dest.writeString(harga);
+        dest.writeLong(dateCreated);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
     public static final Creator<OnlineCourseModel> CREATOR = new Creator<OnlineCourseModel>() {
         @Override
         public OnlineCourseModel createFromParcel(Parcel in) {
@@ -17,54 +61,7 @@ public class OnlineCourseModel implements Parcelable {
             return new OnlineCourseModel[size];
         }
     };
-    String documentId, title, description, tagId, tag, thumbnailUrl, gDriveUrl, harga;
-    long dateCreated;
 
-    public OnlineCourseModel() {
-    }
-
-    public OnlineCourseModel(String title, String description, String tagId, String tag, String thumbnailUrl, String gDriveUrl, String harga, long dateCreated) {
-        this.title = title;
-        this.description = description;
-        this.tagId = tagId;
-        this.tag = tag;
-        this.thumbnailUrl = thumbnailUrl;
-        this.gDriveUrl = gDriveUrl;
-        this.harga = harga;
-        this.dateCreated = dateCreated;
-    }
-
-    protected OnlineCourseModel(Parcel in) {
-        documentId = in.readString();
-        title = in.readString();
-        description = in.readString();
-        tagId = in.readString();
-        tag = in.readString();
-        thumbnailUrl = in.readString();
-        gDriveUrl = in.readString();
-        harga = in.readString();
-        dateCreated = in.readLong();
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(documentId);
-        dest.writeString(title);
-        dest.writeString(description);
-        dest.writeString(tagId);
-        dest.writeString(tag);
-        dest.writeString(thumbnailUrl);
-        dest.writeString(gDriveUrl);
-        dest.writeString(harga);
-        dest.writeLong(dateCreated);
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Exclude
     public String getDocumentId() {
         return documentId;
     }
@@ -89,6 +86,22 @@ public class OnlineCourseModel implements Parcelable {
         this.description = description;
     }
 
+    public String getThumbnailUrl() {
+        return thumbnailUrl;
+    }
+
+    public void setThumbnailUrl(String thumbnailUrl) {
+        this.thumbnailUrl = thumbnailUrl;
+    }
+
+    public String getGoogleDrive() {
+        return googleDrive;
+    }
+
+    public void setGoogleDrive(String googleDrive) {
+        this.googleDrive = googleDrive;
+    }
+
     public String getTagId() {
         return tagId;
     }
@@ -105,22 +118,6 @@ public class OnlineCourseModel implements Parcelable {
         this.tag = tag;
     }
 
-    public String getThumbnailUrl() {
-        return thumbnailUrl;
-    }
-
-    public void setThumbnailUrl(String thumbnailUrl) {
-        this.thumbnailUrl = thumbnailUrl;
-    }
-
-    public String getgDriveUrl() {
-        return gDriveUrl;
-    }
-
-    public void setgDriveUrl(String gDriveUrl) {
-        this.gDriveUrl = gDriveUrl;
-    }
-
     public String getHarga() {
         return harga;
     }
@@ -131,5 +128,9 @@ public class OnlineCourseModel implements Parcelable {
 
     public long getDateCreated() {
         return dateCreated;
+    }
+
+    public void setDateCreated(long dateCreated) {
+        this.dateCreated = dateCreated;
     }
 }
