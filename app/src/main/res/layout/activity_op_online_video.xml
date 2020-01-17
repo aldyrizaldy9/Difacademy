@@ -5,5 +5,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Activity.OpOnlineVideoActivity">
+    <include
+        android:id="@+id/include"
+        layout="@layout/nav_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/nav_bar_height" />
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_op_online_video"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:overScrollMode="never"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/include"
+        tools:listitem="@layout/card_op" />
 </androidx.constraintlayout.widget.ConstraintLayout>

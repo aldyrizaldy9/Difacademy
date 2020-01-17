@@ -12,42 +12,44 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.aldy.difacademy.Activity.OpAddOnlineSoalActivity;
 import com.example.aldy.difacademy.Activity.OpAddOnlineVideoActivity;
+import com.example.aldy.difacademy.Model.OnlineSoalModel;
 import com.example.aldy.difacademy.Model.OnlineVideoModel;
 import com.example.aldy.difacademy.R;
 
 import java.util.ArrayList;
 
-public class OpOnlineVideoAdapter extends RecyclerView.Adapter<OpOnlineVideoAdapter.ViewHolder> {
+public class OpOnlineSoalAdapter extends RecyclerView.Adapter<OpOnlineSoalAdapter.ViewHolder> {
     private Context context;
-    private ArrayList<OnlineVideoModel> onlineVideoModels;
+    private ArrayList<OnlineSoalModel> onlineSoalModels;
 
-    public OpOnlineVideoAdapter(Context context, ArrayList<OnlineVideoModel> onlineVideoModels) {
+    public OpOnlineSoalAdapter(Context context, ArrayList<OnlineSoalModel> onlineSoalModels) {
         this.context = context;
-        this.onlineVideoModels = onlineVideoModels;
+        this.onlineSoalModels = onlineSoalModels;
     }
 
     @NonNull
     @Override
-    public OpOnlineVideoAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public OpOnlineSoalAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         View view = layoutInflater.inflate(R.layout.card_op, parent, false);
-        return new OpOnlineVideoAdapter.ViewHolder(view);
+        return new OpOnlineSoalAdapter.ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull OpOnlineVideoAdapter.ViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull OpOnlineSoalAdapter.ViewHolder holder, final int position) {
         holder.tvTag.setVisibility(View.GONE);
         holder.imgThumbnail.setVisibility(View.GONE);
+        holder.tvDeskripsi.setVisibility(View.GONE);
 
-        final OnlineVideoModel model = onlineVideoModels.get(position);
-        holder.tvDeskripsi.setText(model.getDescription());
-        holder.tvJudul.setText(position + 1 + ". " + model.getTitle());
+        final OnlineSoalModel model = onlineSoalModels.get(position);
+        holder.tvJudul.setText(position + 1 + ". " + model.getSoal());
         holder.container.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, OpAddOnlineVideoActivity.class);
-                intent.putExtra("online_video_model", model);
+                Intent intent = new Intent(context, OpAddOnlineSoalActivity.class);
+                intent.putExtra("online_soal_model", model);
                 intent.putExtra("index", position);
                 context.startActivity(intent);
             }
@@ -56,7 +58,7 @@ public class OpOnlineVideoAdapter extends RecyclerView.Adapter<OpOnlineVideoAdap
 
     @Override
     public int getItemCount() {
-        return onlineVideoModels.size();
+        return onlineSoalModels.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
