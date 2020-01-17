@@ -16,13 +16,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.aldy.difacademy.Adapter.OpOnlineCourseAdapter;
-import com.example.aldy.difacademy.Model.BlendedCourseModel;
 import com.example.aldy.difacademy.Model.OnlineCourseModel;
 import com.example.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -40,7 +38,7 @@ public class OpOnlineCourseActivity extends AppCompatActivity {
     TextView tvNavbar;
     ConstraintLayout clBack, clAdd;
     ImageView imgBack, imgAdd;
-    RecyclerView rvOnline;
+    RecyclerView rvOnlineCourse;
 
     ArrayList<OnlineCourseModel> onlineCourseModels;
     OpOnlineCourseAdapter adapter;
@@ -104,7 +102,7 @@ public class OpOnlineCourseActivity extends AppCompatActivity {
         imgBack.setImageResource(R.drawable.ic_arrow_back);
         imgAdd = findViewById(R.id.img_icon3);
         imgAdd.setImageResource(R.drawable.ic_add);
-        rvOnline = findViewById(R.id.rv_op_online);
+        rvOnlineCourse = findViewById(R.id.rv_op_online_course);
         pd = new ProgressDialog(this);
     }
 
@@ -120,11 +118,11 @@ public class OpOnlineCourseActivity extends AppCompatActivity {
 
     private void setRecyclerView() {
         final LinearLayoutManager manager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
-        rvOnline.setLayoutManager(manager);
+        rvOnlineCourse.setLayoutManager(manager);
         adapter = new OpOnlineCourseAdapter(this, onlineCourseModels);
-        rvOnline.setAdapter(adapter);
+        rvOnlineCourse.setAdapter(adapter);
 
-        rvOnline.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        rvOnlineCourse.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);

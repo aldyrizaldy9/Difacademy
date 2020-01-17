@@ -13,7 +13,9 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activity.OpOnlineVideoActivity"></activity>
+        <activity android:name=".Activity.OpOnlineSoalActivity"></activity>
+        <activity android:name=".Activity.OpAddOnlineSoalActivity" />
+        <activity android:name=".Activity.OpOnlineVideoActivity" />
         <activity android:name=".Activity.OpOnlineMateriActivity" />
         <activity android:name=".Activity.OpAddOnlineVideoActivity" />
         <activity android:name=".Activity.OpAddOnlineCourseActivity" />

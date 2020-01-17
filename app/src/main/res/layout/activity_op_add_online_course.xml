@@ -90,7 +90,7 @@
                     style="@style/Difacademy.Body1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Judul" />
+                    android:hint="Judul Kelas" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <Button
@@ -101,7 +101,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="8dp"
-                android:text="@string/hapus"
+                android:text="hapus kelas"
                 android:visibility="visible"
                 app:layout_constraintBottom_toTopOf="@+id/btn_op_add_online_course_simpan"
                 app:layout_constraintEnd_toEndOf="parent"

@@ -13,7 +13,7 @@
         android:layout_height="@dimen/nav_bar_height" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_op_online"
+        android:id="@+id/rv_op_online_course"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:overScrollMode="never"

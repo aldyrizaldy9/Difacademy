@@ -263,9 +263,8 @@ public class OpAddOnlineCourseActivity extends AppCompatActivity {
                                 tagId.equals(oldOnlineCourseModel.getTagId()) &&
                                 harga.equals(oldOnlineCourseModel.getHarga()) &&
                                 thumbnailUrl.equals(oldOnlineCourseModel.getThumbnailUrl()) &&
-                                imageUri != null) {
+                                imageUri == null) {
                             Log.d(TAG, "onClick: gaada yang berubah");
-                            pd.dismiss();
                             Intent intent = new Intent(OpAddOnlineCourseActivity.this, OpOnlineMateriActivity.class);
                             startActivity(intent);
                         } else {
@@ -314,23 +313,19 @@ public class OpAddOnlineCourseActivity extends AppCompatActivity {
 
     private boolean isDataComplete() {
         if (thereIsData) {
-            return !edtJudul.getText().equals("") &&
-                    !edtDeskripsi.getText().equals("") &&
-                    !edtHarga.getText().equals("") &&
+            return !edtJudul.getText().toString().equals("") &&
+                    !edtDeskripsi.getText().toString().equals("") &&
+                    !edtHarga.getText().toString().equals("") &&
                     !tagCourseId.equals("") &&
                     !tagCourse.equals("");
         } else {
-            return !edtJudul.getText().equals("") &&
-                    !edtDeskripsi.getText().equals("") &&
-                    !edtHarga.getText().equals("") &&
+            return !edtJudul.getText().toString().equals("") &&
+                    !edtDeskripsi.getText().toString().equals("") &&
+                    !edtHarga.getText().toString().equals("") &&
                     !tagCourseId.equals("") &&
                     !tagCourse.equals("") &&
                     imageUri != null;
         }
-    }
-
-    private void tambahMateri() {
-
     }
 
     private void hapusKelas() {
@@ -344,8 +339,6 @@ public class OpAddOnlineCourseActivity extends AppCompatActivity {
         String tag = tagCourse;
         String tagId = tagCourseId;
         String harga = edtHarga.getText().toString();
-
-        OnlineCourseModel model = new OnlineCourseModel(title, description, thumbnailUrl, googleDrive, tagId, tag, harga, dateCreated);
 
         Log.d(TAG, "simpanKelas: berjalan");
         Log.d(TAG, "simpanKelas: title : " + title);
@@ -361,6 +354,8 @@ public class OpAddOnlineCourseActivity extends AppCompatActivity {
             Toast.makeText(OpAddOnlineCourseActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
             return;
         }
+
+        OnlineCourseModel model = new OnlineCourseModel(title, description, thumbnailUrl, googleDrive, tagId, tag, harga, dateCreated);
 
         if (thereIsData) {
             Log.d(TAG, "simpanKelas: there is data");
