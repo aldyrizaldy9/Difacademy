@@ -37,6 +37,7 @@ import com.google.firebase.storage.UploadTask;
 import java.util.UUID;
 
 import static com.example.aldy.difacademy.Activity.OpAddOnlineCourseActivity.onlineCourseDocId;
+import static com.example.aldy.difacademy.Activity.OpMainActivity.ADD_REQUEST_CODE;
 import static com.example.aldy.difacademy.Activity.OpMainActivity.PHOTO_PICK_REQUEST_CODE;
 import static com.example.aldy.difacademy.Activity.OpMainActivity.UPDATE_REQUEST_CODE;
 
@@ -316,7 +317,7 @@ public class OpAddOnlineMateriActivity extends AppCompatActivity {
                             intent.putExtra("online_materi_model", model);
                             intent.putExtra("index", index);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            startActivityForResult(intent, UPDATE_REQUEST_CODE);
+                            startActivityForResult(intent, ADD_REQUEST_CODE);
                         }
                     }
                 })
