@@ -22,7 +22,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.aldy.difacademy.Model.OnlineVideoModel;
+import com.example.aldy.difacademy.Model.VideoModel;
 import com.example.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -57,7 +57,7 @@ public class OpAddOnlineVideoActivity extends AppCompatActivity {
     Button btnPilihFile, btnHapus, btnSimpan, btnCancelUpload;
     TextView tvUploadProses, tvFileName;
 
-    OnlineVideoModel onlineVideoModel, oldOnlineVideoModel;
+    VideoModel videoModel, oldVideoModel;
     boolean thereIsData = false;
     int PICK_VIDEO_REQUEST_CODE = 11;
     Uri videoUri;
@@ -114,16 +114,16 @@ public class OpAddOnlineVideoActivity extends AppCompatActivity {
 
     private void checkIntent() {
         Intent intent = getIntent();
-        onlineVideoModel = intent.getParcelableExtra("online_video_model");
-        if (onlineVideoModel != null) {
-            oldOnlineVideoModel = onlineVideoModel;
+        videoModel = intent.getParcelableExtra("online_video_model");
+        if (videoModel != null) {
+            oldVideoModel = videoModel;
             thereIsData = true;
-            edtJudul.setText(onlineVideoModel.getTitle());
-            edtDeskripsi.setText(onlineVideoModel.getDescription());
-            onlineVideoDocId = onlineVideoModel.getDocumentId();
+            edtJudul.setText(videoModel.getTitle());
+            edtDeskripsi.setText(videoModel.getDescription());
+            onlineVideoDocId = videoModel.getDocumentId();
             btnHapus.setVisibility(View.VISIBLE);
-            dateCreated = onlineVideoModel.getDateCreated();
-            urlVideo = onlineVideoModel.getVideoUrl();
+            dateCreated = videoModel.getDateCreated();
+            urlVideo = videoModel.getVideoUrl();
             index = intent.getIntExtra("index", -1);
         }
     }
@@ -320,7 +320,7 @@ public class OpAddOnlineVideoActivity extends AppCompatActivity {
             return;
         }
 
-        OnlineVideoModel model = new OnlineVideoModel(title, description, urlVideo, dateCreated);
+        VideoModel model = new VideoModel(title, description, urlVideo, dateCreated);
 
         if (thereIsData) {
             editVideo(model);
@@ -329,7 +329,7 @@ public class OpAddOnlineVideoActivity extends AppCompatActivity {
         }
     }
 
-    private void editVideo(final OnlineVideoModel model) {
+    private void editVideo(final VideoModel model) {
         DocumentReference docRef = onlineVideoRef.document(onlineVideoDocId);
         docRef.set(model)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -354,7 +354,7 @@ public class OpAddOnlineVideoActivity extends AppCompatActivity {
                 });
     }
 
-    private void tambahVideo(final OnlineVideoModel model) {
+    private void tambahVideo(final VideoModel model) {
         onlineVideoRef.add(model)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
@@ -374,8 +374,8 @@ public class OpAddOnlineVideoActivity extends AppCompatActivity {
                 });
     }
 
-    private void deleteThanUpdateVideoInFirebase(final OnlineVideoModel model) {
-        StorageReference deleteRef = firebaseStorage.getReferenceFromUrl(oldOnlineVideoModel.getVideoUrl());
+    private void deleteThanUpdateVideoInFirebase(final VideoModel model) {
+        StorageReference deleteRef = firebaseStorage.getReferenceFromUrl(oldVideoModel.getVideoUrl());
         deleteRef.delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override

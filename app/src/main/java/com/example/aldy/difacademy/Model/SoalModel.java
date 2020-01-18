@@ -5,25 +5,14 @@ import android.os.Parcelable;
 
 import com.google.firebase.firestore.Exclude;
 
-public class QuizModel implements Parcelable {
-    public static final Creator<QuizModel> CREATOR = new Creator<QuizModel>() {
-        @Override
-        public QuizModel createFromParcel(Parcel in) {
-            return new QuizModel(in);
-        }
-
-        @Override
-        public QuizModel[] newArray(int size) {
-            return new QuizModel[size];
-        }
-    };
+public class SoalModel implements Parcelable {
     long dateCreated;
     String soal, jwbA, jwbB, jwbC, jwbD, jwbE, jawabanBenar, documentId;
 
-    public QuizModel() {
+    public SoalModel() {
     }
 
-    public QuizModel(long dateCreated, String soal, String jwbA, String jwbB, String jwbC, String jwbD, String jwbE, String jawabanBenar) {
+    public SoalModel(long dateCreated, String soal, String jwbA, String jwbB, String jwbC, String jwbD, String jwbE, String jawabanBenar) {
         this.dateCreated = dateCreated;
         this.soal = soal;
         this.jwbA = jwbA;
@@ -34,7 +23,7 @@ public class QuizModel implements Parcelable {
         this.jawabanBenar = jawabanBenar;
     }
 
-    protected QuizModel(Parcel in) {
+    protected SoalModel(Parcel in) {
         dateCreated = in.readLong();
         soal = in.readString();
         jwbA = in.readString();
@@ -63,6 +52,18 @@ public class QuizModel implements Parcelable {
     public int describeContents() {
         return 0;
     }
+
+    public static final Creator<SoalModel> CREATOR = new Creator<SoalModel>() {
+        @Override
+        public SoalModel createFromParcel(Parcel in) {
+            return new SoalModel(in);
+        }
+
+        @Override
+        public SoalModel[] newArray(int size) {
+            return new SoalModel[size];
+        }
+    };
 
     public long getDateCreated() {
         return dateCreated;

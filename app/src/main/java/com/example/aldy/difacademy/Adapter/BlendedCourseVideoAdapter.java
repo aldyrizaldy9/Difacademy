@@ -14,90 +14,87 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.aldy.difacademy.Activity.PaymentActivity;
 import com.example.aldy.difacademy.Activity.WatchVideoBlendedActivity;
-import com.example.aldy.difacademy.Model.BlendedVideoModel;
 import com.example.aldy.difacademy.R;
 
 import java.util.ArrayList;
 
-import static com.example.aldy.difacademy.Activity.ListVideoCourseActivity.BLENDED_COURSE_ID;
-import static com.example.aldy.difacademy.Activity.ListVideoCourseActivity.ISPAID;
 
-public class BlendedCourseVideoAdapter extends RecyclerView.Adapter<BlendedCourseVideoAdapter.ViewHolder> {
-    private Context context;
-    private ArrayList<BlendedVideoModel> blendedVideoModels;
-
-    public BlendedCourseVideoAdapter(Context context, ArrayList<BlendedVideoModel> blendedVideoModels) {
-        this.context = context;
-        this.blendedVideoModels = blendedVideoModels;
-    }
-
-    @NonNull
-    @Override
-    public BlendedCourseVideoAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-        View view = layoutInflater.inflate(R.layout.card_video_course, parent, false);
-        return new BlendedCourseVideoAdapter.ViewHolder(view);
-    }
-
-    @Override
-    public void onBindViewHolder(@NonNull BlendedCourseVideoAdapter.ViewHolder holder, int position) {
-        final BlendedVideoModel blendedVideoModel = blendedVideoModels.get(position);
-        holder.tvJudul.setText(blendedVideoModel.getTitle());
-//        holder.tvPanjangVideo.setText();
-        int episode = position + 1;
-        holder.tvEpisode.setText("#" + episode);
-        if (position != 0) {
-            if (!ISPAID) {
-                holder.imgStatus.setImageResource(R.drawable.ic_lock);
-                holder.clContainer.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(context, PaymentActivity.class);
-                        intent.putExtra("blendedCourseId", BLENDED_COURSE_ID);
-                        context.startActivity(intent);
-                    }
-                });
-            } else {
-                holder.imgStatus.setImageResource(R.drawable.ic_play_arrow);
-                holder.clContainer.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(context, WatchVideoBlendedActivity.class);
-                        intent.putExtra("blended_video_model", blendedVideoModel);
-                        context.startActivity(intent);
-                    }
-                });
-            }
-        } else {
-            holder.imgStatus.setImageResource(R.drawable.ic_play_arrow);
-            holder.clContainer.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(context, WatchVideoBlendedActivity.class);
-                    intent.putExtra("blended_video_model", blendedVideoModel);
-                    context.startActivity(intent);
-                }
-            });
-        }
-    }
-
-    @Override
-    public int getItemCount() {
-        return blendedVideoModels.size();
-    }
-
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView tvJudul, tvPanjangVideo, tvEpisode;
-        private ImageView imgStatus;
-        private ConstraintLayout clContainer;
-
-        public ViewHolder(@NonNull View itemView) {
-            super(itemView);
-            tvJudul = itemView.findViewById(R.id.tv_judul);
-//            tvPanjangVideo = itemView.findViewById(R.id.tv_panjang_video);
-            tvEpisode = itemView.findViewById(R.id.tv_card_video_episode);
-            imgStatus = itemView.findViewById(R.id.img_video_course_status);
-            clContainer = itemView.findViewById(R.id.cl_card_video_course_container);
-        }
-    }
-}
+//public class BlendedCourseVideoAdapter extends RecyclerView.Adapter<BlendedCourseVideoAdapter.ViewHolder> {
+//    private Context context;
+//    private ArrayList<BlendedVideoModel> blendedVideoModels;
+//
+//    public BlendedCourseVideoAdapter(Context context, ArrayList<BlendedVideoModel> blendedVideoModels) {
+//        this.context = context;
+//        this.blendedVideoModels = blendedVideoModels;
+//    }
+//
+//    @NonNull
+//    @Override
+//    public BlendedCourseVideoAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+//        LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
+//        View view = layoutInflater.inflate(R.layout.card_video_course, parent, false);
+//        return new BlendedCourseVideoAdapter.ViewHolder(view);
+//    }
+//
+//    @Override
+//    public void onBindViewHolder(@NonNull BlendedCourseVideoAdapter.ViewHolder holder, int position) {
+//        final BlendedVideoModel blendedVideoModel = blendedVideoModels.get(position);
+//        holder.tvJudul.setText(blendedVideoModel.getTitle());
+////        holder.tvPanjangVideo.setText();
+//        int episode = position + 1;
+//        holder.tvEpisode.setText("#" + episode);
+//        if (position != 0) {
+//            if (!ISPAID) {
+//                holder.imgStatus.setImageResource(R.drawable.ic_lock);
+//                holder.clContainer.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        Intent intent = new Intent(context, PaymentActivity.class);
+//                        intent.putExtra("blendedCourseId", BLENDED_COURSE_ID);
+//                        context.startActivity(intent);
+//                    }
+//                });
+//            } else {
+//                holder.imgStatus.setImageResource(R.drawable.ic_play_arrow);
+//                holder.clContainer.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        Intent intent = new Intent(context, WatchVideoBlendedActivity.class);
+//                        intent.putExtra("blended_video_model", blendedVideoModel);
+//                        context.startActivity(intent);
+//                    }
+//                });
+//            }
+//        } else {
+//            holder.imgStatus.setImageResource(R.drawable.ic_play_arrow);
+//            holder.clContainer.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    Intent intent = new Intent(context, WatchVideoBlendedActivity.class);
+//                    intent.putExtra("blended_video_model", blendedVideoModel);
+//                    context.startActivity(intent);
+//                }
+//            });
+//        }
+//    }
+//
+//    @Override
+//    public int getItemCount() {
+//        return blendedVideoModels.size();
+//    }
+//
+//    public class ViewHolder extends RecyclerView.ViewHolder {
+//        private TextView tvJudul, tvPanjangVideo, tvEpisode;
+//        private ImageView imgStatus;
+//        private ConstraintLayout clContainer;
+//
+//        public ViewHolder(@NonNull View itemView) {
+//            super(itemView);
+//            tvJudul = itemView.findViewById(R.id.tv_judul);
+////            tvPanjangVideo = itemView.findViewById(R.id.tv_panjang_video);
+//            tvEpisode = itemView.findViewById(R.id.tv_card_video_episode);
+//            imgStatus = itemView.findViewById(R.id.img_video_course_status);
+//            clContainer = itemView.findViewById(R.id.cl_card_video_course_container);
+//        }
+//    }
+//}

@@ -19,7 +19,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import com.example.aldy.difacademy.Model.BlendedCourseModel;
 import com.example.aldy.difacademy.Model.PaymentModel;
 import com.example.aldy.difacademy.Model.UserModel;
 import com.example.aldy.difacademy.Notification.APIService;
@@ -299,27 +298,27 @@ public class PaymentActivity extends AppCompatActivity {
     }
 
     private void getCourseData() {
-        DocumentReference courseRef = firebaseFirestore.collection("BlendedCourse").document(blendedCourseId);
-        courseRef
-                .get()
-                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                    @Override
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        BlendedCourseModel blendedCourseModel = documentSnapshot.toObject(BlendedCourseModel.class);
-                        if (blendedCourseModel != null) {
-                            namaKelas = blendedCourseModel.getTitle();
-                            hargaKelas = blendedCourseModel.getHarga();
-                        }
-                        sendPaymentDetailsToAdmin();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        progressDialog.dismiss();
-                        Log.d(TAG, e.toString());
-                    }
-                });
+//        DocumentReference courseRef = firebaseFirestore.collection("BlendedCourse").document(blendedCourseId);
+//        courseRef
+//                .get()
+//                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+//                    @Override
+//                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+//                        BlendedCourseModel blendedCourseModel = documentSnapshot.toObject(BlendedCourseModel.class);
+//                        if (blendedCourseModel != null) {
+//                            namaKelas = blendedCourseModel.getTitle();
+//                            hargaKelas = blendedCourseModel.getHarga();
+//                        }
+//                        sendPaymentDetailsToAdmin();
+//                    }
+//                })
+//                .addOnFailureListener(new OnFailureListener() {
+//                    @Override
+//                    public void onFailure(@NonNull Exception e) {
+//                        progressDialog.dismiss();
+//                        Log.d(TAG, e.toString());
+//                    }
+//                });
     }
 
     private boolean isNetworkConnected() {

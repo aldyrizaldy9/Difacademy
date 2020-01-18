@@ -15,10 +15,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.aldy.difacademy.Adapter.OpOnlineMateriAdapter;
-import com.example.aldy.difacademy.Adapter.OpOnlineSoalAdapter;
-import com.example.aldy.difacademy.Model.OnlineMateriModel;
-import com.example.aldy.difacademy.Model.OnlineSoalModel;
+import com.example.aldy.difacademy.Adapter.OpSoalAdapter;
+import com.example.aldy.difacademy.Model.SoalModel;
 import com.example.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -43,8 +41,8 @@ public class OpOnlineSoalActivity extends AppCompatActivity {
     ImageView imgBack, imgAdd;
     RecyclerView rvOnlineSoal;
 
-    ArrayList<OnlineSoalModel> onlineSoalModels;
-    OpOnlineSoalAdapter adapter;
+    ArrayList<SoalModel> soalModels;
+    OpSoalAdapter adapter;
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     CollectionReference onlineSoalRef = db.collection("OnlineCourse")
@@ -62,7 +60,7 @@ public class OpOnlineSoalActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_op_online_soal);
 
-        onlineSoalModels = new ArrayList<>();
+        soalModels = new ArrayList<>();
 
         initView();
         onClick();
@@ -74,20 +72,20 @@ public class OpOnlineSoalActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Intent intent = getIntent();
-        OnlineSoalModel model = intent.getParcelableExtra("online_soal_model");
+        SoalModel model = intent.getParcelableExtra("online_soal_model");
         int index = intent.getIntExtra("index", -1);
 
         if (requestCode == ADD_REQUEST_CODE && resultCode == RESULT_OK) {
             if (model != null) {
-                onlineSoalModels.add(model);
+                soalModels.add(model);
             }
         } else if (requestCode == DELETE_REQUEST_CODE && resultCode == RESULT_OK) {
             if (index != -1) {
-                onlineSoalModels.remove(index);
+                soalModels.remove(index);
             }
         } else if (requestCode == UPDATE_REQUEST_CODE && resultCode == RESULT_OK) {
             if (model != null) {
-                onlineSoalModels.set(index, model);
+                soalModels.set(index, model);
             }
         }
         adapter.notifyDataSetChanged();
@@ -127,14 +125,14 @@ public class OpOnlineSoalActivity extends AppCompatActivity {
     private void setRecyclerView(){
         final LinearLayoutManager manager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
         rvOnlineSoal.setLayoutManager(manager);
-        adapter = new OpOnlineSoalAdapter(this, onlineSoalModels);
+        adapter = new OpSoalAdapter(this, soalModels);
         rvOnlineSoal.setAdapter(adapter);
 
         rvOnlineSoal.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                if (manager.findLastVisibleItemPosition() >= onlineSoalModels.size() - 10 &&
+                if (manager.findLastVisibleItemPosition() >= soalModels.size() - 10 &&
                         lastVisible != null &&
                         loadbaru) {
                     loadbaru = false;
@@ -148,9 +146,9 @@ public class OpOnlineSoalActivity extends AppCompatActivity {
                                 public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                                     if (queryDocumentSnapshots.size() > 0) {
                                         for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                                            OnlineSoalModel newModel = documentSnapshot.toObject(OnlineSoalModel.class);
+                                            SoalModel newModel = documentSnapshot.toObject(SoalModel.class);
                                             newModel.setDocumentId(documentSnapshot.getId());
-                                            onlineSoalModels.add(newModel);
+                                            soalModels.add(newModel);
                                         }
 
                                         if (queryDocumentSnapshots.size() < 20) {
@@ -194,12 +192,12 @@ public class OpOnlineSoalActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        onlineSoalModels.clear();
+                        soalModels.clear();
                         if (queryDocumentSnapshots.size() > 0){
                             for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
-                                OnlineSoalModel newModel = documentSnapshot.toObject(OnlineSoalModel.class);
+                                SoalModel newModel = documentSnapshot.toObject(SoalModel.class);
                                 newModel.setDocumentId(documentSnapshot.getId());
-                                onlineSoalModels.add(newModel);
+                                soalModels.add(newModel);
                             }
 
                             if (queryDocumentSnapshots.size() < 20){

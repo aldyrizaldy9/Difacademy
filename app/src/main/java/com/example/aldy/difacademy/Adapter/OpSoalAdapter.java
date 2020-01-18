@@ -12,55 +12,62 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-import com.example.aldy.difacademy.Activity.OpAddOnlineMateriActivity;
-import com.example.aldy.difacademy.Model.OnlineMateriModel;
+import com.example.aldy.difacademy.Activity.OpAddBlendedSoalActivity;
+import com.example.aldy.difacademy.Activity.OpAddOnlineSoalActivity;
+import com.example.aldy.difacademy.Model.SoalModel;
 import com.example.aldy.difacademy.R;
 
 import java.util.ArrayList;
 
-public class OpOnlineMateriAdapter extends RecyclerView.Adapter<OpOnlineMateriAdapter.ViewHolder> {
-    private Context context;
-    private ArrayList<OnlineMateriModel> onlineMateriModels;
+import static com.example.aldy.difacademy.Activity.OpMainActivity.JENIS_KELAS;
 
-    public OpOnlineMateriAdapter(Context context, ArrayList<OnlineMateriModel> onlineMateriModels) {
+public class OpSoalAdapter extends RecyclerView.Adapter<OpSoalAdapter.ViewHolder> {
+    private Context context;
+    private ArrayList<SoalModel> soalModels;
+
+    public OpSoalAdapter(Context context, ArrayList<SoalModel> soalModels) {
         this.context = context;
-        this.onlineMateriModels = onlineMateriModels;
+        this.soalModels = soalModels;
     }
 
     @NonNull
     @Override
-    public OpOnlineMateriAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public OpSoalAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         View view = layoutInflater.inflate(R.layout.card_op, parent, false);
-        return new OpOnlineMateriAdapter.ViewHolder(view);
+        return new OpSoalAdapter.ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull OpOnlineMateriAdapter.ViewHolder holder, final int position) {
-
+    public void onBindViewHolder(@NonNull OpSoalAdapter.ViewHolder holder, final int position) {
         holder.tvTag.setVisibility(View.GONE);
+        holder.imgThumbnail.setVisibility(View.GONE);
         holder.tvDeskripsi.setVisibility(View.GONE);
 
-        final OnlineMateriModel model = onlineMateriModels.get(position);
-        holder.tvJudul.setText(model.getTitle());
-        Glide.with(context)
-                .load(model.getThumbnailUrl())
-                .into(holder.imgThumbnail);
+        final SoalModel model = soalModels.get(position);
+        holder.tvJudul.setText(position + 1 + ". " + model.getSoal());
         holder.container.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, OpAddOnlineMateriActivity.class);
-                intent.putExtra("online_materi_model", model);
-                intent.putExtra("index", position);
-                context.startActivity(intent);
+                Intent intent;
+                if (JENIS_KELAS.equals("blended")){
+                    intent = new Intent(context, OpAddBlendedSoalActivity.class);
+                    intent.putExtra("blended_soal_model", model);
+                    intent.putExtra("index", position);
+                    context.startActivity(intent);
+                } else if (JENIS_KELAS.equals("online")){
+                    intent = new Intent(context, OpAddOnlineSoalActivity.class);
+                    intent.putExtra("online_soal_model", model);
+                    intent.putExtra("index", position);
+                    context.startActivity(intent);
+                }
             }
         });
     }
 
     @Override
     public int getItemCount() {
-        return onlineMateriModels.size();
+        return soalModels.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{

@@ -13,7 +13,6 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -40,14 +39,14 @@ import com.google.firebase.storage.UploadTask;
 import java.util.ArrayList;
 import java.util.UUID;
 
-import static com.example.aldy.difacademy.Activity.OpAddOnlineCourseActivity.onlineCourseDocId;
+import static com.example.aldy.difacademy.Activity.OpAddBlendedCourseActivity.blendedCourseDocId;
 import static com.example.aldy.difacademy.Activity.OpMainActivity.ADD_REQUEST_CODE;
 import static com.example.aldy.difacademy.Activity.OpMainActivity.DELETE_REQUEST_CODE;
 import static com.example.aldy.difacademy.Activity.OpMainActivity.PHOTO_PICK_REQUEST_CODE;
 import static com.example.aldy.difacademy.Activity.OpMainActivity.UPDATE_REQUEST_CODE;
 
-public class OpAddOnlineMateriActivity extends AppCompatActivity {
-    public static String onlineMateriDocId = "";
+public class OpAddBlendedMateriActivity extends AppCompatActivity {
+    public static String blendedMateriDocId = "";
 
     TextView tvNavbar;
     ConstraintLayout clBack;
@@ -59,9 +58,9 @@ public class OpAddOnlineMateriActivity extends AppCompatActivity {
     ConstraintLayout clAddPhoto;
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
-    CollectionReference onlineMateriRef = db.collection("OnlineCourse")
-            .document(onlineCourseDocId)
-            .collection("OnlineMateri");
+    CollectionReference blendedMateriRef = db.collection("BlendedCourse")
+            .document(blendedCourseDocId)
+            .collection("BlendedMateri");
     boolean thereIsData = false;
     boolean addVideo = false;
     boolean addSoal = false;
@@ -79,7 +78,7 @@ public class OpAddOnlineMateriActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_op_add_online_materi);
+        setContentView(R.layout.activity_op_add_blended_materi);
 
         pd = new ProgressDialog(this);
         pd.setMessage("Loading...");
@@ -95,7 +94,7 @@ public class OpAddOnlineMateriActivity extends AppCompatActivity {
 
     private void initView() {
         tvNavbar = findViewById(R.id.tv_navbar);
-        tvNavbar.setText("Detail Materi Kelas Online");
+        tvNavbar.setText("Detail Materi Kelas Blended");
         clBack = findViewById(R.id.cl_icon1);
         clBack.setVisibility(View.VISIBLE);
         clBack.setOnClickListener(new View.OnClickListener() {
@@ -107,18 +106,18 @@ public class OpAddOnlineMateriActivity extends AppCompatActivity {
         imgBack = findViewById(R.id.img_icon1);
         imgBack.setImageResource(R.drawable.ic_arrow_back);
 
-        imgThumbnail = findViewById(R.id.img_op_add_online_materi_thumbnail);
-        btnAddVideo = findViewById(R.id.btn_op_add_online_materi_add_video);
-        btnAddSoal = findViewById(R.id.btn_op_add_online_materi_add_soal);
-        btnHapus = findViewById(R.id.btn_op_add_online_materi_hapus);
-        btnSimpan = findViewById(R.id.btn_op_add_online_materi_simpan);
-        clAddPhoto = findViewById(R.id.cl_op_add_online_materi_add_photo);
-        edtJudul = findViewById(R.id.edt_op_add_online_materi_judul);
+        imgThumbnail = findViewById(R.id.img_op_add_blended_materi_thumbnail);
+        btnAddVideo = findViewById(R.id.btn_op_add_blended_materi_add_video);
+        btnAddSoal = findViewById(R.id.btn_op_add_blended_materi_add_soal);
+        btnHapus = findViewById(R.id.btn_op_add_blended_materi_hapus);
+        btnSimpan = findViewById(R.id.btn_op_add_blended_materi_simpan);
+        clAddPhoto = findViewById(R.id.cl_op_add_blended_materi_add_photo);
+        edtJudul = findViewById(R.id.edt_op_add_blended_materi_judul);
     }
 
     private void checkIntent() {
         Intent intent = getIntent();
-        materiModel = intent.getParcelableExtra("online_materi_model");
+        materiModel = intent.getParcelableExtra("blended_materi_model");
         if (materiModel != null) {
             oldMateriModel = materiModel;
             index = intent.getIntExtra("index", -1);
@@ -129,7 +128,7 @@ public class OpAddOnlineMateriActivity extends AppCompatActivity {
                     .load(thumbnailUrl)
                     .into(imgThumbnail);
             edtJudul.setText(materiModel.getTitle());
-            onlineMateriDocId = materiModel.getDocumentId();
+            blendedMateriDocId = materiModel.getDocumentId();
         }
     }
 
@@ -164,7 +163,7 @@ public class OpAddOnlineMateriActivity extends AppCompatActivity {
                     String title = edtJudul.getText().toString();
                     if (thereIsData) {
                         if (title.equals(oldMateriModel.getTitle()) && imageUri == null) {
-                            Intent intent = new Intent(OpAddOnlineMateriActivity.this, OpOnlineVideoActivity.class);
+                            Intent intent = new Intent(OpAddBlendedMateriActivity.this, OpBlendedVideoActivity.class);
                             startActivity(intent);
                         } else {
                             showSimpanDialog();
@@ -173,7 +172,7 @@ public class OpAddOnlineMateriActivity extends AppCompatActivity {
                         showSimpanDialog();
                     }
                 } else {
-                    Toast.makeText(OpAddOnlineMateriActivity.this, getString(R.string.data_not_complete), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(OpAddBlendedMateriActivity.this, getString(R.string.data_not_complete), Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -188,7 +187,7 @@ public class OpAddOnlineMateriActivity extends AppCompatActivity {
                     String title = edtJudul.getText().toString();
                     if (thereIsData) {
                         if (title.equals(oldMateriModel.getTitle()) && imageUri == null) {
-                            Intent intent = new Intent(OpAddOnlineMateriActivity.this, OpOnlineSoalActivity.class);
+                            Intent intent = new Intent(OpAddBlendedMateriActivity.this, OpBlendedSoalActivity.class);
                             startActivity(intent);
                         } else {
                             showSimpanDialog();
@@ -197,7 +196,7 @@ public class OpAddOnlineMateriActivity extends AppCompatActivity {
                         showSimpanDialog();
                     }
                 } else {
-                    Toast.makeText(OpAddOnlineMateriActivity.this, getString(R.string.data_not_complete), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(OpAddBlendedMateriActivity.this, getString(R.string.data_not_complete), Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -217,7 +216,7 @@ public class OpAddOnlineMateriActivity extends AppCompatActivity {
                 if (isDataComplete()) {
                     showSimpanDialog();
                 } else {
-                    Toast.makeText(OpAddOnlineMateriActivity.this, getString(R.string.data_not_complete), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(OpAddBlendedMateriActivity.this, getString(R.string.data_not_complete), Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -251,7 +250,7 @@ public class OpAddOnlineMateriActivity extends AppCompatActivity {
             dateCreated = Timestamp.now().getSeconds();
         } catch (Exception e) {
             pd.dismiss();
-            Toast.makeText(OpAddOnlineMateriActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+            Toast.makeText(OpAddBlendedMateriActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -265,7 +264,7 @@ public class OpAddOnlineMateriActivity extends AppCompatActivity {
     }
 
     private void editMateri(final MateriModel model) {
-        DocumentReference docRef = onlineMateriRef.document(onlineMateriDocId);
+        DocumentReference docRef = blendedMateriRef.document(blendedMateriDocId);
         docRef.set(model)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -276,16 +275,16 @@ public class OpAddOnlineMateriActivity extends AppCompatActivity {
                             if (addSoal) {
                                 imageUri = null;
                                 pd.dismiss();
-                                Intent intent = new Intent(OpAddOnlineMateriActivity.this, OpOnlineSoalActivity.class);
+                                Intent intent = new Intent(OpAddBlendedMateriActivity.this, OpBlendedSoalActivity.class);
                                 startActivity(intent);
                             } else if (addVideo) {
                                 imageUri = null;
                                 pd.dismiss();
-                                Intent intent = new Intent(OpAddOnlineMateriActivity.this, OpOnlineVideoActivity.class);
+                                Intent intent = new Intent(OpAddBlendedMateriActivity.this, OpBlendedVideoActivity.class);
                                 startActivity(intent);
                             } else {
-                                Intent intent = new Intent(OpAddOnlineMateriActivity.this, OpOnlineMateriActivity.class);
-                                intent.putExtra("online_materi_model", model);
+                                Intent intent = new Intent(OpAddBlendedMateriActivity.this, OpBlendedMateriActivity.class);
+                                intent.putExtra("blended_materi_model", model);
                                 intent.putExtra("index", index);
                                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 startActivityForResult(intent, UPDATE_REQUEST_CODE);
@@ -297,24 +296,24 @@ public class OpAddOnlineMateriActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         pd.dismiss();
-                        Toast.makeText(OpAddOnlineMateriActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(OpAddBlendedMateriActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
                     }
                 });
     }
 
     private void tambahMateri(final MateriModel model) {
-        onlineMateriRef.add(model)
+        blendedMateriRef.add(model)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
-                        onlineMateriDocId = documentReference.getId();
+                        blendedMateriDocId = documentReference.getId();
                         if (addSoal) {
                             thereIsData = true;
                             materiModel = new MateriModel(edtJudul.getText().toString(), thumbnailUrl, dateCreated);
                             oldMateriModel = materiModel;
                             imageUri = null;
                             pd.dismiss();
-                            Intent intent = new Intent(OpAddOnlineMateriActivity.this, OpOnlineSoalActivity.class);
+                            Intent intent = new Intent(OpAddBlendedMateriActivity.this, OpBlendedSoalActivity.class);
                             startActivity(intent);
                         } else if (addVideo) {
                             thereIsData = true;
@@ -322,11 +321,11 @@ public class OpAddOnlineMateriActivity extends AppCompatActivity {
                             oldMateriModel = materiModel;
                             imageUri = null;
                             pd.dismiss();
-                            Intent intent = new Intent(OpAddOnlineMateriActivity.this, OpOnlineVideoActivity.class);
+                            Intent intent = new Intent(OpAddBlendedMateriActivity.this, OpBlendedVideoActivity.class);
                             startActivity(intent);
                         } else {
-                            Intent intent = new Intent(OpAddOnlineMateriActivity.this, OpOnlineMateriActivity.class);
-                            intent.putExtra("online_materi_model", model);
+                            Intent intent = new Intent(OpAddBlendedMateriActivity.this, OpBlendedMateriActivity.class);
+                            intent.putExtra("blended_materi_model", model);
                             intent.putExtra("index", index);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             startActivityForResult(intent, ADD_REQUEST_CODE);
@@ -337,13 +336,13 @@ public class OpAddOnlineMateriActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         pd.dismiss();
-                        Toast.makeText(OpAddOnlineMateriActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(OpAddBlendedMateriActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
                     }
                 });
     }
 
     private void uploadPhotoToFirebase() {
-        final StorageReference ref = firebaseStorage.getReference().child("OnlineMateri/" + UUID.randomUUID().toString());
+        final StorageReference ref = firebaseStorage.getReference().child("BlendedMateri/" + UUID.randomUUID().toString());
         ref.putFile(imageUri)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
@@ -362,7 +361,7 @@ public class OpAddOnlineMateriActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         pd.dismiss();
-                        Toast.makeText(OpAddOnlineMateriActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(OpAddBlendedMateriActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -376,16 +375,16 @@ public class OpAddOnlineMateriActivity extends AppCompatActivity {
                         if (addVideo) {
                             imageUri = null;
                             pd.dismiss();
-                            Intent intent = new Intent(OpAddOnlineMateriActivity.this, OpOnlineVideoActivity.class);
+                            Intent intent = new Intent(OpAddBlendedMateriActivity.this, OpBlendedVideoActivity.class);
                             startActivity(intent);
                         } else if (addSoal) {
                             imageUri = null;
                             pd.dismiss();
-                            Intent intent = new Intent(OpAddOnlineMateriActivity.this, OpOnlineVideoActivity.class);
+                            Intent intent = new Intent(OpAddBlendedMateriActivity.this, OpBlendedVideoActivity.class);
                             startActivity(intent);
                         } else {
-                            Intent intent = new Intent(OpAddOnlineMateriActivity.this, OpOnlineMateriActivity.class);
-                            intent.putExtra("online_materi_model", model);
+                            Intent intent = new Intent(OpAddBlendedMateriActivity.this, OpBlendedMateriActivity.class);
+                            intent.putExtra("blended_materi_model", model);
                             intent.putExtra("index", index);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             startActivityForResult(intent, UPDATE_REQUEST_CODE);
@@ -397,13 +396,13 @@ public class OpAddOnlineMateriActivity extends AppCompatActivity {
     private void showSimpanDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Apakah anda yakin ingin menyimpan materi ini?");
-        builder.setTitle("Simpan Materi Kelas Online");
+        builder.setTitle("Simpan Materi Kelas Blended");
         builder.setCancelable(false);
         builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (!isNetworkConnected()) {
-                    Toast.makeText(OpAddOnlineMateriActivity.this, "Tidak ada koneksi intenet!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(OpAddBlendedMateriActivity.this, "Tidak ada koneksi intenet!", Toast.LENGTH_SHORT).show();
                 } else {
                     pd.show();
                     if (imageUri != null) {
@@ -430,13 +429,13 @@ public class OpAddOnlineMateriActivity extends AppCompatActivity {
     private void showHapusDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Apakah anda yakin ingin menghapus materi ini?");
-        builder.setTitle("Hapus Materi Kelas Online");
+        builder.setTitle("Hapus Materi Kelas Blended");
         builder.setCancelable(false);
         builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (!isNetworkConnected()) {
-                    Toast.makeText(OpAddOnlineMateriActivity.this, "Tidak ada koneksi intenet!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(OpAddBlendedMateriActivity.this, "Tidak ada koneksi intenet!", Toast.LENGTH_SHORT).show();
                 } else {
                     pd.show();
                     hapusMateri();
@@ -457,21 +456,21 @@ public class OpAddOnlineMateriActivity extends AppCompatActivity {
     }
 
     private void hapusMateri(){
-        //ambil link online video di storage
-        //hapus online video document
-        //hapus online video collection
-        //hapus online video storage
-        //hapus online soal document
-        //hapus online soal collection
-        //ambil link online materi thumbnail
-        //hapus online materi document
-        //hapus online materi thumbnail storage
+        //ambil link blended video di storage
+        //hapus blended video document
+        //hapus blended video collection
+        //hapus blended video storage
+        //hapus blended soal document
+        //hapus blended soal collection
+        //ambil link blended materi thumbnail
+        //hapus blended materi document
+        //hapus blended materi thumbnail storage
         getListVideoUrl();
     }
 
     private void getListVideoUrl(){
-        CollectionReference ref = onlineMateriRef.document(onlineMateriDocId)
-                .collection("OnlineVideo");
+        CollectionReference ref = blendedMateriRef.document(blendedMateriDocId)
+                .collection("BlendedVideo");
 
         ref.get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -481,14 +480,14 @@ public class OpAddOnlineMateriActivity extends AppCompatActivity {
                             VideoModel model = documentSnapshot.toObject(VideoModel.class);
                             listVideoUrl.add(model.getVideoUrl());
                         }
-                        hapusOnlineVideoDoc();
+                        hapusBlendedVideoDoc();
                     }
                 });
     }
 
-    private void hapusOnlineVideoDoc(){
-        final CollectionReference ref = onlineMateriRef.document(onlineMateriDocId)
-                .collection("OnlineVideo");
+    private void hapusBlendedVideoDoc(){
+        final CollectionReference ref = blendedMateriRef.document(blendedMateriDocId)
+                .collection("BlendedVideo");
 
         ref.get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -498,22 +497,22 @@ public class OpAddOnlineMateriActivity extends AppCompatActivity {
                             DocumentReference docRef = ref.document(documentSnapshot.getId());
                             docRef.delete();
                         }
-                        hapusOnlineVideoStorage();
+                        hapusBlendedVideoStorage();
                     }
                 });
     }
 
-    private void hapusOnlineVideoStorage(){
+    private void hapusBlendedVideoStorage(){
         for (String url : listVideoUrl){
             StorageReference ref = firebaseStorage.getReferenceFromUrl(url);
             ref.delete();
         }
-        hapusOnlineSoalDoc();
+        hapusBlendedSoalDoc();
     }
 
-    private void hapusOnlineSoalDoc(){
-        final CollectionReference ref = onlineMateriRef.document(onlineMateriDocId)
-                .collection("OnlineSoal");
+    private void hapusBlendedSoalDoc(){
+        final CollectionReference ref = blendedMateriRef.document(blendedMateriDocId)
+                .collection("BlendedSoal");
 
         ref.get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -523,29 +522,29 @@ public class OpAddOnlineMateriActivity extends AppCompatActivity {
                             DocumentReference docRef = ref.document(documentSnapshot.getId());
                             docRef.delete();
                         }
-                        hapusOnlineMateriDoc();
+                        hapusBlendedMateriDoc();
                     }
                 });
     }
 
-    private void hapusOnlineMateriDoc(){
-        DocumentReference ref = onlineMateriRef.document(onlineMateriDocId);
+    private void hapusBlendedMateriDoc(){
+        DocumentReference ref = blendedMateriRef.document(blendedMateriDocId);
         ref.delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        hapusOnlineMateriStorage();
+                        hapusBlendedMateriStorage();
                     }
                 });
     }
 
-    private void hapusOnlineMateriStorage(){
+    private void hapusBlendedMateriStorage(){
         StorageReference ref = firebaseStorage.getReferenceFromUrl(thumbnailUrl);
         ref.delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Intent intent = new Intent(OpAddOnlineMateriActivity.this, OpOnlineMateriActivity.class);
+                        Intent intent = new Intent(OpAddBlendedMateriActivity.this, OpBlendedMateriActivity.class);
                         intent.putExtra("index", index);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivityForResult(intent, DELETE_REQUEST_CODE);

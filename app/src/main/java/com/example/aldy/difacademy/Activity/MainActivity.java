@@ -19,10 +19,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.aldy.difacademy.Adapter.NewsAdapter;
-import com.example.aldy.difacademy.Model.BlendedCourseModel;
 import com.example.aldy.difacademy.Model.NewsModel;
 import com.example.aldy.difacademy.Model.OngoingKelasBlendedModel;
-import com.example.aldy.difacademy.Model.OngoingKelasOnlineModel;
 import com.example.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -49,8 +47,8 @@ public class MainActivity extends AppCompatActivity {
     private NewsAdapter newsAdapter;
     private ArrayList<NewsModel> newsModels;
     private FirebaseFirestore firebaseFirestore;
-    private BlendedCourseModel blendedCourseModel;
-//    private OnlineMateriModel onlineCourseModel;
+//    private BlendedCourseModel blendedCourseModel;
+//    private MateriModel courseModel;
     private String userDocId;
     private OngoingKelasBlendedModel ongoingKelasBlendedModel;
 //    private OngoingKelasOnlineModel ongoingKelasOnlineModel;
@@ -270,45 +268,45 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setBlendedCourseAsOngoing(String courseId) {
-        DocumentReference ongoingRef = firebaseFirestore
-                .collection("BlendedCourse")
-                .document(courseId);
-        ongoingRef.get()
-                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                    @Override
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        blendedCourseModel = documentSnapshot.toObject(BlendedCourseModel.class);
-                        if (blendedCourseModel != null) {
-                            blendedCourseModel.setDocumentId(documentSnapshot.getId());
-
-                            imgOngoing.setClipToOutline(true);
-
-                            Glide.with(MainActivity.this)
-                                    .load(blendedCourseModel.getThumbnailUrl())
-                                    .apply(new RequestOptions().centerCrop())
-                                    .into(imgOngoing);
-                            tvJudulOngoing.setText(blendedCourseModel.getTitle());
-                            tvTagOngoing.setText(blendedCourseModel.getTag());
-
-                            clOngoing.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    Intent intent = new Intent(MainActivity.this, ListVideoCourseActivity.class);
-                                    intent.putExtra("BLENDED_COURSE_ID", blendedCourseModel.getDocumentId());
-                                    startActivity(intent);
-                                }
-                            });
-
-                            setOngoingView();
-                        }
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d(TAG, e.toString());
-                    }
-                });
+//        DocumentReference ongoingRef = firebaseFirestore
+//                .collection("BlendedCourse")
+//                .document(courseId);
+//        ongoingRef.get()
+//                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+//                    @Override
+//                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+//                        blendedCourseModel = documentSnapshot.toObject(BlendedCourseModel.class);
+//                        if (blendedCourseModel != null) {
+//                            blendedCourseModel.setDocumentId(documentSnapshot.getId());
+//
+//                            imgOngoing.setClipToOutline(true);
+//
+//                            Glide.with(MainActivity.this)
+//                                    .load(blendedCourseModel.getThumbnailUrl())
+//                                    .apply(new RequestOptions().centerCrop())
+//                                    .into(imgOngoing);
+//                            tvJudulOngoing.setText(blendedCourseModel.getTitle());
+//                            tvTagOngoing.setText(blendedCourseModel.getTag());
+//
+//                            clOngoing.setOnClickListener(new View.OnClickListener() {
+//                                @Override
+//                                public void onClick(View v) {
+//                                    Intent intent = new Intent(MainActivity.this, ListVideoCourseActivity.class);
+//                                    intent.putExtra("BLENDED_COURSE_ID", blendedCourseModel.getDocumentId());
+//                                    startActivity(intent);
+//                                }
+//                            });
+//
+//                            setOngoingView();
+//                        }
+//                    }
+//                })
+//                .addOnFailureListener(new OnFailureListener() {
+//                    @Override
+//                    public void onFailure(@NonNull Exception e) {
+//                        Log.d(TAG, e.toString());
+//                    }
+//                });
     }
 
     private void setOnlineCourseAsOngoing(String courseId) {
@@ -319,19 +317,19 @@ public class MainActivity extends AppCompatActivity {
 //                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
 //                    @Override
 //                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-//                        onlineCourseModel = documentSnapshot.toObject(OnlineMateriModel.class);
-//                        if (onlineCourseModel != null) {
-//                            onlineCourseModel.setDocumentId(documentSnapshot.getId());
+//                        courseModel = documentSnapshot.toObject(MateriModel.class);
+//                        if (courseModel != null) {
+//                            courseModel.setDocumentId(documentSnapshot.getId());
 //
-//                            Glide.with(MainActivity.this).load(onlineCourseModel.getThumbnailUrl()).into(imgOngoing);
-//                            tvJudulOngoing.setText(onlineCourseModel.getTitle());
-//                            tvTagOngoing.setText(onlineCourseModel.getTag());
+//                            Glide.with(MainActivity.this).load(courseModel.getThumbnailUrl()).into(imgOngoing);
+//                            tvJudulOngoing.setText(courseModel.getTitle());
+//                            tvTagOngoing.setText(courseModel.getTag());
 //
 //                            clOngoing.setOnClickListener(new View.OnClickListener() {
 //                                @Override
 //                                public void onClick(View v) {
 //                                    Intent intent = new Intent(MainActivity.this, ListVideoCourseActivity.class);
-//                                    intent.putExtra("ONLINE_COURSE_ID", onlineCourseModel.getDocumentId());
+//                                    intent.putExtra("ONLINE_COURSE_ID", courseModel.getDocumentId());
 //                                    startActivity(intent);
 //                                }
 //                            });

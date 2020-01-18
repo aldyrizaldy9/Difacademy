@@ -15,8 +15,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.aldy.difacademy.Adapter.OpOnlineCourseAdapter;
-import com.example.aldy.difacademy.Model.OnlineCourseModel;
+import com.example.aldy.difacademy.Adapter.OpCourseAdapter;
+import com.example.aldy.difacademy.Model.CourseModel;
 import com.example.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -31,6 +31,7 @@ import java.util.ArrayList;
 
 import static com.example.aldy.difacademy.Activity.OpMainActivity.ADD_REQUEST_CODE;
 import static com.example.aldy.difacademy.Activity.OpMainActivity.DELETE_REQUEST_CODE;
+import static com.example.aldy.difacademy.Activity.OpMainActivity.JENIS_KELAS;
 import static com.example.aldy.difacademy.Activity.OpMainActivity.UPDATE_REQUEST_CODE;
 
 public class OpOnlineCourseActivity extends AppCompatActivity {
@@ -40,8 +41,8 @@ public class OpOnlineCourseActivity extends AppCompatActivity {
     ImageView imgBack, imgAdd;
     RecyclerView rvOnlineCourse;
 
-    ArrayList<OnlineCourseModel> onlineCourseModels;
-    OpOnlineCourseAdapter adapter;
+    ArrayList<CourseModel> courseModels;
+    OpCourseAdapter adapter;
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     CollectionReference onlineCourseRef = db.collection("OnlineCourse");
@@ -54,7 +55,9 @@ public class OpOnlineCourseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_op_online_course);
 
-        onlineCourseModels = new ArrayList<>();
+        courseModels = new ArrayList<>();
+
+        JENIS_KELAS = "online";
 
         initView();
         onClick();
@@ -66,20 +69,20 @@ public class OpOnlineCourseActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Intent intent = getIntent();
-        OnlineCourseModel model = intent.getParcelableExtra("online_course_model");
+        CourseModel model = intent.getParcelableExtra("online_course_model");
         int index = intent.getIntExtra("index", -1);
 
         if (requestCode == ADD_REQUEST_CODE && resultCode == RESULT_OK) {
             if (model != null) {
-                onlineCourseModels.add(model);
+                courseModels.add(model);
             }
         } else if (requestCode == DELETE_REQUEST_CODE && resultCode == RESULT_OK) {
             if (index != -1) {
-                onlineCourseModels.remove(index);
+                courseModels.remove(index);
             }
         } else if (requestCode == UPDATE_REQUEST_CODE && resultCode == RESULT_OK) {
             if (model != null) {
-                onlineCourseModels.set(index, model);
+                courseModels.set(index, model);
             }
         }
         adapter.notifyDataSetChanged();
@@ -119,14 +122,14 @@ public class OpOnlineCourseActivity extends AppCompatActivity {
     private void setRecyclerView() {
         final LinearLayoutManager manager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
         rvOnlineCourse.setLayoutManager(manager);
-        adapter = new OpOnlineCourseAdapter(this, onlineCourseModels);
+        adapter = new OpCourseAdapter(this, courseModels);
         rvOnlineCourse.setAdapter(adapter);
 
         rvOnlineCourse.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                if (manager.findLastVisibleItemPosition() >= onlineCourseModels.size() - 10 &&
+                if (manager.findLastVisibleItemPosition() >= courseModels.size() - 10 &&
                         lastVisible != null &&
                         loadbaru) {
                     loadbaru = false;
@@ -140,9 +143,9 @@ public class OpOnlineCourseActivity extends AppCompatActivity {
                                 public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                                     if (queryDocumentSnapshots.size() > 0) {
                                         for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                                            OnlineCourseModel newModel = documentSnapshot.toObject(OnlineCourseModel.class);
+                                            CourseModel newModel = documentSnapshot.toObject(CourseModel.class);
                                             newModel.setDocumentId(documentSnapshot.getId());
-                                            onlineCourseModels.add(newModel);
+                                            courseModels.add(newModel);
                                         }
 
                                         if (queryDocumentSnapshots.size() < 20) {
@@ -186,12 +189,12 @@ public class OpOnlineCourseActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        onlineCourseModels.clear();
+                        courseModels.clear();
                         if (queryDocumentSnapshots.size() > 0){
                             for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
-                                OnlineCourseModel newModel = documentSnapshot.toObject(OnlineCourseModel.class);
+                                CourseModel newModel = documentSnapshot.toObject(CourseModel.class);
                                 newModel.setDocumentId(documentSnapshot.getId());
-                                onlineCourseModels.add(newModel);
+                                courseModels.add(newModel);
                             }
 
                             if (queryDocumentSnapshots.size() < 20){

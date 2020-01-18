@@ -15,8 +15,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.aldy.difacademy.Adapter.OpMateriAdapter;
-import com.example.aldy.difacademy.Model.MateriModel;
+import com.example.aldy.difacademy.Adapter.OpSoalAdapter;
+import com.example.aldy.difacademy.Model.SoalModel;
 import com.example.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -29,24 +29,27 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
-import static com.example.aldy.difacademy.Activity.OpAddOnlineCourseActivity.onlineCourseDocId;
+import static com.example.aldy.difacademy.Activity.OpAddBlendedCourseActivity.blendedCourseDocId;
+import static com.example.aldy.difacademy.Activity.OpAddBlendedMateriActivity.blendedMateriDocId;
 import static com.example.aldy.difacademy.Activity.OpMainActivity.ADD_REQUEST_CODE;
 import static com.example.aldy.difacademy.Activity.OpMainActivity.DELETE_REQUEST_CODE;
 import static com.example.aldy.difacademy.Activity.OpMainActivity.UPDATE_REQUEST_CODE;
 
-public class OpOnlineMateriActivity extends AppCompatActivity {
+public class OpBlendedSoalActivity extends AppCompatActivity {
     TextView tvNavbar;
     ConstraintLayout clBack, clAdd;
     ImageView imgBack, imgAdd;
-    RecyclerView rvOnlineMateri;
+    RecyclerView rvBlendedSoal;
 
-    ArrayList<MateriModel> materiModels;
-    OpMateriAdapter adapter;
+    ArrayList<SoalModel> soalModels;
+    OpSoalAdapter adapter;
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
-    CollectionReference onlineMateriRef = db.collection("OnlineCourse")
-            .document(onlineCourseDocId)
-            .collection("OnlineMateri");
+    CollectionReference blendedSoalRef = db.collection("BlendedCourse")
+            .document(blendedCourseDocId)
+            .collection("BlendedMateri")
+            .document(blendedMateriDocId)
+            .collection("BlendedSoal");
 
     DocumentSnapshot lastVisible;
     boolean loadbaru;
@@ -55,9 +58,9 @@ public class OpOnlineMateriActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_op_online_materi);
+        setContentView(R.layout.activity_op_blended_soal);
 
-        materiModels = new ArrayList<>();
+        soalModels = new ArrayList<>();
 
         initView();
         onClick();
@@ -69,20 +72,20 @@ public class OpOnlineMateriActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Intent intent = getIntent();
-        MateriModel model = intent.getParcelableExtra("online_materi_model");
+        SoalModel model = intent.getParcelableExtra("blended_soal_model");
         int index = intent.getIntExtra("index", -1);
 
         if (requestCode == ADD_REQUEST_CODE && resultCode == RESULT_OK) {
             if (model != null) {
-                materiModels.add(model);
+                soalModels.add(model);
             }
         } else if (requestCode == DELETE_REQUEST_CODE && resultCode == RESULT_OK) {
             if (index != -1) {
-                materiModels.remove(index);
+                soalModels.remove(index);
             }
         } else if (requestCode == UPDATE_REQUEST_CODE && resultCode == RESULT_OK) {
             if (model != null) {
-                materiModels.set(index, model);
+                soalModels.set(index, model);
             }
         }
         adapter.notifyDataSetChanged();
@@ -90,7 +93,7 @@ public class OpOnlineMateriActivity extends AppCompatActivity {
 
     private void initView(){
         tvNavbar = findViewById(R.id.tv_navbar);
-        tvNavbar.setText("Materi Kelas Online");
+        tvNavbar.setText("Soal Materi Kelas Blended");
         clBack = findViewById(R.id.cl_icon1);
         clBack.setVisibility(View.VISIBLE);
         clBack.setOnClickListener(new View.OnClickListener() {
@@ -105,7 +108,7 @@ public class OpOnlineMateriActivity extends AppCompatActivity {
         imgBack.setImageResource(R.drawable.ic_arrow_back);
         imgAdd = findViewById(R.id.img_icon3);
         imgAdd.setImageResource(R.drawable.ic_add);
-        rvOnlineMateri = findViewById(R.id.rv_op_online_materi);
+        rvBlendedSoal = findViewById(R.id.rv_op_blended_soal);
         pd = new ProgressDialog(this);
     }
 
@@ -113,7 +116,7 @@ public class OpOnlineMateriActivity extends AppCompatActivity {
         clAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(OpOnlineMateriActivity.this, OpAddOnlineMateriActivity.class);
+                Intent intent = new Intent(OpBlendedSoalActivity.this, OpAddBlendedSoalActivity.class);
                 startActivity(intent);
             }
         });
@@ -121,19 +124,19 @@ public class OpOnlineMateriActivity extends AppCompatActivity {
 
     private void setRecyclerView(){
         final LinearLayoutManager manager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
-        rvOnlineMateri.setLayoutManager(manager);
-        adapter = new OpMateriAdapter(this, materiModels);
-        rvOnlineMateri.setAdapter(adapter);
+        rvBlendedSoal.setLayoutManager(manager);
+        adapter = new OpSoalAdapter(this, soalModels);
+        rvBlendedSoal.setAdapter(adapter);
 
-        rvOnlineMateri.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        rvBlendedSoal.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                if (manager.findLastVisibleItemPosition() >= materiModels.size() - 10 &&
+                if (manager.findLastVisibleItemPosition() >= soalModels.size() - 10 &&
                         lastVisible != null &&
                         loadbaru) {
                     loadbaru = false;
-                    Query load = onlineMateriRef
+                    Query load = blendedSoalRef
                             .orderBy("dateCreated", Query.Direction.DESCENDING)
                             .startAfter(lastVisible)
                             .limit(20);
@@ -143,9 +146,9 @@ public class OpOnlineMateriActivity extends AppCompatActivity {
                                 public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                                     if (queryDocumentSnapshots.size() > 0) {
                                         for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                                            MateriModel newModel = documentSnapshot.toObject(MateriModel.class);
+                                            SoalModel newModel = documentSnapshot.toObject(SoalModel.class);
                                             newModel.setDocumentId(documentSnapshot.getId());
-                                            materiModels.add(newModel);
+                                            soalModels.add(newModel);
                                         }
 
                                         if (queryDocumentSnapshots.size() < 20) {
@@ -164,7 +167,7 @@ public class OpOnlineMateriActivity extends AppCompatActivity {
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
                                     loadbaru = true;
-                                    Toast.makeText(OpOnlineMateriActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(OpBlendedSoalActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
                                 }
                             });
                 }
@@ -181,7 +184,7 @@ public class OpOnlineMateriActivity extends AppCompatActivity {
         pd.setMessage("Memuat...");
         pd.show();
 
-        Query first = onlineMateriRef
+        Query first = blendedSoalRef
                 .orderBy("dateCreated", Query.Direction.DESCENDING)
                 .limit(20);
 
@@ -189,12 +192,12 @@ public class OpOnlineMateriActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        materiModels.clear();
+                        soalModels.clear();
                         if (queryDocumentSnapshots.size() > 0){
                             for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
-                                MateriModel newModel = documentSnapshot.toObject(MateriModel.class);
+                                SoalModel newModel = documentSnapshot.toObject(SoalModel.class);
                                 newModel.setDocumentId(documentSnapshot.getId());
-                                materiModels.add(newModel);
+                                soalModels.add(newModel);
                             }
 
                             if (queryDocumentSnapshots.size() < 20){
@@ -213,7 +216,7 @@ public class OpOnlineMateriActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         pd.dismiss();
-                        Toast.makeText(OpOnlineMateriActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(OpBlendedSoalActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
                     }
                 });
     }

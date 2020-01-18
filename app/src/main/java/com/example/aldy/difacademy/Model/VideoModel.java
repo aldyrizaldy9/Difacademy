@@ -3,34 +3,21 @@ package com.example.aldy.difacademy.Model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.google.firebase.firestore.Exclude;
+public class VideoModel implements Parcelable {
 
-public class BlendedVideoModel implements Parcelable {
-    public static final Creator<BlendedVideoModel> CREATOR = new Creator<BlendedVideoModel>() {
-        @Override
-        public BlendedVideoModel createFromParcel(Parcel in) {
-            return new BlendedVideoModel(in);
-        }
-
-        @Override
-        public BlendedVideoModel[] newArray(int size) {
-            return new BlendedVideoModel[size];
-        }
-    };
     String title, description, videoUrl, documentId;
     long dateCreated;
 
-    public BlendedVideoModel() {
-    }
+    public VideoModel(){}
 
-    public BlendedVideoModel(String title, String description, String videoUrl, long dateCreated) {
+    public VideoModel(String title, String description, String videoUrl, long dateCreated) {
         this.title = title;
         this.description = description;
         this.videoUrl = videoUrl;
         this.dateCreated = dateCreated;
     }
 
-    protected BlendedVideoModel(Parcel in) {
+    protected VideoModel(Parcel in) {
         title = in.readString();
         description = in.readString();
         videoUrl = in.readString();
@@ -51,6 +38,18 @@ public class BlendedVideoModel implements Parcelable {
     public int describeContents() {
         return 0;
     }
+
+    public static final Creator<VideoModel> CREATOR = new Creator<VideoModel>() {
+        @Override
+        public VideoModel createFromParcel(Parcel in) {
+            return new VideoModel(in);
+        }
+
+        @Override
+        public VideoModel[] newArray(int size) {
+            return new VideoModel[size];
+        }
+    };
 
     public String getTitle() {
         return title;
@@ -76,7 +75,6 @@ public class BlendedVideoModel implements Parcelable {
         this.videoUrl = videoUrl;
     }
 
-    @Exclude
     public String getDocumentId() {
         return documentId;
     }
@@ -89,4 +87,7 @@ public class BlendedVideoModel implements Parcelable {
         return dateCreated;
     }
 
+    public void setDateCreated(long dateCreated) {
+        this.dateCreated = dateCreated;
+    }
 }

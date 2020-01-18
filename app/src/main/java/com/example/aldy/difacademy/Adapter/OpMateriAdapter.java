@@ -13,52 +13,66 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.aldy.difacademy.Activity.OpAddOnlineCourseActivity;
-import com.example.aldy.difacademy.Model.OnlineCourseModel;
+import com.example.aldy.difacademy.Activity.OpAddBlendedMateriActivity;
+import com.example.aldy.difacademy.Activity.OpAddOnlineMateriActivity;
+import com.example.aldy.difacademy.Activity.OpMainActivity;
+import com.example.aldy.difacademy.Model.MateriModel;
 import com.example.aldy.difacademy.R;
 
 import java.util.ArrayList;
 
-public class OpOnlineCourseAdapter extends RecyclerView.Adapter<OpOnlineCourseAdapter.ViewHolder> {
-    private Context context;
-    private ArrayList<OnlineCourseModel> onlineCourseModels;
+import static com.example.aldy.difacademy.Activity.OpMainActivity.JENIS_KELAS;
 
-    public OpOnlineCourseAdapter(Context context, ArrayList<OnlineCourseModel> onlineCourseModels) {
+public class OpMateriAdapter extends RecyclerView.Adapter<OpMateriAdapter.ViewHolder> {
+    private Context context;
+    private ArrayList<MateriModel> materiModels;
+
+    public OpMateriAdapter(Context context, ArrayList<MateriModel> materiModels) {
         this.context = context;
-        this.onlineCourseModels = onlineCourseModels;
+        this.materiModels = materiModels;
     }
 
     @NonNull
     @Override
-    public OpOnlineCourseAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public OpMateriAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         View view = layoutInflater.inflate(R.layout.card_op, parent, false);
-        return new OpOnlineCourseAdapter.ViewHolder(view);
+        return new OpMateriAdapter.ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull OpOnlineCourseAdapter.ViewHolder holder, final int position) {
-        final OnlineCourseModel model = onlineCourseModels.get(position);
+    public void onBindViewHolder(@NonNull OpMateriAdapter.ViewHolder holder, final int position) {
+
+        holder.tvTag.setVisibility(View.GONE);
+        holder.tvDeskripsi.setVisibility(View.GONE);
+
+        final MateriModel model = materiModels.get(position);
         holder.tvJudul.setText(model.getTitle());
-        holder.tvDeskripsi.setText(model.getDescription());
-        holder.tvTag.setText(model.getTag());
         Glide.with(context)
                 .load(model.getThumbnailUrl())
                 .into(holder.imgThumbnail);
         holder.container.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, OpAddOnlineCourseActivity.class);
-                intent.putExtra("online_course_model", model);
-                intent.putExtra("index", position);
-                context.startActivity(intent);
+                Intent intent;
+                if (JENIS_KELAS.equals("blended")){
+                    intent = new Intent(context, OpAddBlendedMateriActivity.class);
+                    intent.putExtra("blended_materi_model", model);
+                    intent.putExtra("index", position);
+                    context.startActivity(intent);
+                } else if (JENIS_KELAS.equals("online")){
+                    intent = new Intent(context, OpAddOnlineMateriActivity.class);
+                    intent.putExtra("online_materi_model", model);
+                    intent.putExtra("index", position);
+                    context.startActivity(intent);
+                }
             }
         });
     }
 
     @Override
     public int getItemCount() {
-        return onlineCourseModels.size();
+        return materiModels.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{

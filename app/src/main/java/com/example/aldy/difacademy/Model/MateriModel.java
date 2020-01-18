@@ -3,23 +3,21 @@ package com.example.aldy.difacademy.Model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.google.firebase.firestore.Exclude;
-
-public class OnlineMateriModel implements Parcelable {
+public class MateriModel implements Parcelable {
 
     String documentId, title, thumbnailUrl;
     long dateCreated;
 
-    public OnlineMateriModel() {
+    public MateriModel() {
     }
 
-    public OnlineMateriModel(String title, String thumbnailUrl, long dateCreated) {
+    public MateriModel(String title, String thumbnailUrl, long dateCreated) {
         this.title = title;
         this.thumbnailUrl = thumbnailUrl;
         this.dateCreated = dateCreated;
     }
 
-    protected OnlineMateriModel(Parcel in) {
+    protected MateriModel(Parcel in) {
         documentId = in.readString();
         title = in.readString();
         thumbnailUrl = in.readString();
@@ -39,15 +37,15 @@ public class OnlineMateriModel implements Parcelable {
         return 0;
     }
 
-    public static final Creator<OnlineMateriModel> CREATOR = new Creator<OnlineMateriModel>() {
+    public static final Creator<MateriModel> CREATOR = new Creator<MateriModel>() {
         @Override
-        public OnlineMateriModel createFromParcel(Parcel in) {
-            return new OnlineMateriModel(in);
+        public MateriModel createFromParcel(Parcel in) {
+            return new MateriModel(in);
         }
 
         @Override
-        public OnlineMateriModel[] newArray(int size) {
-            return new OnlineMateriModel[size];
+        public MateriModel[] newArray(int size) {
+            return new MateriModel[size];
         }
     };
 

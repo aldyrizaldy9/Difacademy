@@ -3,45 +3,31 @@ package com.example.aldy.difacademy.Model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.google.firebase.firestore.Exclude;
-
-public class BlendedCourseModel implements Parcelable {
-    public static final Creator<BlendedCourseModel> CREATOR = new Creator<BlendedCourseModel>() {
-        @Override
-        public BlendedCourseModel createFromParcel(Parcel in) {
-            return new BlendedCourseModel(in);
-        }
-
-        @Override
-        public BlendedCourseModel[] newArray(int size) {
-            return new BlendedCourseModel[size];
-        }
-    };
-    String documentId, title, description, tagId, tag, thumbnailUrl, gDriveUrl, harga;
+public class CourseModel implements Parcelable {
+    String documentId, title, description, thumbnailUrl, googleDrive, tagId, tag, harga;
     long dateCreated;
 
-    public BlendedCourseModel() {
-    }
+    public CourseModel() {}
 
-    public BlendedCourseModel(String title, String description, String tagId, String tag, String thumbnailUrl, String gDriveUrl, String harga, long dateCreated) {
+    public CourseModel(String title, String description, String thumbnailUrl, String googleDrive, String tagId, String tag, String harga, long dateCreated) {
         this.title = title;
         this.description = description;
+        this.thumbnailUrl = thumbnailUrl;
+        this.googleDrive = googleDrive;
         this.tagId = tagId;
         this.tag = tag;
-        this.thumbnailUrl = thumbnailUrl;
-        this.gDriveUrl = gDriveUrl;
         this.harga = harga;
         this.dateCreated = dateCreated;
     }
 
-    protected BlendedCourseModel(Parcel in) {
+    protected CourseModel(Parcel in) {
         documentId = in.readString();
         title = in.readString();
         description = in.readString();
+        thumbnailUrl = in.readString();
+        googleDrive = in.readString();
         tagId = in.readString();
         tag = in.readString();
-        thumbnailUrl = in.readString();
-        gDriveUrl = in.readString();
         harga = in.readString();
         dateCreated = in.readLong();
     }
@@ -51,10 +37,10 @@ public class BlendedCourseModel implements Parcelable {
         dest.writeString(documentId);
         dest.writeString(title);
         dest.writeString(description);
+        dest.writeString(thumbnailUrl);
+        dest.writeString(googleDrive);
         dest.writeString(tagId);
         dest.writeString(tag);
-        dest.writeString(thumbnailUrl);
-        dest.writeString(gDriveUrl);
         dest.writeString(harga);
         dest.writeLong(dateCreated);
     }
@@ -64,7 +50,18 @@ public class BlendedCourseModel implements Parcelable {
         return 0;
     }
 
-    @Exclude
+    public static final Creator<CourseModel> CREATOR = new Creator<CourseModel>() {
+        @Override
+        public CourseModel createFromParcel(Parcel in) {
+            return new CourseModel(in);
+        }
+
+        @Override
+        public CourseModel[] newArray(int size) {
+            return new CourseModel[size];
+        }
+    };
+
     public String getDocumentId() {
         return documentId;
     }
@@ -89,6 +86,22 @@ public class BlendedCourseModel implements Parcelable {
         this.description = description;
     }
 
+    public String getThumbnailUrl() {
+        return thumbnailUrl;
+    }
+
+    public void setThumbnailUrl(String thumbnailUrl) {
+        this.thumbnailUrl = thumbnailUrl;
+    }
+
+    public String getGoogleDrive() {
+        return googleDrive;
+    }
+
+    public void setGoogleDrive(String googleDrive) {
+        this.googleDrive = googleDrive;
+    }
+
     public String getTagId() {
         return tagId;
     }
@@ -105,22 +118,6 @@ public class BlendedCourseModel implements Parcelable {
         this.tag = tag;
     }
 
-    public String getThumbnailUrl() {
-        return thumbnailUrl;
-    }
-
-    public void setThumbnailUrl(String thumbnailUrl) {
-        this.thumbnailUrl = thumbnailUrl;
-    }
-
-    public String getgDriveUrl() {
-        return gDriveUrl;
-    }
-
-    public void setgDriveUrl(String gDriveUrl) {
-        this.gDriveUrl = gDriveUrl;
-    }
-
     public String getHarga() {
         return harga;
     }
@@ -133,4 +130,7 @@ public class BlendedCourseModel implements Parcelable {
         return dateCreated;
     }
 
+    public void setDateCreated(long dateCreated) {
+        this.dateCreated = dateCreated;
+    }
 }

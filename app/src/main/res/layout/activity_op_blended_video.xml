@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activity.OpBlendedCourseActivity">
-
+    tools:context=".Activity.OpBlendedVideoActivity">
     <include
         android:id="@+id/include"
         layout="@layout/nav_bar"
@@ -13,7 +12,7 @@
         android:layout_height="@dimen/nav_bar_height" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_op_blended_course"
+        android:id="@+id/rv_op_blended_video"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:overScrollMode="never"

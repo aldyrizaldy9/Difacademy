@@ -1,6 +1,11 @@
 package com.example.aldy.difacademy.Activity;
 
-import android.app.ProgressDialog;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -17,13 +22,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-
-import com.example.aldy.difacademy.Model.BlendedVideoModel;
+import com.example.aldy.difacademy.Model.VideoModel;
 import com.example.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -41,14 +40,13 @@ import com.google.firebase.storage.UploadTask;
 import java.util.UUID;
 
 import static com.example.aldy.difacademy.Activity.OpAddBlendedCourseActivity.blendedCourseDocId;
+import static com.example.aldy.difacademy.Activity.OpAddBlendedMateriActivity.blendedMateriDocId;
 import static com.example.aldy.difacademy.Activity.OpMainActivity.ADD_REQUEST_CODE;
 import static com.example.aldy.difacademy.Activity.OpMainActivity.DELETE_REQUEST_CODE;
 import static com.example.aldy.difacademy.Activity.OpMainActivity.UPDATE_REQUEST_CODE;
 
-public class OpAddBlendedCourseVideoActivity extends AppCompatActivity {
-    private static final String TAG = "OpAddVideoBlendedCourse";
-
-    public static String blendedCourseVideoId = "";
+public class OpAddBlendedVideoActivity extends AppCompatActivity {
+    public static String blendedVideoDocId = "";
 
     TextView tvNavbar;
     ConstraintLayout clBack;
@@ -59,26 +57,30 @@ public class OpAddBlendedCourseVideoActivity extends AppCompatActivity {
     Button btnPilihFile, btnHapus, btnSimpan, btnCancelUpload;
     TextView tvUploadProses, tvFileName;
 
-    BlendedVideoModel blendedVideoModel;
+    VideoModel videoModel, oldVideoModel;
     boolean thereIsData = false;
     int PICK_VIDEO_REQUEST_CODE = 11;
     Uri videoUri;
     boolean isUploading = false;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
-    CollectionReference blendedCourseVideoRef = db.collection("BlendedCourse")
+    CollectionReference blendedVideoRef = db.collection("BlendedCourse")
             .document(blendedCourseDocId)
-            .collection("VideoMateri");
+            .collection("BlendedMateri")
+            .document(blendedMateriDocId)
+            .collection("BlendedVideo");
+    FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
+
     long dateCreated = 0;
     String urlVideo = "";
     UploadTask uploadTask;
     int index;
 
-    ProgressDialog pd;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_op_add_blended_course_video);
+        setContentView(R.layout.activity_op_add_blended_video);
+
+        firebaseStorage.setMaxUploadRetryTimeMillis(60000);
 
         initView();
         checkIntent();
@@ -86,11 +88,8 @@ public class OpAddBlendedCourseVideoActivity extends AppCompatActivity {
     }
 
     private void initView() {
-        pd = new ProgressDialog(this);
-        pd.setCancelable(false);
-
         tvNavbar = findViewById(R.id.tv_navbar);
-        tvNavbar.setText("Detail Video Materi");
+        tvNavbar.setText("Detail Video Materi Blended");
         clBack = findViewById(R.id.cl_icon1);
         clBack.setVisibility(View.VISIBLE);
         clBack.setOnClickListener(new View.OnClickListener() {
@@ -108,25 +107,24 @@ public class OpAddBlendedCourseVideoActivity extends AppCompatActivity {
         btnPilihFile = findViewById(R.id.btn_op_add_blended_video_pilih_file);
         btnHapus = findViewById(R.id.btn_op_add_blended_video_hapus);
         btnSimpan = findViewById(R.id.btn_op_add_blended_video_simpan);
-        btnCancelUpload = findViewById(R.id.btn_op_add_blended_video_upload);
+        btnCancelUpload = findViewById(R.id.btn_op_add_blended_video_cancel);
         tvFileName = findViewById(R.id.tv_op_add_blended_video_pilih_file);
         tvUploadProses = findViewById(R.id.tv_op_add_blended_video_upload_process);
     }
 
     private void checkIntent() {
         Intent intent = getIntent();
-        blendedVideoModel = intent.getParcelableExtra("blended_video_model");
-        if (blendedVideoModel != null) {
+        videoModel = intent.getParcelableExtra("blended_video_model");
+        if (videoModel != null) {
+            oldVideoModel = videoModel;
             thereIsData = true;
-            edtJudul.setText(blendedVideoModel.getTitle());
-            edtDeskripsi.setText(blendedVideoModel.getDescription());
-            blendedCourseVideoId = blendedVideoModel.getDocumentId();
+            edtJudul.setText(videoModel.getTitle());
+            edtDeskripsi.setText(videoModel.getDescription());
+            blendedVideoDocId = videoModel.getDocumentId();
             btnHapus.setVisibility(View.VISIBLE);
-            dateCreated = blendedVideoModel.getDateCreated();
-            urlVideo = blendedVideoModel.getVideoUrl();
+            dateCreated = videoModel.getDateCreated();
+            urlVideo = videoModel.getVideoUrl();
             index = intent.getIntExtra("index", -1);
-        } else {
-            blendedCourseVideoId = "";
         }
     }
 
@@ -169,79 +167,79 @@ public class OpAddBlendedCourseVideoActivity extends AppCompatActivity {
         return result;
     }
 
+    @Override
+    public void onBackPressed() {
+        if (isUploading) {
+            showCancelUploadDialog();
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (isUploading) {
+            uploadTask.cancel();
+        }
+    }
+
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
+    }
+
+    private boolean isDataComplete() {
+        if (thereIsData) {
+            return !edtJudul.getText().toString().equals("") &&
+                    !edtDeskripsi.getText().toString().equals("");
+        } else {
+            return !edtJudul.getText().toString().equals("") &&
+                    !edtDeskripsi.getText().toString().equals("") &&
+                    videoUri != null;
+        }
+    }
+
     private void onClick() {
         btnPilihFile.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                if (isUploading) {
-                    showCancelUploadDialog();
-                } else {
-                    getVideoFromGallery();
-                }
+            public void onClick(View v) {
+                getVideoFromGallery();
             }
         });
         btnHapus.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                if (isUploading) {
-                    showCancelUploadDialog();
-                } else {
-                    showHapusDialog();
-                }
+            public void onClick(View v) {
+                showHapusDialog();
             }
         });
         btnCancelUpload.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View v) {
                 showCancelUploadDialog();
             }
         });
         btnSimpan.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                if (isUploading) {
-                    showCancelUploadDialog();
+            public void onClick(View v) {
+                if (isDataComplete()) {
+                    showSimpanDialog();
                 } else {
-                    if (thereIsData) {
-                        if (edtJudul.getText().toString().equals("") || edtDeskripsi.getText().toString().equals("")) {
-                            Toast.makeText(OpAddBlendedCourseVideoActivity.this, getString(R.string.data_not_complete), Toast.LENGTH_SHORT).show();
-                        } else {
-                            showTambahDialog();
-                        }
-                    } else {
-                        if (edtJudul.getText().toString().equals("") || edtDeskripsi.getText().toString().equals("") || videoUri == null) {
-                            Toast.makeText(OpAddBlendedCourseVideoActivity.this, getString(R.string.data_not_complete), Toast.LENGTH_SHORT).show();
-                        } else {
-                            showTambahDialog();
-                        }
-                    }
+                    Toast.makeText(OpAddBlendedVideoActivity.this, getString(R.string.data_not_complete), Toast.LENGTH_SHORT).show();
                 }
             }
         });
     }
 
-    private void uploadvideo() {
-        FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
-        firebaseStorage.setMaxUploadRetryTimeMillis(60000);
-        if (!urlVideo.equals("")) {
-            StorageReference deleteRef = firebaseStorage.getReferenceFromUrl(urlVideo);
-            deleteRef.delete()
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(OpAddBlendedCourseVideoActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
-                        }
-                    });
-        }
+    private void uploadVideoToFirebase() {
+        final StorageReference uploadRef = firebaseStorage.getReference()
+                .child("BlendedVideo/" + UUID.randomUUID().toString());
 
-        final StorageReference storageReference = firebaseStorage.getReference()
-                .child("VideoMateriBlended/" + UUID.randomUUID().toString());
-
-        uploadTask = storageReference.putFile(videoUri);
+        uploadTask = uploadRef.putFile(videoUri);
         uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                storageReference.getDownloadUrl()
+                uploadRef.getDownloadUrl()
                         .addOnSuccessListener(new OnSuccessListener<Uri>() {
                             @Override
                             public void onSuccess(Uri uri) {
@@ -251,19 +249,14 @@ public class OpAddBlendedCourseVideoActivity extends AppCompatActivity {
                                 tvUploadProses.setText("Loading...");
                                 btnCancelUpload.setVisibility(View.GONE);
                                 btnSimpan.setVisibility(View.GONE);
-
-                                if (thereIsData) {
-                                    edit();
-                                } else {
-                                    tambah();
-                                }
+                                simpanVideo();
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
                                 isUploading = false;
-                                Toast.makeText(OpAddBlendedCourseVideoActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(OpAddBlendedVideoActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
                             }
                         });
             }
@@ -275,12 +268,12 @@ public class OpAddBlendedCourseVideoActivity extends AppCompatActivity {
                 isUploading = false;
                 btnCancelUpload.setVisibility(View.GONE);
 
-                btnCancelUpload.setEnabled(true);
                 edtDeskripsi.setEnabled(true);
                 edtJudul.setEnabled(true);
-                btnSimpan.setEnabled(true);
                 btnHapus.setEnabled(true);
-                Toast.makeText(OpAddBlendedCourseVideoActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+                btnPilihFile.setEnabled(true);
+                btnSimpan.setEnabled(true);
+                Toast.makeText(OpAddBlendedVideoActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
             }
         }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
             @Override
@@ -308,33 +301,67 @@ public class OpAddBlendedCourseVideoActivity extends AppCompatActivity {
 
                     edtDeskripsi.setEnabled(true);
                     edtJudul.setEnabled(true);
-                    btnCancelUpload.setEnabled(true);
-                    btnSimpan.setEnabled(true);
                     btnHapus.setEnabled(true);
+                    btnPilihFile.setEnabled(true);
+                    btnSimpan.setEnabled(true);
                 }
             }
         });
     }
 
-    private void tambah() {
+    private void simpanVideo() {
+        String title = edtJudul.getText().toString();
+        String description = edtDeskripsi.getText().toString();
+
         try {
             dateCreated = Timestamp.now().getSeconds();
         } catch (Exception e) {
-            Toast.makeText(this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+            Toast.makeText(OpAddBlendedVideoActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
             return;
         }
 
-        String judul = edtJudul.getText().toString();
-        String deskripsi = edtDeskripsi.getText().toString();
+        VideoModel model = new VideoModel(title, description, urlVideo, dateCreated);
 
-        final BlendedVideoModel blendedVideoModel = new BlendedVideoModel(judul, deskripsi, urlVideo, dateCreated);
-        blendedCourseVideoRef.add(blendedVideoModel)
+        if (thereIsData) {
+            editVideo(model);
+        } else {
+            tambahVideo(model);
+        }
+    }
+
+    private void editVideo(final VideoModel model) {
+        DocumentReference docRef = blendedVideoRef.document(blendedVideoDocId);
+        docRef.set(model)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        if (videoUri != null) {
+                            deleteThanUpdateVideoInFirebase(model);
+                        } else {
+                            Intent intent = new Intent(OpAddBlendedVideoActivity.this, OpBlendedVideoActivity.class);
+                            intent.putExtra("blended_video_model", model);
+                            intent.putExtra("index", index);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivityForResult(intent, UPDATE_REQUEST_CODE);
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(OpAddBlendedVideoActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void tambahVideo(final VideoModel model) {
+        blendedVideoRef.add(model)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
-                        Toast.makeText(OpAddBlendedCourseVideoActivity.this, "Video berhasil ditambahkan", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(OpAddBlendedCourseVideoActivity.this, OpBlendedCourseVideoActivity.class);
-                        intent.putExtra("blended_video_model", blendedVideoModel);
+                        Intent intent = new Intent(OpAddBlendedVideoActivity.this, OpBlendedVideoActivity.class);
+                        intent.putExtra("blended_video_model", model);
+                        intent.putExtra("index", index);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivityForResult(intent, ADD_REQUEST_CODE);
                     }
@@ -342,25 +369,19 @@ public class OpAddBlendedCourseVideoActivity extends AppCompatActivity {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(OpAddBlendedCourseVideoActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(OpAddBlendedVideoActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
                     }
                 });
     }
 
-    private void edit() {
-        DocumentReference documentReference = blendedCourseVideoRef.document(blendedCourseVideoId);
-        String judul = edtJudul.getText().toString();
-        String deskripsi = edtDeskripsi.getText().toString();
-        final BlendedVideoModel blendedVideoModel = new BlendedVideoModel(judul, deskripsi, urlVideo, dateCreated);
-
-        documentReference.set(blendedVideoModel)
+    private void deleteThanUpdateVideoInFirebase(final VideoModel model) {
+        StorageReference deleteRef = firebaseStorage.getReferenceFromUrl(oldVideoModel.getVideoUrl());
+        deleteRef.delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        pd.dismiss();
-                        Toast.makeText(OpAddBlendedCourseVideoActivity.this, "Video berhasil disimpan", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(OpAddBlendedCourseVideoActivity.this, OpBlendedCourseVideoActivity.class);
-                        intent.putExtra("blended_video_model", blendedVideoModel);
+                        Intent intent = new Intent(OpAddBlendedVideoActivity.this, OpBlendedVideoActivity.class);
+                        intent.putExtra("blended_video_model", model);
                         intent.putExtra("index", index);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivityForResult(intent, UPDATE_REQUEST_CODE);
@@ -369,95 +390,61 @@ public class OpAddBlendedCourseVideoActivity extends AppCompatActivity {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        pd.dismiss();
-                        Toast.makeText(OpAddBlendedCourseVideoActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(OpAddBlendedVideoActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
                     }
                 });
     }
 
-    private void hapus() {
-        FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
-        firebaseStorage.setMaxUploadRetryTimeMillis(60000);
+    private void deleteVideoInFirebase() {
         StorageReference deleteRef = firebaseStorage.getReferenceFromUrl(urlVideo);
         deleteRef.delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        DocumentReference documentReference = blendedCourseVideoRef.document(blendedCourseVideoId);
-                        documentReference.delete()
-                                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void aVoid) {
-                                        pd.dismiss();
-                                        Toast.makeText(OpAddBlendedCourseVideoActivity.this, "Video berhasil dihapus", Toast.LENGTH_SHORT).show();
-                                        Intent intent = new Intent(OpAddBlendedCourseVideoActivity.this, OpBlendedCourseVideoActivity.class);
-                                        intent.putExtra("index", index);
-                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                        startActivityForResult(intent, DELETE_REQUEST_CODE);
-                                    }
-                                })
-                                .addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        pd.dismiss();
-                                        Toast.makeText(OpAddBlendedCourseVideoActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
-                                    }
-                                });
+                        Intent intent = new Intent(OpAddBlendedVideoActivity.this, OpBlendedVideoActivity.class);
+                        intent.putExtra("index", index);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivityForResult(intent, DELETE_REQUEST_CODE);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        pd.dismiss();
-                        Toast.makeText(OpAddBlendedCourseVideoActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(OpAddBlendedVideoActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
                     }
                 });
     }
 
-    private void showHapusDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Apakah anda yakin ingin menghapus video ini?");
-        builder.setTitle("Menghapus Video Kelas Blended");
-        builder.setCancelable(false);
-        builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if (!isNetworkConnected()) {
-                    Toast.makeText(OpAddBlendedCourseVideoActivity.this, "Tidak ada koneksi internet!", Toast.LENGTH_SHORT).show();
-                } else {
-                    pd.setMessage("Menghapus...");
-                    pd.show();
-                    hapus();
-                }
-            }
-        });
-
-        builder.setNegativeButton("Tidak", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-        AlertDialog alertDialog = builder.create();
-        alertDialog.show();
+    private void hapusVideo() {
+        DocumentReference docRef = blendedVideoRef.document(blendedVideoDocId);
+        docRef.delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        deleteVideoInFirebase();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(OpAddBlendedVideoActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     private void showCancelUploadDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Apakah anda yakin ingin membatalkan upload?");
-        builder.setTitle("Batalkan Upload");
+        builder.setTitle("Cancel Upload");
         builder.setCancelable(false);
         builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (!isNetworkConnected()) {
-                    Toast.makeText(OpAddBlendedCourseVideoActivity.this, "Tidak ada koneksi internet", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(OpAddBlendedVideoActivity.this, "Tidak ada koneksi internet!", Toast.LENGTH_SHORT).show();
                 } else {
                     uploadTask.cancel();
-                    Toast.makeText(OpAddBlendedCourseVideoActivity.this, "Cancelling...", Toast.LENGTH_SHORT).show();
-                    btnCancelUpload.setEnabled(false);
-                    btnSimpan.setEnabled(false);
-                    btnHapus.setEnabled(false);
+                    Toast.makeText(OpAddBlendedVideoActivity.this, "Cancelling...", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -472,26 +459,27 @@ public class OpAddBlendedCourseVideoActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
-    private void showTambahDialog() {
+    private void showSimpanDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Apakah anda yakin ingin menyimpan video ini?");
-        builder.setTitle("Tambah Video Kelas Blended");
+        builder.setTitle("Simpan Video Materi Blended");
         builder.setCancelable(false);
         builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (!isNetworkConnected()) {
-                    Toast.makeText(OpAddBlendedCourseVideoActivity.this, "Tidak ada koneksi internet!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(OpAddBlendedVideoActivity.this, "Tidak ada koneksi internet!", Toast.LENGTH_SHORT).show();
                 } else {
-                    if (thereIsData && videoUri == null) {
-                        pd.setMessage("Loading...");
-                        pd.show();
-                        edit();
-                    } else {
+                    if (videoUri != null) {
                         edtDeskripsi.setEnabled(false);
                         edtJudul.setEnabled(false);
+                        btnHapus.setEnabled(false);
+                        btnPilihFile.setEnabled(false);
+                        btnSimpan.setEnabled(false);
                         btnCancelUpload.setVisibility(View.VISIBLE);
-                        uploadvideo();
+                        uploadVideoToFirebase();
+                    } else {
+                        simpanVideo();
                     }
                 }
             }
@@ -507,26 +495,29 @@ public class OpAddBlendedCourseVideoActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
-    @Override
-    public void onBackPressed() {
-        if (isUploading) {
-            showCancelUploadDialog();
-        } else {
-            super.onBackPressed();
-        }
-    }
+    private void showHapusDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Apakah anda yakin ingin menghapus video ini?");
+        builder.setTitle("Hapus Video Materi Blended");
+        builder.setCancelable(false);
+        builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (!isNetworkConnected()) {
+                    Toast.makeText(OpAddBlendedVideoActivity.this, "Tidak ada koneksi internet!", Toast.LENGTH_SHORT).show();
+                } else {
+                    hapusVideo();
+                }
+            }
+        });
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (isUploading) {
-            uploadTask.cancel();
-        }
-    }
-
-    private boolean isNetworkConnected() {
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
+        builder.setNegativeButton("Tidak", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 }

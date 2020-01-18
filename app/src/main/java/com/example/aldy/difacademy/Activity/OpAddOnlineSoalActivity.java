@@ -24,8 +24,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.aldy.difacademy.Model.OnlineSoalModel;
-import com.example.aldy.difacademy.Model.QuizModel;
+import com.example.aldy.difacademy.Model.SoalModel;
 import com.example.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -36,7 +35,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
-import static com.example.aldy.difacademy.Activity.OpAddBlendedCourseActivity.blendedCourseDocId;
 import static com.example.aldy.difacademy.Activity.OpAddOnlineCourseActivity.onlineCourseDocId;
 import static com.example.aldy.difacademy.Activity.OpAddOnlineMateriActivity.onlineMateriDocId;
 import static com.example.aldy.difacademy.Activity.OpMainActivity.ADD_REQUEST_CODE;
@@ -55,7 +53,7 @@ public class OpAddOnlineSoalActivity extends AppCompatActivity {
     Button btnHapus, btnSimpan;
 
     String jawabanBenar = "";
-    OnlineSoalModel onlineSoalModel;
+    SoalModel soalModel;
     ArrayList<String> listJawabanBenar;
     boolean thereIsData = false;
 
@@ -160,21 +158,21 @@ public class OpAddOnlineSoalActivity extends AppCompatActivity {
 
     private void checkIntent() {
         Intent intent = getIntent();
-        onlineSoalModel = intent.getParcelableExtra("online_soal_model");
-        if (onlineSoalModel != null) {
+        soalModel = intent.getParcelableExtra("online_soal_model");
+        if (soalModel != null) {
             thereIsData = true;
             btnHapus.setVisibility(View.VISIBLE);
-            onlineSoalDocId = onlineSoalModel.getDocumentId();
-            edtSoal.setText(onlineSoalModel.getSoal());
-            edtA.setText(onlineSoalModel.getJwbA());
-            edtB.setText(onlineSoalModel.getJwbB());
-            edtC.setText(onlineSoalModel.getJwbC());
-            edtD.setText(onlineSoalModel.getJwbD());
-            edtE.setText(onlineSoalModel.getJwbE());
-            dateCreated = onlineSoalModel.getDateCreated();
+            onlineSoalDocId = soalModel.getDocumentId();
+            edtSoal.setText(soalModel.getSoal());
+            edtA.setText(soalModel.getJwbA());
+            edtB.setText(soalModel.getJwbB());
+            edtC.setText(soalModel.getJwbC());
+            edtD.setText(soalModel.getJwbD());
+            edtE.setText(soalModel.getJwbE());
+            dateCreated = soalModel.getDateCreated();
             index = intent.getIntExtra("index", -1);
             for (int i = 1; i < listJawabanBenar.size(); i++) {
-                if (listJawabanBenar.get(i).equals(onlineSoalModel.getJawabanBenar())) {
+                if (listJawabanBenar.get(i).equals(soalModel.getJawabanBenar())) {
                     spnJawaban.setSelection(i);
                     break;
                 }
@@ -238,7 +236,7 @@ public class OpAddOnlineSoalActivity extends AppCompatActivity {
         String jwbD = edtD.getText().toString();
         String jwbE = edtE.getText().toString();
 
-        final OnlineSoalModel model = new OnlineSoalModel(dateCreated, soal, jwbA, jwbB, jwbC, jwbD, jwbE, jawabanBenar);
+        final SoalModel model = new SoalModel(dateCreated, soal, jwbA, jwbB, jwbC, jwbD, jwbE, jawabanBenar);
         docRef.set(model)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -275,7 +273,7 @@ public class OpAddOnlineSoalActivity extends AppCompatActivity {
         String jwbD = edtD.getText().toString();
         String jwbE = edtE.getText().toString();
 
-        final OnlineSoalModel model = new OnlineSoalModel(dateCreated, soal, jwbA, jwbB, jwbC, jwbD, jwbE, jawabanBenar);
+        final SoalModel model = new SoalModel(dateCreated, soal, jwbA, jwbB, jwbC, jwbD, jwbE, jawabanBenar);
         collRef.add(model)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override

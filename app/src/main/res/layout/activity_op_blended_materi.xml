@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activity.OpBlendedCourseVideoActivity">
+    tools:context=".Activity.OpBlendedMateriActivity">
 
     <include
         android:id="@+id/include"
@@ -13,7 +13,7 @@
         android:layout_height="@dimen/nav_bar_height" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_op_video_blended"
+        android:id="@+id/rv_op_blended_materi"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:overScrollMode="never"
@@ -22,5 +22,4 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/include"
         tools:listitem="@layout/card_op" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

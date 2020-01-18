@@ -1,15 +1,5 @@
 package com.example.aldy.difacademy.Activity;
 
-import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,8 +7,16 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.aldy.difacademy.Adapter.OpBlendedCourseAdapter;
-import com.example.aldy.difacademy.Model.BlendedCourseModel;
+import android.app.ProgressDialog;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.example.aldy.difacademy.Adapter.OpCourseAdapter;
+import com.example.aldy.difacademy.Model.CourseModel;
 import com.example.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -33,31 +31,33 @@ import java.util.ArrayList;
 
 import static com.example.aldy.difacademy.Activity.OpMainActivity.ADD_REQUEST_CODE;
 import static com.example.aldy.difacademy.Activity.OpMainActivity.DELETE_REQUEST_CODE;
+import static com.example.aldy.difacademy.Activity.OpMainActivity.JENIS_KELAS;
 import static com.example.aldy.difacademy.Activity.OpMainActivity.UPDATE_REQUEST_CODE;
 
 public class OpBlendedCourseActivity extends AppCompatActivity {
-    private static final String TAG = "OpBlendedCourseActivity";
 
     TextView tvNavbar;
     ConstraintLayout clBack, clAdd;
     ImageView imgBack, imgAdd;
-    RecyclerView rvBlended;
+    RecyclerView rvBlendedCourse;
 
-    ArrayList<BlendedCourseModel> blendedCourseModels;
-    OpBlendedCourseAdapter adapter;
+    ArrayList<CourseModel> courseModels;
+    OpCourseAdapter adapter;
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     CollectionReference blendedCourseRef = db.collection("BlendedCourse");
     DocumentSnapshot lastVisible;
     boolean loadbaru;
-    private ProgressDialog progressDialog;
+    private ProgressDialog pd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_op_blended_course);
 
-        blendedCourseModels = new ArrayList<>();
+        courseModels = new ArrayList<>();
+
+        JENIS_KELAS = "blended";
 
         initView();
         onClick();
@@ -69,20 +69,20 @@ public class OpBlendedCourseActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Intent intent = getIntent();
-        BlendedCourseModel blendedCourseModel = intent.getParcelableExtra("blended_course_model");
+        CourseModel model = intent.getParcelableExtra("blended_course_model");
         int index = intent.getIntExtra("index", -1);
 
         if (requestCode == ADD_REQUEST_CODE && resultCode == RESULT_OK) {
-            if (blendedCourseModel != null) {
-                blendedCourseModels.add(blendedCourseModel);
+            if (model != null) {
+                courseModels.add(model);
             }
         } else if (requestCode == DELETE_REQUEST_CODE && resultCode == RESULT_OK) {
             if (index != -1) {
-                blendedCourseModels.remove(index);
+                courseModels.remove(index);
             }
         } else if (requestCode == UPDATE_REQUEST_CODE && resultCode == RESULT_OK) {
-            if (blendedCourseModel != null) {
-                blendedCourseModels.set(index, blendedCourseModel);
+            if (model != null) {
+                courseModels.set(index, model);
             }
         }
         adapter.notifyDataSetChanged();
@@ -90,12 +90,12 @@ public class OpBlendedCourseActivity extends AppCompatActivity {
 
     private void initView() {
         tvNavbar = findViewById(R.id.tv_navbar);
-        tvNavbar.setText("Blended Course");
+        tvNavbar.setText("Kelas Blended");
         clBack = findViewById(R.id.cl_icon1);
         clBack.setVisibility(View.VISIBLE);
         clBack.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View v) {
                 onBackPressed();
             }
         });
@@ -105,15 +105,14 @@ public class OpBlendedCourseActivity extends AppCompatActivity {
         imgBack.setImageResource(R.drawable.ic_arrow_back);
         imgAdd = findViewById(R.id.img_icon3);
         imgAdd.setImageResource(R.drawable.ic_add);
-        rvBlended = findViewById(R.id.rv_op_blended);
-
-        progressDialog = new ProgressDialog(this);
+        rvBlendedCourse = findViewById(R.id.rv_op_blended_course);
+        pd = new ProgressDialog(this);
     }
 
     private void onClick() {
         clAdd.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View v) {
                 Intent intent = new Intent(OpBlendedCourseActivity.this, OpAddBlendedCourseActivity.class);
                 startActivity(intent);
             }
@@ -121,55 +120,53 @@ public class OpBlendedCourseActivity extends AppCompatActivity {
     }
 
     private void setRecyclerView() {
-        final LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        rvBlended.setLayoutManager(layoutManager);
-        adapter = new OpBlendedCourseAdapter(this, blendedCourseModels);
-        rvBlended.setAdapter(adapter);
+        final LinearLayoutManager manager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
+        rvBlendedCourse.setLayoutManager(manager);
+        adapter = new OpCourseAdapter(this, courseModels);
+        rvBlendedCourse.setAdapter(adapter);
 
-        rvBlended.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        rvBlendedCourse.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                if (layoutManager.findLastVisibleItemPosition() >= blendedCourseModels.size() - 10) {
-                    if (lastVisible != null) {
-                        if (loadbaru) {
-                            loadbaru = false;
-                            Query load = blendedCourseRef
-                                    .orderBy("dateCreated", Query.Direction.DESCENDING)
-                                    .startAfter(lastVisible)
-                                    .limit(20);
-                            load.get()
-                                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                                        @Override
-                                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                            if (queryDocumentSnapshots.size() > 0) {
-                                                for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                                                    BlendedCourseModel newBlendedCourseModel = documentSnapshot.toObject(BlendedCourseModel.class);
-                                                    newBlendedCourseModel.setDocumentId(documentSnapshot.getId());
-                                                    blendedCourseModels.add(newBlendedCourseModel);
-                                                }
-
-                                                if (queryDocumentSnapshots.size() < 20) {
-                                                    lastVisible = null;
-                                                } else {
-                                                    lastVisible = queryDocumentSnapshots.getDocuments()
-                                                            .get(queryDocumentSnapshots.size() - 1);
-                                                }
-
-                                                adapter.notifyDataSetChanged();
-                                            }
-                                            loadbaru = true;
+                if (manager.findLastVisibleItemPosition() >= courseModels.size() - 10 &&
+                        lastVisible != null &&
+                        loadbaru) {
+                    loadbaru = false;
+                    Query load = blendedCourseRef
+                            .orderBy("dateCreated", Query.Direction.DESCENDING)
+                            .startAfter(lastVisible)
+                            .limit(20);
+                    load.get()
+                            .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                @Override
+                                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                    if (queryDocumentSnapshots.size() > 0) {
+                                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                                            CourseModel newModel = documentSnapshot.toObject(CourseModel.class);
+                                            newModel.setDocumentId(documentSnapshot.getId());
+                                            courseModels.add(newModel);
                                         }
-                                    })
-                                    .addOnFailureListener(new OnFailureListener() {
-                                        @Override
-                                        public void onFailure(@NonNull Exception e) {
-                                            loadbaru = true;
-                                            Toast.makeText(OpBlendedCourseActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+
+                                        if (queryDocumentSnapshots.size() < 20) {
+                                            lastVisible = null;
+                                        } else {
+                                            lastVisible = queryDocumentSnapshots.getDocuments()
+                                                    .get(queryDocumentSnapshots.size() - 1);
                                         }
-                                    });
-                        }
-                    }
+
+                                        adapter.notifyDataSetChanged();
+                                    }
+                                    loadbaru = true;
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    loadbaru = true;
+                                    Toast.makeText(OpBlendedCourseActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+                                }
+                            });
                 }
             }
 
@@ -181,9 +178,8 @@ public class OpBlendedCourseActivity extends AppCompatActivity {
     }
 
     private void loadData() {
-        progressDialog.setMessage("Memuat...");
-        progressDialog.setCancelable(false);
-        progressDialog.show();
+        pd.setMessage("Memuat...");
+        pd.show();
 
         Query first = blendedCourseRef
                 .orderBy("dateCreated", Query.Direction.DESCENDING)
@@ -193,15 +189,15 @@ public class OpBlendedCourseActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        blendedCourseModels.clear();
-                        if (queryDocumentSnapshots.size() > 0) {
-                            for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                                BlendedCourseModel newBlendedCourseModel = documentSnapshot.toObject(BlendedCourseModel.class);
-                                newBlendedCourseModel.setDocumentId(documentSnapshot.getId());
-                                blendedCourseModels.add(newBlendedCourseModel);
+                        courseModels.clear();
+                        if (queryDocumentSnapshots.size() > 0){
+                            for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
+                                CourseModel newModel = documentSnapshot.toObject(CourseModel.class);
+                                newModel.setDocumentId(documentSnapshot.getId());
+                                courseModels.add(newModel);
                             }
 
-                            if (queryDocumentSnapshots.size() < 20) {
+                            if (queryDocumentSnapshots.size() < 20){
                                 lastVisible = null;
                             } else {
                                 lastVisible = queryDocumentSnapshots.getDocuments()
@@ -210,16 +206,15 @@ public class OpBlendedCourseActivity extends AppCompatActivity {
 
                             adapter.notifyDataSetChanged();
                         }
-                        progressDialog.dismiss();
+                        pd.dismiss();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        progressDialog.dismiss();
+                        pd.dismiss();
                         Toast.makeText(OpBlendedCourseActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
                     }
                 });
     }
-
 }

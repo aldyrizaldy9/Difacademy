@@ -1,22 +1,19 @@
 package com.example.aldy.difacademy.Activity;
 
-import android.content.Context;
-import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.aldy.difacademy.Adapter.OpQuizAdapter;
-import com.example.aldy.difacademy.Model.QuizModel;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.example.aldy.difacademy.Adapter.OpVideoAdapter;
+import com.example.aldy.difacademy.Model.VideoModel;
 import com.example.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
@@ -28,25 +25,26 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 
 import static com.example.aldy.difacademy.Activity.OpAddBlendedCourseActivity.blendedCourseDocId;
+import static com.example.aldy.difacademy.Activity.OpAddBlendedMateriActivity.blendedMateriDocId;
 import static com.example.aldy.difacademy.Activity.OpMainActivity.ADD_REQUEST_CODE;
 import static com.example.aldy.difacademy.Activity.OpMainActivity.DELETE_REQUEST_CODE;
 import static com.example.aldy.difacademy.Activity.OpMainActivity.UPDATE_REQUEST_CODE;
 
-public class OpQuizActivity extends AppCompatActivity {
-    private static final String TAG = "OpQuizActivity";
-
+public class OpBlendedVideoActivity extends AppCompatActivity {
     TextView tvNavbar;
     ConstraintLayout clBack, clAdd;
     ImageView imgBack, imgAdd;
 
-    RecyclerView rvQuiz;
-    OpQuizAdapter adapter;
-    ArrayList<QuizModel> quizModels;
+    RecyclerView rvBlendedVideo;
+    ArrayList<VideoModel> videoModels;
+    OpVideoAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_op_quiz);
+        setContentView(R.layout.activity_op_blended_video);
+
+        videoModels = new ArrayList<>();
 
         initView();
         setRecyclerView();
@@ -57,20 +55,20 @@ public class OpQuizActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Intent intent = getIntent();
-        QuizModel quizModel = intent.getParcelableExtra("blended_video_model");
+        VideoModel model = intent.getParcelableExtra("blended_video_model");
         int index = intent.getIntExtra("index", -1);
 
         if (requestCode == ADD_REQUEST_CODE && resultCode == RESULT_OK) {
-            if (quizModel != null) {
-                quizModels.add(quizModel);
+            if (model != null) {
+                videoModels.add(model);
             }
         } else if (requestCode == DELETE_REQUEST_CODE && resultCode == RESULT_OK) {
             if (index != -1) {
-                quizModels.remove(index);
+                videoModels.remove(index);
             }
         } else if (requestCode == UPDATE_REQUEST_CODE && resultCode == RESULT_OK) {
-            if (quizModel != null) {
-                quizModels.set(index, quizModel);
+            if (model != null) {
+                videoModels.set(index, model);
             }
         }
         adapter.notifyDataSetChanged();
@@ -78,7 +76,7 @@ public class OpQuizActivity extends AppCompatActivity {
 
     private void initView() {
         tvNavbar = findViewById(R.id.tv_navbar);
-        tvNavbar.setText("Add Quiz");
+        tvNavbar.setText("Video Materi Kelas Blended");
         clBack = findViewById(R.id.cl_icon1);
         clBack.setVisibility(View.VISIBLE);
         clBack.setOnClickListener(new View.OnClickListener() {
@@ -94,32 +92,34 @@ public class OpQuizActivity extends AppCompatActivity {
         clAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(OpQuizActivity.this, OpAddQuizActivity.class);
+                Intent intent = new Intent(OpBlendedVideoActivity.this, OpAddBlendedVideoActivity.class);
                 startActivity(intent);
             }
         });
         imgAdd = findViewById(R.id.img_icon3);
         imgAdd.setImageResource(R.drawable.ic_add);
 
-        rvQuiz = findViewById(R.id.rv_op_quiz);
+        rvBlendedVideo = findViewById(R.id.rv_op_blended_video);
     }
 
     private void loadData() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference collRef = db.collection("BlendedCourse")
                 .document(blendedCourseDocId)
-                .collection("Quiz");
+                .collection("BlendedMateri")
+                .document(blendedMateriDocId)
+                .collection("BlendedVideo");
 
         collRef.orderBy("dateCreated", Query.Direction.ASCENDING)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        quizModels.clear();
+                        videoModels.clear();
                         for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                            QuizModel quizModel = documentSnapshot.toObject(QuizModel.class);
-                            quizModel.setDocumentId(documentSnapshot.getId());
-                            quizModels.add(quizModel);
+                            VideoModel model = documentSnapshot.toObject(VideoModel.class);
+                            model.setDocumentId(documentSnapshot.getId());
+                            videoModels.add(model);
                         }
                         adapter.notifyDataSetChanged();
                     }
@@ -127,10 +127,8 @@ public class OpQuizActivity extends AppCompatActivity {
     }
 
     private void setRecyclerView() {
-        quizModels = new ArrayList<>();
-        adapter = new OpQuizAdapter(this, quizModels);
-        rvQuiz.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        rvQuiz.setAdapter(adapter);
+        rvBlendedVideo.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        adapter = new OpVideoAdapter(this, videoModels);
+        rvBlendedVideo.setAdapter(adapter);
     }
-
 }

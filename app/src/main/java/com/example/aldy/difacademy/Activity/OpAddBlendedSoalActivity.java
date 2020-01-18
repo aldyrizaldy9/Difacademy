@@ -1,5 +1,11 @@
 package com.example.aldy.difacademy.Activity;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -18,13 +24,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-
-import com.example.aldy.difacademy.Model.QuizModel;
+import com.example.aldy.difacademy.Model.SoalModel;
 import com.example.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -36,14 +36,13 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 
 import static com.example.aldy.difacademy.Activity.OpAddBlendedCourseActivity.blendedCourseDocId;
+import static com.example.aldy.difacademy.Activity.OpAddBlendedMateriActivity.blendedMateriDocId;
 import static com.example.aldy.difacademy.Activity.OpMainActivity.ADD_REQUEST_CODE;
 import static com.example.aldy.difacademy.Activity.OpMainActivity.DELETE_REQUEST_CODE;
 import static com.example.aldy.difacademy.Activity.OpMainActivity.UPDATE_REQUEST_CODE;
 
-public class OpAddQuizActivity extends AppCompatActivity {
-    private static final String TAG = "OpAddQuizActivity";
-
-    public static String quizId = "";
+public class OpAddBlendedSoalActivity extends AppCompatActivity {
+    public static String blendedSoalDocId = "";
 
     TextView tvNavbar;
     ConstraintLayout clBack;
@@ -54,13 +53,17 @@ public class OpAddQuizActivity extends AppCompatActivity {
     Button btnHapus, btnSimpan;
 
     String jawabanBenar = "";
-    QuizModel quizModel;
+    SoalModel soalModel;
     ArrayList<String> listJawabanBenar;
     boolean thereIsData = false;
+
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     CollectionReference collRef = db.collection("BlendedCourse")
             .document(blendedCourseDocId)
-            .collection("Quiz");
+            .collection("BlendedMateri")
+            .document(blendedMateriDocId)
+            .collection("BlendedSoal");
+
     long dateCreated = 0;
     int index;
 
@@ -69,7 +72,7 @@ public class OpAddQuizActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_op_add_quiz);
+        setContentView(R.layout.activity_op_add_blended_soal);
 
         initView();
         customSpinner();
@@ -83,7 +86,7 @@ public class OpAddQuizActivity extends AppCompatActivity {
         pd.setCancelable(false);
 
         tvNavbar = findViewById(R.id.tv_navbar);
-        tvNavbar.setText("Detail Quiz");
+        tvNavbar.setText("Detail Soal Materi Blended");
         clBack = findViewById(R.id.cl_icon1);
         clBack.setVisibility(View.VISIBLE);
         clBack.setOnClickListener(new View.OnClickListener() {
@@ -95,15 +98,15 @@ public class OpAddQuizActivity extends AppCompatActivity {
         imgBack = findViewById(R.id.img_icon1);
         imgBack.setImageResource(R.drawable.ic_arrow_back);
 
-        edtSoal = findViewById(R.id.edt_op_add_quiz_soal);
-        edtA = findViewById(R.id.edt_op_add_quiz_jawaban_a);
-        edtB = findViewById(R.id.edt_op_add_quiz_jawaban_b);
-        edtC = findViewById(R.id.edt_op_add_quiz_jawaban_c);
-        edtD = findViewById(R.id.edt_op_add_quiz_jawaban_d);
-        edtE = findViewById(R.id.edt_op_add_quiz_jawaban_e);
-        spnJawaban = findViewById(R.id.spn_op_add_quiz_jawaban);
-        btnHapus = findViewById(R.id.btn_op_add_quiz_hapus);
-        btnSimpan = findViewById(R.id.btn_op_add_quiz_simpan);
+        edtSoal = findViewById(R.id.edt_op_add_blended_soal_soal);
+        edtA = findViewById(R.id.edt_op_add_blended_soal_jawaban_a);
+        edtB = findViewById(R.id.edt_op_add_blended_soal_jawaban_b);
+        edtC = findViewById(R.id.edt_op_add_blended_soal_jawaban_c);
+        edtD = findViewById(R.id.edt_op_add_blended_soal_jawaban_d);
+        edtE = findViewById(R.id.edt_op_add_blended_soal_jawaban_e);
+        spnJawaban = findViewById(R.id.spn_op_add_blended_soal_jawaban);
+        btnHapus = findViewById(R.id.btn_op_add_blended_soal_hapus);
+        btnSimpan = findViewById(R.id.btn_op_add_blended_soal_simpan);
     }
 
     private void customSpinner() {
@@ -115,7 +118,7 @@ public class OpAddQuizActivity extends AppCompatActivity {
         listJawabanBenar.add("D");
         listJawabanBenar.add("E");
 
-        ArrayAdapter<String> spnArrayAdapter = new ArrayAdapter<String>(OpAddQuizActivity.this, R.layout.support_simple_spinner_dropdown_item, listJawabanBenar) {
+        ArrayAdapter<String> spnArrayAdapter = new ArrayAdapter<String>(OpAddBlendedSoalActivity.this, R.layout.support_simple_spinner_dropdown_item, listJawabanBenar) {
             @Override
             public boolean isEnabled(int position) {
                 return position != 0;
@@ -155,27 +158,25 @@ public class OpAddQuizActivity extends AppCompatActivity {
 
     private void checkIntent() {
         Intent intent = getIntent();
-        quizModel = intent.getParcelableExtra("quiz_model");
-        if (quizModel != null) {
+        soalModel = intent.getParcelableExtra("blended_soal_model");
+        if (soalModel != null) {
             thereIsData = true;
             btnHapus.setVisibility(View.VISIBLE);
-            quizId = quizModel.getDocumentId();
-            edtSoal.setText(quizModel.getSoal());
-            edtA.setText(quizModel.getJwbA());
-            edtB.setText(quizModel.getJwbB());
-            edtC.setText(quizModel.getJwbC());
-            edtD.setText(quizModel.getJwbD());
-            edtE.setText(quizModel.getJwbE());
-            dateCreated = quizModel.getDateCreated();
+            blendedSoalDocId = soalModel.getDocumentId();
+            edtSoal.setText(soalModel.getSoal());
+            edtA.setText(soalModel.getJwbA());
+            edtB.setText(soalModel.getJwbB());
+            edtC.setText(soalModel.getJwbC());
+            edtD.setText(soalModel.getJwbD());
+            edtE.setText(soalModel.getJwbE());
+            dateCreated = soalModel.getDateCreated();
             index = intent.getIntExtra("index", -1);
             for (int i = 1; i < listJawabanBenar.size(); i++) {
-                if (listJawabanBenar.get(i).equals(quizModel.getJawabanBenar())) {
+                if (listJawabanBenar.get(i).equals(soalModel.getJawabanBenar())) {
                     spnJawaban.setSelection(i);
                     break;
                 }
             }
-        } else {
-            quizId = "";
         }
     }
 
@@ -196,7 +197,7 @@ public class OpAddQuizActivity extends AppCompatActivity {
                         edtD.getText().toString().equals("") ||
                         edtE.getText().toString().equals("") ||
                         jawabanBenar.equals("") || spnJawaban.getSelectedItemPosition() == 0) {
-                    Toast.makeText(OpAddQuizActivity.this, getString(R.string.data_not_complete), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(OpAddBlendedSoalActivity.this, getString(R.string.data_not_complete), Toast.LENGTH_SHORT).show();
                 } else {
                     showKonfirmasiDialog();
                 }
@@ -205,13 +206,13 @@ public class OpAddQuizActivity extends AppCompatActivity {
     }
 
     private void hapus() {
-        DocumentReference docRef = collRef.document(quizId);
+        DocumentReference docRef = collRef.document(blendedSoalDocId);
         docRef.delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         pd.dismiss();
-                        Intent intent = new Intent(OpAddQuizActivity.this, OpQuizActivity.class);
+                        Intent intent = new Intent(OpAddBlendedSoalActivity.this, OpBlendedSoalActivity.class);
                         intent.putExtra("index", index);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivityForResult(intent, DELETE_REQUEST_CODE);
@@ -221,13 +222,13 @@ public class OpAddQuizActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         pd.dismiss();
-                        Toast.makeText(OpAddQuizActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(OpAddBlendedSoalActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
                     }
                 });
     }
 
     private void edit() {
-        DocumentReference docRef = collRef.document(quizId);
+        DocumentReference docRef = collRef.document(blendedSoalDocId);
         String soal = edtSoal.getText().toString();
         String jwbA = edtA.getText().toString();
         String jwbB = edtB.getText().toString();
@@ -235,15 +236,15 @@ public class OpAddQuizActivity extends AppCompatActivity {
         String jwbD = edtD.getText().toString();
         String jwbE = edtE.getText().toString();
 
-        final QuizModel quizModel = new QuizModel(dateCreated, soal, jwbA, jwbB, jwbC, jwbD, jwbE, jawabanBenar);
-        docRef.set(quizModel)
+        final SoalModel model = new SoalModel(dateCreated, soal, jwbA, jwbB, jwbC, jwbD, jwbE, jawabanBenar);
+        docRef.set(model)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         pd.dismiss();
-                        Intent intent = new Intent(OpAddQuizActivity.this, OpQuizActivity.class);
+                        Intent intent = new Intent(OpAddBlendedSoalActivity.this, OpBlendedSoalActivity.class);
                         intent.putExtra("index", index);
-                        intent.putExtra("quiz_model", quizModel);
+                        intent.putExtra("blended_soal_model", model);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivityForResult(intent, UPDATE_REQUEST_CODE);
                     }
@@ -252,7 +253,7 @@ public class OpAddQuizActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         pd.dismiss();
-                        Toast.makeText(OpAddQuizActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(OpAddBlendedSoalActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -272,14 +273,14 @@ public class OpAddQuizActivity extends AppCompatActivity {
         String jwbD = edtD.getText().toString();
         String jwbE = edtE.getText().toString();
 
-        final QuizModel quizModel = new QuizModel(dateCreated, soal, jwbA, jwbB, jwbC, jwbD, jwbE, jawabanBenar);
-        collRef.add(quizModel)
+        final SoalModel model = new SoalModel(dateCreated, soal, jwbA, jwbB, jwbC, jwbD, jwbE, jawabanBenar);
+        collRef.add(model)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
                         pd.dismiss();
-                        Intent intent = new Intent(OpAddQuizActivity.this, OpQuizActivity.class);
-                        intent.putExtra("quiz_model", quizModel);
+                        Intent intent = new Intent(OpAddBlendedSoalActivity.this, OpBlendedSoalActivity.class);
+                        intent.putExtra("blended_soal_model", model);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivityForResult(intent, ADD_REQUEST_CODE);
                     }
@@ -288,7 +289,7 @@ public class OpAddQuizActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         pd.dismiss();
-                        Toast.makeText(OpAddQuizActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(OpAddBlendedSoalActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -302,7 +303,7 @@ public class OpAddQuizActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (!isNetworkConnected()) {
-                    Toast.makeText(OpAddQuizActivity.this, "Tidak ada koneksi internet!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(OpAddBlendedSoalActivity.this, "Tidak ada koneksi internet!", Toast.LENGTH_SHORT).show();
                 } else {
                     pd.show();
                     hapus();
@@ -329,7 +330,7 @@ public class OpAddQuizActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (!isNetworkConnected()) {
-                    Toast.makeText(OpAddQuizActivity.this, "Tidak ada koneksi internet!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(OpAddBlendedSoalActivity.this, "Tidak ada koneksi internet!", Toast.LENGTH_SHORT).show();
                 } else {
                     pd.show();
                     if (thereIsData) {
@@ -353,7 +354,6 @@ public class OpAddQuizActivity extends AppCompatActivity {
 
     private boolean isNetworkConnected() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-
         return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
     }
 }

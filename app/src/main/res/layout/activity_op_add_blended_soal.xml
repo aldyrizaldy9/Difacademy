@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activity.OpAddQuizActivity">
+    tools:context=".Activity.OpAddBlendedSoalActivity">
 
     <include
         android:id="@+id/include"
@@ -37,7 +37,7 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edt_op_add_quiz_soal"
+                    android:id="@+id/edt_op_add_blended_soal_soal"
                     style="@style/Difacademy.Body1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -56,7 +56,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/textInputLayout11">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edt_op_add_quiz_jawaban_a"
+                    android:id="@+id/edt_op_add_blended_soal_jawaban_a"
                     style="@style/Difacademy.Body1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -75,7 +75,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/textInputLayout10">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edt_op_add_quiz_jawaban_b"
+                    android:id="@+id/edt_op_add_blended_soal_jawaban_b"
                     style="@style/Difacademy.Body1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -94,7 +94,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/textInputLayout12">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edt_op_add_quiz_jawaban_c"
+                    android:id="@+id/edt_op_add_blended_soal_jawaban_c"
                     style="@style/Difacademy.Body1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -113,7 +113,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/textInputLayout13">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edt_op_add_quiz_jawaban_d"
+                    android:id="@+id/edt_op_add_blended_soal_jawaban_d"
                     style="@style/Difacademy.Body1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -132,7 +132,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/textInputLayout14">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edt_op_add_quiz_jawaban_e"
+                    android:id="@+id/edt_op_add_blended_soal_jawaban_e"
                     style="@style/Difacademy.Body1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -146,12 +146,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:text="Jawaban Benar : "
-                app:layout_constraintBottom_toBottomOf="@+id/spn_op_add_quiz_jawaban"
+                app:layout_constraintBottom_toBottomOf="@+id/spn_op_add_blended_soal_jawaban"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/spn_op_add_quiz_jawaban" />
+                app:layout_constraintTop_toTopOf="@+id/spn_op_add_blended_soal_jawaban" />
 
             <Spinner
-                android:id="@+id/spn_op_add_quiz_jawaban"
+                android:id="@+id/spn_op_add_blended_soal_jawaban"
                 style="@style/Difacademy.Body1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -159,14 +159,14 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp"
-                app:layout_constraintBottom_toTopOf="@+id/btn_op_add_quiz_hapus"
+                app:layout_constraintBottom_toTopOf="@+id/btn_op_add_blended_soal_hapus"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/textView5"
                 app:layout_constraintTop_toBottomOf="@+id/textInputLayout15"
                 app:layout_constraintVertical_bias="0.0" />
 
             <Button
-                android:id="@+id/btn_op_add_quiz_simpan"
+                android:id="@+id/btn_op_add_blended_soal_simpan"
                 style="@style/Difacademy.Button"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -179,7 +179,7 @@
                 app:layout_constraintStart_toStartOf="parent" />
 
             <Button
-                android:id="@+id/btn_op_add_quiz_hapus"
+                android:id="@+id/btn_op_add_blended_soal_hapus"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -187,13 +187,11 @@
                 android:layout_marginBottom="8dp"
                 android:text="@string/hapus"
                 android:visibility="gone"
-                app:layout_constraintBottom_toTopOf="@+id/btn_op_add_quiz_simpan"
+                app:layout_constraintBottom_toTopOf="@+id/btn_op_add_blended_soal_simpan"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </ScrollView>
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>
