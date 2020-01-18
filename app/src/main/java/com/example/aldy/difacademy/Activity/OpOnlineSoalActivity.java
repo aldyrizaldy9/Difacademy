@@ -95,7 +95,7 @@ public class OpOnlineSoalActivity extends AppCompatActivity {
 
     private void initView(){
         tvNavbar = findViewById(R.id.tv_navbar);
-        tvNavbar.setText("Soal Kelas Online");
+        tvNavbar.setText("Soal Materi Kelas Online");
         clBack = findViewById(R.id.cl_icon1);
         clBack.setVisibility(View.VISIBLE);
         clBack.setOnClickListener(new View.OnClickListener() {
