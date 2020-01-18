@@ -23,6 +23,8 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.aldy.difacademy.Model.OnlineMateriModel;
+import com.example.aldy.difacademy.Model.OnlineSoalModel;
+import com.example.aldy.difacademy.Model.OnlineVideoModel;
 import com.example.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -30,18 +32,23 @@ import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 import static com.example.aldy.difacademy.Activity.OpAddOnlineCourseActivity.onlineCourseDocId;
 import static com.example.aldy.difacademy.Activity.OpMainActivity.ADD_REQUEST_CODE;
+import static com.example.aldy.difacademy.Activity.OpMainActivity.DELETE_REQUEST_CODE;
 import static com.example.aldy.difacademy.Activity.OpMainActivity.PHOTO_PICK_REQUEST_CODE;
 import static com.example.aldy.difacademy.Activity.OpMainActivity.UPDATE_REQUEST_CODE;
 
 public class OpAddOnlineMateriActivity extends AppCompatActivity {
+    private static final String TAG = "ganteng";
 
     public static String onlineMateriDocId = "";
 
@@ -70,6 +77,8 @@ public class OpAddOnlineMateriActivity extends AppCompatActivity {
     long dateCreated = 0;
     ProgressDialog pd;
 
+    ArrayList<String> listVideoUrl;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,6 +89,7 @@ public class OpAddOnlineMateriActivity extends AppCompatActivity {
         pd.setCancelable(false);
 
         firebaseStorage.setMaxUploadRetryTimeMillis(60000);
+        listVideoUrl = new ArrayList<>();
 
         initView();
         onClick();
@@ -123,6 +133,7 @@ public class OpAddOnlineMateriActivity extends AppCompatActivity {
                     .into(imgThumbnail);
             edtJudul.setText(onlineMateriModel.getTitle());
             onlineMateriDocId = onlineMateriModel.getDocumentId();
+            Log.d(TAG, "checkIntent: onlinemateridocid : " + onlineMateriDocId);
         }
     }
 
@@ -198,6 +209,7 @@ public class OpAddOnlineMateriActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //hapus materi
+                showHapusDialog();
             }
         });
         btnSimpan.setOnClickListener(new View.OnClickListener() {
@@ -384,7 +396,7 @@ public class OpAddOnlineMateriActivity extends AppCompatActivity {
 
     private void showSimpanDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Apakah anda yakin ingin menyimpan kelas ini?");
+        builder.setMessage("Apakah anda yakin ingin menyimpan materi ini?");
         builder.setTitle("Simpan Materi Kelas Online");
         builder.setCancelable(false);
         builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
@@ -413,5 +425,131 @@ public class OpAddOnlineMateriActivity extends AppCompatActivity {
         });
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
+    }
+
+    private void showHapusDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Apakah anda yakin ingin menghapus materi ini?");
+        builder.setTitle("Hapus Materi Kelas Online");
+        builder.setCancelable(false);
+        builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (!isNetworkConnected()) {
+                    Toast.makeText(OpAddOnlineMateriActivity.this, "Tidak ada koneksi intenet!", Toast.LENGTH_SHORT).show();
+                } else {
+                    pd.show();
+                    hapusMateri();
+                }
+            }
+        });
+
+        builder.setNegativeButton("Tidak", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+                addSoal = false;
+                addVideo = false;
+            }
+        });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+
+    private void hapusMateri(){
+        //ambil link online video di storage
+        //hapus online video document
+        //hapus online video collection
+        //hapus online video storage
+        //hapus online soal document
+        //hapus online soal collection
+        //ambil link online materi thumbnail
+        //hapus online materi document
+        //hapus online materi thumbnail storage
+        getListVideoUrl();
+    }
+
+    private void getListVideoUrl(){
+        CollectionReference ref = onlineMateriRef.document(onlineMateriDocId)
+                .collection("OnlineVideo");
+
+        ref.get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
+                            OnlineVideoModel model = documentSnapshot.toObject(OnlineVideoModel.class);
+                            listVideoUrl.add(model.getVideoUrl());
+                        }
+                        hapusOnlineVideoDoc();
+                    }
+                });
+    }
+
+    private void hapusOnlineVideoDoc(){
+        final CollectionReference ref = onlineMateriRef.document(onlineMateriDocId)
+                .collection("OnlineVideo");
+
+        ref.get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
+                            DocumentReference docRef = ref.document(documentSnapshot.getId());
+                            docRef.delete();
+                        }
+                        hapusOnlineVideoStorage();
+                    }
+                });
+    }
+
+    private void hapusOnlineVideoStorage(){
+        for (String url : listVideoUrl){
+            StorageReference ref = firebaseStorage.getReferenceFromUrl(url);
+            ref.delete();
+        }
+        hapusOnlineSoalDoc();
+    }
+
+    private void hapusOnlineSoalDoc(){
+        final CollectionReference ref = onlineMateriRef.document(onlineMateriDocId)
+                .collection("OnlineSoal");
+
+        ref.get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
+                            DocumentReference docRef = ref.document(documentSnapshot.getId());
+                            docRef.delete();
+                        }
+                        hapusOnlineMateriDoc();
+                    }
+                });
+    }
+
+    private void hapusOnlineMateriDoc(){
+        DocumentReference ref = onlineMateriRef.document(onlineMateriDocId);
+        ref.delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        hapusOnlineMateriStorage();
+                    }
+                });
+    }
+
+    private void hapusOnlineMateriStorage(){
+        StorageReference ref = firebaseStorage.getReferenceFromUrl(thumbnailUrl);
+        ref.delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Intent intent = new Intent(OpAddOnlineMateriActivity.this, OpOnlineMateriActivity.class);
+                        intent.putExtra("index", index);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivityForResult(intent, DELETE_REQUEST_CODE);
+                    }
+                });
     }
 }
