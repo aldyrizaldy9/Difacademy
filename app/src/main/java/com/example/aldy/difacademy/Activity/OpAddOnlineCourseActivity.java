@@ -29,6 +29,8 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.aldy.difacademy.Adapter.OpOnlineMateriAdapter;
 import com.example.aldy.difacademy.Model.OnlineCourseModel;
+import com.example.aldy.difacademy.Model.OnlineMateriModel;
+import com.example.aldy.difacademy.Model.OnlineVideoModel;
 import com.example.aldy.difacademy.Model.TagModel;
 import com.example.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -48,12 +50,11 @@ import java.util.List;
 import java.util.UUID;
 
 import static com.example.aldy.difacademy.Activity.OpMainActivity.ADD_REQUEST_CODE;
+import static com.example.aldy.difacademy.Activity.OpMainActivity.DELETE_REQUEST_CODE;
 import static com.example.aldy.difacademy.Activity.OpMainActivity.PHOTO_PICK_REQUEST_CODE;
 import static com.example.aldy.difacademy.Activity.OpMainActivity.UPDATE_REQUEST_CODE;
 
 public class OpAddOnlineCourseActivity extends AppCompatActivity {
-
-    private static final String TAG = "ganteng";
 
     public static String onlineCourseDocId = "";
 
@@ -82,6 +83,9 @@ public class OpAddOnlineCourseActivity extends AppCompatActivity {
     long dateCreated = 0;
     ProgressDialog pd;
 
+    ArrayList<String> listOnlineVideoUrl;
+    ArrayList<String> listOnlineMateriThumbnailUrl;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,6 +96,8 @@ public class OpAddOnlineCourseActivity extends AppCompatActivity {
         pd.setCancelable(false);
 
         firebaseStorage.setMaxUploadRetryTimeMillis(60000);
+        listOnlineVideoUrl = new ArrayList<>();
+        listOnlineMateriThumbnailUrl = new ArrayList<>();
 
         initView();
         onClick();
@@ -129,9 +135,6 @@ public class OpAddOnlineCourseActivity extends AppCompatActivity {
         Intent intent = getIntent();
         onlineCourseModel = intent.getParcelableExtra("online_course_model");
         if (onlineCourseModel != null) {
-
-            Log.d(TAG, "checkIntent: intent ada");
-
             oldOnlineCourseModel = onlineCourseModel;
             index = intent.getIntExtra("index", -1);
             thereIsData = true;
@@ -243,9 +246,7 @@ public class OpAddOnlineCourseActivity extends AppCompatActivity {
         btnAddMateri.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "onClick: add materi clicked");
                 if (isDataComplete()) {
-                    Log.d(TAG, "onClick: data complete");
                     addMateri = true;
                     String title = edtJudul.getText().toString();
                     String description = edtDeskripsi.getText().toString();
@@ -255,7 +256,6 @@ public class OpAddOnlineCourseActivity extends AppCompatActivity {
                     String harga = edtHarga.getText().toString();
 
                     if (thereIsData) {
-                        Log.d(TAG, "onClick: there is data");
                         if (title.equals(oldOnlineCourseModel.getTitle()) &&
                                 description.equals(oldOnlineCourseModel.getDescription()) &&
                                 googleDrive.equals(oldOnlineCourseModel.getGoogleDrive()) &&
@@ -264,15 +264,12 @@ public class OpAddOnlineCourseActivity extends AppCompatActivity {
                                 harga.equals(oldOnlineCourseModel.getHarga()) &&
                                 thumbnailUrl.equals(oldOnlineCourseModel.getThumbnailUrl()) &&
                                 imageUri == null) {
-                            Log.d(TAG, "onClick: gaada yang berubah");
                             Intent intent = new Intent(OpAddOnlineCourseActivity.this, OpOnlineMateriActivity.class);
                             startActivity(intent);
                         } else {
-                            Log.d(TAG, "onClick: ada yang berubah");
                             showSimpanDialog();
                         }
                     } else {
-                        Log.d(TAG, "onClick: there is no data");
                         showSimpanDialog();
                     }
                 } else {
@@ -283,7 +280,7 @@ public class OpAddOnlineCourseActivity extends AppCompatActivity {
         btnHapus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                hapusKelas();
+                showHapusDialog();
             }
         });
         btnSimpan.setOnClickListener(new View.OnClickListener() {
@@ -328,10 +325,6 @@ public class OpAddOnlineCourseActivity extends AppCompatActivity {
         }
     }
 
-    private void hapusKelas() {
-
-    }
-
     private void simpanKelas() {
         String title = edtJudul.getText().toString();
         String description = edtDeskripsi.getText().toString();
@@ -339,13 +332,6 @@ public class OpAddOnlineCourseActivity extends AppCompatActivity {
         String tag = tagCourse;
         String tagId = tagCourseId;
         String harga = edtHarga.getText().toString();
-
-        Log.d(TAG, "simpanKelas: berjalan");
-        Log.d(TAG, "simpanKelas: title : " + title);
-        Log.d(TAG, "simpanKelas: desc : " + description);
-        Log.d(TAG, "simpanKelas: tag : " + tag);
-        Log.d(TAG, "simpanKelas: tagId : " + tagId);
-        Log.d(TAG, "simpanKelas: harga : " + harga);
 
         try {
             dateCreated = Timestamp.now().getSeconds();
@@ -358,35 +344,27 @@ public class OpAddOnlineCourseActivity extends AppCompatActivity {
         OnlineCourseModel model = new OnlineCourseModel(title, description, thumbnailUrl, googleDrive, tagId, tag, harga, dateCreated);
 
         if (thereIsData) {
-            Log.d(TAG, "simpanKelas: there is data");
             editKelas(model);
         } else {
-            Log.d(TAG, "simpanKelas: there is no data");
             tambahKelas(model);
         }
     }
 
     private void editKelas(final OnlineCourseModel model) {
-        Log.d(TAG, "editKelas: berjalan");
-
         DocumentReference docRef = onlineCourseRef.document(onlineCourseDocId);
         docRef.set(model)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "onSuccess: berhasil set ke firestore");
                         if (imageUri != null){
                             deletePhotoInFirebase(model);
                         } else {
                             if (addMateri) {
-                                Log.d(TAG, "onSuccess: addmateri");
-
                                 imageUri = null;
                                 pd.dismiss();
                                 Intent intent = new Intent(OpAddOnlineCourseActivity.this, OpOnlineMateriActivity.class);
                                 startActivity(intent);
                             } else {
-                                Log.d(TAG, "onSuccess: tidak addmateri");
                                 Intent intent = new Intent(OpAddOnlineCourseActivity.this, OpOnlineCourseActivity.class);
                                 intent.putExtra("online_course_model", model);
                                 intent.putExtra("index", index);
@@ -406,26 +384,18 @@ public class OpAddOnlineCourseActivity extends AppCompatActivity {
     }
 
     private void tambahKelas(final OnlineCourseModel model) {
-        Log.d(TAG, "tambahKelas: berjalan");
-
         onlineCourseRef.add(model)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
-                        Log.d(TAG, "onSuccess: berhasil add ke firestore");
-
                         onlineCourseDocId = documentReference.getId();
                         if (addMateri) {
-                            Log.d(TAG, "onSuccess: addmateri");
-
                             thereIsData = true;
                             imageUri = null;
                             pd.dismiss();
                             Intent intent = new Intent(OpAddOnlineCourseActivity.this, OpOnlineMateriActivity.class);
                             startActivity(intent);
                         } else {
-                            Log.d(TAG, "onSuccess: tidak addmateri");
-
                             Intent intent = new Intent(OpAddOnlineCourseActivity.this, OpOnlineCourseActivity.class);
                             intent.putExtra("online_course_model", model);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -443,8 +413,6 @@ public class OpAddOnlineCourseActivity extends AppCompatActivity {
     }
 
     private void uploadPhotoToFirebase() {
-        Log.d(TAG, "uploadPhotoToFirebase: berjalan");
-
         final StorageReference ref = firebaseStorage.getReference().child("OnlineCourse/" + UUID.randomUUID().toString());
         ref.putFile(imageUri)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -455,7 +423,6 @@ public class OpAddOnlineCourseActivity extends AppCompatActivity {
                                     @Override
                                     public void onSuccess(Uri uri) {
                                         thumbnailUrl = uri.toString();
-                                        Log.d(TAG, "onSuccess: thumbnail url yang baru : " + thumbnailUrl);
                                         simpanKelas();
                                     }
                                 });
@@ -471,23 +438,17 @@ public class OpAddOnlineCourseActivity extends AppCompatActivity {
     }
 
     private void deletePhotoInFirebase(final OnlineCourseModel model) {
-        Log.d(TAG, "deletePhotoInFirebase: berjalan");
-
         StorageReference deleteRef = firebaseStorage.getReferenceFromUrl(oldOnlineCourseModel.getThumbnailUrl());
         deleteRef.delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "onSuccess: berhasil hapus foto storage");
                         if (addMateri) {
-                            Log.d(TAG, "onSuccess: addmateri");
-
                             imageUri = null;
                             pd.dismiss();
                             Intent intent = new Intent(OpAddOnlineCourseActivity.this, OpOnlineMateriActivity.class);
                             startActivity(intent);
                         } else {
-                            Log.d(TAG, "onSuccess: tidak addmateri");
                             Intent intent = new Intent(OpAddOnlineCourseActivity.this, OpOnlineCourseActivity.class);
                             intent.putExtra("online_course_model", model);
                             intent.putExtra("index", index);
@@ -506,18 +467,13 @@ public class OpAddOnlineCourseActivity extends AppCompatActivity {
         builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
-                Log.d(TAG, "onClick: show simpan dialog");
-
                 if (!isNetworkConnected()) {
                     Toast.makeText(OpAddOnlineCourseActivity.this, "Tidak ada koneksi intenet!", Toast.LENGTH_SHORT).show();
                 } else {
                     pd.show();
                     if (imageUri != null) {
-                        Log.d(TAG, "onClick: ada foto yang dipilih");
                         uploadPhotoToFirebase();
                     } else {
-                        Log.d(TAG, "onClick: tidak ada foto yang dipilih");
                         simpanKelas();
                     }
                 }
@@ -534,4 +490,202 @@ public class OpAddOnlineCourseActivity extends AppCompatActivity {
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }
+
+    private void showHapusDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Apakah anda yakin ingin menghapus kelas ini?");
+        builder.setTitle("Hapus Kelas Online");
+        builder.setCancelable(false);
+        builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (!isNetworkConnected()) {
+                    Toast.makeText(OpAddOnlineCourseActivity.this, "Tidak ada koneksi intenet!", Toast.LENGTH_SHORT).show();
+                } else {
+                    pd.show();
+                    hapusKelas();
+                }
+            }
+        });
+
+        builder.setNegativeButton("Tidak", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+                addMateri = false;
+            }
+        });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+
+    private void hapusKelas(){
+        //ambil link online video di storage
+        //hapus online video document
+        //hapus online video collection
+        //hapus online video storage
+        //hapus online soal document
+        //hapus online soal collection
+        //ambil link online materi thumbnail
+        //hapus online materi document
+        //hapus online materi collection
+        //hapus online materi thumbnail storage
+        //ambil link online course thumbnail
+        //hapus online course document
+        //hapus online course thumbnail storage
+        getListVideoUrl();
+    }
+
+    private void getListVideoUrl(){
+        final CollectionReference ref1 = onlineCourseRef
+                .document(onlineCourseDocId)
+                .collection("OnlineMateri");
+
+        ref1.get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
+                            OnlineMateriModel model = documentSnapshot.toObject(OnlineMateriModel.class);
+                            model.setDocumentId(documentSnapshot.getId());
+
+                            CollectionReference ref2 = ref1.document(model.getDocumentId())
+                                    .collection("OnlineVideo");
+
+                            getListVideoUrl2(ref2, documentSnapshot.getId());
+                        }
+                    }
+                });
+    }
+
+    private void getListVideoUrl2(CollectionReference ref, final String docRef){
+        ref.get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
+                            OnlineVideoModel model = documentSnapshot.toObject(OnlineVideoModel.class);
+                            listOnlineVideoUrl.add(model.getVideoUrl());
+                        }
+                        hapusOnlineVideoDoc(docRef);
+                    }
+                });
+    }
+
+    private void hapusOnlineVideoDoc(final String docRef){
+        final CollectionReference ref = onlineCourseRef
+                .document(onlineCourseDocId)
+                .collection("OnlineMateri")
+                .document(docRef)
+                .collection("OnlineVideo");
+
+        ref.get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
+                            DocumentReference docRef = ref.document(documentSnapshot.getId());
+                            docRef.delete();
+                        }
+                        hapusOnlineVideoStorage(docRef);
+                    }
+                });
+    }
+
+    private void hapusOnlineVideoStorage(String docRef){
+        for (String url : listOnlineVideoUrl){
+            StorageReference ref = firebaseStorage.getReferenceFromUrl(url);
+            ref.delete();
+        }
+        hapusOnlineSoalDoc(docRef);
+    }
+
+    private void hapusOnlineSoalDoc(final String docRef){
+        final CollectionReference ref = onlineCourseRef
+                .document(onlineCourseDocId)
+                .collection("OnlineMateri")
+                .document(docRef)
+                .collection("OnlineSoal");
+
+        ref.get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
+                            DocumentReference docRef2 = ref.document(documentSnapshot.getId());
+                            docRef2.delete();
+                        }
+                        getListThumbnailUrl();
+                    }
+                });
+    }
+
+    private void getListThumbnailUrl(){
+        CollectionReference ref = onlineCourseRef.document(onlineCourseDocId)
+                .collection("OnlineMateri");
+
+        ref.get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
+                            OnlineMateriModel model = documentSnapshot.toObject(OnlineMateriModel.class);
+                            listOnlineMateriThumbnailUrl.add(model.getThumbnailUrl());
+                        }
+                        hapusOnlineMateriDoc();
+                    }
+                });
+    }
+
+    private void hapusOnlineMateriDoc(){
+        final CollectionReference ref = onlineCourseRef
+                .document(onlineCourseDocId)
+                .collection("OnlineMateri");
+
+        ref.get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
+                            DocumentReference docRef = ref.document(documentSnapshot.getId());
+                            docRef.delete();
+                        }
+                        hapusOnlineMateriStorage();
+                    }
+                });
+    }
+
+    private void hapusOnlineMateriStorage(){
+        for (String url : listOnlineMateriThumbnailUrl){
+            StorageReference ref = firebaseStorage.getReferenceFromUrl(url);
+            ref.delete();
+        }
+        hapusOnlineCourseDoc();
+    }
+
+    private void hapusOnlineCourseDoc(){
+        DocumentReference ref = onlineCourseRef.document(onlineCourseDocId);
+        ref.delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        hapusOnlineCourseStorage();
+                    }
+                });
+    }
+
+    private void hapusOnlineCourseStorage(){
+        StorageReference ref = firebaseStorage.getReferenceFromUrl(thumbnailUrl);
+        ref.delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Intent intent = new Intent(OpAddOnlineCourseActivity.this, OpOnlineCourseActivity.class);
+                        intent.putExtra("index", index);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivityForResult(intent, DELETE_REQUEST_CODE);
+                    }
+                });
+    }
+
 }
