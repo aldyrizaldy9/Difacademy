@@ -201,7 +201,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="Berita terbaru"
+                android:text="Artikel terbaru"
                 app:layout_constraintStart_toStartOf="@+id/img_main_kelas_gratis"
                 app:layout_constraintTop_toBottomOf="@+id/img_main_kelas_gratis" />
 

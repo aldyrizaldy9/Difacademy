@@ -82,7 +82,7 @@ public class OpNewsActivity extends AppCompatActivity {
 
     private void initView() {
         TextView tvNavBar = findViewById(R.id.tv_navbar);
-        tvNavBar.setText(R.string.berita);
+        tvNavBar.setText(R.string.artikel);
         clTambah = findViewById(R.id.cl_icon3);
         clTambah.setVisibility(View.VISIBLE);
         clBack = findViewById(R.id.cl_icon1);

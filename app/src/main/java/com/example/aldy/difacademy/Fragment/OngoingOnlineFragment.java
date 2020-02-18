@@ -40,15 +40,19 @@ public class OngoingOnlineFragment extends Fragment {
 
     private RecyclerView rvOngoingOnline;
     private ArrayList<CourseModel> courseModels;
-    private CourseAdapter courseAdapter;
+    private CourseAdapter adapter;
 
-    private ProgressDialog progressDialog;
+    private ProgressDialog pd;
 
-    private FirebaseFirestore firebaseFirestore;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();;
 
     private View rootView;
 
     private static final String TAG = "OngoingOnlineFragment";
+
+    DocumentSnapshot lastVisible;
+    boolean loadbaru;
+    CollectionReference ongoingCoursesRef;
 
     public OngoingOnlineFragment() {
         // Required empty public constructor
@@ -70,51 +74,138 @@ public class OngoingOnlineFragment extends Fragment {
     private void initView() {
         JENIS_KELAS = "online";
         rvOngoingOnline = rootView.findViewById(R.id.rv_ongoing_online);
-        progressDialog = new ProgressDialog(rootView.getContext());
+        pd = new ProgressDialog(rootView.getContext());
+
+        ongoingCoursesRef = db
+                .collection("User")
+                .document(USER_DOC_ID)
+                .collection("OngoingOnlineCourse");
     }
 
     private void setRecyclerView() {
         courseModels = new ArrayList<>();
-        courseAdapter = new CourseAdapter(rootView.getContext(), courseModels);
-        rvOngoingOnline.setLayoutManager(new LinearLayoutManager(rootView.getContext(), RecyclerView.VERTICAL, false));
-        rvOngoingOnline.setAdapter(courseAdapter);
+        adapter = new CourseAdapter(rootView.getContext(), courseModels);
+
+        final LinearLayoutManager manager = new LinearLayoutManager(rootView.getContext(), RecyclerView.VERTICAL, false);
+        rvOngoingOnline.setLayoutManager(manager);
+        rvOngoingOnline.setAdapter(adapter);
+
+        rvOngoingOnline.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (manager.findLastVisibleItemPosition() >= courseModels.size() - 10 &&
+                        lastVisible != null &&
+                        loadbaru){
+                    loadbaru = false;
+                    Query load = ongoingCoursesRef
+                            .orderBy("dateCreated", Query.Direction.DESCENDING)
+                            .startAfter(lastVisible)
+                            .limit(20);
+
+                    load.get()
+                            .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                @Override
+                                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                    courseModels.clear();
+                                    if (queryDocumentSnapshots.size() > 0){
+                                        for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
+                                            OngoingKelasOnlineModel ongoingKelasOnlineModel = queryDocumentSnapshot.toObject(OngoingKelasOnlineModel.class);
+
+                                            DocumentReference onlineCourseRef = db
+                                                    .collection("OnlineCourse")
+                                                    .document(ongoingKelasOnlineModel.getKelasOnlineId());
+                                            onlineCourseRef
+                                                    .get()
+                                                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                                        @Override
+                                                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                                            CourseModel courseModel = documentSnapshot.toObject(CourseModel.class);
+                                                            if (courseModel != null) {
+                                                                courseModel.setDocumentId(documentSnapshot.getId());
+                                                            }
+                                                            courseModels.add(courseModel);
+                                                            adapter.notifyDataSetChanged();
+                                                            loadbaru = true;
+                                                        }
+                                                    })
+                                                    .addOnFailureListener(new OnFailureListener() {
+                                                        @Override
+                                                        public void onFailure(@NonNull Exception e) {
+                                                            loadbaru = true;
+                                                            Log.d(TAG, e.toString());
+                                                        }
+                                                    });
+                                        }
+
+                                        if (queryDocumentSnapshots.size() < 20){
+                                            lastVisible = null;
+                                        } else {
+                                            lastVisible = queryDocumentSnapshots.getDocuments()
+                                                    .get(queryDocumentSnapshots.size() - 1);
+                                        }
+                                    }
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    loadbaru = true;
+                                    Log.d(TAG, e.toString());
+                                }
+                            });
+
+                }
+            }
+
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+            }
+        });
     }
 
     private void loadOngoingCourses() {
-        firebaseFirestore = FirebaseFirestore.getInstance();
-        CollectionReference ongoingCoursesRef = firebaseFirestore
-                .collection("User")
-                .document(USER_DOC_ID)
-                .collection("OngoingOnlineCourse");
+        pd.setMessage("Memuat...");
+        pd.setCancelable(false);
+        pd.show();
 
-        progressDialog.setMessage("Memuat...");
-        progressDialog.setCancelable(false);
-        progressDialog.show();
-
-        ongoingCoursesRef
+        Query first = ongoingCoursesRef
                 .orderBy("dateCreated", Query.Direction.DESCENDING)
-                .get()
+                .limit(20);
+
+        first.get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
-                            OngoingKelasOnlineModel ongoingKelasOnlineModel = queryDocumentSnapshot.toObject(OngoingKelasOnlineModel.class);
-                            loadOngoingCoursesDetail(ongoingKelasOnlineModel.getKelasOnlineId());
+                        courseModels.clear();
+                        if (queryDocumentSnapshots.size() > 0){
+                            for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
+                                OngoingKelasOnlineModel ongoingKelasOnlineModel = queryDocumentSnapshot.toObject(OngoingKelasOnlineModel.class);
+                                loadOngoingCoursesDetail(ongoingKelasOnlineModel.getKelasOnlineId());
+                            }
+
+                            if (queryDocumentSnapshots.size() < 20){
+                                lastVisible = null;
+                            } else {
+                                lastVisible = queryDocumentSnapshots.getDocuments()
+                                        .get(queryDocumentSnapshots.size() - 1);
+                            }
                         }
-                        progressDialog.dismiss();
+                        pd.dismiss();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        progressDialog.dismiss();
+                        pd.dismiss();
                         Log.d(TAG, e.toString());
                     }
                 });
     }
 
     private void loadOngoingCoursesDetail(final String courseId) {
-        DocumentReference onlineCourseRef = firebaseFirestore
+        DocumentReference onlineCourseRef = db
                 .collection("OnlineCourse")
                 .document(courseId);
         onlineCourseRef
@@ -127,13 +218,13 @@ public class OngoingOnlineFragment extends Fragment {
                             courseModel.setDocumentId(documentSnapshot.getId());
                         }
                         courseModels.add(courseModel);
-                        courseAdapter.notifyDataSetChanged();
+                        adapter.notifyDataSetChanged();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        progressDialog.dismiss();
+                        pd.dismiss();
                         Log.d(TAG, e.toString());
                     }
                 });

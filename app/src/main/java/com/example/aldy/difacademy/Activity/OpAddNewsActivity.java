@@ -98,7 +98,7 @@ public class OpAddNewsActivity extends AppCompatActivity {
         imgBack.setImageResource(R.drawable.ic_arrow_back);
         imgBack.setVisibility(View.VISIBLE);
         TextView tvNavbar = findViewById(R.id.tv_navbar);
-        tvNavbar.setText(R.string.tambah_berita);
+        tvNavbar.setText(R.string.tambah_artikel);
         edtJudul = findViewById(R.id.edt_judul);
         edtIsi = findViewById(R.id.edt_op_add_news_isi);
         btnHapus = findViewById(R.id.btn_op_add_news_hapus);
@@ -219,7 +219,7 @@ public class OpAddNewsActivity extends AppCompatActivity {
                         intent.putExtra("index", index);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivityForResult(intent, DELETE_REQUEST_CODE);
-                        Toast.makeText(OpAddNewsActivity.this, "Berita telah dihapus", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(OpAddNewsActivity.this, "Artikel telah dihapus", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -234,9 +234,9 @@ public class OpAddNewsActivity extends AppCompatActivity {
         if (imageUri == null && newsModel == null) {
             Toast.makeText(this, "Harap unggah foto thumbnail terlebih dahulu", Toast.LENGTH_SHORT).show();
         } else if (edtJudul.length() == 0) {
-            Toast.makeText(this, "Harap memasukkan judul berita terlebih dahulu", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Harap memasukkan judul artikel terlebih dahulu", Toast.LENGTH_SHORT).show();
         } else if (edtIsi.length() == 0) {
-            Toast.makeText(this, "Harap memasukkan isi berita terlebih dahulu", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Harap memasukkan isi artikel terlebih dahulu", Toast.LENGTH_SHORT).show();
         } else {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setMessage("Apakah anda yakin ingin menyimpan?");
@@ -330,7 +330,7 @@ public class OpAddNewsActivity extends AppCompatActivity {
                             intent.putExtra("newsModel", newsModel);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             startActivityForResult(intent, ADD_REQUEST_CODE);
-                            Toast.makeText(OpAddNewsActivity.this, "Berita telah ditambahkan", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(OpAddNewsActivity.this, "Artikel telah ditambahkan", Toast.LENGTH_SHORT).show();
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
@@ -408,7 +408,7 @@ public class OpAddNewsActivity extends AppCompatActivity {
                             intent.putExtra("index", index);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             startActivityForResult(intent, UPDATE_REQUEST_CODE);
-                            Toast.makeText(OpAddNewsActivity.this, "Berita telah disunting", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(OpAddNewsActivity.this, "Artikel telah disunting", Toast.LENGTH_SHORT).show();
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -36,7 +37,6 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 
 public class ListFreeCourseActivity extends AppCompatActivity {
-    private static final String TAG = "ListFreeCourseActivity";
     DocumentSnapshot lastVisible;
     boolean loadbaru;
     boolean loadFromTag = false;
@@ -76,7 +76,7 @@ public class ListFreeCourseActivity extends AppCompatActivity {
         ImageView imgSearch = findViewById(R.id.img_icon3);
         imgSearch.setImageResource(R.drawable.ic_search);
         TextView tvNavBar = findViewById(R.id.tv_navbar);
-        tvNavBar.setText("Free Video");
+        tvNavBar.setText("Short Course");
         rvVideo = findViewById(R.id.rv_free_course_video);
         spnTags = findViewById(R.id.spn_free_course_search);
 

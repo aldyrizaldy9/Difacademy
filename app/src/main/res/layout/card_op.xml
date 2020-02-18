@@ -39,7 +39,7 @@
         android:layout_marginEnd="8dp"
         android:ellipsize="end"
         android:maxLines="2"
-        android:text="Judul Video/Berita"
+        android:text="Judul Video/Artikel"
         android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@+id/tv_c_op_tag"
         app:layout_constraintEnd_toStartOf="@+id/cl_c_op_delete"

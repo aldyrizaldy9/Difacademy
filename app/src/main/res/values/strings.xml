@@ -4,7 +4,7 @@
     <string name="kelas_gratis">KELAS GRATIS</string>
     <string name="kelas_online">KELAS ONLINE</string>
     <string name="kelas_blended">KELAS CAMPURAN</string>
-    <string name="berita">BERITA</string>
+    <string name="artikel">ARTIKEL</string>
     <string name="tags">TAGS</string>
     <string name="banner">BANNER</string>
 
@@ -16,7 +16,7 @@
     <string name="no_internet">Tidak ada koneksi internet!</string>
     <string name="link_not_valid">Link Tidak Valid</string>
     <string name="data_not_complete">Data Tidak Lengkap</string>
-    <string name="tambah_berita">Tambah Berita</string>
+    <string name="tambah_artikel">Tambah Artikel</string>
     <string name="title_activity_watch_video_blended">WatchVideoBlendedActivity</string>
 
     <!-- TODO: Remove or change this placeholder text -->

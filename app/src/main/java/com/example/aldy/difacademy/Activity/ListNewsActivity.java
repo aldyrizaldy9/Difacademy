@@ -53,7 +53,7 @@ public class ListNewsActivity extends AppCompatActivity {
         TextView tvNavbar = findViewById(R.id.tv_navbar);
         clNavbar = findViewById(R.id.cl_navbar);
         clNavbar.setBackgroundColor(getResources().getColor(R.color.navKuning));
-        tvNavbar.setText(R.string.berita);
+        tvNavbar.setText(R.string.artikel);
         clBack = findViewById(R.id.cl_icon1);
         clBack.setVisibility(View.VISIBLE);
         ImageView imgBack = findViewById(R.id.img_icon1);
