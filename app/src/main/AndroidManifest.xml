@@ -35,7 +35,7 @@
         <activity android:name=".Activity.OnlineCourseActivity" />
         <activity android:name=".Activity.BlendedCourseActivity" />
         <activity
-            android:name=".Activity.WatchVideoBlendedActivity"
+            android:name=".Activity.WatchVideoActivity"
             android:configChanges="orientation|screenSize|layoutDirection" />
         <activity
             android:name=".Activity.ChangePasswordActivity"

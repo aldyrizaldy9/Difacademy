@@ -17,7 +17,7 @@ public class GraduationModel implements Parcelable {
             return new GraduationModel[size];
         }
     };
-    private String userId, namaUser, email, noWa, blendedCourseId, namaKelas, graduationId;
+    private String userId, namaUser, email, noWa, materiId, namaMateri, graduationId;
     private long dateCreated;
     private boolean isSeen, isDone;
 
@@ -28,8 +28,8 @@ public class GraduationModel implements Parcelable {
                            String namaUser,
                            String email,
                            String noWa,
-                           String blendedCourseId,
-                           String namaKelas,
+                           String materiId,
+                           String namaMateri,
                            long dateCreated,
                            boolean isSeen,
                            boolean isDone) {
@@ -37,8 +37,8 @@ public class GraduationModel implements Parcelable {
         this.namaUser = namaUser;
         this.email = email;
         this.noWa = noWa;
-        this.blendedCourseId = blendedCourseId;
-        this.namaKelas = namaKelas;
+        this.materiId = materiId;
+        this.namaMateri = namaMateri;
         this.dateCreated = dateCreated;
         this.isSeen = isSeen;
         this.isDone = isDone;
@@ -49,8 +49,8 @@ public class GraduationModel implements Parcelable {
         namaUser = in.readString();
         email = in.readString();
         noWa = in.readString();
-        blendedCourseId = in.readString();
-        namaKelas = in.readString();
+        materiId = in.readString();
+        namaMateri = in.readString();
         graduationId = in.readString();
         dateCreated = in.readLong();
         isSeen = in.readByte() != 0;
@@ -63,8 +63,8 @@ public class GraduationModel implements Parcelable {
         dest.writeString(namaUser);
         dest.writeString(email);
         dest.writeString(noWa);
-        dest.writeString(blendedCourseId);
-        dest.writeString(namaKelas);
+        dest.writeString(materiId);
+        dest.writeString(namaMateri);
         dest.writeString(graduationId);
         dest.writeLong(dateCreated);
         dest.writeByte((byte) (isSeen ? 1 : 0));
@@ -92,12 +92,12 @@ public class GraduationModel implements Parcelable {
         return noWa;
     }
 
-    public String getBlendedCourseId() {
-        return blendedCourseId;
+    public String getMateriId() {
+        return materiId;
     }
 
-    public String getNamaKelas() {
-        return namaKelas;
+    public String getNamaMateri() {
+        return namaMateri;
     }
 
     @Exclude

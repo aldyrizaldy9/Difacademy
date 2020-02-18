@@ -272,7 +272,7 @@ public class MainActivity extends AppCompatActivity {
     private void setBlendedCourseAsOngoing(String courseId) {
 //        DocumentReference ongoingRef = firebaseFirestore
 //                .collection("BlendedCourse")
-//                .document(courseId);
+//                .document(COURSE_ID);
 //        ongoingRef.get()
 //                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
 //                    @Override
@@ -314,7 +314,7 @@ public class MainActivity extends AppCompatActivity {
     private void setOnlineCourseAsOngoing(String courseId) {
 //        DocumentReference ongoingRef = firebaseFirestore
 //                .collection("OnlineCourse")
-//                .document(courseId);
+//                .document(COURSE_ID);
 //        ongoingRef.get()
 //                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
 //                    @Override

@@ -32,14 +32,14 @@ public class WatchVideoBlendedActivity extends AppCompatActivity {
 //    ScrollView scrollView;
 //
 //    SimpleExoPlayer simpleExoPlayer;
-//    BlendedVideoModel blendedVideoModel;
+//    BlendedVideoModel videoModel;
 //
 //    String videoUrl = "";
 //
 //    @Override
 //    protected void onCreate(Bundle savedInstanceState) {
 //        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_watch_video_blended);
+//        setContentView(R.layout.activity_watch_video);
 //
 //        initView();
 //        checkIntent();
@@ -55,11 +55,11 @@ public class WatchVideoBlendedActivity extends AppCompatActivity {
 //
 //    private void checkIntent() {
 //        Intent intent = getIntent();
-//        blendedVideoModel = intent.getParcelableExtra("blended_video_model");
-//        if (blendedVideoModel != null) {
-//            videoUrl = blendedVideoModel.getVideoUrl();
-//            tvJudul.setText(blendedVideoModel.getTitle());
-//            tvDeskripsi.setText(blendedVideoModel.getDescription());
+//        videoModel = intent.getParcelableExtra("blended_video_model");
+//        if (videoModel != null) {
+//            videoUrl = videoModel.getVideoUrl();
+//            tvJudul.setText(videoModel.getTitle());
+//            tvDeskripsi.setText(videoModel.getDescription());
 //        }
 //    }
 //

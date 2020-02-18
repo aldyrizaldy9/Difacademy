@@ -38,7 +38,7 @@ public class OpNotifGraduationAdapter extends RecyclerView.Adapter<OpNotifGradua
     public void onBindViewHolder(@NonNull OpNotifGraduationAdapter.ViewHolder holder, int position) {
         final GraduationModel graduationModel = graduationModels.get(position);
         holder.tvNama.setText(graduationModel.getNamaUser());
-        holder.tvKelas.setText(graduationModel.getNamaKelas());
+        holder.tvKelas.setText(graduationModel.getNamaMateri());
         if (graduationModel.isDone()) {
             holder.tvStatus.setText("SUDAH DIHUBUNGI");
         } else {

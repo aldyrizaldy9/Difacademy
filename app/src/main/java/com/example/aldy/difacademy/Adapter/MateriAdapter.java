@@ -1,18 +1,19 @@
 package com.example.aldy.difacademy.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.aldy.difacademy.Activity.ListVideoCourseActivity;
 import com.example.aldy.difacademy.Model.MateriModel;
 import com.example.aldy.difacademy.R;
 
@@ -48,7 +49,9 @@ public class MateriAdapter extends RecyclerView.Adapter<MateriAdapter.ViewHolder
         holder.clContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, materiModel.getTitle(), Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(context, ListVideoCourseActivity.class);
+                intent.putExtra("materiId", materiModel.getDocumentId());
+                context.startActivity(intent);
             }
         });
     }

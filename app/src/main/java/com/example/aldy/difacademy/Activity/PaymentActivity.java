@@ -98,7 +98,7 @@ public class PaymentActivity extends AppCompatActivity {
         btnBayarBni = findViewById(R.id.btn_payment_bayar_bni);
         btnBayarBri = findViewById(R.id.btn_payment_bayar_bri);
         Intent intent = getIntent();
-        courseId = intent.getStringExtra("courseId");
+        courseId = intent.getStringExtra("COURSE_ID");
         SharedPreferences sharedPreferences = getSharedPreferences(SHARE_PREFS, MODE_PRIVATE);
         userId = sharedPreferences.getString(USERID_PREFS, "");
         progressDialog = new ProgressDialog(this);

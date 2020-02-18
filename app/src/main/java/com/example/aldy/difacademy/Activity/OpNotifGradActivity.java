@@ -76,7 +76,7 @@ public class OpNotifGradActivity extends AppCompatActivity {
         tvNama.setText(graduationModel.getNamaUser());
         tvEmail.setText(graduationModel.getEmail());
         tvNoWa.setText(graduationModel.getNoWa());
-        tvNamaKelas.setText(graduationModel.getNamaKelas());
+        tvNamaKelas.setText(graduationModel.getNamaMateri());
         if(graduationModel.isDone()){
             btnTandai.setEnabled(false);
         }
@@ -167,7 +167,7 @@ public class OpNotifGradActivity extends AppCompatActivity {
         progressDialog.show();
         CollectionReference gradRef = firebaseFirestore.collection("Graduation");
         gradRef
-                .whereEqualTo("blendedCourseId", graduationModel.getBlendedCourseId())
+                .whereEqualTo("blendedCourseId", graduationModel.getMateriId())
                 .whereEqualTo("userId", graduationModel.getUserId())
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
