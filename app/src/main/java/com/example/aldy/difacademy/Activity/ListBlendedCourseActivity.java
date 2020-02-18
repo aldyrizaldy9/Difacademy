@@ -48,7 +48,7 @@ public class ListBlendedCourseActivity extends AppCompatActivity {
 //    private ProgressDialog pd;
 //    private Spinner spnTags;
 //    private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
-//    CollectionReference blendedCourseRef = firebaseFirestore.collection("BlendedCourse");
+//    CollectionReference courseRef = firebaseFirestore.collection("BlendedCourse");
 //
 //    @Override
 //    protected void onCreate(Bundle savedInstanceState) {
@@ -121,13 +121,13 @@ public class ListBlendedCourseActivity extends AppCompatActivity {
 //                            Query load;
 //
 //                            if (loadFromTag) {
-//                                load = blendedCourseRef
+//                                load = courseRef
 //                                        .whereEqualTo("tag", tag)
 //                                        .orderBy("dateCreated", Query.Direction.DESCENDING)
 //                                        .startAfter(lastVisible)
 //                                        .limit(20);
 //                            } else {
-//                                load = blendedCourseRef
+//                                load = courseRef
 //                                        .orderBy("dateCreated", Query.Direction.DESCENDING)
 //                                        .startAfter(lastVisible)
 //                                        .limit(20);
@@ -178,7 +178,7 @@ public class ListBlendedCourseActivity extends AppCompatActivity {
 //    private void loadBlendedCourseData() {
 //        pd.show();
 //
-//        Query first = blendedCourseRef
+//        Query first = courseRef
 //                .orderBy("dateCreated", Query.Direction.DESCENDING)
 //                .limit(20);
 //
@@ -218,7 +218,7 @@ public class ListBlendedCourseActivity extends AppCompatActivity {
 //    private void loadBlendedCourseWithTheSameTag() {
 //        pd.show();
 //
-//        Query first = blendedCourseRef
+//        Query first = courseRef
 //                .whereEqualTo("tag", tag)
 //                .orderBy("dateCreated", Query.Direction.DESCENDING)
 //                .limit(20);

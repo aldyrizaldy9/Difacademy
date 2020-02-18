@@ -13,7 +13,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activity.OpBlendedSoalActivity"></activity>
+        <activity android:name=".Activity.OpBlendedSoalActivity" />
         <activity android:name=".Activity.OpBlendedVideoActivity" />
         <activity android:name=".Activity.OpBlendedMateriActivity" />
         <activity android:name=".Activity.OpBlendedCourseActivity" />
@@ -30,6 +30,10 @@
         <activity android:name=".Activity.OpAddOnlineMateriActivity" />
         <activity android:name=".Activity.OpOnlineCourseActivity" />
         <activity android:name=".Activity.OpBannerActivity" />
+        <activity android:name=".Activity.OnlineMateriActivity" />
+        <activity android:name=".Activity.BlendedMateriActivity" />
+        <activity android:name=".Activity.OnlineCourseActivity" />
+        <activity android:name=".Activity.BlendedCourseActivity" />
         <activity
             android:name=".Activity.WatchVideoBlendedActivity"
             android:configChanges="orientation|screenSize|layoutDirection" />

@@ -31,7 +31,7 @@ import java.util.ArrayList;
 
 import static com.example.aldy.difacademy.Activity.OpMainActivity.ADD_REQUEST_CODE;
 import static com.example.aldy.difacademy.Activity.OpMainActivity.DELETE_REQUEST_CODE;
-import static com.example.aldy.difacademy.Activity.OpMainActivity.JENIS_KELAS;
+import static com.example.aldy.difacademy.Activity.OpMainActivity.OP_JENIS_KELAS;
 import static com.example.aldy.difacademy.Activity.OpMainActivity.UPDATE_REQUEST_CODE;
 
 public class OpBlendedCourseActivity extends AppCompatActivity {
@@ -57,7 +57,7 @@ public class OpBlendedCourseActivity extends AppCompatActivity {
 
         courseModels = new ArrayList<>();
 
-        JENIS_KELAS = "blended";
+        OP_JENIS_KELAS = "blended";
 
         initView();
         onClick();

@@ -19,6 +19,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.example.aldy.difacademy.Model.CourseModel;
 import com.example.aldy.difacademy.Model.PaymentModel;
 import com.example.aldy.difacademy.Model.UserModel;
 import com.example.aldy.difacademy.Notification.APIService;
@@ -45,21 +46,21 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 import static com.example.aldy.difacademy.Activity.LoginActivity.SHARE_PREFS;
 import static com.example.aldy.difacademy.Activity.LoginActivity.USERID_PREFS;
+import static com.example.aldy.difacademy.Activity.MainActivity.JENIS_KELAS;
 import static com.example.aldy.difacademy.Activity.OpMainActivity.ADMIN_USER_ID;
 
 public class PaymentActivity extends AppCompatActivity {
     private static final String TAG = "PaymentActivity";
     View.OnClickListener bniClickListener;
     View.OnClickListener briClickListener;
-    private ConstraintLayout clBack, clContainerBni, clContainerBri, clExpandBni, clExpandBri, clNavbar;
-    private ImageView imgBack, imgLogoBni, imgLogoBri, imgExpandBni, imgExpandBri;
-    private TextView tvNavBar, tvTataCaraBni, tvTataCaraBri;
+    private ConstraintLayout clBack, clContainerBni, clContainerBri, clExpandBni, clExpandBri;
+    private ImageView imgLogoBni, imgLogoBri, imgExpandBni, imgExpandBri;
+    private TextView tvTataCaraBni, tvTataCaraBri;
     private Button btnBayarBni, btnBayarBri;
     private boolean isBniActive = false, isBriActive = false;
 
-    private String userId, blendedCourseId, namaUser, email, noWa, namaKelas, hargaKelas, namaBank;
+    private String userId, courseId, namaUser, email, noWa, namaKelas, hargaKelas, namaBank;
     private ProgressDialog progressDialog;
-    private SharedPreferences sharedPreferences;
     private FirebaseFirestore firebaseFirestore;
 
     @Override
@@ -72,7 +73,7 @@ public class PaymentActivity extends AppCompatActivity {
     }
 
     private void initView() {
-        clNavbar = findViewById(R.id.cl_navbar);
+        ConstraintLayout clNavbar = findViewById(R.id.cl_navbar);
         clNavbar.setBackgroundColor(getResources().getColor(R.color.navKuning));
         clBack = findViewById(R.id.cl_icon1);
         clBack.setVisibility(View.VISIBLE);
@@ -80,7 +81,7 @@ public class PaymentActivity extends AppCompatActivity {
         clContainerBri = findViewById(R.id.cl_payment_container_bri);
         clExpandBni = findViewById(R.id.cl_payment_expand_bni);
         clExpandBri = findViewById(R.id.cl_payment_expand_bri);
-        imgBack = findViewById(R.id.img_icon1);
+        ImageView imgBack = findViewById(R.id.img_icon1);
         imgBack.setImageResource(R.drawable.ic_arrow_back);
         imgLogoBni = findViewById(R.id.img_payment_logo_bni);
 //        imgLogoBni.setImageResource();
@@ -90,15 +91,15 @@ public class PaymentActivity extends AppCompatActivity {
         imgExpandBni.setImageResource(R.drawable.ic_expand_more);
         imgExpandBri = findViewById(R.id.img_payment_expand_bri);
         imgExpandBri.setImageResource(R.drawable.ic_expand_more);
-        tvNavBar = findViewById(R.id.tv_navbar);
+        TextView tvNavBar = findViewById(R.id.tv_navbar);
         tvNavBar.setText("Cara Pembayaran");
         tvTataCaraBni = findViewById(R.id.tv_payment_tata_cara_bni);
         tvTataCaraBri = findViewById(R.id.tv_payment_tata_cara_bri);
         btnBayarBni = findViewById(R.id.btn_payment_bayar_bni);
         btnBayarBri = findViewById(R.id.btn_payment_bayar_bri);
         Intent intent = getIntent();
-        blendedCourseId = intent.getStringExtra("blendedCourseId");
-        sharedPreferences = getSharedPreferences(SHARE_PREFS, MODE_PRIVATE);
+        courseId = intent.getStringExtra("courseId");
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARE_PREFS, MODE_PRIVATE);
         userId = sharedPreferences.getString(USERID_PREFS, "");
         progressDialog = new ProgressDialog(this);
     }
@@ -206,7 +207,7 @@ public class PaymentActivity extends AppCompatActivity {
     private void sendPaymentDetailsToAdmin() {
 
         long dateCreated = Timestamp.now().getSeconds();
-        PaymentModel paymentModel = new PaymentModel(userId, namaUser, email, noWa, blendedCourseId, namaKelas, hargaKelas, namaBank, dateCreated, false, false);
+        PaymentModel paymentModel = new PaymentModel(userId, namaUser, email, noWa, JENIS_KELAS, courseId, namaKelas, hargaKelas, namaBank, dateCreated, false, false);
 
         CollectionReference paymentRef = firebaseFirestore.collection("Payment");
         paymentRef
@@ -235,7 +236,10 @@ public class PaymentActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         Token token = documentSnapshot.toObject(Token.class);
-                        String tokenAdmin = token.getToken();
+                        String tokenAdmin = "";
+                        if (token != null) {
+                            tokenAdmin = token.getToken();
+                        }
                         Data data = new Data(userId, R.mipmap.ic_launcher, "Ketuk untuk menuju ke daftar pembelian", "Pembelian kelas", ADMIN_USER_ID);
                         Sender sender = new Sender(data, tokenAdmin);
                         Retrofit retrofit = new Retrofit.Builder()
@@ -298,27 +302,32 @@ public class PaymentActivity extends AppCompatActivity {
     }
 
     private void getCourseData() {
-//        DocumentReference courseRef = firebaseFirestore.collection("BlendedCourse").document(blendedCourseId);
-//        courseRef
-//                .get()
-//                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-//                    @Override
-//                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-//                        BlendedCourseModel blendedCourseModel = documentSnapshot.toObject(BlendedCourseModel.class);
-//                        if (blendedCourseModel != null) {
-//                            namaKelas = blendedCourseModel.getTitle();
-//                            hargaKelas = blendedCourseModel.getHarga();
-//                        }
-//                        sendPaymentDetailsToAdmin();
-//                    }
-//                })
-//                .addOnFailureListener(new OnFailureListener() {
-//                    @Override
-//                    public void onFailure(@NonNull Exception e) {
-//                        progressDialog.dismiss();
-//                        Log.d(TAG, e.toString());
-//                    }
-//                });
+        DocumentReference courseRef;
+        if (JENIS_KELAS.equalsIgnoreCase("online")) {
+            courseRef = firebaseFirestore.collection("OnlineCourse").document(courseId);
+        } else {
+            courseRef = firebaseFirestore.collection("BlendedCourse").document(courseId);
+        }
+        courseRef
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        CourseModel courseModel = documentSnapshot.toObject(CourseModel.class);
+                        if (courseModel != null) {
+                            namaKelas = courseModel.getTitle();
+                            hargaKelas = courseModel.getHarga();
+                        }
+                        sendPaymentDetailsToAdmin();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        progressDialog.dismiss();
+                        Log.d(TAG, e.toString());
+                    }
+                });
     }
 
     private boolean isNetworkConnected() {

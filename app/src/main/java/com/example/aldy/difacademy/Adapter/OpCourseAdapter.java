@@ -20,7 +20,7 @@ import com.example.aldy.difacademy.R;
 
 import java.util.ArrayList;
 
-import static com.example.aldy.difacademy.Activity.OpMainActivity.JENIS_KELAS;
+import static com.example.aldy.difacademy.Activity.OpMainActivity.OP_JENIS_KELAS;
 
 public class OpCourseAdapter extends RecyclerView.Adapter<OpCourseAdapter.ViewHolder> {
     private Context context;
@@ -52,12 +52,12 @@ public class OpCourseAdapter extends RecyclerView.Adapter<OpCourseAdapter.ViewHo
             @Override
             public void onClick(View v) {
                 Intent intent;
-                if (JENIS_KELAS.equals("blended")){
+                if (OP_JENIS_KELAS.equals("blended")){
                     intent = new Intent(context, OpAddBlendedCourseActivity.class);
                     intent.putExtra("blended_course_model", model);
                     intent.putExtra("index", position);
                     context.startActivity(intent);
-                } else if (JENIS_KELAS.equals("online")){
+                } else if (OP_JENIS_KELAS.equals("online")){
                     intent = new Intent(context, OpAddOnlineCourseActivity.class);
                     intent.putExtra("online_course_model", model);
                     intent.putExtra("index", position);

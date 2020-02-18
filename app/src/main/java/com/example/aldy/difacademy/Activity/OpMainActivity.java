@@ -57,7 +57,7 @@ public class OpMainActivity extends AppCompatActivity {
     public static final String ADMIN_USER_ID = "4TOu1jtLjWYcPbRzFYZ9PhZRZs22";
     private static final String TAG = "OpMainActivity";
 
-    public static String JENIS_KELAS = "";
+    public static String OP_JENIS_KELAS = "";
 
     private boolean doubleBackToExitPressedOnce = false;
     private ConstraintLayout clLogout, clNotif;

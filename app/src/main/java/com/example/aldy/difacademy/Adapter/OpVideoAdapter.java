@@ -19,7 +19,7 @@ import com.example.aldy.difacademy.R;
 
 import java.util.ArrayList;
 
-import static com.example.aldy.difacademy.Activity.OpMainActivity.JENIS_KELAS;
+import static com.example.aldy.difacademy.Activity.OpMainActivity.OP_JENIS_KELAS;
 
 public class OpVideoAdapter extends RecyclerView.Adapter<OpVideoAdapter.ViewHolder> {
     private Context context;
@@ -50,12 +50,12 @@ public class OpVideoAdapter extends RecyclerView.Adapter<OpVideoAdapter.ViewHold
             @Override
             public void onClick(View v) {
                 Intent intent;
-                if (JENIS_KELAS.equals("blended")){
+                if (OP_JENIS_KELAS.equals("blended")){
                     intent = new Intent(context, OpAddBlendedVideoActivity.class);
                     intent.putExtra("blended_video_model", model);
                     intent.putExtra("index", position);
                     context.startActivity(intent);
-                } else if (JENIS_KELAS.equals("online")){
+                } else if (OP_JENIS_KELAS.equals("online")){
                     intent = new Intent(context, OpAddOnlineVideoActivity.class);
                     intent.putExtra("online_video_model", model);
                     intent.putExtra("index", position);

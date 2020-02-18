@@ -20,6 +20,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.aldy.difacademy.Model.OngoingKelasBlendedModel;
+import com.example.aldy.difacademy.Model.OngoingKelasOnlineModel;
 import com.example.aldy.difacademy.Model.PaymentModel;
 import com.example.aldy.difacademy.Model.UserModel;
 import com.example.aldy.difacademy.R;
@@ -120,7 +121,7 @@ public class OpNotifPaymentActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_VIEW);
                 String urlNew = paymentModel.getNoWa();
-                if (urlNew.substring(0,3).equals("+62")){
+                if (urlNew.substring(0, 3).equals("+62")) {
                     urlNew = "http://wa.me/" + urlNew;
                 } else {
                     urlNew = "http://wa.me/+62" + urlNew.substring(1);
@@ -178,7 +179,7 @@ public class OpNotifPaymentActivity extends AppCompatActivity {
 
         CollectionReference userRef = firebaseFirestore.collection("User");
         userRef
-                .whereEqualTo("userId",paymentModel.getUserId())
+                .whereEqualTo("userId", paymentModel.getUserId())
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
@@ -201,36 +202,63 @@ public class OpNotifPaymentActivity extends AppCompatActivity {
     }
 
     private void bukaKelas() {
-        CollectionReference onGoingRef = firebaseFirestore
-                .collection("User")
-                .document(userModel.getUserDocId())
-                .collection("OngoingBlendedCourse");
-
         long dateCreated = Timestamp.now().getSeconds();
-        OngoingKelasBlendedModel ongoingKelasBlendedModel = new OngoingKelasBlendedModel(paymentModel.getBlendedCourseId(), dateCreated);
+        CollectionReference onGoingRef;
+        if (paymentModel.getJenisKelas().equalsIgnoreCase("online")) {
+            onGoingRef = firebaseFirestore
+                    .collection("User")
+                    .document(userModel.getUserDocId())
+                    .collection("OngoingOnlineCourse");
+            OngoingKelasOnlineModel ongoingKelasOnlineModel = new OngoingKelasOnlineModel(paymentModel.getCourseId(), dateCreated);
 
-        onGoingRef
-                .add(ongoingKelasBlendedModel)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Log.d(TAG, "buka kelas success");
-                        getPaymentDocuments();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        progressDialog.dismiss();
-                        Log.d(TAG, e.toString());
-                    }
-                });
+            onGoingRef
+                    .add(ongoingKelasOnlineModel)
+                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                        @Override
+                        public void onSuccess(DocumentReference documentReference) {
+                            Log.d(TAG, "buka kelas success");
+                            getPaymentDocuments();
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            progressDialog.dismiss();
+                            Log.d(TAG, e.toString());
+                        }
+                    });
+        } else {
+            onGoingRef = firebaseFirestore
+                    .collection("User")
+                    .document(userModel.getUserDocId())
+                    .collection("OngoingBlendedCourse");
+            OngoingKelasBlendedModel ongoingKelasBlendedModel = new OngoingKelasBlendedModel(paymentModel.getCourseId(), dateCreated);
+
+            onGoingRef
+                    .add(ongoingKelasBlendedModel)
+                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                        @Override
+                        public void onSuccess(DocumentReference documentReference) {
+                            Log.d(TAG, "buka kelas success");
+                            getPaymentDocuments();
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            progressDialog.dismiss();
+                            Log.d(TAG, e.toString());
+                        }
+                    });
+        }
+
+
     }
 
     private void getPaymentDocuments() {
         CollectionReference paymentRef = firebaseFirestore.collection("Payment");
         paymentRef
-                .whereEqualTo("blendedCourseId", paymentModel.getBlendedCourseId())
+                .whereEqualTo("courseId", paymentModel.getCourseId())
                 .whereEqualTo("userId", paymentModel.getUserId())
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {

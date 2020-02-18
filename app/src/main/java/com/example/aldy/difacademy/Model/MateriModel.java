@@ -3,6 +3,8 @@ package com.example.aldy.difacademy.Model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.firebase.firestore.Exclude;
+
 public class MateriModel implements Parcelable {
 
     String documentId, title, thumbnailUrl;
@@ -49,6 +51,7 @@ public class MateriModel implements Parcelable {
         }
     };
 
+    @Exclude
     public String getDocumentId() {
         return documentId;
     }

@@ -17,7 +17,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.example.aldy.difacademy.Adapter.NewsAdapter;
 import com.example.aldy.difacademy.Model.NewsModel;
 import com.example.aldy.difacademy.Model.OngoingKelasBlendedModel;
@@ -47,12 +46,14 @@ public class MainActivity extends AppCompatActivity {
     private NewsAdapter newsAdapter;
     private ArrayList<NewsModel> newsModels;
     private FirebaseFirestore firebaseFirestore;
-//    private BlendedCourseModel blendedCourseModel;
+    //    private BlendedCourseModel blendedCourseModel;
 //    private MateriModel courseModel;
     private String userDocId;
     private OngoingKelasBlendedModel ongoingKelasBlendedModel;
-//    private OngoingKelasOnlineModel ongoingKelasOnlineModel;
+    //    private OngoingKelasOnlineModel ongoingKelasOnlineModel;
     private boolean doubleBackToExitPressedOnce = false;
+
+    public static String JENIS_KELAS = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,13 +107,13 @@ public class MainActivity extends AppCompatActivity {
         firebaseFirestore = FirebaseFirestore.getInstance();
     }
 
-    private void setBanner(){
+    private void setBanner() {
         DocumentReference docRef = firebaseFirestore.collection("BannerPhotoUrl").document("bannerphotourl");
         docRef.get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        if (documentSnapshot != null){
+                        if (documentSnapshot != null) {
                             String url = documentSnapshot.getString("url");
                             Glide.with(MainActivity.this)
                                     .load(url)
@@ -148,13 +149,14 @@ public class MainActivity extends AppCompatActivity {
         imgKelasOnline.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "Fitur ini belum tersedia, stay tune :)", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(MainActivity.this, OnlineCourseActivity.class);
+                startActivity(intent);
             }
         });
         imgKelasCampuran.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, ListBlendedCourseActivity.class);
+                Intent intent = new Intent(MainActivity.this, BlendedMateriActivity.class);
                 startActivity(intent);
             }
         });
@@ -200,30 +202,30 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getOngoingBlendedCourse() {
-        CollectionReference ongoingRef = firebaseFirestore
-                .collection("User")
-                .document(userDocId)
-                .collection("OngoingBlendedCourse");
-
-        ongoingRef
-                .orderBy("dateCreated", Query.Direction.DESCENDING)
-                .limit(1)
-                .get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
-                            ongoingKelasBlendedModel = queryDocumentSnapshot.toObject(OngoingKelasBlendedModel.class);
-                        }
-//                        getOngoingOnlineCourse();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d(TAG, e.toString());
-                    }
-                });
+//        CollectionReference ongoingRef = firebaseFirestore
+//                .collection("User")
+//                .document(userDocId)
+//                .collection("OngoingBlendedCourse");
+//
+//        ongoingRef
+//                .orderBy("dateCreated", Query.Direction.DESCENDING)
+//                .limit(1)
+//                .get()
+//                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+//                        for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
+//                            ongoingKelasBlendedModel = queryDocumentSnapshot.toObject(OngoingKelasBlendedModel.class);
+//                        }
+////                        getOngoingOnlineCourse();
+//                    }
+//                })
+//                .addOnFailureListener(new OnFailureListener() {
+//                    @Override
+//                    public void onFailure(@NonNull Exception e) {
+//                        Log.d(TAG, e.toString());
+//                    }
+//                });
     }
 
     private void getOngoingOnlineCourse() {

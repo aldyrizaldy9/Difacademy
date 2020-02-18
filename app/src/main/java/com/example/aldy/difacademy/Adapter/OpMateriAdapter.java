@@ -15,13 +15,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.aldy.difacademy.Activity.OpAddBlendedMateriActivity;
 import com.example.aldy.difacademy.Activity.OpAddOnlineMateriActivity;
-import com.example.aldy.difacademy.Activity.OpMainActivity;
 import com.example.aldy.difacademy.Model.MateriModel;
 import com.example.aldy.difacademy.R;
 
 import java.util.ArrayList;
 
-import static com.example.aldy.difacademy.Activity.OpMainActivity.JENIS_KELAS;
+import static com.example.aldy.difacademy.Activity.OpMainActivity.OP_JENIS_KELAS;
 
 public class OpMateriAdapter extends RecyclerView.Adapter<OpMateriAdapter.ViewHolder> {
     private Context context;
@@ -55,12 +54,12 @@ public class OpMateriAdapter extends RecyclerView.Adapter<OpMateriAdapter.ViewHo
             @Override
             public void onClick(View v) {
                 Intent intent;
-                if (JENIS_KELAS.equals("blended")){
+                if (OP_JENIS_KELAS.equals("blended")){
                     intent = new Intent(context, OpAddBlendedMateriActivity.class);
                     intent.putExtra("blended_materi_model", model);
                     intent.putExtra("index", position);
                     context.startActivity(intent);
-                } else if (JENIS_KELAS.equals("online")){
+                } else if (OP_JENIS_KELAS.equals("online")){
                     intent = new Intent(context, OpAddOnlineMateriActivity.class);
                     intent.putExtra("online_materi_model", model);
                     intent.putExtra("index", position);

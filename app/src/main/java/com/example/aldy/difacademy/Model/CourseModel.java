@@ -3,11 +3,14 @@ package com.example.aldy.difacademy.Model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.firebase.firestore.Exclude;
+
 public class CourseModel implements Parcelable {
     String documentId, title, description, thumbnailUrl, googleDrive, tagId, tag, harga;
     long dateCreated;
 
-    public CourseModel() {}
+    public CourseModel() {
+    }
 
     public CourseModel(String title, String description, String thumbnailUrl, String googleDrive, String tagId, String tag, String harga, long dateCreated) {
         this.title = title;
@@ -62,6 +65,7 @@ public class CourseModel implements Parcelable {
         }
     };
 
+    @Exclude
     public String getDocumentId() {
         return documentId;
     }
