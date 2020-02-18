@@ -1,13 +1,10 @@
 package com.example.aldy.difacademy.Activity;
 
-import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,8 +15,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-import com.example.aldy.difacademy.OpNotifGraduationFragment;
-import com.example.aldy.difacademy.OpNotifPaymentFragment;
+import com.example.aldy.difacademy.Fragment.OpNotifGraduationFragment;
+import com.example.aldy.difacademy.Fragment.OpNotifPaymentFragment;
 import com.example.aldy.difacademy.R;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;

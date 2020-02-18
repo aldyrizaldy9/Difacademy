@@ -1,4 +1,4 @@
-package com.example.aldy.difacademy;
+package com.example.aldy.difacademy.Fragment;
 
 
 import android.app.ProgressDialog;
@@ -13,8 +13,9 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.aldy.difacademy.Adapter.OpNotifGraduationAdapter;
-import com.example.aldy.difacademy.Model.GraduationModel;
+import com.example.aldy.difacademy.Adapter.OpNotifPaymentAdapter;
+import com.example.aldy.difacademy.Model.PaymentModel;
+import com.example.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
@@ -29,16 +30,16 @@ import java.util.ArrayList;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class OpNotifGraduationFragment extends Fragment {
-    private static final String TAG = "OpNotifGraduationFragme";
-    public static OpNotifGraduationAdapter OP_NOTIF_GRADUATION_ADAPTER;
+public class OpNotifPaymentFragment extends Fragment {
+    private static final String TAG = "OpNotifPaymentFragment";
+    public static OpNotifPaymentAdapter OP_NOTIF_PAYMENT_ADAPTER;
     private View rootView;
-    private RecyclerView rvNotifGrad;
-    private ArrayList<GraduationModel> graduationModels;
+    private RecyclerView rvNotifPayment;
+    private ArrayList<PaymentModel> paymentModels;
     private ProgressDialog progressDialog;
-    private CollectionReference graduationRef;
+    private CollectionReference paymentRef;
 
-    public OpNotifGraduationFragment() {
+    public OpNotifPaymentFragment() {
         // Required empty public constructor
     }
 
@@ -47,7 +48,7 @@ public class OpNotifGraduationFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        rootView = inflater.inflate(R.layout.fragment_op_notif_graduation, container, false);
+        rootView = inflater.inflate(R.layout.fragment_op_notif_payment, container, false);
         initView();
         setRecyclerView();
         return rootView;
@@ -60,17 +61,17 @@ public class OpNotifGraduationFragment extends Fragment {
     }
 
     private void initView() {
-        rvNotifGrad = rootView.findViewById(R.id.rv_op_notif_grad);
+        rvNotifPayment = rootView.findViewById(R.id.rv_op_notif_payment);
         progressDialog = new ProgressDialog(rootView.getContext());
         FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
-        graduationRef = firebaseFirestore.collection("Graduation");
+        paymentRef = firebaseFirestore.collection("Payment");
     }
 
     private void setRecyclerView() {
-        graduationModels = new ArrayList<>();
-        OP_NOTIF_GRADUATION_ADAPTER = new OpNotifGraduationAdapter(rootView.getContext(), graduationModels);
-        rvNotifGrad.setLayoutManager(new LinearLayoutManager(rootView.getContext(), RecyclerView.VERTICAL, false));
-        rvNotifGrad.setAdapter(OP_NOTIF_GRADUATION_ADAPTER);
+        paymentModels = new ArrayList<>();
+        OP_NOTIF_PAYMENT_ADAPTER = new OpNotifPaymentAdapter(rootView.getContext(), paymentModels);
+        rvNotifPayment.setLayoutManager(new LinearLayoutManager(rootView.getContext(), RecyclerView.VERTICAL, false));
+        rvNotifPayment.setAdapter(OP_NOTIF_PAYMENT_ADAPTER);
     }
 
     private void loadData() {
@@ -78,22 +79,21 @@ public class OpNotifGraduationFragment extends Fragment {
         progressDialog.setCancelable(false);
         progressDialog.show();
 
-
-        graduationRef
+        paymentRef
                 .orderBy("dateCreated", Query.Direction.DESCENDING)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        graduationModels.clear();
+                        paymentModels.clear();
                         for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
-                            GraduationModel graduationModel = queryDocumentSnapshot.toObject(GraduationModel.class);
-                            graduationModel.setGraduationId(queryDocumentSnapshot.getId());
+                            PaymentModel paymentModel = queryDocumentSnapshot.toObject(PaymentModel.class);
+                            paymentModel.setPaymentId(queryDocumentSnapshot.getId());
 
-                            graduationModels.add(graduationModel);
+                            paymentModels.add(paymentModel);
                         }
                         progressDialog.dismiss();
-                        OP_NOTIF_GRADUATION_ADAPTER.notifyDataSetChanged();
+                        OP_NOTIF_PAYMENT_ADAPTER.notifyDataSetChanged();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
