@@ -27,8 +27,9 @@ import com.google.firebase.firestore.Source;
 
 import java.util.ArrayList;
 
+import static com.example.aldy.difacademy.Activity.BlendedMateriActivity.BLENDED_COURSE_ID;
 import static com.example.aldy.difacademy.Activity.MainActivity.JENIS_KELAS;
-import static com.example.aldy.difacademy.Activity.OnlineMateriActivity.COURSE_ID;
+import static com.example.aldy.difacademy.Activity.OnlineMateriActivity.ONLINE_COURSE_ID;
 
 public class ListVideoCourseActivity extends AppCompatActivity {
     private static final String TAG = "ListVideoCourseActivity";
@@ -109,14 +110,14 @@ public class ListVideoCourseActivity extends AppCompatActivity {
         if (JENIS_KELAS.equalsIgnoreCase("online")) {
             videoRef = firebaseFirestore
                     .collection("OnlineCourse")
-                    .document(COURSE_ID)
+                    .document(ONLINE_COURSE_ID)
                     .collection("OnlineMateri")
                     .document(materiId)
                     .collection("OnlineVideo");
         }else{
             videoRef = firebaseFirestore
                     .collection("BlendedCourse")
-                    .document(COURSE_ID)
+                    .document(BLENDED_COURSE_ID)
                     .collection("BlendedMateri")
                     .document(materiId)
                     .collection("BlendedVideo");

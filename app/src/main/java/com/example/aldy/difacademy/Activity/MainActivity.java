@@ -156,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
         imgKelasCampuran.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, BlendedMateriActivity.class);
+                Intent intent = new Intent(MainActivity.this, BlendedCourseActivity.class);
                 startActivity(intent);
             }
         });

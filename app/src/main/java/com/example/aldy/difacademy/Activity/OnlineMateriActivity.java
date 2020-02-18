@@ -37,7 +37,7 @@ public class OnlineMateriActivity extends AppCompatActivity {
     private MateriAdapter adapter;
     private ArrayList<MateriModel> materiModels;
     private ProgressDialog pd;
-    public static String COURSE_ID;
+    public static String ONLINE_COURSE_ID;
     private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
     private CollectionReference materiRef;
 
@@ -62,7 +62,7 @@ public class OnlineMateriActivity extends AppCompatActivity {
         tvNavBar.setText("Materi");
         rvVideo = findViewById(R.id.rv_online_materi_materi);
         Intent intent = getIntent();
-        COURSE_ID = intent.getStringExtra("courseId");
+        ONLINE_COURSE_ID = intent.getStringExtra("courseId");
 
         pd = new ProgressDialog(this);
         pd.setMessage("Memuat...");
@@ -143,7 +143,7 @@ public class OnlineMateriActivity extends AppCompatActivity {
 
     private void loadMateriData() {
         pd.show();
-        materiRef = firebaseFirestore.collection("OnlineCourse").document(COURSE_ID).collection("OnlineMateri");
+        materiRef = firebaseFirestore.collection("OnlineCourse").document(ONLINE_COURSE_ID).collection("OnlineMateri");
 
         Query first = materiRef
                 .orderBy("dateCreated", Query.Direction.DESCENDING)

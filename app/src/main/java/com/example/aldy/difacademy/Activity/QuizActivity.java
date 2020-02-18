@@ -18,8 +18,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.aldy.difacademy.Model.CourseModel;
 import com.example.aldy.difacademy.Model.GraduationModel;
+import com.example.aldy.difacademy.Model.MateriModel;
 import com.example.aldy.difacademy.Model.SoalModel;
 import com.example.aldy.difacademy.Model.UserModel;
 import com.example.aldy.difacademy.Notification.APIService;
@@ -47,10 +47,11 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import static com.example.aldy.difacademy.Activity.BlendedMateriActivity.BLENDED_COURSE_ID;
 import static com.example.aldy.difacademy.Activity.LoginActivity.SHARE_PREFS;
 import static com.example.aldy.difacademy.Activity.LoginActivity.USERID_PREFS;
 import static com.example.aldy.difacademy.Activity.MainActivity.JENIS_KELAS;
-import static com.example.aldy.difacademy.Activity.OnlineMateriActivity.COURSE_ID;
+import static com.example.aldy.difacademy.Activity.OnlineMateriActivity.ONLINE_COURSE_ID;
 import static com.example.aldy.difacademy.Activity.OpMainActivity.ADMIN_USER_ID;
 
 public class QuizActivity extends AppCompatActivity {
@@ -139,14 +140,14 @@ public class QuizActivity extends AppCompatActivity {
         if (JENIS_KELAS.equalsIgnoreCase("online")) {
             colRef = db
                     .collection("OnlineCourse")
-                    .document(COURSE_ID)
+                    .document(ONLINE_COURSE_ID)
                     .collection("OnlineMateri")
                     .document(materiId)
                     .collection("OnlineSoal");
         } else {
             colRef = db
                     .collection("BlendedCourse")
-                    .document(COURSE_ID)
+                    .document(BLENDED_COURSE_ID)
                     .collection("BlendedMateri")
                     .document(materiId)
                     .collection("BlendedSoal");
@@ -372,7 +373,7 @@ public class QuizActivity extends AppCompatActivity {
                         namaUser = userModel.getNama();
                         email = userModel.getEmail();
                         noWa = userModel.getNoTelp();
-                        getCourseData();
+                        getMateriData();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -385,21 +386,23 @@ public class QuizActivity extends AppCompatActivity {
 
     }
 
-    private void getCourseData() {
-        DocumentReference courseRef;
+    private void getMateriData() {
+        DocumentReference materiRef;
         if (JENIS_KELAS.equalsIgnoreCase("online")) {
-            courseRef = db.collection("OnlineCourse").document(COURSE_ID);
+            materiRef = db.collection("OnlineCourse").document(ONLINE_COURSE_ID)
+                    .collection("OnlineMateri").document(materiId);
         } else {
-            courseRef = db.collection("BlendedCourse").document(COURSE_ID);
+            materiRef = db.collection("BlendedCourse").document(BLENDED_COURSE_ID)
+            .collection("BlendedMateri").document(materiId);
         }
-        courseRef
+        materiRef
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        CourseModel courseModel = documentSnapshot.toObject(CourseModel.class);
-                        if (courseModel != null) {
-                            namaMateri = courseModel.getTitle();
+                        MateriModel materiModel = documentSnapshot.toObject(MateriModel.class);
+                        if (materiModel != null) {
+                            namaMateri = materiModel.getTitle();
                         }
                         sendGraduationDetailsToAdmin();
                     }
@@ -424,7 +427,6 @@ public class QuizActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
-                        pd.dismiss();
                         sendOpNotification();
                     }
                 })
@@ -460,6 +462,7 @@ public class QuizActivity extends AppCompatActivity {
                                         if (!response.isSuccessful()) {
                                             return;
                                         }
+                                        pd.dismiss();
                                         onBackPressed();
                                     }
 

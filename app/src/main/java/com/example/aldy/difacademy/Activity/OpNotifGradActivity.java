@@ -167,7 +167,7 @@ public class OpNotifGradActivity extends AppCompatActivity {
         progressDialog.show();
         CollectionReference gradRef = firebaseFirestore.collection("Graduation");
         gradRef
-                .whereEqualTo("blendedCourseId", graduationModel.getMateriId())
+                .whereEqualTo("materiId", graduationModel.getMateriId())
                 .whereEqualTo("userId", graduationModel.getUserId())
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {

@@ -258,7 +258,7 @@ public class OpNotifPaymentActivity extends AppCompatActivity {
     private void getPaymentDocuments() {
         CollectionReference paymentRef = firebaseFirestore.collection("Payment");
         paymentRef
-                .whereEqualTo("COURSE_ID", paymentModel.getCourseId())
+                .whereEqualTo("courseId", paymentModel.getCourseId())
                 .whereEqualTo("userId", paymentModel.getUserId())
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
