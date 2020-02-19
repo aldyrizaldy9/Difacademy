@@ -164,7 +164,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/logo_free_course"
+                android:src="@drawable/logo_short_course"
                 app:layout_constraintDimensionRatio="1:1"
                 app:layout_constraintEnd_toStartOf="@+id/img_main_kelas_online"
                 app:layout_constraintHorizontal_chainStyle="spread_inside"

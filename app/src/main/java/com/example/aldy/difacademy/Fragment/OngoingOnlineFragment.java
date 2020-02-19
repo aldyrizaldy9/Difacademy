@@ -2,6 +2,7 @@ package com.example.aldy.difacademy.Fragment;
 
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -44,7 +45,8 @@ public class OngoingOnlineFragment extends Fragment {
 
     private ProgressDialog pd;
 
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    ;
 
     private View rootView;
 
@@ -72,7 +74,6 @@ public class OngoingOnlineFragment extends Fragment {
     }
 
     private void initView() {
-        JENIS_KELAS = "online";
         rvOngoingOnline = rootView.findViewById(R.id.rv_ongoing_online);
         pd = new ProgressDialog(rootView.getContext());
 
@@ -96,7 +97,7 @@ public class OngoingOnlineFragment extends Fragment {
                 super.onScrollStateChanged(recyclerView, newState);
                 if (manager.findLastVisibleItemPosition() >= courseModels.size() - 10 &&
                         lastVisible != null &&
-                        loadbaru){
+                        loadbaru) {
                     loadbaru = false;
                     Query load = ongoingCoursesRef
                             .orderBy("dateCreated", Query.Direction.DESCENDING)
@@ -108,7 +109,7 @@ public class OngoingOnlineFragment extends Fragment {
                                 @Override
                                 public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                                     courseModels.clear();
-                                    if (queryDocumentSnapshots.size() > 0){
+                                    if (queryDocumentSnapshots.size() > 0) {
                                         for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
                                             OngoingKelasOnlineModel ongoingKelasOnlineModel = queryDocumentSnapshot.toObject(OngoingKelasOnlineModel.class);
 
@@ -138,7 +139,7 @@ public class OngoingOnlineFragment extends Fragment {
                                                     });
                                         }
 
-                                        if (queryDocumentSnapshots.size() < 20){
+                                        if (queryDocumentSnapshots.size() < 20) {
                                             lastVisible = null;
                                         } else {
                                             lastVisible = queryDocumentSnapshots.getDocuments()
@@ -179,13 +180,13 @@ public class OngoingOnlineFragment extends Fragment {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         courseModels.clear();
-                        if (queryDocumentSnapshots.size() > 0){
+                        if (queryDocumentSnapshots.size() > 0) {
                             for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
                                 OngoingKelasOnlineModel ongoingKelasOnlineModel = queryDocumentSnapshot.toObject(OngoingKelasOnlineModel.class);
                                 loadOngoingCoursesDetail(ongoingKelasOnlineModel.getKelasOnlineId());
                             }
 
-                            if (queryDocumentSnapshots.size() < 20){
+                            if (queryDocumentSnapshots.size() < 20) {
                                 lastVisible = null;
                             } else {
                                 lastVisible = queryDocumentSnapshots.getDocuments()

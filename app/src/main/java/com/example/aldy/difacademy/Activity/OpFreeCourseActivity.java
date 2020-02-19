@@ -93,7 +93,7 @@ public class OpFreeCourseActivity extends AppCompatActivity {
 
     private void initView() {
         tvNavbar = findViewById(R.id.tv_navbar);
-        tvNavbar.setText("Free Course");
+        tvNavbar.setText("Short Course");
         clBack = findViewById(R.id.cl_icon1);
         clBack.setVisibility(View.VISIBLE);
         clAdd = findViewById(R.id.cl_icon3);

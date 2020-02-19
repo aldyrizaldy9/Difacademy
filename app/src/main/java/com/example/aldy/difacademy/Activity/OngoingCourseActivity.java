@@ -15,11 +15,14 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import com.example.aldy.difacademy.Fragment.OngoingBlendedFragment;
 import com.example.aldy.difacademy.Fragment.OngoingOnlineFragment;
 import com.example.aldy.difacademy.R;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
+
+import static com.example.aldy.difacademy.Activity.MainActivity.JENIS_KELAS;
 
 public class OngoingCourseActivity extends AppCompatActivity {
 
@@ -63,7 +66,7 @@ public class OngoingCourseActivity extends AppCompatActivity {
 
     private void setViewPager() {
         final OngoingCourseActivity.ViewPagerAdapter viewPagerAdapter = new OngoingCourseActivity.ViewPagerAdapter(getSupportFragmentManager());
-//        viewPagerAdapter.addFragment(new OngoingBlendedFragment(), "Blended");
+        viewPagerAdapter.addFragment(new OngoingBlendedFragment(), "Blended");
         viewPagerAdapter.addFragment(new OngoingOnlineFragment(), "Online");
 
         viewPager.setAdapter(viewPagerAdapter);

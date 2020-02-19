@@ -2,19 +2,18 @@ package com.example.aldy.difacademy.Fragment;
 
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.aldy.difacademy.Activity.OngoingCourseActivity;
 import com.example.aldy.difacademy.Adapter.CourseAdapter;
 import com.example.aldy.difacademy.Model.CourseModel;
 import com.example.aldy.difacademy.Model.OngoingKelasBlendedModel;
@@ -31,6 +30,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
+import static com.example.aldy.difacademy.Activity.MainActivity.JENIS_KELAS;
 import static com.example.aldy.difacademy.Activity.OngoingCourseActivity.USER_DOC_ID;
 
 
@@ -38,17 +38,23 @@ import static com.example.aldy.difacademy.Activity.OngoingCourseActivity.USER_DO
  * A simple {@link Fragment} subclass.
  */
 public class OngoingBlendedFragment extends Fragment {
-    private static final String TAG = "ganteng";
 
-    ProgressDialog pd;
-    View v;
-    RecyclerView rvBlended;
-    ArrayList<CourseModel> courseModels;
-    CourseAdapter courseAdapter;
+    private RecyclerView rvOngoingBlended;
+    private ArrayList<CourseModel> courseModels;
+    private CourseAdapter adapter;
 
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private ProgressDialog pd;
+
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    ;
+
+    private View rootView;
+
+    private static final String TAG = "OngoingBlendedFragment";
+
     DocumentSnapshot lastVisible;
     boolean loadbaru;
+    CollectionReference ongoingCoursesRef;
 
     public OngoingBlendedFragment() {
         // Required empty public constructor
@@ -59,42 +65,41 @@ public class OngoingBlendedFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        v = inflater.inflate(R.layout.fragment_ongoing_blended, container, false);
 
-        courseModels = new ArrayList<>();
-        rvBlended = v.findViewById(R.id.rv_ongoing_blended);
-        pd = new ProgressDialog(v.getContext());
-
+        rootView = inflater.inflate(R.layout.fragment_ongoing_blended, container, false);
+        initView();
         setRecyclerView();
-        return v;
+        loadOngoingCourses();
+        return rootView;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        loadData();
+    private void initView() {
+        rvOngoingBlended = rootView.findViewById(R.id.rv_ongoing_blended);
+        pd = new ProgressDialog(rootView.getContext());
+
+        ongoingCoursesRef = db
+                .collection("User")
+                .document(USER_DOC_ID)
+                .collection("OngoingBlendedCourse");
     }
 
     private void setRecyclerView() {
-        courseAdapter = new CourseAdapter(v.getContext(), courseModels);
-        final LinearLayoutManager layoutManager = new LinearLayoutManager(v.getContext(), RecyclerView.VERTICAL, false);
-        rvBlended.setLayoutManager(layoutManager);
-        rvBlended.setAdapter(courseAdapter);
+        courseModels = new ArrayList<>();
+        adapter = new CourseAdapter(rootView.getContext(), courseModels);
 
-        rvBlended.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        final LinearLayoutManager manager = new LinearLayoutManager(rootView.getContext(), RecyclerView.VERTICAL, false);
+        rvOngoingBlended.setLayoutManager(manager);
+        rvOngoingBlended.setAdapter(adapter);
+
+        rvOngoingBlended.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                if (layoutManager.findLastVisibleItemPosition() >= courseModels.size() - 10 &&
+                if (manager.findLastVisibleItemPosition() >= courseModels.size() - 10 &&
                         lastVisible != null &&
                         loadbaru) {
-
                     loadbaru = false;
-                    CollectionReference colRef = db.collection("User")
-                            .document(USER_DOC_ID)
-                            .collection("OngoingBlendedCourse");
-
-                    Query load = colRef
+                    Query load = ongoingCoursesRef
                             .orderBy("dateCreated", Query.Direction.DESCENDING)
                             .startAfter(lastVisible)
                             .limit(20);
@@ -104,21 +109,32 @@ public class OngoingBlendedFragment extends Fragment {
                                 @Override
                                 public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                                     courseModels.clear();
-
                                     if (queryDocumentSnapshots.size() > 0) {
-                                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                                            OngoingKelasBlendedModel ongoingModel = documentSnapshot.toObject(OngoingKelasBlendedModel.class);
+                                        for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
+                                            OngoingKelasBlendedModel ongoingKelasBlendedModel = queryDocumentSnapshot.toObject(OngoingKelasBlendedModel.class);
 
-                                            DocumentReference blendedRef = db.collection("BlendedCourse")
-                                                    .document(ongoingModel.getKelasBlendedId());
-                                            blendedRef.get()
+                                            DocumentReference blendedCourseRef = db
+                                                    .collection("BlendedCourse")
+                                                    .document(ongoingKelasBlendedModel.getKelasBlendedId());
+                                            blendedCourseRef
+                                                    .get()
                                                     .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                                         @Override
                                                         public void onSuccess(DocumentSnapshot documentSnapshot) {
                                                             CourseModel courseModel = documentSnapshot.toObject(CourseModel.class);
-                                                            courseModel.setDocumentId(documentSnapshot.getId());
+                                                            if (courseModel != null) {
+                                                                courseModel.setDocumentId(documentSnapshot.getId());
+                                                            }
                                                             courseModels.add(courseModel);
-                                                            courseAdapter.notifyDataSetChanged();
+                                                            adapter.notifyDataSetChanged();
+                                                            loadbaru = true;
+                                                        }
+                                                    })
+                                                    .addOnFailureListener(new OnFailureListener() {
+                                                        @Override
+                                                        public void onFailure(@NonNull Exception e) {
+                                                            loadbaru = true;
+                                                            Log.d(TAG, e.toString());
                                                         }
                                                     });
                                         }
@@ -130,8 +146,6 @@ public class OngoingBlendedFragment extends Fragment {
                                                     .get(queryDocumentSnapshots.size() - 1);
                                         }
                                     }
-                                    loadbaru = true;
-                                    pd.dismiss();
                                 }
                             })
                             .addOnFailureListener(new OnFailureListener() {
@@ -141,6 +155,7 @@ public class OngoingBlendedFragment extends Fragment {
                                     Log.d(TAG, e.toString());
                                 }
                             });
+
                 }
             }
 
@@ -151,15 +166,12 @@ public class OngoingBlendedFragment extends Fragment {
         });
     }
 
-    private void loadData() {
+    private void loadOngoingCourses() {
         pd.setMessage("Memuat...");
+        pd.setCancelable(false);
         pd.show();
 
-        CollectionReference colRef = db.collection("User")
-                .document(USER_DOC_ID)
-                .collection("OngoingBlendedCourse");
-
-        Query first = colRef
+        Query first = ongoingCoursesRef
                 .orderBy("dateCreated", Query.Direction.DESCENDING)
                 .limit(20);
 
@@ -168,23 +180,10 @@ public class OngoingBlendedFragment extends Fragment {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         courseModels.clear();
-
                         if (queryDocumentSnapshots.size() > 0) {
-                            for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                                OngoingKelasBlendedModel ongoingModel = documentSnapshot.toObject(OngoingKelasBlendedModel.class);
-
-                                DocumentReference blendedRef = db.collection("BlendedCourse")
-                                        .document(ongoingModel.getKelasBlendedId());
-                                blendedRef.get()
-                                        .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                            @Override
-                                            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                                CourseModel courseModel = documentSnapshot.toObject(CourseModel.class);
-                                                courseModel.setDocumentId(documentSnapshot.getId());
-                                                courseModels.add(courseModel);
-                                                courseAdapter.notifyDataSetChanged();
-                                            }
-                                        });
+                            for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
+                                OngoingKelasBlendedModel ongoingKelasBlendedModel = queryDocumentSnapshot.toObject(OngoingKelasBlendedModel.class);
+                                loadOngoingCoursesDetail(ongoingKelasBlendedModel.getKelasBlendedId());
                             }
 
                             if (queryDocumentSnapshots.size() < 20) {
@@ -200,8 +199,36 @@ public class OngoingBlendedFragment extends Fragment {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
+                        pd.dismiss();
                         Log.d(TAG, e.toString());
                     }
                 });
     }
+
+    private void loadOngoingCoursesDetail(final String courseId) {
+        DocumentReference blendedCourseRef = db
+                .collection("BlendedCourse")
+                .document(courseId);
+        blendedCourseRef
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        CourseModel courseModel = documentSnapshot.toObject(CourseModel.class);
+                        if (courseModel != null) {
+                            courseModel.setDocumentId(documentSnapshot.getId());
+                        }
+                        courseModels.add(courseModel);
+                        adapter.notifyDataSetChanged();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        pd.dismiss();
+                        Log.d(TAG, e.toString());
+                    }
+                });
+    }
+
 }

@@ -135,6 +135,7 @@ public class DetailCourseActivity extends AppCompatActivity {
         progressDialog.setMessage("Memuat...");
         progressDialog.setCancelable(false);
         progressDialog.show();
+        Log.d("ASUW", JENIS_KELAS);
         String userId = sharedPreferences.getString(USERID_PREFS, "");
         firebaseFirestore = FirebaseFirestore.getInstance();
         CollectionReference userRef = firebaseFirestore.collection("User");
