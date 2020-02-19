@@ -42,7 +42,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder
         final CourseModel courseModel = courseModels.get(position);
         holder.tvJudul.setText(courseModel.getTitle());
         holder.tvTag.setText(courseModel.getTag());
-        holder.tvHarga.setText(courseModel.getHarga());
+        holder.tvHarga.setText("Rp " + courseModel.getHarga());
         Glide
                 .with(context)
                 .load(courseModel.getThumbnailUrl())

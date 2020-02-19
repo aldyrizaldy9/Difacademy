@@ -84,7 +84,7 @@ public class OpNotifPaymentActivity extends AppCompatActivity {
         tvEmail.setText(paymentModel.getEmail());
         tvNoWa.setText(paymentModel.getNoWa());
         tvNamaKelas.setText(paymentModel.getNamaKelas());
-        String harga = "Rp" + paymentModel.getHargaKelas();
+        String harga = "Rp " + paymentModel.getHargaKelas();
         tvHargaKelas.setText(harga);
         tvNamaBank.setText(paymentModel.getNamaBank());
         if (paymentModel.isPaid()) {
