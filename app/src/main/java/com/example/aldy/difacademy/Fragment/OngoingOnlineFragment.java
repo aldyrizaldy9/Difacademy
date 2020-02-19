@@ -2,7 +2,6 @@ package com.example.aldy.difacademy.Fragment;
 
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -46,7 +46,6 @@ public class OngoingOnlineFragment extends Fragment {
     private ProgressDialog pd;
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    ;
 
     private View rootView;
 
@@ -71,6 +70,20 @@ public class OngoingOnlineFragment extends Fragment {
         setRecyclerView();
         loadOngoingCourses();
         return rootView;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setUserVisibleHint(false);
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            JENIS_KELAS = "online";
+        }
     }
 
     private void initView() {
