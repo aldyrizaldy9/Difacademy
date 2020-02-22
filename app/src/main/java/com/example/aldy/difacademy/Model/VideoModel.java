@@ -5,15 +5,18 @@ import android.os.Parcelable;
 
 public class VideoModel implements Parcelable {
 
-    String title, description, videoUrl, documentId;
+    String title, description, videoUrl, documentId, courseId, materiId;
     long dateCreated;
 
-    public VideoModel(){}
+    public VideoModel() {
+    }
 
-    public VideoModel(String title, String description, String videoUrl, long dateCreated) {
+    public VideoModel(String title, String description, String videoUrl, String courseId, String materiId, long dateCreated) {
         this.title = title;
         this.description = description;
         this.videoUrl = videoUrl;
+        this.courseId = courseId;
+        this.materiId = materiId;
         this.dateCreated = dateCreated;
     }
 
@@ -22,6 +25,8 @@ public class VideoModel implements Parcelable {
         description = in.readString();
         videoUrl = in.readString();
         documentId = in.readString();
+        courseId = in.readString();
+        materiId = in.readString();
         dateCreated = in.readLong();
     }
 
@@ -31,6 +36,8 @@ public class VideoModel implements Parcelable {
         dest.writeString(description);
         dest.writeString(videoUrl);
         dest.writeString(documentId);
+        dest.writeString(courseId);
+        dest.writeString(materiId);
         dest.writeLong(dateCreated);
     }
 
@@ -63,16 +70,9 @@ public class VideoModel implements Parcelable {
         return description;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
 
     public String getVideoUrl() {
         return videoUrl;
-    }
-
-    public void setVideoUrl(String videoUrl) {
-        this.videoUrl = videoUrl;
     }
 
     public String getDocumentId() {
@@ -85,6 +85,14 @@ public class VideoModel implements Parcelable {
 
     public long getDateCreated() {
         return dateCreated;
+    }
+
+    public String getCourseId() {
+        return courseId;
+    }
+
+    public String getMateriId() {
+        return materiId;
     }
 
     public void setDateCreated(long dateCreated) {

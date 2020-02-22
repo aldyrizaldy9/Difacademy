@@ -99,7 +99,7 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
 
         initView();
         onClick();
-        checkIntent();
+//        checkIntent();
         loadTags();
     }
 
@@ -144,7 +144,7 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
             edtJudul.setText(courseModel.getTitle());
             edtDeskripsi.setText(courseModel.getDescription());
             edtLinkGDrive.setText(courseModel.getGoogleDrive());
-            edtHarga.setText(courseModel.getHarga());
+//            edtHarga.setText(courseModel.getHarga());
             blendedCourseDocId = courseModel.getDocumentId();
         }
     }
@@ -259,7 +259,6 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
                                 googleDrive.equals(oldCourseModel.getGoogleDrive()) &&
                                 tag.equals(oldCourseModel.getTag()) &&
                                 tagId.equals(oldCourseModel.getTagId()) &&
-                                harga.equals(oldCourseModel.getHarga()) &&
                                 thumbnailUrl.equals(oldCourseModel.getThumbnailUrl()) &&
                                 imageUri == null) {
                             Intent intent = new Intent(OpAddBlendedCourseActivity.this, OpBlendedMateriActivity.class);
@@ -339,13 +338,13 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
             return;
         }
 
-        CourseModel model = new CourseModel(title, description, thumbnailUrl, googleDrive, tagId, tag, harga, dateCreated);
+//        CourseModel model = new CourseModel(title, description, thumbnailUrl, googleDrive, tagId, tag, harga, dateCreated);
 
-        if (thereIsData) {
-            editKelas(model);
-        } else {
-            tambahKelas(model);
-        }
+//        if (thereIsData) {
+//            editKelas(model);
+//        } else {
+//            tambahKelas(model);
+//        }
     }
 
     private void editKelas(final CourseModel model) {

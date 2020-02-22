@@ -255,13 +255,13 @@ public class OpAddOnlineMateriActivity extends AppCompatActivity {
             return;
         }
 
-        MateriModel model = new MateriModel(title, thumbnailUrl, dateCreated);
-
-        if (thereIsData) {
-            editMateri(model);
-        } else {
-            tambahMateri(model);
-        }
+//        MateriModel model = new MateriModel(title, thumbnailUrl, dateCreated);
+//
+//        if (thereIsData) {
+//            editMateri(model);
+//        } else {
+//            tambahMateri(model);
+//        }
     }
 
     private void editMateri(final MateriModel model) {
@@ -310,7 +310,7 @@ public class OpAddOnlineMateriActivity extends AppCompatActivity {
                         onlineMateriDocId = documentReference.getId();
                         if (addSoal) {
                             thereIsData = true;
-                            materiModel = new MateriModel(edtJudul.getText().toString(), thumbnailUrl, dateCreated);
+//                            materiModel = new MateriModel(edtJudul.getText().toString(), thumbnailUrl, dateCreated);
                             oldMateriModel = materiModel;
                             imageUri = null;
                             pd.dismiss();
@@ -318,7 +318,7 @@ public class OpAddOnlineMateriActivity extends AppCompatActivity {
                             startActivity(intent);
                         } else if (addVideo) {
                             thereIsData = true;
-                            materiModel = new MateriModel(edtJudul.getText().toString(), thumbnailUrl, dateCreated);
+//                            materiModel = new MateriModel(edtJudul.getText().toString(), thumbnailUrl, dateCreated);
                             oldMateriModel = materiModel;
                             imageUri = null;
                             pd.dismiss();

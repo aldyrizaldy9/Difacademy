@@ -38,7 +38,7 @@ public class OpNotifPaymentAdapter extends RecyclerView.Adapter<OpNotifPaymentAd
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         final PaymentModel paymentModel = paymentModels.get(position);
         holder.tvNama.setText(paymentModel.getNamaUser());
-        holder.tvKelas.setText(paymentModel.getNamaKelas());
+        holder.tvMateri.setText(paymentModel.getNamaMateri());
         if (paymentModel.isPaid()) {
             holder.tvStatus.setText("SUDAH DIPROSES");
         } else {
@@ -60,13 +60,13 @@ public class OpNotifPaymentAdapter extends RecyclerView.Adapter<OpNotifPaymentAd
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView tvNama, tvKelas, tvStatus;
+        private TextView tvNama, tvMateri, tvStatus;
         private ConstraintLayout clContainer;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tvNama = itemView.findViewById(R.id.tv_c_op_notif_payment_nama);
-            tvKelas = itemView.findViewById(R.id.tv_c_op_notif_payment_kelas);
+            tvMateri = itemView.findViewById(R.id.tv_c_op_notif_payment_kelas);
             tvStatus = itemView.findViewById(R.id.tv_c_op_notif_status_beli);
             clContainer = itemView.findViewById(R.id.cl_c_op_notif_payment);
         }

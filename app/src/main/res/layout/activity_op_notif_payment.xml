@@ -17,13 +17,13 @@
         style="@style/Difacademy.Subtitle2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Kelas yang ingin dibeli"
+        android:text="Materi yang ingin dibeli"
         app:layout_constraintEnd_toEndOf="@+id/tv_op_notif_pay_nowa"
         app:layout_constraintStart_toStartOf="@+id/tv_op_notif_pay_nowa"
         app:layout_constraintTop_toBottomOf="@+id/tv_op_notif_pay_nowa" />
 
     <TextView
-        android:id="@+id/tv_op_notif_pay_nama_kelas"
+        android:id="@+id/tv_op_notif_pay_nama_materi"
         style="@style/Difacademy.Body1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -104,14 +104,14 @@
         app:layout_constraintTop_toBottomOf="@+id/textView14" />
 
     <Button
-        android:id="@+id/btn_op_notif_pay_buka_kelas"
+        android:id="@+id/btn_op_notif_pay_buka_materi"
         style="@style/Difacademy.Button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="32dp"
-        android:text="@string/buka_kelas"
+        android:text="@string/buka_materi"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -124,10 +124,10 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="Bank yang dipilih"
-        app:layout_constraintEnd_toEndOf="@+id/tv_op_notif_pay_harga_kelas"
+        app:layout_constraintEnd_toEndOf="@+id/tv_op_notif_pay_harga_materi"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/tv_op_notif_pay_harga_kelas"
-        app:layout_constraintTop_toBottomOf="@+id/tv_op_notif_pay_harga_kelas" />
+        app:layout_constraintStart_toStartOf="@+id/tv_op_notif_pay_harga_materi"
+        app:layout_constraintTop_toBottomOf="@+id/tv_op_notif_pay_harga_materi" />
 
     <TextView
         android:id="@+id/tv_op_notif_pay_nama_bank"
@@ -145,13 +145,13 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Harga kelas"
-        app:layout_constraintEnd_toEndOf="@+id/tv_op_notif_pay_nama_kelas"
-        app:layout_constraintStart_toStartOf="@+id/tv_op_notif_pay_nama_kelas"
-        app:layout_constraintTop_toBottomOf="@+id/tv_op_notif_pay_nama_kelas" />
+        android:text="Harga materi"
+        app:layout_constraintEnd_toEndOf="@+id/tv_op_notif_pay_nama_materi"
+        app:layout_constraintStart_toStartOf="@+id/tv_op_notif_pay_nama_materi"
+        app:layout_constraintTop_toBottomOf="@+id/tv_op_notif_pay_nama_materi" />
 
     <TextView
-        android:id="@+id/tv_op_notif_pay_harga_kelas"
+        android:id="@+id/tv_op_notif_pay_harga_materi"
         style="@style/Difacademy.Body1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

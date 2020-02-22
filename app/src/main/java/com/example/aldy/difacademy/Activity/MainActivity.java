@@ -19,10 +19,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.aldy.difacademy.Adapter.NewsAdapter;
-import com.example.aldy.difacademy.Model.CourseModel;
+import com.example.aldy.difacademy.Model.MateriModel;
 import com.example.aldy.difacademy.Model.NewsModel;
-import com.example.aldy.difacademy.Model.OngoingKelasBlendedModel;
-import com.example.aldy.difacademy.Model.OngoingKelasOnlineModel;
+import com.example.aldy.difacademy.Model.OngoingMateriModel;
 import com.example.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -49,13 +48,11 @@ public class MainActivity extends AppCompatActivity {
     private NewsAdapter newsAdapter;
     private ArrayList<NewsModel> newsModels;
     private FirebaseFirestore firebaseFirestore;
-    private CourseModel courseModel;
+    private MateriModel materiModel;
     private String userDocId;
-    private OngoingKelasBlendedModel ongoingKelasBlendedModel;
-    private OngoingKelasOnlineModel ongoingKelasOnlineModel;
+    private OngoingMateriModel ongoingOnlineMateri;
+    private OngoingMateriModel ongoingBlendedMateri;
     private boolean doubleBackToExitPressedOnce = false;
-
-    public static String JENIS_KELAS = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
         imgKelasOnline = findViewById(R.id.img_main_kelas_online);
         imgKelasCampuran = findViewById(R.id.img_main_kelas_campuran);
         imgOngoing = findViewById(R.id.img_main_ongoing_thumbnail);
+        imgOngoing.setClipToOutline(true);
         imgBanner = findViewById(R.id.img_main_banner);
         btnBeritaLainnya = findViewById(R.id.btn_main_berita_lainnya);
         tvDiikutiSemua = findViewById(R.id.tv_main_diikuti_semua);
@@ -191,7 +189,7 @@ public class MainActivity extends AppCompatActivity {
                             for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
                                 userDocId = queryDocumentSnapshot.getId();
                             }
-                            getOngoingBlendedCourse();
+                            getOngoingBlendedMateri();
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
@@ -203,11 +201,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void getOngoingBlendedCourse() {
+    private void getOngoingBlendedMateri() {
         CollectionReference ongoingRef = firebaseFirestore
                 .collection("User")
                 .document(userDocId)
-                .collection("OngoingBlendedCourse");
+                .collection("OngoingBlendedMateri");
 
         ongoingRef
                 .orderBy("dateCreated", Query.Direction.DESCENDING)
@@ -217,9 +215,9 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
-                            ongoingKelasBlendedModel = queryDocumentSnapshot.toObject(OngoingKelasBlendedModel.class);
+                            ongoingBlendedMateri = queryDocumentSnapshot.toObject(OngoingMateriModel.class);
                         }
-                        getOngoingOnlineCourse();
+                        getOngoingOnlineMateri();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -230,11 +228,11 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
-    private void getOngoingOnlineCourse() {
+    private void getOngoingOnlineMateri() {
         CollectionReference ongoingRef = firebaseFirestore
                 .collection("User")
                 .document(userDocId)
-                .collection("OngoingOnlineCourse");
+                .collection("OngoingOnlineMateri");
 
         ongoingRef
                 .orderBy("dateCreated", Query.Direction.DESCENDING)
@@ -244,9 +242,9 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
-                            ongoingKelasOnlineModel = queryDocumentSnapshot.toObject(OngoingKelasOnlineModel.class);
+                            ongoingOnlineMateri = queryDocumentSnapshot.toObject(OngoingMateriModel.class);
                         }
-                        compareOngoingCourses();
+                        compareOngoingMateri();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -257,83 +255,56 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
-    private void compareOngoingCourses() {
-        if (ongoingKelasBlendedModel != null) {
-            if (ongoingKelasOnlineModel == null) {
-                setBlendedCourseAsOngoing(ongoingKelasBlendedModel.getKelasBlendedId());
-            } else if (ongoingKelasBlendedModel.getDateCreated() > ongoingKelasOnlineModel.getDateCreated()) {
-                setBlendedCourseAsOngoing(ongoingKelasBlendedModel.getKelasBlendedId());
+    private void compareOngoingMateri() {
+        if (ongoingBlendedMateri != null) {
+            if (ongoingOnlineMateri == null) {
+                setOngoingMateri("blended", ongoingBlendedMateri.getCourseId(), ongoingBlendedMateri.getMateriId());
+            } else if (ongoingBlendedMateri.getDateCreated() > ongoingOnlineMateri.getDateCreated()) {
+                setOngoingMateri("blended", ongoingBlendedMateri.getCourseId(), ongoingBlendedMateri.getMateriId());
             } else {
-                setOnlineCourseAsOngoing(ongoingKelasOnlineModel.getKelasOnlineId());
+                setOngoingMateri("online", ongoingOnlineMateri.getCourseId(), ongoingOnlineMateri.getMateriId());
             }
-        } else if (ongoingKelasOnlineModel != null) {
-            setOnlineCourseAsOngoing(ongoingKelasOnlineModel.getKelasOnlineId());
+        } else if (ongoingOnlineMateri != null) {
+            setOngoingMateri("online", ongoingOnlineMateri.getCourseId(), ongoingOnlineMateri.getMateriId());
         }
     }
 
-    private void setBlendedCourseAsOngoing(String courseId) {
-        DocumentReference ongoingRef = firebaseFirestore
-                .collection("BlendedCourse")
-                .document(courseId);
+    private void setOngoingMateri(final String jenisKelas, String courseId, final String materiId) {
+        DocumentReference ongoingRef;
+        if (jenisKelas.equalsIgnoreCase("online")) {
+            ongoingRef = firebaseFirestore
+                    .collection("OnlineCourse")
+                    .document(courseId)
+                    .collection("OnlineMateri")
+                    .document(materiId);
+        } else {
+            ongoingRef = firebaseFirestore
+                    .collection("BlendedCourse")
+                    .document(courseId)
+                    .collection("BlendedMateri")
+                    .document(materiId);
+        }
+
         ongoingRef.get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        courseModel = documentSnapshot.toObject(CourseModel.class);
-                        if (courseModel != null) {
-                            courseModel.setDocumentId(documentSnapshot.getId());
-
-                            imgOngoing.setClipToOutline(true);
+                        materiModel = documentSnapshot.toObject(MateriModel.class);
+                        if (materiModel != null) {
+                            materiModel.setDocumentId(documentSnapshot.getId());
 
                             Glide.with(MainActivity.this)
-                                    .load(courseModel.getThumbnailUrl())
+                                    .load(materiModel.getThumbnailUrl())
                                     .apply(new RequestOptions().centerCrop())
                                     .into(imgOngoing);
-                            tvJudulOngoing.setText(courseModel.getTitle());
-                            tvTagOngoing.setText(courseModel.getTag());
+                            tvJudulOngoing.setText(materiModel.getTitle());
 
                             clOngoing.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    Intent intent = new Intent(MainActivity.this, BlendedMateriActivity.class);
-                                    intent.putExtra("courseId", courseModel.getDocumentId());
-                                    startActivity(intent);
-                                }
-                            });
-
-                            setOngoingView();
-                        }
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d(TAG, e.toString());
-                    }
-                });
-    }
-
-    private void setOnlineCourseAsOngoing(String courseId) {
-        DocumentReference ongoingRef = firebaseFirestore
-                .collection("OnlineCourse")
-                .document(courseId);
-        ongoingRef.get()
-                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                    @Override
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        courseModel = documentSnapshot.toObject(CourseModel.class);
-                        if (courseModel != null) {
-                            courseModel.setDocumentId(documentSnapshot.getId());
-
-                            Glide.with(MainActivity.this).load(courseModel.getThumbnailUrl()).into(imgOngoing);
-                            tvJudulOngoing.setText(courseModel.getTitle());
-                            tvTagOngoing.setText(courseModel.getTag());
-
-                            clOngoing.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    Intent intent = new Intent(MainActivity.this, OnlineMateriActivity.class);
-                                    intent.putExtra("courseId", courseModel.getDocumentId());
+                                    Intent intent = new Intent(MainActivity.this, ListVideoMateriActivity.class);
+                                    intent.putExtra("jenisKelas", jenisKelas);
+                                    intent.putExtra("materiModel", materiModel);
                                     startActivity(intent);
                                 }
                             });

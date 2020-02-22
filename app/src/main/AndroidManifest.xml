@@ -74,7 +74,7 @@
             android:name=".Activity.PaymentActivity"
             android:screenOrientation="sensorPortrait" />
         <activity
-            android:name=".Activity.ListVideoCourseActivity"
+            android:name=".Activity.ListVideoMateriActivity"
             android:screenOrientation="sensorPortrait" />
         <activity
             android:name=".Activity.DetailCourseActivity"

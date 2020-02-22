@@ -19,8 +19,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import com.example.aldy.difacademy.Model.OngoingKelasBlendedModel;
-import com.example.aldy.difacademy.Model.OngoingKelasOnlineModel;
+import com.example.aldy.difacademy.Model.OngoingMateriModel;
 import com.example.aldy.difacademy.Model.PaymentModel;
 import com.example.aldy.difacademy.Model.UserModel;
 import com.example.aldy.difacademy.R;
@@ -40,10 +39,10 @@ import de.cketti.mailto.EmailIntentBuilder;
 
 public class OpNotifPaymentActivity extends AppCompatActivity {
     private static final String TAG = "MANTAP";
-    private TextView tvNavBar, tvNama, tvEmail, tvNoWa, tvNamaKelas, tvHargaKelas, tvNamaBank;
+    private TextView tvNavBar, tvNama, tvEmail, tvNoWa, tvNamaMateri, tvHargaMateri, tvNamaBank;
     private ConstraintLayout clBack;
     private ImageView imgBack;
-    private Button btnBukaKelas;
+    private Button btnBukaMateri;
     private PaymentModel paymentModel;
     private ProgressDialog progressDialog;
     private UserModel userModel;
@@ -65,14 +64,14 @@ public class OpNotifPaymentActivity extends AppCompatActivity {
         tvNama = findViewById(R.id.tv_op_notif_pay_nama);
         tvEmail = findViewById(R.id.tv_op_notif_pay_email);
         tvNoWa = findViewById(R.id.tv_op_notif_pay_nowa);
-        tvNamaKelas = findViewById(R.id.tv_op_notif_pay_nama_kelas);
-        tvHargaKelas = findViewById(R.id.tv_op_notif_pay_harga_kelas);
+        tvNamaMateri = findViewById(R.id.tv_op_notif_pay_nama_materi);
+        tvHargaMateri = findViewById(R.id.tv_op_notif_pay_harga_materi);
         tvNamaBank = findViewById(R.id.tv_op_notif_pay_nama_bank);
         clBack = findViewById(R.id.cl_icon1);
         clBack.setVisibility(View.VISIBLE);
         imgBack = findViewById(R.id.img_icon1);
         imgBack.setImageResource(R.drawable.ic_arrow_back);
-        btnBukaKelas = findViewById(R.id.btn_op_notif_pay_buka_kelas);
+        btnBukaMateri = findViewById(R.id.btn_op_notif_pay_buka_materi);
         progressDialog = new ProgressDialog(this);
         firebaseFirestore = FirebaseFirestore.getInstance();
     }
@@ -83,13 +82,13 @@ public class OpNotifPaymentActivity extends AppCompatActivity {
         tvNama.setText(paymentModel.getNamaUser());
         tvEmail.setText(paymentModel.getEmail());
         tvNoWa.setText(paymentModel.getNoWa());
-        tvNamaKelas.setText(paymentModel.getNamaKelas());
-        String harga = "Rp " + paymentModel.getHargaKelas();
-        tvHargaKelas.setText(harga);
+        tvNamaMateri.setText(paymentModel.getNamaMateri());
+        String harga = "Rp " + paymentModel.getHargaMateri();
+        tvHargaMateri.setText(harga);
         tvNamaBank.setText(paymentModel.getNamaBank());
         if (paymentModel.isPaid()) {
             //Kalo sudah bayar tombol buka kelas jadi disabled
-            btnBukaKelas.setEnabled(false);
+            btnBukaMateri.setEnabled(false);
         }
     }
 
@@ -100,7 +99,7 @@ public class OpNotifPaymentActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
-        btnBukaKelas.setOnClickListener(new View.OnClickListener() {
+        btnBukaMateri.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 konfirmasiBukaKelas();
@@ -111,7 +110,7 @@ public class OpNotifPaymentActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = EmailIntentBuilder.from(OpNotifPaymentActivity.this)
                         .to(paymentModel.getEmail())
-                        .subject("Pembayaran Course Taman Pelajar")
+                        .subject("Pembayaran Materi Taman Pelajar")
                         .build();
                 startActivity(intent);
             }
@@ -146,8 +145,8 @@ public class OpNotifPaymentActivity extends AppCompatActivity {
 
     private void konfirmasiBukaKelas() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Apakah anda yakin ingin membuka course ini?");
-        builder.setTitle("Buka kelas");
+        builder.setMessage("Apakah anda yakin ingin membuka materi ini?");
+        builder.setTitle("Buka materi");
         builder.setCancelable(false);
         builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
 
@@ -189,7 +188,7 @@ public class OpNotifPaymentActivity extends AppCompatActivity {
                             userModel = queryDocumentSnapshot.toObject(UserModel.class);
                             userModel.setUserDocId(queryDocumentSnapshot.getId());
                         }
-                        bukaKelas();
+                        bukaMateri();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -201,64 +200,44 @@ public class OpNotifPaymentActivity extends AppCompatActivity {
                 });
     }
 
-    private void bukaKelas() {
+    private void bukaMateri() {
         long dateCreated = Timestamp.now().getSeconds();
         CollectionReference onGoingRef;
         if (paymentModel.getJenisKelas().equalsIgnoreCase("online")) {
             onGoingRef = firebaseFirestore
                     .collection("User")
                     .document(userModel.getUserDocId())
-                    .collection("OngoingOnlineCourse");
-            OngoingKelasOnlineModel ongoingKelasOnlineModel = new OngoingKelasOnlineModel(paymentModel.getCourseId(), dateCreated);
-
-            onGoingRef
-                    .add(ongoingKelasOnlineModel)
-                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                        @Override
-                        public void onSuccess(DocumentReference documentReference) {
-                            Log.d(TAG, "buka kelas success");
-                            getPaymentDocuments();
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            progressDialog.dismiss();
-                            Log.d(TAG, e.toString());
-                        }
-                    });
+                    .collection("OngoingOnlineMateri");
         } else {
             onGoingRef = firebaseFirestore
                     .collection("User")
                     .document(userModel.getUserDocId())
-                    .collection("OngoingBlendedCourse");
-            OngoingKelasBlendedModel ongoingKelasBlendedModel = new OngoingKelasBlendedModel(paymentModel.getCourseId(), dateCreated);
-
-            onGoingRef
-                    .add(ongoingKelasBlendedModel)
-                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                        @Override
-                        public void onSuccess(DocumentReference documentReference) {
-                            Log.d(TAG, "buka kelas success");
-                            getPaymentDocuments();
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            progressDialog.dismiss();
-                            Log.d(TAG, e.toString());
-                        }
-                    });
+                    .collection("OngoingBlendedMateri");
         }
+        OngoingMateriModel ongoingMateriModel = new OngoingMateriModel(paymentModel.getCourseId(), paymentModel.getMateriId(), dateCreated);
 
-
+        onGoingRef
+                .add(ongoingMateriModel)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.d(TAG, "buka materi success");
+                        getPaymentDocuments();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        progressDialog.dismiss();
+                        Log.d(TAG, e.toString());
+                    }
+                });
     }
 
     private void getPaymentDocuments() {
         CollectionReference paymentRef = firebaseFirestore.collection("Payment");
         paymentRef
-                .whereEqualTo("courseId", paymentModel.getCourseId())
+                .whereEqualTo("materiId", paymentModel.getMateriId())
                 .whereEqualTo("userId", paymentModel.getUserId())
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -296,7 +275,7 @@ public class OpNotifPaymentActivity extends AppCompatActivity {
                         progressDialog.dismiss();
                         onBackPressed();
                         Toast.makeText(OpNotifPaymentActivity.this,
-                                "Kelas telah dibuka untuk user "
+                                "Materi telah dibuka untuk user "
                                         + paymentModel.getNamaUser(), Toast.LENGTH_SHORT).show();
                     }
                 })

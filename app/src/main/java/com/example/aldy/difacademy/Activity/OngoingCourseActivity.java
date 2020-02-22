@@ -22,8 +22,6 @@ import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
 
-import static com.example.aldy.difacademy.Activity.MainActivity.JENIS_KELAS;
-
 public class OngoingCourseActivity extends AppCompatActivity {
 
     public static String USER_DOC_ID = "";

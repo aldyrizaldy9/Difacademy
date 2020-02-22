@@ -19,9 +19,10 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import com.example.aldy.difacademy.Model.CourseModel;
+import com.example.aldy.difacademy.Model.MateriModel;
 import com.example.aldy.difacademy.Model.PaymentModel;
 import com.example.aldy.difacademy.Model.UserModel;
+import com.example.aldy.difacademy.Model.VideoModel;
 import com.example.aldy.difacademy.Notification.APIService;
 import com.example.aldy.difacademy.Notification.Data;
 import com.example.aldy.difacademy.Notification.MyResponse;
@@ -46,7 +47,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 import static com.example.aldy.difacademy.Activity.LoginActivity.SHARE_PREFS;
 import static com.example.aldy.difacademy.Activity.LoginActivity.USERID_PREFS;
-import static com.example.aldy.difacademy.Activity.MainActivity.JENIS_KELAS;
 import static com.example.aldy.difacademy.Activity.OpMainActivity.ADMIN_USER_ID;
 
 public class PaymentActivity extends AppCompatActivity {
@@ -59,9 +59,11 @@ public class PaymentActivity extends AppCompatActivity {
     private Button btnBayarBni, btnBayarBri;
     private boolean isBniActive = false, isBriActive = false;
 
-    private String userId, courseId, namaUser, email, noWa, namaKelas, hargaKelas, namaBank;
+    private String userId, namaUser, email, noWa, namaMateri, hargaMateri, namaBank;
     private ProgressDialog progressDialog;
     private FirebaseFirestore firebaseFirestore;
+    private VideoModel videoModel;
+    private String jenisKelas;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,9 +86,7 @@ public class PaymentActivity extends AppCompatActivity {
         ImageView imgBack = findViewById(R.id.img_icon1);
         imgBack.setImageResource(R.drawable.ic_arrow_back);
         imgLogoBni = findViewById(R.id.img_payment_logo_bni);
-//        imgLogoBni.setImageResource();
         imgLogoBri = findViewById(R.id.img_payment_logo_bri);
-//        imgLogoBri.setImageResource();
         imgExpandBni = findViewById(R.id.img_payment_expand_bni);
         imgExpandBni.setImageResource(R.drawable.ic_expand_more);
         imgExpandBri = findViewById(R.id.img_payment_expand_bri);
@@ -98,7 +98,8 @@ public class PaymentActivity extends AppCompatActivity {
         btnBayarBni = findViewById(R.id.btn_payment_bayar_bni);
         btnBayarBri = findViewById(R.id.btn_payment_bayar_bri);
         Intent intent = getIntent();
-        courseId = intent.getStringExtra("courseId");
+        videoModel = intent.getParcelableExtra("videoModel");
+        jenisKelas = intent.getStringExtra("jenisKelas");
         SharedPreferences sharedPreferences = getSharedPreferences(SHARE_PREFS, MODE_PRIVATE);
         userId = sharedPreferences.getString(USERID_PREFS, "");
         progressDialog = new ProgressDialog(this);
@@ -207,7 +208,7 @@ public class PaymentActivity extends AppCompatActivity {
     private void sendPaymentDetailsToAdmin() {
 
         long dateCreated = Timestamp.now().getSeconds();
-        PaymentModel paymentModel = new PaymentModel(userId, namaUser, email, noWa, JENIS_KELAS, courseId, namaKelas, hargaKelas, namaBank, dateCreated, false, false);
+        PaymentModel paymentModel = new PaymentModel(userId, namaUser, email, noWa, jenisKelas, videoModel.getCourseId(), videoModel.getMateriId(), namaMateri, hargaMateri, namaBank, dateCreated, false, false);
 
         CollectionReference paymentRef = firebaseFirestore.collection("Payment");
         paymentRef
@@ -240,7 +241,7 @@ public class PaymentActivity extends AppCompatActivity {
                         if (token != null) {
                             tokenAdmin = token.getToken();
                         }
-                        Data data = new Data(userId, R.mipmap.ic_launcher, "Ketuk untuk menuju ke daftar pembelian", "Pembelian kelas", ADMIN_USER_ID);
+                        Data data = new Data(userId, R.mipmap.ic_launcher, "Ketuk untuk menuju ke daftar pembelian", "Pembelian materi", ADMIN_USER_ID);
                         Sender sender = new Sender(data, tokenAdmin);
                         Retrofit retrofit = new Retrofit.Builder()
                                 .baseUrl("https://fcm.googleapis.com/")
@@ -288,7 +289,7 @@ public class PaymentActivity extends AppCompatActivity {
                         namaUser = userModel.getNama();
                         email = userModel.getEmail();
                         noWa = userModel.getNoTelp();
-                        getCourseData();
+                        getMateriData();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -301,22 +302,24 @@ public class PaymentActivity extends AppCompatActivity {
 
     }
 
-    private void getCourseData() {
+    private void getMateriData() {
         DocumentReference courseRef;
-        if (JENIS_KELAS.equalsIgnoreCase("online")) {
-            courseRef = firebaseFirestore.collection("OnlineCourse").document(courseId);
+        if (jenisKelas.equalsIgnoreCase("online")) {
+            courseRef = firebaseFirestore.collection("OnlineCourse").document(videoModel.getCourseId())
+                    .collection("OnlineMateri").document(videoModel.getMateriId());
         } else {
-            courseRef = firebaseFirestore.collection("BlendedCourse").document(courseId);
+            courseRef = firebaseFirestore.collection("BlendedCourse").document(videoModel.getCourseId())
+                    .collection("BlendedMateri").document(videoModel.getMateriId());
         }
         courseRef
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        CourseModel courseModel = documentSnapshot.toObject(CourseModel.class);
-                        if (courseModel != null) {
-                            namaKelas = courseModel.getTitle();
-                            hargaKelas = courseModel.getHarga();
+                        MateriModel materiModel = documentSnapshot.toObject(MateriModel.class);
+                        if (materiModel != null) {
+                            namaMateri = materiModel.getTitle();
+                            hargaMateri = materiModel.getHarga();
                         }
                         sendPaymentDetailsToAdmin();
                     }

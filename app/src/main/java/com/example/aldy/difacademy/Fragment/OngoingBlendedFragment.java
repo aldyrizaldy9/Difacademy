@@ -9,14 +9,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.aldy.difacademy.Adapter.CourseAdapter;
-import com.example.aldy.difacademy.Model.CourseModel;
-import com.example.aldy.difacademy.Model.OngoingKelasBlendedModel;
+import com.example.aldy.difacademy.Adapter.BlendedMateriAdapter;
+import com.example.aldy.difacademy.Model.MateriModel;
+import com.example.aldy.difacademy.Model.OngoingMateriModel;
 import com.example.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -30,7 +29,6 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
-import static com.example.aldy.difacademy.Activity.MainActivity.JENIS_KELAS;
 import static com.example.aldy.difacademy.Activity.OngoingCourseActivity.USER_DOC_ID;
 
 
@@ -40,8 +38,8 @@ import static com.example.aldy.difacademy.Activity.OngoingCourseActivity.USER_DO
 public class OngoingBlendedFragment extends Fragment {
 
     private RecyclerView rvOngoingBlended;
-    private ArrayList<CourseModel> courseModels;
-    private CourseAdapter adapter;
+    private ArrayList<MateriModel> materiModels;
+    private BlendedMateriAdapter blendedMateriAdapter;
 
     private ProgressDialog pd;
 
@@ -53,7 +51,7 @@ public class OngoingBlendedFragment extends Fragment {
 
     DocumentSnapshot lastVisible;
     boolean loadbaru;
-    CollectionReference ongoingCoursesRef;
+    CollectionReference ongoingMateriRef;
 
     public OngoingBlendedFragment() {
         // Required empty public constructor
@@ -68,51 +66,37 @@ public class OngoingBlendedFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_ongoing_blended, container, false);
         initView();
         setRecyclerView();
-        loadOngoingCourses();
+        loadOngoingMateri();
         return rootView;
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setUserVisibleHint(false);
-    }
-
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser) {
-            JENIS_KELAS = "blended";
-        }
     }
 
     private void initView() {
         rvOngoingBlended = rootView.findViewById(R.id.rv_ongoing_blended);
         pd = new ProgressDialog(rootView.getContext());
 
-        ongoingCoursesRef = db
+        ongoingMateriRef = db
                 .collection("User")
                 .document(USER_DOC_ID)
-                .collection("OngoingBlendedCourse");
+                .collection("OngoingBlendedMateri");
     }
 
     private void setRecyclerView() {
-        courseModels = new ArrayList<>();
-        adapter = new CourseAdapter(rootView.getContext(), courseModels);
+        materiModels = new ArrayList<>();
+        blendedMateriAdapter = new BlendedMateriAdapter(rootView.getContext(), materiModels);
 
         final LinearLayoutManager manager = new LinearLayoutManager(rootView.getContext(), RecyclerView.VERTICAL, false);
         rvOngoingBlended.setLayoutManager(manager);
-        rvOngoingBlended.setAdapter(adapter);
+        rvOngoingBlended.setAdapter(blendedMateriAdapter);
 
         rvOngoingBlended.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                if (manager.findLastVisibleItemPosition() >= courseModels.size() - 10 &&
+                if (manager.findLastVisibleItemPosition() >= materiModels.size() - 10 &&
                         lastVisible != null &&
                         loadbaru) {
                     loadbaru = false;
-                    Query load = ongoingCoursesRef
+                    Query load = ongoingMateriRef
                             .orderBy("dateCreated", Query.Direction.DESCENDING)
                             .startAfter(lastVisible)
                             .limit(20);
@@ -121,25 +105,28 @@ public class OngoingBlendedFragment extends Fragment {
                             .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                                 @Override
                                 public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                    courseModels.clear();
+                                    materiModels.clear();
                                     if (queryDocumentSnapshots.size() > 0) {
                                         for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
-                                            OngoingKelasBlendedModel ongoingKelasBlendedModel = queryDocumentSnapshot.toObject(OngoingKelasBlendedModel.class);
+                                            OngoingMateriModel ongoingMateriModel = queryDocumentSnapshot.toObject(OngoingMateriModel.class);
 
-                                            DocumentReference blendedCourseRef = db
+                                            DocumentReference blendedMateriRef = db
                                                     .collection("BlendedCourse")
-                                                    .document(ongoingKelasBlendedModel.getKelasBlendedId());
-                                            blendedCourseRef
+                                                    .document(ongoingMateriModel.getCourseId())
+                                                    .collection("BlendedMateri")
+                                                    .document(ongoingMateriModel.getMateriId());
+
+                                            blendedMateriRef
                                                     .get()
                                                     .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                                         @Override
                                                         public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                                            CourseModel courseModel = documentSnapshot.toObject(CourseModel.class);
-                                                            if (courseModel != null) {
-                                                                courseModel.setDocumentId(documentSnapshot.getId());
+                                                            MateriModel materiModel = documentSnapshot.toObject(MateriModel.class);
+                                                            if (materiModel != null) {
+                                                                materiModel.setDocumentId(documentSnapshot.getId());
                                                             }
-                                                            courseModels.add(courseModel);
-                                                            adapter.notifyDataSetChanged();
+                                                            materiModels.add(materiModel);
+                                                            blendedMateriAdapter.notifyDataSetChanged();
                                                             loadbaru = true;
                                                         }
                                                     })
@@ -179,12 +166,12 @@ public class OngoingBlendedFragment extends Fragment {
         });
     }
 
-    private void loadOngoingCourses() {
+    private void loadOngoingMateri() {
         pd.setMessage("Memuat...");
         pd.setCancelable(false);
         pd.show();
 
-        Query first = ongoingCoursesRef
+        Query first = ongoingMateriRef
                 .orderBy("dateCreated", Query.Direction.DESCENDING)
                 .limit(20);
 
@@ -192,11 +179,11 @@ public class OngoingBlendedFragment extends Fragment {
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        courseModels.clear();
+                        materiModels.clear();
                         if (queryDocumentSnapshots.size() > 0) {
                             for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
-                                OngoingKelasBlendedModel ongoingKelasBlendedModel = queryDocumentSnapshot.toObject(OngoingKelasBlendedModel.class);
-                                loadOngoingCoursesDetail(ongoingKelasBlendedModel.getKelasBlendedId());
+                                OngoingMateriModel ongoingMateriModel = queryDocumentSnapshot.toObject(OngoingMateriModel.class);
+                                loadOngoingMateriDetail(ongoingMateriModel.getCourseId(), ongoingMateriModel.getMateriId());
                             }
 
                             if (queryDocumentSnapshots.size() < 20) {
@@ -218,21 +205,23 @@ public class OngoingBlendedFragment extends Fragment {
                 });
     }
 
-    private void loadOngoingCoursesDetail(final String courseId) {
-        DocumentReference blendedCourseRef = db
+    private void loadOngoingMateriDetail(final String courseId, String materiId) {
+        DocumentReference blendedMateriref = db
                 .collection("BlendedCourse")
-                .document(courseId);
-        blendedCourseRef
+                .document(courseId)
+                .collection("BlendedMateri")
+                .document(materiId);
+        blendedMateriref
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        CourseModel courseModel = documentSnapshot.toObject(CourseModel.class);
-                        if (courseModel != null) {
-                            courseModel.setDocumentId(documentSnapshot.getId());
+                        MateriModel materiModel = documentSnapshot.toObject(MateriModel.class);
+                        if (materiModel != null) {
+                            materiModel.setDocumentId(documentSnapshot.getId());
                         }
-                        courseModels.add(courseModel);
-                        adapter.notifyDataSetChanged();
+                        materiModels.add(materiModel);
+                        blendedMateriAdapter.notifyDataSetChanged();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {

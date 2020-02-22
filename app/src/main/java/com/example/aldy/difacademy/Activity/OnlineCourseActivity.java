@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -20,7 +21,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.aldy.difacademy.Adapter.CourseAdapter;
+import com.example.aldy.difacademy.Adapter.OnlineCourseAdapter;
 import com.example.aldy.difacademy.Model.CourseModel;
 import com.example.aldy.difacademy.Model.TagModel;
 import com.example.aldy.difacademy.R;
@@ -35,8 +36,6 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
-import static com.example.aldy.difacademy.Activity.MainActivity.JENIS_KELAS;
-
 public class OnlineCourseActivity extends AppCompatActivity {
     private static final String TAG = "OnlineCourseActivity";
     private DocumentSnapshot lastVisible;
@@ -46,13 +45,13 @@ public class OnlineCourseActivity extends AppCompatActivity {
     private String tag = "";
     private ConstraintLayout clBack, clSearch, clSearchContainer, clNavbar;
     private RecyclerView rvCourse;
-    private CourseAdapter adapter;
+    private OnlineCourseAdapter adapter;
     private ArrayList<CourseModel> courseModels;
     private ArrayList<String> tags;
     private ProgressDialog pd;
     private Spinner spnTags;
     private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
-    CollectionReference courseRef = firebaseFirestore.collection("OnlineCourse");
+    private CollectionReference courseRef = firebaseFirestore.collection("OnlineCourse");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +65,6 @@ public class OnlineCourseActivity extends AppCompatActivity {
     }
 
     private void initView() {
-        JENIS_KELAS = "online";
         clNavbar = findViewById(R.id.cl_navbar);
         clNavbar.setBackgroundColor(getResources().getColor(R.color.navCoklat));
         clBack = findViewById(R.id.cl_icon1);
@@ -109,7 +107,7 @@ public class OnlineCourseActivity extends AppCompatActivity {
 
     private void setRecyclerView() {
         courseModels = new ArrayList<>();
-        adapter = new CourseAdapter(this, courseModels);
+        adapter = new OnlineCourseAdapter(this, courseModels);
 
         final LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         rvCourse.setLayoutManager(layoutManager);
@@ -165,6 +163,7 @@ public class OnlineCourseActivity extends AppCompatActivity {
                                         @Override
                                         public void onFailure(@NonNull Exception e) {
                                             loadbaru = true;
+                                            Log.d(TAG, e.toString());
                                             Toast.makeText(OnlineCourseActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
                                         }
                                     });
@@ -216,6 +215,7 @@ public class OnlineCourseActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         pd.dismiss();
+                        Log.d(TAG, e.toString());
                     }
                 });
     }
@@ -257,6 +257,7 @@ public class OnlineCourseActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         pd.dismiss();
+                        Log.d(TAG, e.toString());
                     }
                 });
 
@@ -284,6 +285,7 @@ public class OnlineCourseActivity extends AppCompatActivity {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, e.toString());
                     }
                 });
     }

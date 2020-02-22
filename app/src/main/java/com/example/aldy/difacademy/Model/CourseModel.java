@@ -6,20 +6,19 @@ import android.os.Parcelable;
 import com.google.firebase.firestore.Exclude;
 
 public class CourseModel implements Parcelable {
-    String documentId, title, description, thumbnailUrl, googleDrive, tagId, tag, harga;
-    long dateCreated;
+    private String documentId, title, description, thumbnailUrl, googleDrive, tagId, tag;
+    private long dateCreated;
 
     public CourseModel() {
     }
 
-    public CourseModel(String title, String description, String thumbnailUrl, String googleDrive, String tagId, String tag, String harga, long dateCreated) {
+    public CourseModel(String title, String description, String thumbnailUrl, String googleDrive, String tagId, String tag, long dateCreated) {
         this.title = title;
         this.description = description;
         this.thumbnailUrl = thumbnailUrl;
         this.googleDrive = googleDrive;
         this.tagId = tagId;
         this.tag = tag;
-        this.harga = harga;
         this.dateCreated = dateCreated;
     }
 
@@ -31,7 +30,6 @@ public class CourseModel implements Parcelable {
         googleDrive = in.readString();
         tagId = in.readString();
         tag = in.readString();
-        harga = in.readString();
         dateCreated = in.readLong();
     }
 
@@ -44,7 +42,6 @@ public class CourseModel implements Parcelable {
         dest.writeString(googleDrive);
         dest.writeString(tagId);
         dest.writeString(tag);
-        dest.writeString(harga);
         dest.writeLong(dateCreated);
     }
 
@@ -86,32 +83,16 @@ public class CourseModel implements Parcelable {
         return description;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public String getThumbnailUrl() {
         return thumbnailUrl;
-    }
-
-    public void setThumbnailUrl(String thumbnailUrl) {
-        this.thumbnailUrl = thumbnailUrl;
     }
 
     public String getGoogleDrive() {
         return googleDrive;
     }
 
-    public void setGoogleDrive(String googleDrive) {
-        this.googleDrive = googleDrive;
-    }
-
     public String getTagId() {
         return tagId;
-    }
-
-    public void setTagId(String tagId) {
-        this.tagId = tagId;
     }
 
     public String getTag() {
@@ -120,14 +101,6 @@ public class CourseModel implements Parcelable {
 
     public void setTag(String tag) {
         this.tag = tag;
-    }
-
-    public String getHarga() {
-        return harga;
-    }
-
-    public void setHarga(String harga) {
-        this.harga = harga;
     }
 
     public long getDateCreated() {

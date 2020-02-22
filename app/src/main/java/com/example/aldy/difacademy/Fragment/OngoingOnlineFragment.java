@@ -14,9 +14,9 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.aldy.difacademy.Adapter.CourseAdapter;
-import com.example.aldy.difacademy.Model.CourseModel;
-import com.example.aldy.difacademy.Model.OngoingKelasOnlineModel;
+import com.example.aldy.difacademy.Adapter.OnlineMateriAdapter;
+import com.example.aldy.difacademy.Model.MateriModel;
+import com.example.aldy.difacademy.Model.OngoingMateriModel;
 import com.example.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -30,7 +30,6 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
-import static com.example.aldy.difacademy.Activity.MainActivity.JENIS_KELAS;
 import static com.example.aldy.difacademy.Activity.OngoingCourseActivity.USER_DOC_ID;
 
 
@@ -40,8 +39,8 @@ import static com.example.aldy.difacademy.Activity.OngoingCourseActivity.USER_DO
 public class OngoingOnlineFragment extends Fragment {
 
     private RecyclerView rvOngoingOnline;
-    private ArrayList<CourseModel> courseModels;
-    private CourseAdapter adapter;
+    private ArrayList<MateriModel> materiModels;
+    private OnlineMateriAdapter onlineMateriAdapter;
 
     private ProgressDialog pd;
 
@@ -53,7 +52,7 @@ public class OngoingOnlineFragment extends Fragment {
 
     DocumentSnapshot lastVisible;
     boolean loadbaru;
-    CollectionReference ongoingCoursesRef;
+    CollectionReference ongoingMateriRef;
 
     public OngoingOnlineFragment() {
         // Required empty public constructor
@@ -68,51 +67,37 @@ public class OngoingOnlineFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_ongoing_online, container, false);
         initView();
         setRecyclerView();
-        loadOngoingCourses();
+        loadOngoingMateri();
         return rootView;
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setUserVisibleHint(false);
-    }
-
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser) {
-            JENIS_KELAS = "online";
-        }
     }
 
     private void initView() {
         rvOngoingOnline = rootView.findViewById(R.id.rv_ongoing_online);
         pd = new ProgressDialog(rootView.getContext());
 
-        ongoingCoursesRef = db
+        ongoingMateriRef = db
                 .collection("User")
                 .document(USER_DOC_ID)
-                .collection("OngoingOnlineCourse");
+                .collection("OngoingOnlineMateri");
     }
 
     private void setRecyclerView() {
-        courseModels = new ArrayList<>();
-        adapter = new CourseAdapter(rootView.getContext(), courseModels);
+        materiModels = new ArrayList<>();
+        onlineMateriAdapter = new OnlineMateriAdapter(rootView.getContext(), materiModels);
 
         final LinearLayoutManager manager = new LinearLayoutManager(rootView.getContext(), RecyclerView.VERTICAL, false);
         rvOngoingOnline.setLayoutManager(manager);
-        rvOngoingOnline.setAdapter(adapter);
+        rvOngoingOnline.setAdapter(onlineMateriAdapter);
 
         rvOngoingOnline.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                if (manager.findLastVisibleItemPosition() >= courseModels.size() - 10 &&
+                if (manager.findLastVisibleItemPosition() >= materiModels.size() - 10 &&
                         lastVisible != null &&
                         loadbaru) {
                     loadbaru = false;
-                    Query load = ongoingCoursesRef
+                    Query load = ongoingMateriRef
                             .orderBy("dateCreated", Query.Direction.DESCENDING)
                             .startAfter(lastVisible)
                             .limit(20);
@@ -121,25 +106,28 @@ public class OngoingOnlineFragment extends Fragment {
                             .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                                 @Override
                                 public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                    courseModels.clear();
+                                    materiModels.clear();
                                     if (queryDocumentSnapshots.size() > 0) {
                                         for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
-                                            OngoingKelasOnlineModel ongoingKelasOnlineModel = queryDocumentSnapshot.toObject(OngoingKelasOnlineModel.class);
+                                            OngoingMateriModel ongoingMateriModel = queryDocumentSnapshot.toObject(OngoingMateriModel.class);
 
-                                            DocumentReference onlineCourseRef = db
+                                            DocumentReference onlineMateriRef = db
                                                     .collection("OnlineCourse")
-                                                    .document(ongoingKelasOnlineModel.getKelasOnlineId());
-                                            onlineCourseRef
+                                                    .document(ongoingMateriModel.getCourseId())
+                                                    .collection("OnlineMateri")
+                                                    .document(ongoingMateriModel.getMateriId());
+
+                                            onlineMateriRef
                                                     .get()
                                                     .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                                         @Override
                                                         public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                                            CourseModel courseModel = documentSnapshot.toObject(CourseModel.class);
-                                                            if (courseModel != null) {
-                                                                courseModel.setDocumentId(documentSnapshot.getId());
+                                                            MateriModel materiModel = documentSnapshot.toObject(MateriModel.class);
+                                                            if (materiModel != null) {
+                                                                materiModel.setDocumentId(documentSnapshot.getId());
                                                             }
-                                                            courseModels.add(courseModel);
-                                                            adapter.notifyDataSetChanged();
+                                                            materiModels.add(materiModel);
+                                                            onlineMateriAdapter.notifyDataSetChanged();
                                                             loadbaru = true;
                                                         }
                                                     })
@@ -179,12 +167,12 @@ public class OngoingOnlineFragment extends Fragment {
         });
     }
 
-    private void loadOngoingCourses() {
+    private void loadOngoingMateri() {
         pd.setMessage("Memuat...");
         pd.setCancelable(false);
         pd.show();
 
-        Query first = ongoingCoursesRef
+        Query first = ongoingMateriRef
                 .orderBy("dateCreated", Query.Direction.DESCENDING)
                 .limit(20);
 
@@ -192,11 +180,11 @@ public class OngoingOnlineFragment extends Fragment {
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        courseModels.clear();
+                        materiModels.clear();
                         if (queryDocumentSnapshots.size() > 0) {
                             for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
-                                OngoingKelasOnlineModel ongoingKelasOnlineModel = queryDocumentSnapshot.toObject(OngoingKelasOnlineModel.class);
-                                loadOngoingCoursesDetail(ongoingKelasOnlineModel.getKelasOnlineId());
+                                OngoingMateriModel ongoingMateriModel = queryDocumentSnapshot.toObject(OngoingMateriModel.class);
+                                loadOngoingMateriDetail(ongoingMateriModel.getCourseId(), ongoingMateriModel.getMateriId());
                             }
 
                             if (queryDocumentSnapshots.size() < 20) {
@@ -218,21 +206,23 @@ public class OngoingOnlineFragment extends Fragment {
                 });
     }
 
-    private void loadOngoingCoursesDetail(final String courseId) {
-        DocumentReference onlineCourseRef = db
+    private void loadOngoingMateriDetail(final String courseId, String materiId) {
+        DocumentReference onlineMateriref = db
                 .collection("OnlineCourse")
-                .document(courseId);
-        onlineCourseRef
+                .document(courseId)
+                .collection("OnlineMateri")
+                .document(materiId);
+        onlineMateriref
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        CourseModel courseModel = documentSnapshot.toObject(CourseModel.class);
-                        if (courseModel != null) {
-                            courseModel.setDocumentId(documentSnapshot.getId());
+                        MateriModel materiModel = documentSnapshot.toObject(MateriModel.class);
+                        if (materiModel != null) {
+                            materiModel.setDocumentId(documentSnapshot.getId());
                         }
-                        courseModels.add(courseModel);
-                        adapter.notifyDataSetChanged();
+                        materiModels.add(materiModel);
+                        onlineMateriAdapter.notifyDataSetChanged();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {

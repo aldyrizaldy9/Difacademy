@@ -7,15 +7,17 @@ import com.google.firebase.firestore.Exclude;
 
 public class MateriModel implements Parcelable {
 
-    String documentId, title, thumbnailUrl;
-    long dateCreated;
+    private String documentId, title, thumbnailUrl, harga, courseId;
+    private long dateCreated;
 
     public MateriModel() {
     }
 
-    public MateriModel(String title, String thumbnailUrl, long dateCreated) {
+    public MateriModel(String title, String thumbnailUrl, String harga, String courseId, long dateCreated) {
         this.title = title;
         this.thumbnailUrl = thumbnailUrl;
+        this.harga = harga;
+        this.courseId = courseId;
         this.dateCreated = dateCreated;
     }
 
@@ -23,6 +25,8 @@ public class MateriModel implements Parcelable {
         documentId = in.readString();
         title = in.readString();
         thumbnailUrl = in.readString();
+        harga = in.readString();
+        courseId = in.readString();
         dateCreated = in.readLong();
     }
 
@@ -31,6 +35,8 @@ public class MateriModel implements Parcelable {
         dest.writeString(documentId);
         dest.writeString(title);
         dest.writeString(thumbnailUrl);
+        dest.writeString(harga);
+        dest.writeString(courseId);
         dest.writeLong(dateCreated);
     }
 
@@ -72,8 +78,12 @@ public class MateriModel implements Parcelable {
         return thumbnailUrl;
     }
 
-    public void setThumbnailUrl(String thumbnailUrl) {
-        this.thumbnailUrl = thumbnailUrl;
+    public String getHarga() {
+        return harga;
+    }
+
+    public String getCourseId() {
+        return courseId;
     }
 
     public long getDateCreated() {

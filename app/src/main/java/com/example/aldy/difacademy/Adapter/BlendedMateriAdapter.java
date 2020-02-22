@@ -13,35 +13,35 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.aldy.difacademy.Activity.ListVideoCourseActivity;
+import com.example.aldy.difacademy.Activity.ListVideoMateriActivity;
 import com.example.aldy.difacademy.Model.MateriModel;
 import com.example.aldy.difacademy.R;
 
 import java.util.ArrayList;
 
-public class MateriAdapter extends RecyclerView.Adapter<MateriAdapter.ViewHolder> {
+public class BlendedMateriAdapter extends RecyclerView.Adapter<BlendedMateriAdapter.ViewHolder> {
     private Context context;
     private ArrayList<MateriModel> materiModels;
 
-    public MateriAdapter(Context context, ArrayList<MateriModel> materiModels) {
+    public BlendedMateriAdapter(Context context, ArrayList<MateriModel> materiModels) {
         this.context = context;
         this.materiModels = materiModels;
     }
 
     @NonNull
     @Override
-    public MateriAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public BlendedMateriAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         View view = layoutInflater.inflate(R.layout.card_video_with_thumbnail, parent, false);
-        return new MateriAdapter.ViewHolder(view);
+        return new BlendedMateriAdapter.ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MateriAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull BlendedMateriAdapter.ViewHolder holder, int position) {
         final MateriModel materiModel = materiModels.get(position);
         holder.tvJudul.setText(materiModel.getTitle());
         holder.tvHarga.setVisibility(View.GONE);
-        holder.tvTag.setVisibility(View.GONE);
+        holder.tvTag.setText(materiModel.getHarga());
         Glide
                 .with(context)
                 .load(materiModel.getThumbnailUrl())
@@ -49,8 +49,9 @@ public class MateriAdapter extends RecyclerView.Adapter<MateriAdapter.ViewHolder
         holder.clContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, ListVideoCourseActivity.class);
-                intent.putExtra("materiId", materiModel.getDocumentId());
+                Intent intent = new Intent(context, ListVideoMateriActivity.class);
+                intent.putExtra("jenisKelas","blended");
+                intent.putExtra("materiModel", materiModel);
                 context.startActivity(intent);
             }
         });

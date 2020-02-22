@@ -47,11 +47,8 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-import static com.example.aldy.difacademy.Activity.BlendedMateriActivity.BLENDED_COURSE_ID;
 import static com.example.aldy.difacademy.Activity.LoginActivity.SHARE_PREFS;
 import static com.example.aldy.difacademy.Activity.LoginActivity.USERID_PREFS;
-import static com.example.aldy.difacademy.Activity.MainActivity.JENIS_KELAS;
-import static com.example.aldy.difacademy.Activity.OnlineMateriActivity.ONLINE_COURSE_ID;
 import static com.example.aldy.difacademy.Activity.OpMainActivity.ADMIN_USER_ID;
 
 public class QuizActivity extends AppCompatActivity {
@@ -62,8 +59,6 @@ public class QuizActivity extends AppCompatActivity {
     ArrayList<String> jawabanSaya;
 
     int nilai = 0;
-
-    String materiId;
 
     int nomor = 0;
     int totalNomor = 0;
@@ -79,6 +74,9 @@ public class QuizActivity extends AppCompatActivity {
     ProgressDialog pd;
     String userId, namaUser, noWa, email, namaMateri;
     SharedPreferences sharedPreferences;
+
+    MateriModel materiModel;
+    String jenisKelas;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,6 +109,9 @@ public class QuizActivity extends AppCompatActivity {
         imgNextOrFinish = findViewById(R.id.img_quiz_next_or_finish);
         sharedPreferences = getSharedPreferences(SHARE_PREFS, MODE_PRIVATE);
         userId = sharedPreferences.getString(USERID_PREFS, "");
+        Intent intent = getIntent();
+        jenisKelas = intent.getStringExtra("jenisKelas");
+        materiModel = intent.getParcelableExtra("materiModel");
     }
 
     private void onClick() {
@@ -133,23 +134,21 @@ public class QuizActivity extends AppCompatActivity {
     }
 
     private void loadData() {
-        Intent intent = getIntent();
-        materiId = intent.getStringExtra("materiId");
         CollectionReference colRef;
 
-        if (JENIS_KELAS.equalsIgnoreCase("online")) {
+        if (jenisKelas.equalsIgnoreCase("online")) {
             colRef = db
                     .collection("OnlineCourse")
-                    .document(ONLINE_COURSE_ID)
+                    .document(materiModel.getCourseId())
                     .collection("OnlineMateri")
-                    .document(materiId)
+                    .document(materiModel.getDocumentId())
                     .collection("OnlineSoal");
         } else {
             colRef = db
                     .collection("BlendedCourse")
-                    .document(BLENDED_COURSE_ID)
+                    .document(materiModel.getCourseId())
                     .collection("BlendedMateri")
-                    .document(materiId)
+                    .document(materiModel.getDocumentId())
                     .collection("BlendedSoal");
         }
 
@@ -388,12 +387,12 @@ public class QuizActivity extends AppCompatActivity {
 
     private void getMateriData() {
         DocumentReference materiRef;
-        if (JENIS_KELAS.equalsIgnoreCase("online")) {
-            materiRef = db.collection("OnlineCourse").document(ONLINE_COURSE_ID)
-                    .collection("OnlineMateri").document(materiId);
+        if (jenisKelas.equalsIgnoreCase("online")) {
+            materiRef = db.collection("OnlineCourse").document(materiModel.getCourseId())
+                    .collection("OnlineMateri").document(materiModel.getDocumentId());
         } else {
-            materiRef = db.collection("BlendedCourse").document(BLENDED_COURSE_ID)
-            .collection("BlendedMateri").document(materiId);
+            materiRef = db.collection("BlendedCourse").document(materiModel.getCourseId())
+                    .collection("BlendedMateri").document(materiModel.getDocumentId());
         }
         materiRef
                 .get()
@@ -419,7 +418,7 @@ public class QuizActivity extends AppCompatActivity {
     private void sendGraduationDetailsToAdmin() {
 
         long dateCreated = Timestamp.now().getSeconds();
-        GraduationModel graduationModel = new GraduationModel(userId, namaUser, email, noWa, materiId, namaMateri, dateCreated, false, false);
+        GraduationModel graduationModel = new GraduationModel(userId, namaUser, email, noWa, materiModel.getDocumentId(), namaMateri, dateCreated, false, false);
 
         CollectionReference gradRef = db.collection("Graduation");
         gradRef

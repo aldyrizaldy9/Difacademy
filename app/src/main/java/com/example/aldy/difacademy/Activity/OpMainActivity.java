@@ -1,13 +1,10 @@
 package com.example.aldy.difacademy.Activity;
 
 import android.Manifest;
-import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -90,7 +87,13 @@ public class OpMainActivity extends AppCompatActivity {
         }
     }
 
-    private void showDialogAskPermission(){
+    @Override
+    protected void onResume() {
+        super.onResume();
+        checkIfPaymentExist();
+    }
+
+    private void showDialogAskPermission() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Wajib Untuk Memberikan Storage Permission Pada Aplikasi");
         builder.setTitle("Write Permission");
@@ -129,7 +132,6 @@ public class OpMainActivity extends AppCompatActivity {
         firebaseFirestore = FirebaseFirestore.getInstance();
         paymentRef = firebaseFirestore.collection("Payment");
         graduationRef = firebaseFirestore.collection("Graduation");
-        checkIfPaymentExist();
 
         //update token
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -300,7 +302,8 @@ public class OpMainActivity extends AppCompatActivity {
                 if (e != null) {
                     return;
                 }
-                if (queryDocumentSnapshots.isEmpty()) {
+
+                if (queryDocumentSnapshots == null) {
                     imgNotif.setImageResource(R.drawable.ic_notifications);
                 } else {
                     for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
@@ -324,7 +327,7 @@ public class OpMainActivity extends AppCompatActivity {
                 if (e != null) {
                     return;
                 }
-                if (queryDocumentSnapshots.isEmpty()) {
+                if (queryDocumentSnapshots == null) {
                     imgNotif.setImageResource(R.drawable.ic_notifications);
                 } else {
                     for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {

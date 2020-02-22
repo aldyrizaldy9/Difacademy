@@ -320,13 +320,13 @@ public class OpAddBlendedVideoActivity extends AppCompatActivity {
             return;
         }
 
-        VideoModel model = new VideoModel(title, description, urlVideo, dateCreated);
+//        VideoModel model = new VideoModel(title, description, urlVideo, dateCreated);
 
-        if (thereIsData) {
-            editVideo(model);
-        } else {
-            tambahVideo(model);
-        }
+//        if (thereIsData) {
+//            editVideo(model);
+//        } else {
+//            tambahVideo(model);
+//        }
     }
 
     private void editVideo(final VideoModel model) {

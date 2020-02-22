@@ -7,7 +7,7 @@ import com.google.firebase.firestore.Exclude;
 
 public class PaymentModel implements Parcelable {
 
-    private String userId, namaUser, email, noWa, jenisKelas, courseId, namaKelas, hargaKelas, namaBank, paymentId;
+    private String userId, namaUser, email, noWa, jenisKelas, courseId, materiId, namaMateri, hargaMateri, namaBank, paymentId;
     private long dateCreated;
     private boolean isSeen, isPaid;
 
@@ -20,8 +20,9 @@ public class PaymentModel implements Parcelable {
                         String noWa,
                         String jenisKelas,
                         String courseId,
-                        String namaKelas,
-                        String hargaKelas,
+                        String materiId,
+                        String namaMateri,
+                        String hargaMateri,
                         String namaBank,
                         long dateCreated,
                         boolean isSeen,
@@ -32,8 +33,9 @@ public class PaymentModel implements Parcelable {
         this.noWa = noWa;
         this.jenisKelas = jenisKelas;
         this.courseId = courseId;
-        this.namaKelas = namaKelas;
-        this.hargaKelas = hargaKelas;
+        this.materiId = materiId;
+        this.namaMateri = namaMateri;
+        this.hargaMateri = hargaMateri;
         this.namaBank = namaBank;
         this.dateCreated = dateCreated;
         this.isSeen = isSeen;
@@ -47,8 +49,9 @@ public class PaymentModel implements Parcelable {
         noWa = in.readString();
         jenisKelas = in.readString();
         courseId = in.readString();
-        namaKelas = in.readString();
-        hargaKelas = in.readString();
+        materiId = in.readString();
+        namaMateri = in.readString();
+        hargaMateri = in.readString();
         namaBank = in.readString();
         paymentId = in.readString();
         dateCreated = in.readLong();
@@ -76,8 +79,9 @@ public class PaymentModel implements Parcelable {
         dest.writeString(noWa);
         dest.writeString(jenisKelas);
         dest.writeString(courseId);
-        dest.writeString(namaKelas);
-        dest.writeString(hargaKelas);
+        dest.writeString(materiId);
+        dest.writeString(namaMateri);
+        dest.writeString(hargaMateri);
         dest.writeString(namaBank);
         dest.writeString(paymentId);
         dest.writeLong(dateCreated);
@@ -114,12 +118,16 @@ public class PaymentModel implements Parcelable {
         return courseId;
     }
 
-    public String getNamaKelas() {
-        return namaKelas;
+    public String getMateriId() {
+        return materiId;
     }
 
-    public String getHargaKelas() {
-        return hargaKelas;
+    public String getNamaMateri() {
+        return namaMateri;
+    }
+
+    public String getHargaMateri() {
+        return hargaMateri;
     }
 
     public String getNamaBank() {
@@ -143,12 +151,12 @@ public class PaymentModel implements Parcelable {
         return isSeen;
     }
 
-    public void setSeen(boolean seen) {
-        isSeen = seen;
-    }
-
     public boolean isPaid() {
         return isPaid;
+    }
+
+    public void setSeen(boolean seen) {
+        isSeen = seen;
     }
 
     public void setPaid(boolean paid) {

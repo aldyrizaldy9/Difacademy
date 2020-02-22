@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,13 +13,13 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.aldy.difacademy.Adapter.MateriAdapter;
+import com.example.aldy.difacademy.Adapter.BlendedMateriAdapter;
+import com.example.aldy.difacademy.Model.CourseModel;
 import com.example.aldy.difacademy.Model.MateriModel;
 import com.example.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -30,16 +29,14 @@ import java.util.ArrayList;
 
 public class BlendedMateriActivity extends AppCompatActivity {
     private static final String TAG = "BlendedMateriActivity";
-    private DocumentSnapshot lastVisible;
-    private boolean loadbaru;
     private ConstraintLayout clBack, clNavbar;
     private RecyclerView rvVideo;
-    private MateriAdapter adapter;
+    private BlendedMateriAdapter adapter;
     private ArrayList<MateriModel> materiModels;
-    private ProgressDialog pd;
-    public static String BLENDED_COURSE_ID;
+    private ProgressDialog progressDialog;
     private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
     private CollectionReference materiRef;
+    private CourseModel courseModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,11 +59,8 @@ public class BlendedMateriActivity extends AppCompatActivity {
         tvNavBar.setText("Materi");
         rvVideo = findViewById(R.id.rv_blended_materi_materi);
         Intent intent = getIntent();
-        BLENDED_COURSE_ID= intent.getStringExtra("courseId");
-
-        pd = new ProgressDialog(this);
-        pd.setMessage("Memuat...");
-        pd.setCancelable(false);
+        courseModel = intent.getParcelableExtra("courseModel");
+        progressDialog = new ProgressDialog(this);
     }
 
     private void onClick() {
@@ -80,76 +74,28 @@ public class BlendedMateriActivity extends AppCompatActivity {
 
     private void setRecyclerView() {
         materiModels = new ArrayList<>();
-        adapter = new MateriAdapter(this, materiModels);
+        adapter = new BlendedMateriAdapter(this, materiModels);
 
         final LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         rvVideo.setLayoutManager(layoutManager);
         rvVideo.setAdapter(adapter);
 
-        rvVideo.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                if (layoutManager.findLastVisibleItemPosition() >= materiModels.size() - 10) {
-                    if (lastVisible != null) {
-                        if (loadbaru) {
-                            loadbaru = false;
-                            Query load;
-                            load = materiRef
-                                    .orderBy("dateCreated", Query.Direction.DESCENDING)
-                                    .startAfter(lastVisible)
-                                    .limit(20);
-                            load.get()
-                                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                                        @Override
-                                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                            if (queryDocumentSnapshots.size() > 0) {
-                                                for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                                                    MateriModel materiModel = documentSnapshot.toObject(MateriModel.class);
-                                                    materiModel.setDocumentId(documentSnapshot.getId());
-
-                                                    materiModels.add(materiModel);
-                                                }
-
-                                                if (queryDocumentSnapshots.size() < 20) {
-                                                    lastVisible = null;
-                                                } else {
-                                                    lastVisible = queryDocumentSnapshots.getDocuments()
-                                                            .get(queryDocumentSnapshots.size() - 1);
-                                                }
-                                                adapter.notifyDataSetChanged();
-                                            }
-                                            loadbaru = true;
-                                        }
-                                    })
-                                    .addOnFailureListener(new OnFailureListener() {
-                                        @Override
-                                        public void onFailure(@NonNull Exception e) {
-                                            loadbaru = true;
-                                            Toast.makeText(BlendedMateriActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
-                        }
-                    }
-                }
-            }
-
-            @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-            }
-        });
     }
 
     private void loadMateriData() {
-        pd.show();
-        materiRef = firebaseFirestore.collection("BlendedCourse").document(BLENDED_COURSE_ID).collection("BlendedMateri");
+        progressDialog.setMessage("Memuat...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
 
-        Query first = materiRef
+
+        materiRef = firebaseFirestore
+                .collection("BlendedCourse")
+                .document(courseModel.getDocumentId())
+                .collection("BlendedMateri");
+
+        materiRef
                 .orderBy("dateCreated", Query.Direction.DESCENDING)
-                .limit(20);
-
-        first.get()
+                .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
@@ -161,23 +107,15 @@ public class BlendedMateriActivity extends AppCompatActivity {
 
                                 materiModels.add(materiModel);
                             }
-
-                            if (queryDocumentSnapshots.size() < 20) {
-                                lastVisible = null;
-                            } else {
-                                lastVisible = queryDocumentSnapshots.getDocuments()
-                                        .get(queryDocumentSnapshots.size() - 1);
-                            }
-
                             adapter.notifyDataSetChanged();
                         }
-                        pd.dismiss();
+                        progressDialog.dismiss();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        pd.dismiss();
+                        progressDialog.dismiss();
                     }
                 });
     }

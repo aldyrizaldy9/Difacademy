@@ -1,54 +1,27 @@
 package com.example.aldy.difacademy.Activity;
 
-import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.example.aldy.difacademy.Model.CourseModel;
-import com.example.aldy.difacademy.Model.OngoingKelasBlendedModel;
-import com.example.aldy.difacademy.Model.OngoingKelasOnlineModel;
 import com.example.aldy.difacademy.R;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.Source;
-
-import static com.example.aldy.difacademy.Activity.LoginActivity.SHARE_PREFS;
-import static com.example.aldy.difacademy.Activity.LoginActivity.USERID_PREFS;
-import static com.example.aldy.difacademy.Activity.MainActivity.JENIS_KELAS;
 
 public class DetailCourseActivity extends AppCompatActivity {
     private ImageView imgThumbnail;
     private TextView tvJudul, tvTag, tvDetail, tvLampiran;
-    private Button btnBeli;
-    private ProgressDialog progressDialog;
+    private Button btnDaftarMateri;
+    private String jenisKelas;
 
     private CourseModel courseModel;
-
-    private FirebaseFirestore firebaseFirestore;
-
-    private String docId;
-
-    private SharedPreferences sharedPreferences;
-
-    private  boolean isPaid = false;
-    private static final String TAG = "DetailCourseActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +29,7 @@ public class DetailCourseActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail_course);
         initView();
         setViewWithParcelable();
-        getUserDocId();
+        onClick();
     }
 
     private void initView() {
@@ -65,10 +38,7 @@ public class DetailCourseActivity extends AppCompatActivity {
         tvTag = findViewById(R.id.tv_detail_course_tag);
         tvDetail = findViewById(R.id.tv_detail_course_detail);
         tvLampiran = findViewById(R.id.tv_detail_course_lampiran);
-        btnBeli = findViewById(R.id.btn_detail_course_beli);
-        sharedPreferences = getSharedPreferences(SHARE_PREFS, MODE_PRIVATE);
-        progressDialog = new ProgressDialog(this);
-
+        btnDaftarMateri = findViewById(R.id.btn_detail_course_daftar_materi);
     }
 
     private void setViewWithParcelable() {
@@ -78,6 +48,7 @@ public class DetailCourseActivity extends AppCompatActivity {
         tvJudul.setText(courseModel.getTitle());
         tvTag.setText(courseModel.getTag());
         tvDetail.setText(courseModel.getDescription());
+        jenisKelas = intent.getStringExtra("jenisKelas");
     }
 
     private void onClick() {
@@ -101,126 +72,22 @@ public class DetailCourseActivity extends AppCompatActivity {
             });
         }
 
-        if (isPaid) {
-            btnBeli.setText("LIHAT MATERI");
-            btnBeli.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent;
-                    if (JENIS_KELAS.equalsIgnoreCase("online")) {
-                        intent = new Intent(DetailCourseActivity.this, OnlineMateriActivity.class);
+        btnDaftarMateri.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent;
+                if (jenisKelas.equalsIgnoreCase("online")) {
+                    intent = new Intent(DetailCourseActivity.this, OnlineMateriActivity.class);
 
-                    } else {
-                        intent = new Intent(DetailCourseActivity.this, BlendedMateriActivity.class);
+                } else {
+                    intent = new Intent(DetailCourseActivity.this, BlendedMateriActivity.class);
 
-                    }
-                    intent.putExtra("courseId", courseModel.getDocumentId());
-                    startActivity(intent);
                 }
-            });
-        } else {
-            btnBeli.setText("BELI COURSE");
-            btnBeli.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(DetailCourseActivity.this, PaymentActivity.class);
-                    intent.putExtra("courseId", courseModel.getDocumentId());
-                    startActivity(intent);
-                }
-            });
-        }
+                intent.putExtra("courseModel", courseModel);
+                startActivity(intent);
+            }
+        });
+
     }
 
-    private void getUserDocId() {
-        progressDialog.setMessage("Memuat...");
-        progressDialog.setCancelable(false);
-        progressDialog.show();
-        Log.d("ASUW", JENIS_KELAS);
-        String userId = sharedPreferences.getString(USERID_PREFS, "");
-        firebaseFirestore = FirebaseFirestore.getInstance();
-        CollectionReference userRef = firebaseFirestore.collection("User");
-        userRef
-                .whereEqualTo("userId", userId)
-                .get(Source.SERVER)
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
-                            docId = queryDocumentSnapshot.getId();
-                        }
-                        if (JENIS_KELAS.equalsIgnoreCase("online")) {
-                            checkOngoingOnline(docId);
-                        } else {
-                            checkOngoingBlended(docId);
-                        }
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        progressDialog.dismiss();
-                        Log.d(TAG, e.toString());
-                    }
-                });
-    }
-
-    private void checkOngoingOnline(final String docId) {
-        CollectionReference onGoingRef = firebaseFirestore
-                .collection("User")
-                .document(docId)
-                .collection("OngoingOnlineCourse");
-        onGoingRef
-                .get(Source.SERVER)
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
-                            OngoingKelasOnlineModel ongoingKelasOnlineModel = queryDocumentSnapshot.toObject(OngoingKelasOnlineModel.class);
-                            if (ongoingKelasOnlineModel.getKelasOnlineId().equals(courseModel.getDocumentId())) {
-                                isPaid = true;
-                                break;
-                            }
-                        }
-                        onClick();
-                        progressDialog.dismiss();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        progressDialog.dismiss();
-                        Log.d(TAG, e.toString());
-                    }
-                });
-    }
-
-    private void checkOngoingBlended(String docId) {
-        CollectionReference onGoingRef = firebaseFirestore
-                .collection("User")
-                .document(docId)
-                .collection("OngoingBlendedCourse");
-        onGoingRef
-                .get(Source.SERVER)
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
-                            OngoingKelasBlendedModel ongoingKelasBlendedModel = queryDocumentSnapshot.toObject(OngoingKelasBlendedModel.class);
-                            if (ongoingKelasBlendedModel.getKelasBlendedId().equals(courseModel.getDocumentId())) {
-                                isPaid = true;
-                                break;
-                            }
-                        }
-                        onClick();
-                        progressDialog.dismiss();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        progressDialog.dismiss();
-                        Log.d(TAG, e.toString());
-                    }
-                });
-    }
 }

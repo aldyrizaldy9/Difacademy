@@ -14,35 +14,34 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.aldy.difacademy.Activity.DetailCourseActivity;
-import com.example.aldy.difacademy.Activity.OnlineMateriActivity;
 import com.example.aldy.difacademy.Model.CourseModel;
 import com.example.aldy.difacademy.R;
 
 import java.util.ArrayList;
 
-public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder> {
+public class OnlineCourseAdapter extends RecyclerView.Adapter<OnlineCourseAdapter.ViewHolder> {
     private Context context;
     private ArrayList<CourseModel> courseModels;
 
-    public CourseAdapter(Context context, ArrayList<CourseModel> courseModels) {
+    public OnlineCourseAdapter(Context context, ArrayList<CourseModel> courseModels) {
         this.context = context;
         this.courseModels = courseModels;
     }
 
     @NonNull
     @Override
-    public CourseAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public OnlineCourseAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         View view = layoutInflater.inflate(R.layout.card_video_with_thumbnail, parent, false);
-        return new CourseAdapter.ViewHolder(view);
+        return new OnlineCourseAdapter.ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CourseAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull OnlineCourseAdapter.ViewHolder holder, int position) {
         final CourseModel courseModel = courseModels.get(position);
         holder.tvJudul.setText(courseModel.getTitle());
         holder.tvTag.setText(courseModel.getTag());
-        holder.tvHarga.setText("Rp " + courseModel.getHarga());
+        holder.tvHarga.setVisibility(View.GONE);
         Glide
                 .with(context)
                 .load(courseModel.getThumbnailUrl())
@@ -51,6 +50,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, DetailCourseActivity.class);
+                intent.putExtra("jenisKelas", "online");
                 intent.putExtra("courseModel", courseModel);
                 context.startActivity(intent);
             }
