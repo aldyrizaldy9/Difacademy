@@ -48,7 +48,7 @@ public class ListVideoMateriActivity extends AppCompatActivity {
     private String userDocId;
 
     private SharedPreferences sharedPreferences;
-    public static boolean IS_PAID;
+    public static boolean IS_PAID = false;
     private MateriModel materiModel;
     private String jenisKelas;
 
@@ -60,6 +60,18 @@ public class ListVideoMateriActivity extends AppCompatActivity {
         onClick();
         setRecyclerView();
         getUserDocId();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        ISPAID = false;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ISPAID = false;
     }
 
     private void initView() {
@@ -159,7 +171,6 @@ public class ListVideoMateriActivity extends AppCompatActivity {
         progressDialog.setCancelable(false);
         progressDialog.show();
 
-        IS_PAID = false;
         String userId = sharedPreferences.getString(USERID_PREFS, "");
         firebaseFirestore = FirebaseFirestore.getInstance();
 
