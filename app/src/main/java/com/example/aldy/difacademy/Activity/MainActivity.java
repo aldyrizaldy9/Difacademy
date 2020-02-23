@@ -271,18 +271,21 @@ public class MainActivity extends AppCompatActivity {
 
     private void setOngoingMateri(final String jenisKelas, String courseId, final String materiId) {
         DocumentReference ongoingRef;
+        final Intent intent;
         if (jenisKelas.equalsIgnoreCase("online")) {
             ongoingRef = firebaseFirestore
                     .collection("OnlineCourse")
                     .document(courseId)
                     .collection("OnlineMateri")
                     .document(materiId);
+            intent = new Intent(MainActivity.this, ListVideoOnlineActivity.class);
         } else {
             ongoingRef = firebaseFirestore
                     .collection("BlendedCourse")
                     .document(courseId)
                     .collection("BlendedMateri")
                     .document(materiId);
+            intent = new Intent(MainActivity.this, ListVideoBlendedActivity.class);
         }
 
         ongoingRef.get()
@@ -302,7 +305,6 @@ public class MainActivity extends AppCompatActivity {
                             clOngoing.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    Intent intent = new Intent(MainActivity.this, ListVideoOnlineActivity.class);
                                     intent.putExtra("jenisKelas", jenisKelas);
                                     intent.putExtra("materiModel", materiModel);
                                     startActivity(intent);
