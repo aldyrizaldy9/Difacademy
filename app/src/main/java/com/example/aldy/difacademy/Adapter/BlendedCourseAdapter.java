@@ -41,7 +41,6 @@ public class BlendedCourseAdapter extends RecyclerView.Adapter<BlendedCourseAdap
         final CourseModel courseModel = courseModels.get(position);
         holder.tvJudul.setText(courseModel.getTitle());
         holder.tvTag.setText(courseModel.getTag());
-        holder.tvHarga.setVisibility(View.GONE);
         Glide
                 .with(context)
                 .load(courseModel.getThumbnailUrl())
@@ -50,7 +49,7 @@ public class BlendedCourseAdapter extends RecyclerView.Adapter<BlendedCourseAdap
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, DetailCourseActivity.class);
-                intent.putExtra("jenisKelas","blended");
+                intent.putExtra("jenisKelas", "blended");
                 intent.putExtra("courseModel", courseModel);
                 context.startActivity(intent);
             }
@@ -64,7 +63,7 @@ public class BlendedCourseAdapter extends RecyclerView.Adapter<BlendedCourseAdap
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private ImageView imgThumbnail;
-        private TextView tvJudul, tvTag, tvHarga;
+        private TextView tvJudul, tvTag;
         private ConstraintLayout clContainer;
 
         public ViewHolder(@NonNull View itemView) {
@@ -73,7 +72,6 @@ public class BlendedCourseAdapter extends RecyclerView.Adapter<BlendedCourseAdap
             tvJudul = itemView.findViewById(R.id.tv_card_video_thumbnail_judul);
             tvTag = itemView.findViewById(R.id.tv_card_video_thumbnail_tag);
             clContainer = itemView.findViewById(R.id.cl_card_video_thumbnail_container);
-            tvHarga = itemView.findViewById(R.id.tv_card_video_thumbnail_harga);
         }
     }
 }

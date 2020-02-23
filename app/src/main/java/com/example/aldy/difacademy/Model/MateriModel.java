@@ -7,6 +7,17 @@ import com.google.firebase.firestore.Exclude;
 
 public class MateriModel implements Parcelable {
 
+    public static final Creator<MateriModel> CREATOR = new Creator<MateriModel>() {
+        @Override
+        public MateriModel createFromParcel(Parcel in) {
+            return new MateriModel(in);
+        }
+
+        @Override
+        public MateriModel[] newArray(int size) {
+            return new MateriModel[size];
+        }
+    };
     private String documentId, title, thumbnailUrl, harga, courseId;
     private long dateCreated;
 
@@ -44,18 +55,6 @@ public class MateriModel implements Parcelable {
     public int describeContents() {
         return 0;
     }
-
-    public static final Creator<MateriModel> CREATOR = new Creator<MateriModel>() {
-        @Override
-        public MateriModel createFromParcel(Parcel in) {
-            return new MateriModel(in);
-        }
-
-        @Override
-        public MateriModel[] newArray(int size) {
-            return new MateriModel[size];
-        }
-    };
 
     @Exclude
     public String getDocumentId() {

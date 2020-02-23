@@ -7,6 +7,17 @@ import com.google.firebase.firestore.Exclude;
 
 public class PaymentModel implements Parcelable {
 
+    public static final Creator<PaymentModel> CREATOR = new Creator<PaymentModel>() {
+        @Override
+        public PaymentModel createFromParcel(Parcel in) {
+            return new PaymentModel(in);
+        }
+
+        @Override
+        public PaymentModel[] newArray(int size) {
+            return new PaymentModel[size];
+        }
+    };
     private String userId, namaUser, email, noWa, jenisKelas, courseId, materiId, namaMateri, hargaMateri, namaBank, paymentId;
     private long dateCreated;
     private boolean isSeen, isPaid;
@@ -58,18 +69,6 @@ public class PaymentModel implements Parcelable {
         isSeen = in.readByte() != 0;
         isPaid = in.readByte() != 0;
     }
-
-    public static final Creator<PaymentModel> CREATOR = new Creator<PaymentModel>() {
-        @Override
-        public PaymentModel createFromParcel(Parcel in) {
-            return new PaymentModel(in);
-        }
-
-        @Override
-        public PaymentModel[] newArray(int size) {
-            return new PaymentModel[size];
-        }
-    };
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
@@ -151,12 +150,12 @@ public class PaymentModel implements Parcelable {
         return isSeen;
     }
 
-    public boolean isPaid() {
-        return isPaid;
-    }
-
     public void setSeen(boolean seen) {
         isSeen = seen;
+    }
+
+    public boolean isPaid() {
+        return isPaid;
     }
 
     public void setPaid(boolean paid) {

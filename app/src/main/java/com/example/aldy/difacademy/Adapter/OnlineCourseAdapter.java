@@ -41,7 +41,6 @@ public class OnlineCourseAdapter extends RecyclerView.Adapter<OnlineCourseAdapte
         final CourseModel courseModel = courseModels.get(position);
         holder.tvJudul.setText(courseModel.getTitle());
         holder.tvTag.setText(courseModel.getTag());
-        holder.tvHarga.setVisibility(View.GONE);
         Glide
                 .with(context)
                 .load(courseModel.getThumbnailUrl())
@@ -64,7 +63,7 @@ public class OnlineCourseAdapter extends RecyclerView.Adapter<OnlineCourseAdapte
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private ImageView imgThumbnail;
-        private TextView tvJudul, tvTag, tvHarga;
+        private TextView tvJudul, tvTag;
         private ConstraintLayout clContainer;
 
         public ViewHolder(@NonNull View itemView) {
@@ -73,7 +72,6 @@ public class OnlineCourseAdapter extends RecyclerView.Adapter<OnlineCourseAdapte
             tvJudul = itemView.findViewById(R.id.tv_card_video_thumbnail_judul);
             tvTag = itemView.findViewById(R.id.tv_card_video_thumbnail_tag);
             clContainer = itemView.findViewById(R.id.cl_card_video_thumbnail_container);
-            tvHarga = itemView.findViewById(R.id.tv_card_video_thumbnail_harga);
         }
     }
 }

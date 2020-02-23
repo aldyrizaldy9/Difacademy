@@ -6,6 +6,17 @@ import android.os.Parcelable;
 import com.google.firebase.firestore.Exclude;
 
 public class CourseModel implements Parcelable {
+    public static final Creator<CourseModel> CREATOR = new Creator<CourseModel>() {
+        @Override
+        public CourseModel createFromParcel(Parcel in) {
+            return new CourseModel(in);
+        }
+
+        @Override
+        public CourseModel[] newArray(int size) {
+            return new CourseModel[size];
+        }
+    };
     private String documentId, title, description, thumbnailUrl, googleDrive, tagId, tag;
     private long dateCreated;
 
@@ -49,18 +60,6 @@ public class CourseModel implements Parcelable {
     public int describeContents() {
         return 0;
     }
-
-    public static final Creator<CourseModel> CREATOR = new Creator<CourseModel>() {
-        @Override
-        public CourseModel createFromParcel(Parcel in) {
-            return new CourseModel(in);
-        }
-
-        @Override
-        public CourseModel[] newArray(int size) {
-            return new CourseModel[size];
-        }
-    };
 
     @Exclude
     public String getDocumentId() {

@@ -19,7 +19,7 @@ import com.example.aldy.difacademy.R;
 
 import java.util.ArrayList;
 
-import static com.example.aldy.difacademy.Activity.ListVideoMateriActivity.IS_PAID;
+import static com.example.aldy.difacademy.Activity.ListVideoBlendedActivity.IS_PAID;
 
 public class VideoBlendedAdapter extends RecyclerView.Adapter<VideoBlendedAdapter.ViewHolder> {
     private Context context;

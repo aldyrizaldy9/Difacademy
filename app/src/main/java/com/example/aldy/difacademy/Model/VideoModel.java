@@ -5,6 +5,17 @@ import android.os.Parcelable;
 
 public class VideoModel implements Parcelable {
 
+    public static final Creator<VideoModel> CREATOR = new Creator<VideoModel>() {
+        @Override
+        public VideoModel createFromParcel(Parcel in) {
+            return new VideoModel(in);
+        }
+
+        @Override
+        public VideoModel[] newArray(int size) {
+            return new VideoModel[size];
+        }
+    };
     String title, description, videoUrl, documentId, courseId, materiId;
     long dateCreated;
 
@@ -46,18 +57,6 @@ public class VideoModel implements Parcelable {
         return 0;
     }
 
-    public static final Creator<VideoModel> CREATOR = new Creator<VideoModel>() {
-        @Override
-        public VideoModel createFromParcel(Parcel in) {
-            return new VideoModel(in);
-        }
-
-        @Override
-        public VideoModel[] newArray(int size) {
-            return new VideoModel[size];
-        }
-    };
-
     public String getTitle() {
         return title;
     }
@@ -87,15 +86,15 @@ public class VideoModel implements Parcelable {
         return dateCreated;
     }
 
+    public void setDateCreated(long dateCreated) {
+        this.dateCreated = dateCreated;
+    }
+
     public String getCourseId() {
         return courseId;
     }
 
     public String getMateriId() {
         return materiId;
-    }
-
-    public void setDateCreated(long dateCreated) {
-        this.dateCreated = dateCreated;
     }
 }

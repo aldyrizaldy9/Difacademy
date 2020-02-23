@@ -37,21 +37,16 @@ import static com.example.aldy.difacademy.Activity.OngoingCourseActivity.USER_DO
  */
 public class OngoingBlendedFragment extends Fragment {
 
-    private RecyclerView rvOngoingBlended;
-    private ArrayList<MateriModel> materiModels;
-    private BlendedMateriAdapter blendedMateriAdapter;
-
-    private ProgressDialog pd;
-
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-    private View rootView;
-
     private static final String TAG = "OngoingBlendedFragment";
-
     DocumentSnapshot lastVisible;
     boolean loadbaru;
     CollectionReference ongoingMateriRef;
+    private RecyclerView rvOngoingBlended;
+    private ArrayList<MateriModel> materiModels;
+    private BlendedMateriAdapter blendedMateriAdapter;
+    private ProgressDialog pd;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private View rootView;
 
     public OngoingBlendedFragment() {
         // Required empty public constructor

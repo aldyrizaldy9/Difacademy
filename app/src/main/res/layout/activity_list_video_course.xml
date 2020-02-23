@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/backgroundCoklat"
-    tools:context=".Activity.ListVideoMateriActivity">
+    tools:context=".Activity.ListVideoOnlineActivity">
 
     <include
         android:id="@+id/include"

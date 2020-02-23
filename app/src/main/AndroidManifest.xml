@@ -30,10 +30,18 @@
         <activity android:name=".Activity.OpAddOnlineMateriActivity" />
         <activity android:name=".Activity.OpOnlineCourseActivity" />
         <activity android:name=".Activity.OpBannerActivity" />
-        <activity android:name=".Activity.OnlineMateriActivity" />
-        <activity android:name=".Activity.BlendedMateriActivity" />
-        <activity android:name=".Activity.OnlineCourseActivity" />
-        <activity android:name=".Activity.BlendedCourseActivity" />
+        <activity
+            android:name=".Activity.OnlineMateriActivity"
+            android:screenOrientation="sensorPortrait" />
+        <activity
+            android:name=".Activity.BlendedMateriActivity"
+            android:screenOrientation="sensorPortrait" />
+        <activity
+            android:name=".Activity.OnlineCourseActivity"
+            android:screenOrientation="sensorPortrait" />
+        <activity
+            android:name=".Activity.BlendedCourseActivity"
+            android:screenOrientation="sensorPortrait" />
         <activity
             android:name=".Activity.WatchVideoActivity"
             android:configChanges="orientation|screenSize|layoutDirection" />
@@ -74,7 +82,10 @@
             android:name=".Activity.PaymentActivity"
             android:screenOrientation="sensorPortrait" />
         <activity
-            android:name=".Activity.ListVideoMateriActivity"
+            android:name=".Activity.ListVideoOnlineActivity"
+            android:screenOrientation="sensorPortrait" />
+        <activity
+            android:name=".Activity.ListVideoBlendedActivity"
             android:screenOrientation="sensorPortrait" />
         <activity
             android:name=".Activity.DetailCourseActivity"
@@ -94,9 +105,6 @@
         <activity
             android:name=".Activity.WatchYoutubeVideoActivity"
             android:configChanges="orientation|keyboard|keyboardHidden|screenSize|screenLayout|uiMode" />
-        <activity
-            android:name=".Activity.ListBlendedCourseActivity"
-            android:screenOrientation="sensorPortrait" />
         <activity
             android:name=".Activity.ListFreeCourseActivity"
             android:screenOrientation="sensorPortrait" />
