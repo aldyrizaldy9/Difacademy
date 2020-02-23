@@ -54,12 +54,12 @@ public class OpMateriAdapter extends RecyclerView.Adapter<OpMateriAdapter.ViewHo
             @Override
             public void onClick(View v) {
                 Intent intent;
-                if (OP_JENIS_KELAS.equals("blended")){
+                if (OP_JENIS_KELAS.equals("blended")) {
                     intent = new Intent(context, OpAddBlendedMateriActivity.class);
                     intent.putExtra("blended_materi_model", model);
                     intent.putExtra("index", position);
                     context.startActivity(intent);
-                } else if (OP_JENIS_KELAS.equals("online")){
+                } else if (OP_JENIS_KELAS.equals("online")) {
                     intent = new Intent(context, OpAddOnlineMateriActivity.class);
                     intent.putExtra("online_materi_model", model);
                     intent.putExtra("index", position);
@@ -74,7 +74,7 @@ public class OpMateriAdapter extends RecyclerView.Adapter<OpMateriAdapter.ViewHo
         return materiModels.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView tvJudul, tvTag, tvDeskripsi;
         private ImageView imgThumbnail;
         private ConstraintLayout container;

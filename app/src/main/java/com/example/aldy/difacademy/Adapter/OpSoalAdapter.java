@@ -50,12 +50,12 @@ public class OpSoalAdapter extends RecyclerView.Adapter<OpSoalAdapter.ViewHolder
             @Override
             public void onClick(View v) {
                 Intent intent;
-                if (OP_JENIS_KELAS.equals("blended")){
+                if (OP_JENIS_KELAS.equals("blended")) {
                     intent = new Intent(context, OpAddBlendedSoalActivity.class);
                     intent.putExtra("blended_soal_model", model);
                     intent.putExtra("index", position);
                     context.startActivity(intent);
-                } else if (OP_JENIS_KELAS.equals("online")){
+                } else if (OP_JENIS_KELAS.equals("online")) {
                     intent = new Intent(context, OpAddOnlineSoalActivity.class);
                     intent.putExtra("online_soal_model", model);
                     intent.putExtra("index", position);
@@ -70,7 +70,7 @@ public class OpSoalAdapter extends RecyclerView.Adapter<OpSoalAdapter.ViewHolder
         return soalModels.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView tvJudul, tvTag, tvDeskripsi;
         private ImageView imgThumbnail;
         private ConstraintLayout container;

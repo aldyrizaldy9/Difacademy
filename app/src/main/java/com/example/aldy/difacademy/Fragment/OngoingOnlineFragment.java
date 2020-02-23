@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -38,21 +37,16 @@ import static com.example.aldy.difacademy.Activity.OngoingCourseActivity.USER_DO
  */
 public class OngoingOnlineFragment extends Fragment {
 
-    private RecyclerView rvOngoingOnline;
-    private ArrayList<MateriModel> materiModels;
-    private OnlineMateriAdapter onlineMateriAdapter;
-
-    private ProgressDialog pd;
-
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-    private View rootView;
-
     private static final String TAG = "OngoingOnlineFragment";
-
     DocumentSnapshot lastVisible;
     boolean loadbaru;
     CollectionReference ongoingMateriRef;
+    private RecyclerView rvOngoingOnline;
+    private ArrayList<MateriModel> materiModels;
+    private OnlineMateriAdapter onlineMateriAdapter;
+    private ProgressDialog pd;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private View rootView;
 
     public OngoingOnlineFragment() {
         // Required empty public constructor

@@ -35,20 +35,18 @@ import java.util.ArrayList;
 import static com.example.aldy.difacademy.Activity.LoginActivity.SHARE_PREFS;
 import static com.example.aldy.difacademy.Activity.LoginActivity.USERID_PREFS;
 
-public class ListVideoMateriActivity extends AppCompatActivity {
-    private static final String TAG = "ListVideoMateriActivity";
+public class ListVideoOnlineActivity extends AppCompatActivity {
+    private static final String TAG = "ListVideoOnlineActivity";
+    public static boolean IS_PAID = false;
     private ConstraintLayout clBack;
     private ConstraintLayout clQuiz;
     private RecyclerView rvListVideoCourse;
     private ArrayList<VideoModel> videoModels;
     private VideoOnlineAdapter videoOnlineAdapter;
     private ProgressDialog progressDialog;
-
     private FirebaseFirestore firebaseFirestore;
     private String userDocId;
-
     private SharedPreferences sharedPreferences;
-    public static boolean IS_PAID = false;
     private MateriModel materiModel;
     private String jenisKelas;
 
@@ -65,13 +63,13 @@ public class ListVideoMateriActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        ISPAID = false;
+        IS_PAID = false;
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        ISPAID = false;
+        IS_PAID = false;
     }
 
     private void initView() {
@@ -103,12 +101,12 @@ public class ListVideoMateriActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (IS_PAID) {
-                    Intent intent = new Intent(ListVideoMateriActivity.this, QuizActivity.class);
+                    Intent intent = new Intent(ListVideoOnlineActivity.this, QuizActivity.class);
                     intent.putExtra("jenisKelas", jenisKelas);
                     intent.putExtra("materiModel", materiModel);
                     startActivity(intent);
                 } else {
-                    Toast.makeText(ListVideoMateriActivity.this, "Anda belum membeli materi ini!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ListVideoOnlineActivity.this, "Anda belum membeli materi ini!", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -124,22 +122,13 @@ public class ListVideoMateriActivity extends AppCompatActivity {
 
 
     private void loadData() {
-        CollectionReference videoRef;
-        if (jenisKelas.equalsIgnoreCase("online")) {
-            videoRef = firebaseFirestore
-                    .collection("OnlineCourse")
-                    .document(materiModel.getCourseId())
-                    .collection("OnlineMateri")
-                    .document(materiModel.getDocumentId())
-                    .collection("OnlineVideo");
-        } else {
-            videoRef = firebaseFirestore
-                    .collection("BlendedCourse")
-                    .document(materiModel.getCourseId())
-                    .collection("BlendedMateri")
-                    .document(materiModel.getDocumentId())
-                    .collection("BlendedVideo");
-        }
+        CollectionReference videoRef = firebaseFirestore
+                .collection("OnlineCourse")
+                .document(materiModel.getCourseId())
+                .collection("OnlineMateri")
+                .document(materiModel.getDocumentId())
+                .collection("OnlineVideo");
+
 
         videoRef
                 .orderBy("dateCreated", Query.Direction.ASCENDING)
@@ -184,11 +173,9 @@ public class ListVideoMateriActivity extends AppCompatActivity {
                         for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
                             userDocId = queryDocumentSnapshot.getId();
                         }
-                        if (jenisKelas.equalsIgnoreCase("online")) {
-                            checkOngoing(userDocId, "OngoingOnlineMateri");
-                        } else {
-                            checkOngoing(userDocId, "OngoingBlendedMateri");
-                        }
+
+                        checkOngoing(userDocId);
+
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -200,11 +187,11 @@ public class ListVideoMateriActivity extends AppCompatActivity {
                 });
     }
 
-    private void checkOngoing(final String userDocId, String jenisMateri) {
+    private void checkOngoing(final String userDocId) {
         CollectionReference onGoingRef = firebaseFirestore
                 .collection("User")
                 .document(userDocId)
-                .collection(jenisMateri);
+                .collection("OngoingOnlineMateri");
         onGoingRef
                 .get(Source.SERVER)
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {

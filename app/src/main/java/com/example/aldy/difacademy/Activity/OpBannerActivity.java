@@ -1,9 +1,5 @@
 package com.example.aldy.difacademy.Activity;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -15,6 +11,10 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.example.aldy.difacademy.R;
@@ -69,7 +69,7 @@ public class OpBannerActivity extends AppCompatActivity {
         }
     }
 
-    private void initView(){
+    private void initView() {
         imgBanner = findViewById(R.id.img_op_banner);
         btnFile = findViewById(R.id.btn_op_banner_file);
         btnSimpan = findViewById(R.id.btn_op_banner_upload);
@@ -83,14 +83,14 @@ public class OpBannerActivity extends AppCompatActivity {
         pd.setMessage("Loading...");
     }
 
-    private void loadBanner(){
+    private void loadBanner() {
         DocumentReference doc = db.collection("BannerPhotoUrl")
                 .document("bannerphotourl");
         doc.get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        if (documentSnapshot != null){
+                        if (documentSnapshot != null) {
                             String coba = documentSnapshot.getString("url");
                             bannerUrl = coba;
                             Glide.with(OpBannerActivity.this)
@@ -102,7 +102,7 @@ public class OpBannerActivity extends AppCompatActivity {
                 });
     }
 
-    private void onClick(){
+    private void onClick() {
         btnFile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -112,7 +112,7 @@ public class OpBannerActivity extends AppCompatActivity {
         btnSimpan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isNetworkConnected()){
+                if (isNetworkConnected()) {
                     pd.show();
                     uploadImageToFirebase();
                 } else {
@@ -122,13 +122,13 @@ public class OpBannerActivity extends AppCompatActivity {
         });
     }
 
-    private void getImageFromGallery(){
+    private void getImageFromGallery() {
         Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setType("image/*");
         startActivityForResult(intent, PHOTO_PICK_REQUEST_CODE);
     }
 
-    private void deleteCurrentImage(){
+    private void deleteCurrentImage() {
         final StorageReference deleteRef = firebaseStorage.getReferenceFromUrl(bannerUrl);
         deleteRef.delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -140,7 +140,7 @@ public class OpBannerActivity extends AppCompatActivity {
                 });
     }
 
-    private void uploadImageToFirebase(){
+    private void uploadImageToFirebase() {
         final StorageReference ref = firebaseStorage.getReference().child("BannerPhoto/" + UUID.randomUUID().toString());
         ref.putFile(imageUri)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -165,7 +165,7 @@ public class OpBannerActivity extends AppCompatActivity {
                 });
     }
 
-    private void updateBannerUrl(String bannerUrl){
+    private void updateBannerUrl(String bannerUrl) {
         HashMap<String, Object> update = new HashMap<>();
         update.put("url", bannerUrl);
 

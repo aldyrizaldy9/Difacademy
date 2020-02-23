@@ -6,6 +6,17 @@ import android.os.Parcelable;
 import com.google.firebase.firestore.Exclude;
 
 public class SoalModel implements Parcelable {
+    public static final Creator<SoalModel> CREATOR = new Creator<SoalModel>() {
+        @Override
+        public SoalModel createFromParcel(Parcel in) {
+            return new SoalModel(in);
+        }
+
+        @Override
+        public SoalModel[] newArray(int size) {
+            return new SoalModel[size];
+        }
+    };
     long dateCreated;
     String soal, jwbA, jwbB, jwbC, jwbD, jwbE, jawabanBenar, documentId;
 
@@ -52,18 +63,6 @@ public class SoalModel implements Parcelable {
     public int describeContents() {
         return 0;
     }
-
-    public static final Creator<SoalModel> CREATOR = new Creator<SoalModel>() {
-        @Override
-        public SoalModel createFromParcel(Parcel in) {
-            return new SoalModel(in);
-        }
-
-        @Override
-        public SoalModel[] newArray(int size) {
-            return new SoalModel[size];
-        }
-    };
 
     public long getDateCreated() {
         return dateCreated;

@@ -19,7 +19,7 @@ import com.example.aldy.difacademy.R;
 
 import java.util.ArrayList;
 
-import static com.example.aldy.difacademy.Activity.ListVideoMateriActivity.IS_PAID;
+import static com.example.aldy.difacademy.Activity.ListVideoOnlineActivity.IS_PAID;
 
 public class VideoOnlineAdapter extends RecyclerView.Adapter<VideoOnlineAdapter.ViewHolder> {
     private Context context;
@@ -53,7 +53,7 @@ public class VideoOnlineAdapter extends RecyclerView.Adapter<VideoOnlineAdapter.
                     public void onClick(View v) {
                         Intent intent = new Intent(context, PaymentActivity.class);
                         intent.putExtra("videoModel", videoModel);
-                        intent.putExtra("jenisKelas","online");
+                        intent.putExtra("jenisKelas", "online");
                         context.startActivity(intent);
                     }
                 });

@@ -1,11 +1,5 @@
 package com.example.aldy.difacademy.Activity;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -13,13 +7,18 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.bumptech.glide.Glide;
 import com.example.aldy.difacademy.Model.MateriModel;
@@ -456,7 +455,7 @@ public class OpAddOnlineMateriActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
-    private void hapusMateri(){
+    private void hapusMateri() {
         //ambil link online video di storage
         //hapus online video document
         //hapus online video collection
@@ -469,7 +468,7 @@ public class OpAddOnlineMateriActivity extends AppCompatActivity {
         getListVideoUrl();
     }
 
-    private void getListVideoUrl(){
+    private void getListVideoUrl() {
         CollectionReference ref = onlineMateriRef.document(onlineMateriDocId)
                 .collection("OnlineVideo");
 
@@ -477,7 +476,7 @@ public class OpAddOnlineMateriActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                             VideoModel model = documentSnapshot.toObject(VideoModel.class);
                             listVideoUrl.add(model.getVideoUrl());
                         }
@@ -486,7 +485,7 @@ public class OpAddOnlineMateriActivity extends AppCompatActivity {
                 });
     }
 
-    private void hapusOnlineVideoDoc(){
+    private void hapusOnlineVideoDoc() {
         final CollectionReference ref = onlineMateriRef.document(onlineMateriDocId)
                 .collection("OnlineVideo");
 
@@ -494,7 +493,7 @@ public class OpAddOnlineMateriActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                             DocumentReference docRef = ref.document(documentSnapshot.getId());
                             docRef.delete();
                         }
@@ -503,15 +502,15 @@ public class OpAddOnlineMateriActivity extends AppCompatActivity {
                 });
     }
 
-    private void hapusOnlineVideoStorage(){
-        for (String url : listVideoUrl){
+    private void hapusOnlineVideoStorage() {
+        for (String url : listVideoUrl) {
             StorageReference ref = firebaseStorage.getReferenceFromUrl(url);
             ref.delete();
         }
         hapusOnlineSoalDoc();
     }
 
-    private void hapusOnlineSoalDoc(){
+    private void hapusOnlineSoalDoc() {
         final CollectionReference ref = onlineMateriRef.document(onlineMateriDocId)
                 .collection("OnlineSoal");
 
@@ -519,7 +518,7 @@ public class OpAddOnlineMateriActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                             DocumentReference docRef = ref.document(documentSnapshot.getId());
                             docRef.delete();
                         }
@@ -528,7 +527,7 @@ public class OpAddOnlineMateriActivity extends AppCompatActivity {
                 });
     }
 
-    private void hapusOnlineMateriDoc(){
+    private void hapusOnlineMateriDoc() {
         DocumentReference ref = onlineMateriRef.document(onlineMateriDocId);
         ref.delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -539,7 +538,7 @@ public class OpAddOnlineMateriActivity extends AppCompatActivity {
                 });
     }
 
-    private void hapusOnlineMateriStorage(){
+    private void hapusOnlineMateriStorage() {
         StorageReference ref = firebaseStorage.getReferenceFromUrl(thumbnailUrl);
         ref.delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {

@@ -1,12 +1,5 @@
 package com.example.aldy.difacademy.Activity;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,6 +7,13 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.aldy.difacademy.Adapter.OpMateriAdapter;
 import com.example.aldy.difacademy.Model.MateriModel;
@@ -88,7 +88,7 @@ public class OpBlendedMateriActivity extends AppCompatActivity {
         adapter.notifyDataSetChanged();
     }
 
-    private void initView(){
+    private void initView() {
         tvNavbar = findViewById(R.id.tv_navbar);
         tvNavbar.setText("Materi Kelas Blended");
         clBack = findViewById(R.id.cl_icon1);
@@ -109,7 +109,7 @@ public class OpBlendedMateriActivity extends AppCompatActivity {
         pd = new ProgressDialog(this);
     }
 
-    private void onClick(){
+    private void onClick() {
         clAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -119,7 +119,7 @@ public class OpBlendedMateriActivity extends AppCompatActivity {
         });
     }
 
-    private void setRecyclerView(){
+    private void setRecyclerView() {
         final LinearLayoutManager manager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
         rvBlendedMateri.setLayoutManager(manager);
         adapter = new OpMateriAdapter(this, materiModels);
@@ -177,7 +177,7 @@ public class OpBlendedMateriActivity extends AppCompatActivity {
         });
     }
 
-    private void loadData(){
+    private void loadData() {
         pd.setMessage("Memuat...");
         pd.show();
 
@@ -190,14 +190,14 @@ public class OpBlendedMateriActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         materiModels.clear();
-                        if (queryDocumentSnapshots.size() > 0){
-                            for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
+                        if (queryDocumentSnapshots.size() > 0) {
+                            for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                                 MateriModel newModel = documentSnapshot.toObject(MateriModel.class);
                                 newModel.setDocumentId(documentSnapshot.getId());
                                 materiModels.add(newModel);
                             }
 
-                            if (queryDocumentSnapshots.size() < 20){
+                            if (queryDocumentSnapshots.size() < 20) {
                                 lastVisible = null;
                             } else {
                                 lastVisible = queryDocumentSnapshots.getDocuments()

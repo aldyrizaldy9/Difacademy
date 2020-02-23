@@ -77,7 +77,7 @@ public class OpNotifGradActivity extends AppCompatActivity {
         tvEmail.setText(graduationModel.getEmail());
         tvNoWa.setText(graduationModel.getNoWa());
         tvNamaKelas.setText(graduationModel.getNamaMateri());
-        if(graduationModel.isDone()){
+        if (graduationModel.isDone()) {
             btnTandai.setEnabled(false);
         }
     }
@@ -110,7 +110,7 @@ public class OpNotifGradActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_VIEW);
                 String urlNew = graduationModel.getNoWa();
-                if (urlNew.substring(0,3).equals("+62")){
+                if (urlNew.substring(0, 3).equals("+62")) {
                     urlNew = "http://wa.me/" + urlNew;
                 } else {
                     urlNew = "http://wa.me/+62" + urlNew.substring(1);

@@ -1,11 +1,5 @@
 package com.example.aldy.difacademy.Activity;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -24,6 +18,12 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.bumptech.glide.Glide;
 import com.example.aldy.difacademy.Model.CourseModel;
@@ -353,7 +353,7 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        if (imageUri != null){
+                        if (imageUri != null) {
                             deletePhotoInFirebase(model);
                         } else {
                             if (addMateri) {
@@ -516,7 +516,7 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
-    private void hapusKelas(){
+    private void hapusKelas() {
         //ambil link blended video di storage
         //hapus blended video document
         //hapus blended video collection
@@ -533,7 +533,7 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
         getListVideoUrl();
     }
 
-    private void getListVideoUrl(){
+    private void getListVideoUrl() {
         final CollectionReference ref1 = blendedCourseRef
                 .document(blendedCourseDocId)
                 .collection("BlendedMateri");
@@ -542,7 +542,7 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                             MateriModel model = documentSnapshot.toObject(MateriModel.class);
                             model.setDocumentId(documentSnapshot.getId());
 
@@ -555,12 +555,12 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
                 });
     }
 
-    private void getListVideoUrl2(CollectionReference ref, final String docRef){
+    private void getListVideoUrl2(CollectionReference ref, final String docRef) {
         ref.get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                             VideoModel model = documentSnapshot.toObject(VideoModel.class);
                             listBlendedVideoUrl.add(model.getVideoUrl());
                         }
@@ -569,7 +569,7 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
                 });
     }
 
-    private void hapusBlendedVideoDoc(final String docRef){
+    private void hapusBlendedVideoDoc(final String docRef) {
         final CollectionReference ref = blendedCourseRef
                 .document(blendedCourseDocId)
                 .collection("BlendedMateri")
@@ -580,7 +580,7 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                             DocumentReference docRef = ref.document(documentSnapshot.getId());
                             docRef.delete();
                         }
@@ -589,15 +589,15 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
                 });
     }
 
-    private void hapusBlendedVideoStorage(String docRef){
-        for (String url : listBlendedVideoUrl){
+    private void hapusBlendedVideoStorage(String docRef) {
+        for (String url : listBlendedVideoUrl) {
             StorageReference ref = firebaseStorage.getReferenceFromUrl(url);
             ref.delete();
         }
         hapusBlendedSoalDoc(docRef);
     }
 
-    private void hapusBlendedSoalDoc(final String docRef){
+    private void hapusBlendedSoalDoc(final String docRef) {
         final CollectionReference ref = blendedCourseRef
                 .document(blendedCourseDocId)
                 .collection("BlendedMateri")
@@ -608,7 +608,7 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                             DocumentReference docRef2 = ref.document(documentSnapshot.getId());
                             docRef2.delete();
                         }
@@ -617,7 +617,7 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
                 });
     }
 
-    private void getListThumbnailUrl(){
+    private void getListThumbnailUrl() {
         CollectionReference ref = blendedCourseRef.document(blendedCourseDocId)
                 .collection("BlendedMateri");
 
@@ -625,7 +625,7 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                             MateriModel model = documentSnapshot.toObject(MateriModel.class);
                             listBlendedMateriThumbnailUrl.add(model.getThumbnailUrl());
                         }
@@ -634,7 +634,7 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
                 });
     }
 
-    private void hapusBlendedMateriDoc(){
+    private void hapusBlendedMateriDoc() {
         final CollectionReference ref = blendedCourseRef
                 .document(blendedCourseDocId)
                 .collection("BlendedMateri");
@@ -643,7 +643,7 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                             DocumentReference docRef = ref.document(documentSnapshot.getId());
                             docRef.delete();
                         }
@@ -652,15 +652,15 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
                 });
     }
 
-    private void hapusBlendedMateriStorage(){
-        for (String url : listBlendedMateriThumbnailUrl){
+    private void hapusBlendedMateriStorage() {
+        for (String url : listBlendedMateriThumbnailUrl) {
             StorageReference ref = firebaseStorage.getReferenceFromUrl(url);
             ref.delete();
         }
         hapusBlendedCourseDoc();
     }
 
-    private void hapusBlendedCourseDoc(){
+    private void hapusBlendedCourseDoc() {
         DocumentReference ref = blendedCourseRef.document(blendedCourseDocId);
         ref.delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -671,7 +671,7 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
                 });
     }
 
-    private void hapusBlendedCourseStorage(){
+    private void hapusBlendedCourseStorage() {
         StorageReference ref = firebaseStorage.getReferenceFromUrl(thumbnailUrl);
         ref.delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {

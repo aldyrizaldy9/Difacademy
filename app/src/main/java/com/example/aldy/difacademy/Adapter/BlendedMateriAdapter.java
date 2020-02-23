@@ -13,7 +13,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.aldy.difacademy.Activity.ListVideoMateriActivity;
+import com.example.aldy.difacademy.Activity.ListVideoBlendedActivity;
 import com.example.aldy.difacademy.Model.MateriModel;
 import com.example.aldy.difacademy.R;
 
@@ -40,8 +40,7 @@ public class BlendedMateriAdapter extends RecyclerView.Adapter<BlendedMateriAdap
     public void onBindViewHolder(@NonNull BlendedMateriAdapter.ViewHolder holder, int position) {
         final MateriModel materiModel = materiModels.get(position);
         holder.tvJudul.setText(materiModel.getTitle());
-        holder.tvHarga.setVisibility(View.GONE);
-        holder.tvTag.setText(materiModel.getHarga());
+        holder.tvTag.setText("Rp " + materiModel.getHarga());
         Glide
                 .with(context)
                 .load(materiModel.getThumbnailUrl())
@@ -49,8 +48,8 @@ public class BlendedMateriAdapter extends RecyclerView.Adapter<BlendedMateriAdap
         holder.clContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, ListVideoMateriActivity.class);
-                intent.putExtra("jenisKelas","blended");
+                Intent intent = new Intent(context, ListVideoBlendedActivity.class);
+                intent.putExtra("jenisKelas", "blended");
                 intent.putExtra("materiModel", materiModel);
                 context.startActivity(intent);
             }
@@ -64,14 +63,13 @@ public class BlendedMateriAdapter extends RecyclerView.Adapter<BlendedMateriAdap
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private ImageView imgThumbnail;
-        private TextView tvJudul, tvHarga, tvTag;
+        private TextView tvJudul, tvTag;
         private ConstraintLayout clContainer;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             imgThumbnail = itemView.findViewById(R.id.img_card_video_thumbnail);
             tvJudul = itemView.findViewById(R.id.tv_card_video_thumbnail_judul);
-            tvHarga = itemView.findViewById(R.id.tv_card_video_thumbnail_harga);
             tvTag = itemView.findViewById(R.id.tv_card_video_thumbnail_tag);
             clContainer = itemView.findViewById(R.id.cl_card_video_thumbnail_container);
         }

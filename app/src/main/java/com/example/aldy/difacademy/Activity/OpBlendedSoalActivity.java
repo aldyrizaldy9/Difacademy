@@ -1,12 +1,5 @@
 package com.example.aldy.difacademy.Activity;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,6 +7,13 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.aldy.difacademy.Adapter.OpSoalAdapter;
 import com.example.aldy.difacademy.Model.SoalModel;
@@ -91,7 +91,7 @@ public class OpBlendedSoalActivity extends AppCompatActivity {
         adapter.notifyDataSetChanged();
     }
 
-    private void initView(){
+    private void initView() {
         tvNavbar = findViewById(R.id.tv_navbar);
         tvNavbar.setText("Soal Materi Kelas Blended");
         clBack = findViewById(R.id.cl_icon1);
@@ -112,7 +112,7 @@ public class OpBlendedSoalActivity extends AppCompatActivity {
         pd = new ProgressDialog(this);
     }
 
-    private void onClick(){
+    private void onClick() {
         clAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -122,7 +122,7 @@ public class OpBlendedSoalActivity extends AppCompatActivity {
         });
     }
 
-    private void setRecyclerView(){
+    private void setRecyclerView() {
         final LinearLayoutManager manager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
         rvBlendedSoal.setLayoutManager(manager);
         adapter = new OpSoalAdapter(this, soalModels);
@@ -180,7 +180,7 @@ public class OpBlendedSoalActivity extends AppCompatActivity {
         });
     }
 
-    private void loadData(){
+    private void loadData() {
         pd.setMessage("Memuat...");
         pd.show();
 
@@ -193,14 +193,14 @@ public class OpBlendedSoalActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         soalModels.clear();
-                        if (queryDocumentSnapshots.size() > 0){
-                            for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
+                        if (queryDocumentSnapshots.size() > 0) {
+                            for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                                 SoalModel newModel = documentSnapshot.toObject(SoalModel.class);
                                 newModel.setDocumentId(documentSnapshot.getId());
                                 soalModels.add(newModel);
                             }
 
-                            if (queryDocumentSnapshots.size() < 20){
+                            if (queryDocumentSnapshots.size() < 20) {
                                 lastVisible = null;
                             } else {
                                 lastVisible = queryDocumentSnapshots.getDocuments()

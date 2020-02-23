@@ -1,11 +1,5 @@
 package com.example.aldy.difacademy.Activity;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -19,6 +13,12 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.bumptech.glide.Glide;
 import com.example.aldy.difacademy.Model.MateriModel;
@@ -455,7 +455,7 @@ public class OpAddBlendedMateriActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
-    private void hapusMateri(){
+    private void hapusMateri() {
         //ambil link blended video di storage
         //hapus blended video document
         //hapus blended video collection
@@ -468,7 +468,7 @@ public class OpAddBlendedMateriActivity extends AppCompatActivity {
         getListVideoUrl();
     }
 
-    private void getListVideoUrl(){
+    private void getListVideoUrl() {
         CollectionReference ref = blendedMateriRef.document(blendedMateriDocId)
                 .collection("BlendedVideo");
 
@@ -476,7 +476,7 @@ public class OpAddBlendedMateriActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                             VideoModel model = documentSnapshot.toObject(VideoModel.class);
                             listVideoUrl.add(model.getVideoUrl());
                         }
@@ -485,7 +485,7 @@ public class OpAddBlendedMateriActivity extends AppCompatActivity {
                 });
     }
 
-    private void hapusBlendedVideoDoc(){
+    private void hapusBlendedVideoDoc() {
         final CollectionReference ref = blendedMateriRef.document(blendedMateriDocId)
                 .collection("BlendedVideo");
 
@@ -493,7 +493,7 @@ public class OpAddBlendedMateriActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                             DocumentReference docRef = ref.document(documentSnapshot.getId());
                             docRef.delete();
                         }
@@ -502,15 +502,15 @@ public class OpAddBlendedMateriActivity extends AppCompatActivity {
                 });
     }
 
-    private void hapusBlendedVideoStorage(){
-        for (String url : listVideoUrl){
+    private void hapusBlendedVideoStorage() {
+        for (String url : listVideoUrl) {
             StorageReference ref = firebaseStorage.getReferenceFromUrl(url);
             ref.delete();
         }
         hapusBlendedSoalDoc();
     }
 
-    private void hapusBlendedSoalDoc(){
+    private void hapusBlendedSoalDoc() {
         final CollectionReference ref = blendedMateriRef.document(blendedMateriDocId)
                 .collection("BlendedSoal");
 
@@ -518,7 +518,7 @@ public class OpAddBlendedMateriActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                             DocumentReference docRef = ref.document(documentSnapshot.getId());
                             docRef.delete();
                         }
@@ -527,7 +527,7 @@ public class OpAddBlendedMateriActivity extends AppCompatActivity {
                 });
     }
 
-    private void hapusBlendedMateriDoc(){
+    private void hapusBlendedMateriDoc() {
         DocumentReference ref = blendedMateriRef.document(blendedMateriDocId);
         ref.delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -538,7 +538,7 @@ public class OpAddBlendedMateriActivity extends AppCompatActivity {
                 });
     }
 
-    private void hapusBlendedMateriStorage(){
+    private void hapusBlendedMateriStorage() {
         StorageReference ref = firebaseStorage.getReferenceFromUrl(thumbnailUrl);
         ref.delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {

@@ -302,7 +302,7 @@ public class MainActivity extends AppCompatActivity {
                             clOngoing.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    Intent intent = new Intent(MainActivity.this, ListVideoMateriActivity.class);
+                                    Intent intent = new Intent(MainActivity.this, ListVideoOnlineActivity.class);
                                     intent.putExtra("jenisKelas", jenisKelas);
                                     intent.putExtra("materiModel", materiModel);
                                     startActivity(intent);

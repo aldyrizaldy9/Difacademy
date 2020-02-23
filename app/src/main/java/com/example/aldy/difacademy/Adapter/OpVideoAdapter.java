@@ -50,12 +50,12 @@ public class OpVideoAdapter extends RecyclerView.Adapter<OpVideoAdapter.ViewHold
             @Override
             public void onClick(View v) {
                 Intent intent;
-                if (OP_JENIS_KELAS.equals("blended")){
+                if (OP_JENIS_KELAS.equals("blended")) {
                     intent = new Intent(context, OpAddBlendedVideoActivity.class);
                     intent.putExtra("blended_video_model", model);
                     intent.putExtra("index", position);
                     context.startActivity(intent);
-                } else if (OP_JENIS_KELAS.equals("online")){
+                } else if (OP_JENIS_KELAS.equals("online")) {
                     intent = new Intent(context, OpAddOnlineVideoActivity.class);
                     intent.putExtra("online_video_model", model);
                     intent.putExtra("index", position);
@@ -70,7 +70,7 @@ public class OpVideoAdapter extends RecyclerView.Adapter<OpVideoAdapter.ViewHold
         return videoModels.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView tvJudul, tvTag, tvDeskripsi;
         private ImageView imgThumbnail;
         private ConstraintLayout container;
