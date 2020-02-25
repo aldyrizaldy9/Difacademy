@@ -54,7 +54,7 @@ public class OpAddBlendedMateriActivity extends AppCompatActivity {
 
     ImageView imgThumbnail;
     Button btnAddVideo, btnAddSoal, btnHapus, btnSimpan;
-    EditText edtJudul;
+    EditText edtJudul, edtHarga;
     ConstraintLayout clAddPhoto;
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -113,6 +113,7 @@ public class OpAddBlendedMateriActivity extends AppCompatActivity {
         btnSimpan = findViewById(R.id.btn_op_add_blended_materi_simpan);
         clAddPhoto = findViewById(R.id.cl_op_add_blended_materi_add_photo);
         edtJudul = findViewById(R.id.edt_op_add_blended_materi_judul);
+        edtHarga = findViewById(R.id.edt_op_add_blended_materi_harga);
     }
 
     private void checkIntent() {
@@ -128,6 +129,7 @@ public class OpAddBlendedMateriActivity extends AppCompatActivity {
                     .load(thumbnailUrl)
                     .into(imgThumbnail);
             edtJudul.setText(materiModel.getTitle());
+            edtHarga.setText(materiModel.getHarga());
             blendedMateriDocId = materiModel.getDocumentId();
         }
     }
@@ -161,8 +163,11 @@ public class OpAddBlendedMateriActivity extends AppCompatActivity {
                     addVideo = true;
 
                     String title = edtJudul.getText().toString();
+                    String harga = edtHarga.getText().toString();
                     if (thereIsData) {
-                        if (title.equals(oldMateriModel.getTitle()) && imageUri == null) {
+                        if (title.equals(oldMateriModel.getTitle())
+                                && harga.equals(oldMateriModel.getHarga())
+                                && imageUri == null) {
                             Intent intent = new Intent(OpAddBlendedMateriActivity.this, OpBlendedVideoActivity.class);
                             startActivity(intent);
                         } else {
@@ -185,8 +190,11 @@ public class OpAddBlendedMateriActivity extends AppCompatActivity {
                     addVideo = false;
 
                     String title = edtJudul.getText().toString();
+                    String harga = edtHarga.getText().toString();
                     if (thereIsData) {
-                        if (title.equals(oldMateriModel.getTitle()) && imageUri == null) {
+                        if (title.equals(oldMateriModel.getTitle())
+                                && harga.equals(oldMateriModel.getHarga())
+                                && imageUri == null) {
                             Intent intent = new Intent(OpAddBlendedMateriActivity.this, OpBlendedSoalActivity.class);
                             startActivity(intent);
                         } else {
@@ -236,15 +244,17 @@ public class OpAddBlendedMateriActivity extends AppCompatActivity {
 
     private boolean isDataComplete() {
         if (thereIsData) {
-            return !edtJudul.getText().toString().equals("");
+            return !edtJudul.getText().toString().equals("") && !edtHarga.getText().toString().equals("");
         } else {
-            return !edtJudul.getText().toString().equals("") &&
-                    imageUri != null;
+            return !edtJudul.getText().toString().equals("")
+                    && !edtHarga.getText().toString().equals("")
+                    && imageUri != null;
         }
     }
 
     private void simpanMateri() {
         String title = edtJudul.getText().toString();
+        String harga = edtHarga.getText().toString();
 
         try {
             dateCreated = Timestamp.now().getSeconds();
@@ -254,13 +264,13 @@ public class OpAddBlendedMateriActivity extends AppCompatActivity {
             return;
         }
 
-//        MateriModel model = new MateriModel(title, thumbnailUrl, dateCreated);
+        MateriModel model = new MateriModel(title, thumbnailUrl, harga, blendedCourseDocId, dateCreated);
 
-//        if (thereIsData) {
-//            editMateri(model);
-//        } else {
-//            tambahMateri(model);
-//        }
+        if (thereIsData) {
+            editMateri(model);
+        } else {
+            tambahMateri(model);
+        }
     }
 
     private void editMateri(final MateriModel model) {
@@ -309,7 +319,7 @@ public class OpAddBlendedMateriActivity extends AppCompatActivity {
                         blendedMateriDocId = documentReference.getId();
                         if (addSoal) {
                             thereIsData = true;
-//                            materiModel = new MateriModel(edtJudul.getText().toString(), thumbnailUrl, dateCreated);
+                            materiModel = new MateriModel(edtJudul.getText().toString(), thumbnailUrl, edtHarga.getText().toString(), blendedCourseDocId, dateCreated);
                             oldMateriModel = materiModel;
                             imageUri = null;
                             pd.dismiss();
@@ -317,7 +327,7 @@ public class OpAddBlendedMateriActivity extends AppCompatActivity {
                             startActivity(intent);
                         } else if (addVideo) {
                             thereIsData = true;
-//                            materiModel = new MateriModel(edtJudul.getText().toString(), thumbnailUrl, dateCreated);
+                            materiModel = new MateriModel(edtJudul.getText().toString(), thumbnailUrl, edtHarga.getText().toString(), blendedCourseDocId, dateCreated);
                             oldMateriModel = materiModel;
                             imageUri = null;
                             pd.dismiss();

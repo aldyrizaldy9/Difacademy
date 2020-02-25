@@ -62,7 +62,7 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
 
     ImageView imgThumbnail;
     Button btnAddMateri, btnHapus, btnSimpan;
-    EditText edtJudul, edtDeskripsi, edtLinkGDrive, edtHarga;
+    EditText edtJudul, edtDeskripsi, edtLinkGDrive;
     Spinner spnTag;
     ConstraintLayout clAddPhoto;
 
@@ -99,7 +99,7 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
 
         initView();
         onClick();
-//        checkIntent();
+        checkIntent();
         loadTags();
     }
 
@@ -124,7 +124,6 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
         edtJudul = findViewById(R.id.edt_op_add_blended_course_judul);
         edtDeskripsi = findViewById(R.id.edt_op_add_blended_course_deskripsi);
         edtLinkGDrive = findViewById(R.id.edt_op_add_blended_course_link);
-        edtHarga = findViewById(R.id.edt_op_add_blended_course_harga);
         spnTag = findViewById(R.id.spn_op_add_blended_course_tag);
         clAddPhoto = findViewById(R.id.cl_op_add_blended_course_add_photo);
     }
@@ -144,7 +143,6 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
             edtJudul.setText(courseModel.getTitle());
             edtDeskripsi.setText(courseModel.getDescription());
             edtLinkGDrive.setText(courseModel.getGoogleDrive());
-//            edtHarga.setText(courseModel.getHarga());
             blendedCourseDocId = courseModel.getDocumentId();
         }
     }
@@ -251,7 +249,6 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
                     String googleDrive = edtLinkGDrive.getText().toString();
                     String tag = tagCourse;
                     String tagId = tagCourseId;
-                    String harga = edtHarga.getText().toString();
 
                     if (thereIsData) {
                         if (title.equals(oldCourseModel.getTitle()) &&
@@ -309,13 +306,11 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
         if (thereIsData) {
             return !edtJudul.getText().toString().equals("") &&
                     !edtDeskripsi.getText().toString().equals("") &&
-                    !edtHarga.getText().toString().equals("") &&
                     !tagCourseId.equals("") &&
                     !tagCourse.equals("");
         } else {
             return !edtJudul.getText().toString().equals("") &&
                     !edtDeskripsi.getText().toString().equals("") &&
-                    !edtHarga.getText().toString().equals("") &&
                     !tagCourseId.equals("") &&
                     !tagCourse.equals("") &&
                     imageUri != null;
@@ -328,7 +323,6 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
         String googleDrive = edtLinkGDrive.getText().toString();
         String tag = tagCourse;
         String tagId = tagCourseId;
-        String harga = edtHarga.getText().toString();
 
         try {
             dateCreated = Timestamp.now().getSeconds();
@@ -338,13 +332,13 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
             return;
         }
 
-//        CourseModel model = new CourseModel(title, description, thumbnailUrl, googleDrive, tagId, tag, harga, dateCreated);
+        CourseModel model = new CourseModel(title, description, thumbnailUrl, googleDrive, tagId, tag, dateCreated);
 
-//        if (thereIsData) {
-//            editKelas(model);
-//        } else {
-//            tambahKelas(model);
-//        }
+        if (thereIsData) {
+            editKelas(model);
+        } else {
+            tambahKelas(model);
+        }
     }
 
     private void editKelas(final CourseModel model) {
@@ -542,14 +536,18 @@ public class OpAddBlendedCourseActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                            MateriModel model = documentSnapshot.toObject(MateriModel.class);
-                            model.setDocumentId(documentSnapshot.getId());
+                        if (queryDocumentSnapshots.size() > 0){
+                            for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                                MateriModel model = documentSnapshot.toObject(MateriModel.class);
+                                model.setDocumentId(documentSnapshot.getId());
 
-                            CollectionReference ref2 = ref1.document(model.getDocumentId())
-                                    .collection("BlendedVideo");
+                                CollectionReference ref2 = ref1.document(model.getDocumentId())
+                                        .collection("BlendedVideo");
 
-                            getListVideoUrl2(ref2, documentSnapshot.getId());
+                                getListVideoUrl2(ref2, documentSnapshot.getId());
+                            }
+                        } else {
+                            hapusBlendedCourseDoc();
                         }
                     }
                 });
