@@ -175,7 +175,7 @@ public class OpMainActivity extends AppCompatActivity {
         btnBanner = findViewById(R.id.btn_op_main_banner);
         tvNavbar = findViewById(R.id.tv_navbar);
 
-        tvNavbar.setText("Welcome, Admin");
+        tvNavbar.setText("Admin");
     }
 
     private void onClick() {
