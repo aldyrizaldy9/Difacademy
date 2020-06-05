@@ -36,7 +36,7 @@ import static com.tamanpelajar.aldy.difacademy.Activity.LoginActivity.SHARE_PREF
 import static com.tamanpelajar.aldy.difacademy.Activity.LoginActivity.USERID_PREFS;
 
 public class ListVideoBlendedActivity extends AppCompatActivity {
-    private static final String TAG = "ListVideoBlendedActivity";
+    private static final String TAG = "ListVideoBlendedActivit";
     public static boolean IS_PAID = false;
     private ConstraintLayout clBack;
     private ConstraintLayout clQuiz;
