@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:943772231994:android:7f4f471246a177bdc24803",
         "android_client_info": {
-          "package_name": "com.example.aldy.difacademy"
+          "package_name": "com.tamanpelajar.aldy.difacademy"
         }
       },
       "oauth_client": [
@@ -18,7 +18,7 @@
           "client_id": "943772231994-q1ha9btaprggcp4212loebiidu97c96t.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.aldy.difacademy",
+            "package_name": "com.tamanpelajar.aldy.difacademy",
             "certificate_hash": "f8a2e6482354bf6b162a5541827edd298c13ffbe"
           }
         },
