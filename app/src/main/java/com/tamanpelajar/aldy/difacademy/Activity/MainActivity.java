@@ -18,11 +18,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.tamanpelajar.aldy.difacademy.Adapter.NewsAdapter;
-import com.tamanpelajar.aldy.difacademy.Model.MateriModel;
-import com.tamanpelajar.aldy.difacademy.Model.NewsModel;
-import com.tamanpelajar.aldy.difacademy.Model.OngoingMateriModel;
-import com.tamanpelajar.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -34,6 +29,12 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.tamanpelajar.aldy.difacademy.Adapter.NewsAdapter;
+import com.tamanpelajar.aldy.difacademy.Model.CourseModel;
+import com.tamanpelajar.aldy.difacademy.Model.MateriModel;
+import com.tamanpelajar.aldy.difacademy.Model.NewsModel;
+import com.tamanpelajar.aldy.difacademy.Model.OngoingMateriModel;
+import com.tamanpelajar.aldy.difacademy.R;
 
 import java.util.ArrayList;
 
@@ -278,6 +279,7 @@ public class MainActivity extends AppCompatActivity {
                     .document(courseId)
                     .collection("OnlineMateri")
                     .document(materiId);
+            setOngoingTag("OnlineCourse", courseId);
             intent = new Intent(MainActivity.this, ListVideoOnlineActivity.class);
         } else {
             ongoingRef = firebaseFirestore
@@ -285,6 +287,7 @@ public class MainActivity extends AppCompatActivity {
                     .document(courseId)
                     .collection("BlendedMateri")
                     .document(materiId);
+            setOngoingTag("BlendedCourse", courseId);
             intent = new Intent(MainActivity.this, ListVideoBlendedActivity.class);
         }
 
@@ -301,7 +304,6 @@ public class MainActivity extends AppCompatActivity {
                                     .apply(new RequestOptions().centerCrop())
                                     .into(imgOngoing);
                             tvJudulOngoing.setText(materiModel.getTitle());
-
                             clOngoing.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
@@ -321,6 +323,29 @@ public class MainActivity extends AppCompatActivity {
                         Log.d(TAG, e.toString());
                     }
                 });
+    }
+
+    private void setOngoingTag(String jenisKelas, String courseId) {
+        DocumentReference ongoingRef = firebaseFirestore
+                .collection(jenisKelas)
+                .document(courseId);
+        ongoingRef.get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        CourseModel courseModel = documentSnapshot.toObject(CourseModel.class);
+                        if (courseModel != null) {
+                            tvTagOngoing.setText(courseModel.getTag());
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, e.toString());
+                    }
+                });
+
     }
 
     private void setOngoingView() {
