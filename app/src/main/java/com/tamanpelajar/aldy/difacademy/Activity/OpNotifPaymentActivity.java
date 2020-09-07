@@ -273,10 +273,10 @@ public class OpNotifPaymentActivity extends AppCompatActivity {
                     public void onSuccess(Void aVoid) {
                         Log.d(TAG, "set paid success");
                         progressDialog.dismiss();
-                        onBackPressed();
                         Toast.makeText(OpNotifPaymentActivity.this,
                                 "Materi telah dibuka untuk user "
                                         + paymentModel.getNamaUser(), Toast.LENGTH_SHORT).show();
+                        onBackPressed();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
