@@ -276,7 +276,8 @@ public class OpNotifPaymentActivity extends AppCompatActivity {
                         Toast.makeText(OpNotifPaymentActivity.this,
                                 "Materi telah dibuka untuk user "
                                         + paymentModel.getNamaUser(), Toast.LENGTH_SHORT).show();
-                        onBackPressed();
+//                        onBackPressed();
+                        finish();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -293,5 +294,10 @@ public class OpNotifPaymentActivity extends AppCompatActivity {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 
         return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
     }
 }
