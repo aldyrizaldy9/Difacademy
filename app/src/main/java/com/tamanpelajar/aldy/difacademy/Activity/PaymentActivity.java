@@ -256,7 +256,8 @@ public class PaymentActivity extends AppCompatActivity {
                                         if (!response.isSuccessful()) {
                                             return;
                                         }
-                                        onBackPressed();
+//                                        onBackPressed();
+                                        finish();
                                     }
 
                                     @Override
