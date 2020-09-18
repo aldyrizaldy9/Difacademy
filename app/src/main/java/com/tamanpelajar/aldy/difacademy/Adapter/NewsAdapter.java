@@ -13,7 +13,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.tamanpelajar.aldy.difacademy.Activity.DetailNewsActivity;
+import com.tamanpelajar.aldy.difacademy.ActivityUser.UsDetailNewsActivity;
 import com.tamanpelajar.aldy.difacademy.Model.NewsModel;
 import com.tamanpelajar.aldy.difacademy.R;
 
@@ -44,7 +44,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
         holder.clContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, DetailNewsActivity.class);
+                Intent intent = new Intent(context, UsDetailNewsActivity.class);
                 intent.putExtra("newsModel", newsModel);
                 context.startActivity(intent);
             }

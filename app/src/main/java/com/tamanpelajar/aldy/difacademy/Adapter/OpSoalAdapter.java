@@ -12,14 +12,14 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.tamanpelajar.aldy.difacademy.Activity.OpAddBlendedSoalActivity;
-import com.tamanpelajar.aldy.difacademy.Activity.OpAddOnlineSoalActivity;
+import com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpAddBlendedSoalActivity;
+import com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpAddOnlineSoalActivity;
 import com.tamanpelajar.aldy.difacademy.Model.SoalModel;
 import com.tamanpelajar.aldy.difacademy.R;
 
 import java.util.ArrayList;
 
-import static com.tamanpelajar.aldy.difacademy.Activity.OpMainActivity.OP_JENIS_KELAS;
+import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpMainActivity.OP_JENIS_KELAS;
 
 public class OpSoalAdapter extends RecyclerView.Adapter<OpSoalAdapter.ViewHolder> {
     private Context context;

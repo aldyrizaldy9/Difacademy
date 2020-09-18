@@ -11,13 +11,13 @@ import android.os.Build;
 
 import androidx.core.app.NotificationCompat;
 
-import com.tamanpelajar.aldy.difacademy.Activity.OpNotifActivity;
+import com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpNotifActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
-import static com.tamanpelajar.aldy.difacademy.Activity.LoginActivity.USERID_PREFS;
+import static com.tamanpelajar.aldy.difacademy.ActivityCommon.LoginActivity.USERID_PREFS;
 
 public class MyFirebaseMessaging extends FirebaseMessagingService {
     @Override

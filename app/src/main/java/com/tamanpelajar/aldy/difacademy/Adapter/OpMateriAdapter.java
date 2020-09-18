@@ -13,14 +13,14 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.tamanpelajar.aldy.difacademy.Activity.OpAddBlendedMateriActivity;
-import com.tamanpelajar.aldy.difacademy.Activity.OpAddOnlineMateriActivity;
+import com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpAddBlendedMateriActivity;
+import com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpAddOnlineMateriActivity;
 import com.tamanpelajar.aldy.difacademy.Model.MateriModel;
 import com.tamanpelajar.aldy.difacademy.R;
 
 import java.util.ArrayList;
 
-import static com.tamanpelajar.aldy.difacademy.Activity.OpMainActivity.OP_JENIS_KELAS;
+import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpMainActivity.OP_JENIS_KELAS;
 
 public class OpMateriAdapter extends RecyclerView.Adapter<OpMateriAdapter.ViewHolder> {
     private Context context;

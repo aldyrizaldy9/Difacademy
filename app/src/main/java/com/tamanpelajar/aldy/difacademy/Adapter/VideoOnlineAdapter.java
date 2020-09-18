@@ -12,14 +12,14 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.tamanpelajar.aldy.difacademy.Activity.PaymentActivity;
-import com.tamanpelajar.aldy.difacademy.Activity.WatchVideoActivity;
+import com.tamanpelajar.aldy.difacademy.ActivityUser.UsPaymentActivity;
+import com.tamanpelajar.aldy.difacademy.ActivityUser.UsWatchVideoActivity;
 import com.tamanpelajar.aldy.difacademy.Model.VideoModel;
 import com.tamanpelajar.aldy.difacademy.R;
 
 import java.util.ArrayList;
 
-import static com.tamanpelajar.aldy.difacademy.Activity.ListVideoOnlineActivity.IS_PAID;
+import static com.tamanpelajar.aldy.difacademy.ActivityUser.UsListVideoOnlineActivity.IS_PAID;
 
 public class VideoOnlineAdapter extends RecyclerView.Adapter<VideoOnlineAdapter.ViewHolder> {
     private Context context;
@@ -51,7 +51,7 @@ public class VideoOnlineAdapter extends RecyclerView.Adapter<VideoOnlineAdapter.
                 holder.clContainer.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(context, PaymentActivity.class);
+                        Intent intent = new Intent(context, UsPaymentActivity.class);
                         intent.putExtra("videoModel", videoModel);
                         intent.putExtra("jenisKelas", "online");
                         context.startActivity(intent);
@@ -62,7 +62,7 @@ public class VideoOnlineAdapter extends RecyclerView.Adapter<VideoOnlineAdapter.
                 holder.clContainer.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(context, WatchVideoActivity.class);
+                        Intent intent = new Intent(context, UsWatchVideoActivity.class);
                         intent.putExtra("videoModel", videoModel);
                         context.startActivity(intent);
                     }
@@ -73,7 +73,7 @@ public class VideoOnlineAdapter extends RecyclerView.Adapter<VideoOnlineAdapter.
             holder.clContainer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(context, WatchVideoActivity.class);
+                    Intent intent = new Intent(context, UsWatchVideoActivity.class);
                     intent.putExtra("videoModel", videoModel);
                     context.startActivity(intent);
                 }

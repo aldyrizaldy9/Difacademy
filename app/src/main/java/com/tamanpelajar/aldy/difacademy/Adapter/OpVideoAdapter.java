@@ -12,14 +12,14 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.tamanpelajar.aldy.difacademy.Activity.OpAddBlendedVideoActivity;
-import com.tamanpelajar.aldy.difacademy.Activity.OpAddOnlineVideoActivity;
+import com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpAddBlendedVideoActivity;
+import com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpAddOnlineVideoActivity;
 import com.tamanpelajar.aldy.difacademy.Model.VideoModel;
 import com.tamanpelajar.aldy.difacademy.R;
 
 import java.util.ArrayList;
 
-import static com.tamanpelajar.aldy.difacademy.Activity.OpMainActivity.OP_JENIS_KELAS;
+import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpMainActivity.OP_JENIS_KELAS;
 
 public class OpVideoAdapter extends RecyclerView.Adapter<OpVideoAdapter.ViewHolder> {
     private Context context;

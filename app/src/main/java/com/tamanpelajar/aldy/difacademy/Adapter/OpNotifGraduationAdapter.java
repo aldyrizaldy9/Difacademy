@@ -11,7 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.tamanpelajar.aldy.difacademy.Activity.OpNotifGradActivity;
+import com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpNotifGradActivity;
 import com.tamanpelajar.aldy.difacademy.Model.GraduationModel;
 import com.tamanpelajar.aldy.difacademy.R;
 

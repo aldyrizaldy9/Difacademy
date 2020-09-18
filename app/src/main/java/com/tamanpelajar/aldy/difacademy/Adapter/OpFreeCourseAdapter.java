@@ -13,7 +13,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.tamanpelajar.aldy.difacademy.Activity.OpAddFreeCourseActivity;
+import com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpAddFreeCourseActivity;
 import com.tamanpelajar.aldy.difacademy.Model.VideoFreeModel;
 import com.tamanpelajar.aldy.difacademy.R;
 

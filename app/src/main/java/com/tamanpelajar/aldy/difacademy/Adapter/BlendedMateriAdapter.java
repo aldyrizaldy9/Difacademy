@@ -13,7 +13,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.tamanpelajar.aldy.difacademy.Activity.ListVideoBlendedActivity;
+import com.tamanpelajar.aldy.difacademy.ActivityUser.UsListVideoBlendedActivity;
 import com.tamanpelajar.aldy.difacademy.Model.MateriModel;
 import com.tamanpelajar.aldy.difacademy.R;
 
@@ -48,7 +48,7 @@ public class BlendedMateriAdapter extends RecyclerView.Adapter<BlendedMateriAdap
         holder.clContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, ListVideoBlendedActivity.class);
+                Intent intent = new Intent(context, UsListVideoBlendedActivity.class);
                 intent.putExtra("jenisKelas", "blended");
                 intent.putExtra("materiModel", materiModel);
                 context.startActivity(intent);

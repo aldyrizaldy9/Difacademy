@@ -11,7 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.tamanpelajar.aldy.difacademy.Activity.OpNotifPaymentActivity;
+import com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpNotifPaymentActivity;
 import com.tamanpelajar.aldy.difacademy.Model.PaymentModel;
 import com.tamanpelajar.aldy.difacademy.R;
 

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
     android:background="@color/backgroundHijau"
-    tools:context=".Activity.ListFreeCourseActivity">
+    tools:context=".ActivityUser.UsListFreeCourseActivity">
 
     <include
         android:id="@+id/include"
