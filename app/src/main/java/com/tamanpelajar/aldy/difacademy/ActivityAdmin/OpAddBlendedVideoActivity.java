@@ -424,6 +424,7 @@ public class OpAddBlendedVideoActivity extends AppCompatActivity {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
+                        tvUploadProses.setText("");
                         Toast.makeText(OpAddBlendedVideoActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -442,7 +443,6 @@ public class OpAddBlendedVideoActivity extends AppCompatActivity {
                 }
 
                 uploadTask.cancel();
-
             }
         });
 
@@ -504,6 +504,7 @@ public class OpAddBlendedVideoActivity extends AppCompatActivity {
                     return;
                 }
 
+                tvUploadProses.setText("Deleting...");
                 hapusVideo();
             }
         });
