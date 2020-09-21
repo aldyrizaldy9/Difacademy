@@ -2,17 +2,25 @@ package com.tamanpelajar.aldy.difacademy.ActivityAdmin;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.google.android.gms.tasks.OnFailureListener;
 import com.tamanpelajar.aldy.difacademy.Adapter.OpVideoAdapter;
+import com.tamanpelajar.aldy.difacademy.Adapter.OpVideoBlendedAdapter;
+import com.tamanpelajar.aldy.difacademy.CommonMethod;
+import com.tamanpelajar.aldy.difacademy.Model.VideoBlendedModel;
 import com.tamanpelajar.aldy.difacademy.Model.VideoModel;
 import com.tamanpelajar.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -31,44 +39,46 @@ import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpMainActivity.DELE
 import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpMainActivity.UPDATE_REQUEST_CODE;
 
 public class OpBlendedVideoActivity extends AppCompatActivity {
-    TextView tvNavbar;
-    ConstraintLayout clBack, clAdd;
-    ImageView imgBack, imgAdd;
+    private TextView tvNavbar;
+    private ConstraintLayout clBack, clAdd;
+    private ImageView imgBack, imgAdd;
+    private SwipeRefreshLayout srl;
 
-    RecyclerView rvBlendedVideo;
-    ArrayList<VideoModel> videoModels;
-    OpVideoAdapter adapter;
+    private RecyclerView rvBlendedVideo;
+    private ArrayList<VideoBlendedModel> videoBlendedModels;
+    private OpVideoBlendedAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_op_blended_video);
 
-        videoModels = new ArrayList<>();
+        videoBlendedModels = new ArrayList<>();
 
         initView();
+        onClick();
         setRecyclerView();
-        loadData();
+        getData();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Intent intent = getIntent();
-        VideoModel model = intent.getParcelableExtra("blended_video_model");
-        int index = intent.getIntExtra("index", -1);
+        VideoBlendedModel model = intent.getParcelableExtra(CommonMethod.intentVideoBlendedModel);
+        int index = intent.getIntExtra(CommonMethod.intentIndex, -1);
 
         if (requestCode == ADD_REQUEST_CODE && resultCode == RESULT_OK) {
             if (model != null) {
-                videoModels.add(model);
+                videoBlendedModels.add(model);
             }
         } else if (requestCode == DELETE_REQUEST_CODE && resultCode == RESULT_OK) {
             if (index != -1) {
-                videoModels.remove(index);
+                videoBlendedModels.remove(index);
             }
         } else if (requestCode == UPDATE_REQUEST_CODE && resultCode == RESULT_OK) {
             if (model != null) {
-                videoModels.set(index, model);
+                videoBlendedModels.set(index, model);
             }
         }
         adapter.notifyDataSetChanged();
@@ -89,6 +99,24 @@ public class OpBlendedVideoActivity extends AppCompatActivity {
         imgBack.setImageResource(R.drawable.ic_arrow_back);
         clAdd = findViewById(R.id.cl_icon3);
         clAdd.setVisibility(View.VISIBLE);
+
+        imgAdd = findViewById(R.id.img_icon3);
+        imgAdd.setImageResource(R.drawable.ic_add);
+
+        rvBlendedVideo = findViewById(R.id.rv_op_blended_video);
+        srl = findViewById(R.id.srl_op_blended_video);
+        srl.setRefreshing(true);
+        srl.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                videoBlendedModels.clear();
+                adapter.notifyDataSetChanged();
+                getData();
+            }
+        });
+    }
+
+    private void onClick(){
         clAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -96,39 +124,43 @@ public class OpBlendedVideoActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        imgAdd = findViewById(R.id.img_icon3);
-        imgAdd.setImageResource(R.drawable.ic_add);
-
-        rvBlendedVideo = findViewById(R.id.rv_op_blended_video);
-    }
-
-    private void loadData() {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference collRef = db.collection("BlendedCourse")
-                .document(kelasBlendedDocId)
-                .collection("BlendedMateri")
-                .document(blendedMateriDocId)
-                .collection("BlendedVideo");
-
-        collRef.orderBy("dateCreated", Query.Direction.ASCENDING)
-                .get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        videoModels.clear();
-                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                            VideoModel model = documentSnapshot.toObject(VideoModel.class);
-                            model.setDocumentId(documentSnapshot.getId());
-                            videoModels.add(model);
-                        }
-                        adapter.notifyDataSetChanged();
-                    }
-                });
     }
 
     private void setRecyclerView() {
         rvBlendedVideo.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        adapter = new OpVideoAdapter(this, videoModels);
+        adapter = new OpVideoBlendedAdapter(this, videoBlendedModels);
         rvBlendedVideo.setAdapter(adapter);
+    }
+
+    private void getData() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference collRef = db.collection(CommonMethod.refKelasBlended)
+                .document(kelasBlendedDocId)
+                .collection(CommonMethod.refMateriBlended)
+                .document(blendedMateriDocId)
+                .collection(CommonMethod.refVideoBlended);
+
+        collRef.orderBy(CommonMethod.fieldDateCreated, Query.Direction.ASCENDING)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        videoBlendedModels.clear();
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                            VideoBlendedModel model = documentSnapshot.toObject(VideoBlendedModel.class);
+                            model.setDocumentId(documentSnapshot.getId());
+                            videoBlendedModels.add(model);
+                        }
+                        adapter.notifyDataSetChanged();
+                        srl.setRefreshing(false);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        srl.setRefreshing(false);
+                        Toast.makeText(OpBlendedVideoActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 }

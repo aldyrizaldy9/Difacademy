@@ -1,6 +1,5 @@
 package com.tamanpelajar.aldy.difacademy.ActivityAdmin;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -16,11 +15,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.tamanpelajar.aldy.difacademy.Adapter.OpSoalAdapter;
 import com.tamanpelajar.aldy.difacademy.Adapter.OpSoalBlendedAdapter;
 import com.tamanpelajar.aldy.difacademy.CommonMethod;
 import com.tamanpelajar.aldy.difacademy.Model.SoalBlendedModel;
-import com.tamanpelajar.aldy.difacademy.Model.SoalModel;
 import com.tamanpelajar.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -66,7 +63,7 @@ public class OpBlendedSoalActivity extends AppCompatActivity {
         initView();
         onClick();
         setRecyclerView();
-        loadData();
+        getData();
     }
 
     @Override
@@ -118,7 +115,7 @@ public class OpBlendedSoalActivity extends AppCompatActivity {
             public void onRefresh() {
                 soalBlendedModels.clear();
                 adapter.notifyDataSetChanged();
-                loadData();
+                getData();
             }
         });
     }
@@ -140,7 +137,7 @@ public class OpBlendedSoalActivity extends AppCompatActivity {
         rvBlendedSoal.setAdapter(adapter);
     }
 
-    private void loadData() {
+    private void getData() {
         Query first = blendedSoalRef
                 .orderBy(CommonMethod.fieldDateCreated, Query.Direction.DESCENDING);
 

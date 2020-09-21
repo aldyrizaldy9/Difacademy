@@ -49,32 +49,32 @@ import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpMainActivity.UPDA
 public class OpAddOnlineVideoActivity extends AppCompatActivity {
     public static String onlineVideoDocId = "";
 
-    TextView tvNavbar;
-    ConstraintLayout clBack;
-    ImageView imgBack;
+    private TextView tvNavbar;
+    private ConstraintLayout clBack;
+    private ImageView imgBack;
 
-    EditText edtJudul, edtDeskripsi;
-    ProgressBar pbUploadProses;
-    Button btnPilihFile, btnHapus, btnSimpan, btnCancelUpload;
-    TextView tvUploadProses, tvFileName;
+    private EditText edtJudul, edtDeskripsi;
+    private ProgressBar pbUploadProses;
+    private Button btnPilihFile, btnHapus, btnSimpan, btnCancelUpload;
+    private TextView tvUploadProses, tvFileName;
 
-    VideoModel videoModel, oldVideoModel;
-    boolean thereIsData = false;
-    int PICK_VIDEO_REQUEST_CODE = 11;
-    Uri videoUri;
-    boolean isUploading = false;
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
-    CollectionReference onlineVideoRef = db.collection("OnlineCourse")
+    private VideoModel videoModel, oldVideoModel;
+    private boolean thereIsData = false;
+    private int PICK_VIDEO_REQUEST_CODE = 11;
+    private Uri videoUri;
+    private boolean isUploading = false;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private CollectionReference onlineVideoRef = db.collection("OnlineCourse")
             .document(onlineCourseDocId)
             .collection("OnlineMateri")
             .document(onlineMateriDocId)
             .collection("OnlineVideo");
-    FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
+    private FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
 
-    long dateCreated = 0;
-    String urlVideo = "";
-    UploadTask uploadTask;
-    int index;
+    private long dateCreated = 0;
+    private String urlVideo = "";
+    private UploadTask uploadTask;
+    private int index;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

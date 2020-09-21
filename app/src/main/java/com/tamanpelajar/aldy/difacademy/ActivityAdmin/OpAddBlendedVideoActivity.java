@@ -23,6 +23,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.tamanpelajar.aldy.difacademy.CommonMethod;
+import com.tamanpelajar.aldy.difacademy.Model.VideoBlendedModel;
 import com.tamanpelajar.aldy.difacademy.Model.VideoModel;
 import com.tamanpelajar.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -49,32 +50,34 @@ import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpMainActivity.UPDA
 public class OpAddBlendedVideoActivity extends AppCompatActivity {
     public static String blendedVideoDocId = "";
 
-    TextView tvNavbar;
-    ConstraintLayout clBack;
-    ImageView imgBack;
+    private TextView tvNavbar;
+    private ConstraintLayout clBack, clHapus;
+    private ImageView imgBack, imgHapus;
 
-    EditText edtJudul, edtDeskripsi;
-    ProgressBar pbUploadProses;
-    Button btnPilihFile, btnHapus, btnSimpan, btnCancelUpload;
-    TextView tvUploadProses, tvFileName;
+    private EditText edtJudul, edtDeskripsi;
+    private ProgressBar pbUploadProses;
+    private Button btnPilihFile, btnSimpan, btnCancelUpload;
+    private TextView tvUploadProses, tvFileName;
 
-    VideoModel videoModel, oldVideoModel;
-    boolean thereIsData = false;
-    int PICK_VIDEO_REQUEST_CODE = 11;
-    Uri videoUri;
-    boolean isUploading = false;
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
-    CollectionReference blendedVideoRef = db.collection("BlendedCourse")
+    private VideoBlendedModel videoModel, oldVideoModel;
+    private boolean thereIsData = false;
+    private int PICK_VIDEO_REQUEST_CODE = 11;
+
+    private Uri videoUri;
+    private boolean isUploading = false;
+
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private CollectionReference blendedVideoRef = db.collection(CommonMethod.refKelasBlended)
             .document(kelasBlendedDocId)
-            .collection("BlendedMateri")
+            .collection(CommonMethod.refMateriBlended)
             .document(blendedMateriDocId)
-            .collection("BlendedVideo");
-    FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
+            .collection(CommonMethod.refVideoBlended);
+    private FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
 
-    long dateCreated = 0;
-    String urlVideo = "";
-    UploadTask uploadTask;
-    int index;
+    private long dateCreated = 0;
+    private String urlVideo = "";
+    private UploadTask uploadTask;
+    private int index;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,12 +104,14 @@ public class OpAddBlendedVideoActivity extends AppCompatActivity {
         });
         imgBack = findViewById(R.id.img_icon1);
         imgBack.setImageResource(R.drawable.ic_arrow_back);
-
+        clHapus = findViewById(R.id.cl_icon3);
+        clHapus.setVisibility(View.VISIBLE);
+        imgHapus = findViewById(R.id.img_icon3);
+        imgHapus.setImageResource(R.drawable.ic_delete);
         edtJudul = findViewById(R.id.edt_op_add_blended_video_judul);
         edtDeskripsi = findViewById(R.id.edt_op_add_blended_video_deskripsi);
         pbUploadProses = findViewById(R.id.pb_op_add_blended_video_upload);
         btnPilihFile = findViewById(R.id.btn_op_add_blended_video_pilih_file);
-//        btnHapus = findViewById(R.id.btn_op_add_blended_video_hapus);
         btnSimpan = findViewById(R.id.btn_op_add_blended_video_simpan);
         btnCancelUpload = findViewById(R.id.btn_op_add_blended_video_cancel);
         tvFileName = findViewById(R.id.tv_op_add_blended_video_pilih_file);
@@ -115,14 +120,14 @@ public class OpAddBlendedVideoActivity extends AppCompatActivity {
 
     private void checkIntent() {
         Intent intent = getIntent();
-        videoModel = intent.getParcelableExtra("blended_video_model");
+        videoModel = intent.getParcelableExtra(CommonMethod.intentVideoBlendedModel);
         if (videoModel != null) {
             oldVideoModel = videoModel;
             thereIsData = true;
+
             edtJudul.setText(videoModel.getTitle());
             edtDeskripsi.setText(videoModel.getDescription());
             blendedVideoDocId = videoModel.getDocumentId();
-            btnHapus.setVisibility(View.VISIBLE);
             dateCreated = videoModel.getDateCreated();
             urlVideo = videoModel.getVideoUrl();
             index = intent.getIntExtra("index", -1);
@@ -185,18 +190,11 @@ public class OpAddBlendedVideoActivity extends AppCompatActivity {
         }
     }
 
-    private boolean isNetworkConnected() {
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
-    }
-
     private boolean isDataComplete() {
         if (thereIsData) {
-            return !edtJudul.getText().toString().equals("") &&
-                    !edtDeskripsi.getText().toString().equals("");
+            return !edtJudul.getText().toString().equals("");
         } else {
             return !edtJudul.getText().toString().equals("") &&
-                    !edtDeskripsi.getText().toString().equals("") &&
                     videoUri != null;
         }
     }
@@ -208,7 +206,7 @@ public class OpAddBlendedVideoActivity extends AppCompatActivity {
                 getVideoFromGallery();
             }
         });
-        btnHapus.setOnClickListener(new View.OnClickListener() {
+        clHapus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showHapusDialog();
@@ -234,7 +232,7 @@ public class OpAddBlendedVideoActivity extends AppCompatActivity {
 
     private void uploadVideoToFirebase() {
         final StorageReference uploadRef = firebaseStorage.getReference()
-                .child("BlendedVideo/" + UUID.randomUUID().toString());
+                .child(CommonMethod.storageBlendedVideo + UUID.randomUUID().toString());
 
         uploadTask = uploadRef.putFile(videoUri);
         uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -271,7 +269,6 @@ public class OpAddBlendedVideoActivity extends AppCompatActivity {
 
                 edtDeskripsi.setEnabled(true);
                 edtJudul.setEnabled(true);
-                btnHapus.setEnabled(true);
                 btnPilihFile.setEnabled(true);
                 btnSimpan.setEnabled(true);
                 Toast.makeText(OpAddBlendedVideoActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
@@ -302,7 +299,6 @@ public class OpAddBlendedVideoActivity extends AppCompatActivity {
 
                     edtDeskripsi.setEnabled(true);
                     edtJudul.setEnabled(true);
-                    btnHapus.setEnabled(true);
                     btnPilihFile.setEnabled(true);
                     btnSimpan.setEnabled(true);
                 }
@@ -311,7 +307,7 @@ public class OpAddBlendedVideoActivity extends AppCompatActivity {
     }
 
     private void simpanVideo() {
-        if (!CommonMethod.isInternetAvailable(OpAddBlendedVideoActivity.this)){
+        if (!CommonMethod.isInternetAvailable(OpAddBlendedVideoActivity.this)) {
             return;
         }
 
@@ -320,7 +316,7 @@ public class OpAddBlendedVideoActivity extends AppCompatActivity {
         String title = edtJudul.getText().toString();
         String description = edtDeskripsi.getText().toString();
 
-        VideoModel model = new VideoModel(title, description, urlVideo, kelasBlendedDocId, blendedMateriDocId, dateCreated);
+        VideoBlendedModel model = new VideoBlendedModel(title, description, urlVideo, kelasBlendedDocId, blendedMateriDocId, dateCreated);
 
         if (thereIsData) {
             editVideo(model);
@@ -329,7 +325,8 @@ public class OpAddBlendedVideoActivity extends AppCompatActivity {
         }
     }
 
-    private void editVideo(final VideoModel model) {
+    private void editVideo(final VideoBlendedModel model) {
+        model.setDateCreated(oldVideoModel.getDateCreated());
         DocumentReference docRef = blendedVideoRef.document(blendedVideoDocId);
         docRef.set(model)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -354,7 +351,7 @@ public class OpAddBlendedVideoActivity extends AppCompatActivity {
                 });
     }
 
-    private void tambahVideo(final VideoModel model) {
+    private void tambahVideo(final VideoBlendedModel model) {
         blendedVideoRef.add(model)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
@@ -374,7 +371,7 @@ public class OpAddBlendedVideoActivity extends AppCompatActivity {
                 });
     }
 
-    private void deleteThanUpdateVideoInFirebase(final VideoModel model) {
+    private void deleteThanUpdateVideoInFirebase(final VideoBlendedModel model) {
         StorageReference deleteRef = firebaseStorage.getReferenceFromUrl(oldVideoModel.getVideoUrl());
         deleteRef.delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -440,12 +437,12 @@ public class OpAddBlendedVideoActivity extends AppCompatActivity {
         builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if (!isNetworkConnected()) {
-                    Toast.makeText(OpAddBlendedVideoActivity.this, "Tidak ada koneksi internet!", Toast.LENGTH_SHORT).show();
-                } else {
-                    uploadTask.cancel();
-                    Toast.makeText(OpAddBlendedVideoActivity.this, "Cancelling...", Toast.LENGTH_SHORT).show();
+                if (!CommonMethod.isInternetAvailable(OpAddBlendedVideoActivity.this)) {
+                    return;
                 }
+
+                uploadTask.cancel();
+
             }
         });
 
@@ -467,21 +464,21 @@ public class OpAddBlendedVideoActivity extends AppCompatActivity {
         builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if (!isNetworkConnected()) {
-                    Toast.makeText(OpAddBlendedVideoActivity.this, "Tidak ada koneksi internet!", Toast.LENGTH_SHORT).show();
-                } else {
-                    if (videoUri != null) {
-                        edtDeskripsi.setEnabled(false);
-                        edtJudul.setEnabled(false);
-                        btnHapus.setEnabled(false);
-                        btnPilihFile.setEnabled(false);
-                        btnSimpan.setEnabled(false);
-                        btnCancelUpload.setVisibility(View.VISIBLE);
-                        uploadVideoToFirebase();
-                    } else {
-                        simpanVideo();
-                    }
+                if (!CommonMethod.isInternetAvailable(OpAddBlendedVideoActivity.this)) {
+                    return;
                 }
+
+                if (videoUri != null) {
+                    edtDeskripsi.setEnabled(false);
+                    edtJudul.setEnabled(false);
+                    btnPilihFile.setEnabled(false);
+                    btnSimpan.setEnabled(false);
+                    btnCancelUpload.setVisibility(View.VISIBLE);
+                    uploadVideoToFirebase();
+                } else {
+                    simpanVideo();
+                }
+
             }
         });
 
@@ -503,11 +500,11 @@ public class OpAddBlendedVideoActivity extends AppCompatActivity {
         builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if (!isNetworkConnected()) {
-                    Toast.makeText(OpAddBlendedVideoActivity.this, "Tidak ada koneksi internet!", Toast.LENGTH_SHORT).show();
-                } else {
-                    hapusVideo();
+                if (!CommonMethod.isInternetAvailable(OpAddBlendedVideoActivity.this)) {
+                    return;
                 }
+
+                hapusVideo();
             }
         });
 

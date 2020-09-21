@@ -15,11 +15,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.tamanpelajar.aldy.difacademy.Adapter.OpMateriAdapter;
 import com.tamanpelajar.aldy.difacademy.Adapter.OpMateriBlendedAdapter;
 import com.tamanpelajar.aldy.difacademy.CommonMethod;
 import com.tamanpelajar.aldy.difacademy.Model.MateriBlendedModel;
-import com.tamanpelajar.aldy.difacademy.Model.MateriModel;
 import com.tamanpelajar.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -51,9 +49,6 @@ public class OpBlendedMateriActivity extends AppCompatActivity {
             .document(kelasBlendedDocId)
             .collection(CommonMethod.refMateriBlended);
 
-    private DocumentSnapshot lastVisible;
-    private boolean loadNewData;
-
     private SwipeRefreshLayout srl;
 
     @Override
@@ -66,7 +61,7 @@ public class OpBlendedMateriActivity extends AppCompatActivity {
         initView();
         onClick();
         setRecyclerView();
-        getFirstData();
+        getData();
     }
 
     @Override
@@ -118,7 +113,7 @@ public class OpBlendedMateriActivity extends AppCompatActivity {
             public void onRefresh() {
                 materiBlendedModels.clear();
                 adapter.notifyDataSetChanged();
-                getFirstData();
+                getData();
             }
         });
     }
@@ -138,65 +133,11 @@ public class OpBlendedMateriActivity extends AppCompatActivity {
         rvBlendedMateri.setLayoutManager(manager);
         adapter = new OpMateriBlendedAdapter(this, materiBlendedModels);
         rvBlendedMateri.setAdapter(adapter);
-
-        rvBlendedMateri.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                if (manager.findLastVisibleItemPosition() >= materiBlendedModels.size() - CommonMethod.paginationLoadNewData &&
-                        lastVisible != null &&
-                        loadNewData) {
-                    loadNewData = false;
-                    getNewData();
-                }
-            }
-
-            @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-            }
-        });
     }
 
-    private void getNewData() {
-        Query load = blendedMateriRef
-                .orderBy(CommonMethod.fieldDateCreated, Query.Direction.DESCENDING)
-                .startAfter(lastVisible)
-                .limit(CommonMethod.paginationMaxLoad);
-        load.get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                            MateriBlendedModel newModel = documentSnapshot.toObject(MateriBlendedModel.class);
-                            newModel.setDocumentId(documentSnapshot.getId());
-                            materiBlendedModels.add(newModel);
-                        }
-
-                        if (queryDocumentSnapshots.size() >= CommonMethod.paginationMaxLoad) {
-                            lastVisible = queryDocumentSnapshots.getDocuments()
-                                    .get(queryDocumentSnapshots.size() - 1);
-                        } else {
-                            lastVisible = null;
-                        }
-
-                        adapter.notifyDataSetChanged();
-                        loadNewData = true;
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        loadNewData = true;
-                        Toast.makeText(OpBlendedMateriActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
-                    }
-                });
-    }
-
-    private void getFirstData() {
+    private void getData() {
         Query first = blendedMateriRef
-                .orderBy(CommonMethod.fieldDateCreated, Query.Direction.DESCENDING)
-                .limit(CommonMethod.paginationMaxLoad);
+                .orderBy(CommonMethod.fieldDateCreated, Query.Direction.DESCENDING);
 
         first.get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -206,13 +147,6 @@ public class OpBlendedMateriActivity extends AppCompatActivity {
                             MateriBlendedModel newModel = documentSnapshot.toObject(MateriBlendedModel.class);
                             newModel.setDocumentId(documentSnapshot.getId());
                             materiBlendedModels.add(newModel);
-                        }
-
-                        if (queryDocumentSnapshots.size() >= CommonMethod.paginationMaxLoad) {
-                            lastVisible = queryDocumentSnapshots.getDocuments()
-                                    .get(queryDocumentSnapshots.size() - 1);
-                        } else {
-                            lastVisible = null;
                         }
 
                         adapter.notifyDataSetChanged();
