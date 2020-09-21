@@ -34,7 +34,7 @@ public class UsOngoingCourseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_ongoing_course);
+        setContentView(R.layout.activity_us_ongoing_course);
 
         initView();
         setViewPager();

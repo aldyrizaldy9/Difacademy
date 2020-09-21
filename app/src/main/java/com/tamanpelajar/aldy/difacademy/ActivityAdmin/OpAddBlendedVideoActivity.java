@@ -22,6 +22,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.tamanpelajar.aldy.difacademy.CommonMethod;
 import com.tamanpelajar.aldy.difacademy.Model.VideoModel;
 import com.tamanpelajar.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -39,7 +40,7 @@ import com.google.firebase.storage.UploadTask;
 
 import java.util.UUID;
 
-import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpAddBlendedCourseActivity.blendedCourseDocId;
+import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpAddBlendedKelasActivity.kelasBlendedDocId;
 import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpAddBlendedMateriActivity.blendedMateriDocId;
 import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpMainActivity.ADD_REQUEST_CODE;
 import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpMainActivity.DELETE_REQUEST_CODE;
@@ -64,7 +65,7 @@ public class OpAddBlendedVideoActivity extends AppCompatActivity {
     boolean isUploading = false;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     CollectionReference blendedVideoRef = db.collection("BlendedCourse")
-            .document(blendedCourseDocId)
+            .document(kelasBlendedDocId)
             .collection("BlendedMateri")
             .document(blendedMateriDocId)
             .collection("BlendedVideo");
@@ -105,7 +106,7 @@ public class OpAddBlendedVideoActivity extends AppCompatActivity {
         edtDeskripsi = findViewById(R.id.edt_op_add_blended_video_deskripsi);
         pbUploadProses = findViewById(R.id.pb_op_add_blended_video_upload);
         btnPilihFile = findViewById(R.id.btn_op_add_blended_video_pilih_file);
-        btnHapus = findViewById(R.id.btn_op_add_blended_video_hapus);
+//        btnHapus = findViewById(R.id.btn_op_add_blended_video_hapus);
         btnSimpan = findViewById(R.id.btn_op_add_blended_video_simpan);
         btnCancelUpload = findViewById(R.id.btn_op_add_blended_video_cancel);
         tvFileName = findViewById(R.id.tv_op_add_blended_video_pilih_file);
@@ -310,17 +311,16 @@ public class OpAddBlendedVideoActivity extends AppCompatActivity {
     }
 
     private void simpanVideo() {
-        String title = edtJudul.getText().toString();
-        String description = edtDeskripsi.getText().toString();
-
-        try {
-            dateCreated = Timestamp.now().getSeconds();
-        } catch (Exception e) {
-            Toast.makeText(OpAddBlendedVideoActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+        if (!CommonMethod.isInternetAvailable(OpAddBlendedVideoActivity.this)){
             return;
         }
 
-        VideoModel model = new VideoModel(title, description, urlVideo, blendedCourseDocId, blendedMateriDocId, dateCreated);
+        dateCreated = CommonMethod.getTimeStamp();
+
+        String title = edtJudul.getText().toString();
+        String description = edtDeskripsi.getText().toString();
+
+        VideoModel model = new VideoModel(title, description, urlVideo, kelasBlendedDocId, blendedMateriDocId, dateCreated);
 
         if (thereIsData) {
             editVideo(model);
@@ -339,8 +339,8 @@ public class OpAddBlendedVideoActivity extends AppCompatActivity {
                             deleteThanUpdateVideoInFirebase(model);
                         } else {
                             Intent intent = new Intent(OpAddBlendedVideoActivity.this, OpBlendedVideoActivity.class);
-                            intent.putExtra("blended_video_model", model);
-                            intent.putExtra("index", index);
+                            intent.putExtra(CommonMethod.intentVideoBlendedModel, model);
+                            intent.putExtra(CommonMethod.intentIndex, index);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             startActivityForResult(intent, UPDATE_REQUEST_CODE);
                         }
@@ -360,8 +360,8 @@ public class OpAddBlendedVideoActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
                         Intent intent = new Intent(OpAddBlendedVideoActivity.this, OpBlendedVideoActivity.class);
-                        intent.putExtra("blended_video_model", model);
-                        intent.putExtra("index", index);
+                        intent.putExtra(CommonMethod.intentVideoBlendedModel, model);
+                        intent.putExtra(CommonMethod.intentIndex, index);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivityForResult(intent, ADD_REQUEST_CODE);
                     }
@@ -381,8 +381,8 @@ public class OpAddBlendedVideoActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Intent intent = new Intent(OpAddBlendedVideoActivity.this, OpBlendedVideoActivity.class);
-                        intent.putExtra("blended_video_model", model);
-                        intent.putExtra("index", index);
+                        intent.putExtra(CommonMethod.intentVideoBlendedModel, model);
+                        intent.putExtra(CommonMethod.intentIndex, index);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivityForResult(intent, UPDATE_REQUEST_CODE);
                     }
@@ -402,7 +402,7 @@ public class OpAddBlendedVideoActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Intent intent = new Intent(OpAddBlendedVideoActivity.this, OpBlendedVideoActivity.class);
-                        intent.putExtra("index", index);
+                        intent.putExtra(CommonMethod.intentIndex, index);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivityForResult(intent, DELETE_REQUEST_CODE);
                     }

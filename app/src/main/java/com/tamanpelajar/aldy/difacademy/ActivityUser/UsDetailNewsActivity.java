@@ -18,7 +18,7 @@ public class UsDetailNewsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detail_news);
+        setContentView(R.layout.activity_us_detail_news);
         initView();
         setViewWithParcelable();
     }

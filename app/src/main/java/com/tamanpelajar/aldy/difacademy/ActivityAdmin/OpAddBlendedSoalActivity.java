@@ -24,6 +24,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.tamanpelajar.aldy.difacademy.CommonMethod;
 import com.tamanpelajar.aldy.difacademy.Model.SoalModel;
 import com.tamanpelajar.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -35,7 +36,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
-import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpAddBlendedCourseActivity.blendedCourseDocId;
+import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpAddBlendedKelasActivity.kelasBlendedDocId;
 import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpAddBlendedMateriActivity.blendedMateriDocId;
 import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpMainActivity.ADD_REQUEST_CODE;
 import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpMainActivity.DELETE_REQUEST_CODE;
@@ -59,7 +60,7 @@ public class OpAddBlendedSoalActivity extends AppCompatActivity {
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     CollectionReference collRef = db.collection("BlendedCourse")
-            .document(blendedCourseDocId)
+            .document(kelasBlendedDocId)
             .collection("BlendedMateri")
             .document(blendedMateriDocId)
             .collection("BlendedSoal");
@@ -105,7 +106,7 @@ public class OpAddBlendedSoalActivity extends AppCompatActivity {
         edtD = findViewById(R.id.edt_op_add_blended_soal_jawaban_d);
         edtE = findViewById(R.id.edt_op_add_blended_soal_jawaban_e);
         spnJawaban = findViewById(R.id.spn_op_add_blended_soal_jawaban);
-        btnHapus = findViewById(R.id.btn_op_add_blended_soal_hapus);
+//        btnHapus = findViewById(R.id.btn_op_add_blended_soal_hapus);
         btnSimpan = findViewById(R.id.btn_op_add_blended_soal_simpan);
     }
 
@@ -213,7 +214,7 @@ public class OpAddBlendedSoalActivity extends AppCompatActivity {
                     public void onSuccess(Void aVoid) {
                         pd.dismiss();
                         Intent intent = new Intent(OpAddBlendedSoalActivity.this, OpBlendedSoalActivity.class);
-                        intent.putExtra("index", index);
+                        intent.putExtra(CommonMethod.intentIndex, index);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivityForResult(intent, DELETE_REQUEST_CODE);
                     }
@@ -243,8 +244,8 @@ public class OpAddBlendedSoalActivity extends AppCompatActivity {
                     public void onSuccess(Void aVoid) {
                         pd.dismiss();
                         Intent intent = new Intent(OpAddBlendedSoalActivity.this, OpBlendedSoalActivity.class);
-                        intent.putExtra("index", index);
-                        intent.putExtra("blended_soal_model", model);
+                        intent.putExtra(CommonMethod.intentIndex, index);
+                        intent.putExtra(CommonMethod.intentSoalBlendedModel, model);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivityForResult(intent, UPDATE_REQUEST_CODE);
                     }
@@ -259,12 +260,11 @@ public class OpAddBlendedSoalActivity extends AppCompatActivity {
     }
 
     private void tambah() {
-        try {
-            dateCreated = Timestamp.now().getSeconds();
-        } catch (Exception e) {
-            Toast.makeText(this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+        if (!CommonMethod.isInternetAvailable(OpAddBlendedSoalActivity.this)){
             return;
         }
+
+        dateCreated = CommonMethod.getTimeStamp();
 
         String soal = edtSoal.getText().toString();
         String jwbA = edtA.getText().toString();
@@ -280,7 +280,7 @@ public class OpAddBlendedSoalActivity extends AppCompatActivity {
                     public void onSuccess(DocumentReference documentReference) {
                         pd.dismiss();
                         Intent intent = new Intent(OpAddBlendedSoalActivity.this, OpBlendedSoalActivity.class);
-                        intent.putExtra("blended_soal_model", model);
+                        intent.putExtra(CommonMethod.intentSoalBlendedModel, model);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivityForResult(intent, ADD_REQUEST_CODE);
                     }

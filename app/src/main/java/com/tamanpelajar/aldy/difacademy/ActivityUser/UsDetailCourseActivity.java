@@ -26,7 +26,7 @@ public class UsDetailCourseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detail_course);
+        setContentView(R.layout.activity_us_detail_course);
         initView();
         setViewWithParcelable();
         onClick();

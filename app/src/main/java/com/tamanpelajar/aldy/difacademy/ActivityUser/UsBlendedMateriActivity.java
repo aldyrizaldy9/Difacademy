@@ -41,7 +41,7 @@ public class UsBlendedMateriActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_blended_materi);
+        setContentView(R.layout.activity_us_blended_materi);
         initView();
         onClick();
         setRecyclerView();

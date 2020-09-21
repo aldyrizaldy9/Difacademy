@@ -24,6 +24,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.tamanpelajar.aldy.difacademy.ActivityCommon.LoginActivity;
+import com.tamanpelajar.aldy.difacademy.BuildConfig;
 import com.tamanpelajar.aldy.difacademy.Model.GraduationModel;
 import com.tamanpelajar.aldy.difacademy.Model.PaymentModel;
 import com.tamanpelajar.aldy.difacademy.Notification.Token;
@@ -52,10 +53,7 @@ public class OpMainActivity extends AppCompatActivity {
     public static final int DELETE_REQUEST_CODE = 3;
     public static final int UPDATE_REQUEST_CODE = 4;
     public static final int WRITE_PERM_REQUEST_CODE = 5;
-    public static final String ADMIN_USER_ID = "4TOu1jtLjWYcPbRzFYZ9PhZRZs22";
     private static final String TAG = "OpMainActivity";
-
-    public static String OP_JENIS_KELAS = "";
 
     private boolean doubleBackToExitPressedOnce = false;
     private ConstraintLayout clLogout, clNotif;
@@ -153,7 +151,7 @@ public class OpMainActivity extends AppCompatActivity {
 
     private void checkAdmin() {
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        if (!firebaseUser.getUid().equals(ADMIN_USER_ID)) {
+        if (!firebaseUser.getUid().equals(BuildConfig.ADMIN_USER_ID)) {
             Intent intent = new Intent(OpMainActivity.this, LoginActivity.class);
             startActivity(intent);
         }
@@ -203,7 +201,7 @@ public class OpMainActivity extends AppCompatActivity {
         btnBlended.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(OpMainActivity.this, OpBlendedCourseActivity.class);
+                Intent intent = new Intent(OpMainActivity.this, OpBlendedKelasActivity.class);
                 startActivity(intent);
             }
         });

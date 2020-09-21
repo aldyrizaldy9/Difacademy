@@ -49,7 +49,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 import static com.tamanpelajar.aldy.difacademy.ActivityCommon.LoginActivity.SHARE_PREFS;
 import static com.tamanpelajar.aldy.difacademy.ActivityCommon.LoginActivity.USERID_PREFS;
-import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpMainActivity.ADMIN_USER_ID;
+import static com.tamanpelajar.aldy.difacademy.BuildConfig.ADMIN_USER_ID;
 
 public class UsQuizActivity extends AppCompatActivity {
     private static final String TAG = "QuizActivity";
@@ -81,7 +81,7 @@ public class UsQuizActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_quiz);
+        setContentView(R.layout.activity_us_quiz);
 
         soalModels = new ArrayList<>();
         jawabanBenar = new ArrayList<>();

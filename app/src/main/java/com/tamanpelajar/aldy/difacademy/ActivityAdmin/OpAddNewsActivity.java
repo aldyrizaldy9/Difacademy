@@ -21,6 +21,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.bumptech.glide.Glide;
+import com.tamanpelajar.aldy.difacademy.CommonMethod;
 import com.tamanpelajar.aldy.difacademy.Model.NewsModel;
 import com.tamanpelajar.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -216,7 +217,7 @@ public class OpAddNewsActivity extends AppCompatActivity {
                     public void onSuccess(Void aVoid) {
                         progressDialog.dismiss();
                         Intent intent = new Intent(OpAddNewsActivity.this, OpNewsActivity.class);
-                        intent.putExtra("index", index);
+                        intent.putExtra(CommonMethod.intentIndex, index);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivityForResult(intent, DELETE_REQUEST_CODE);
                         Toast.makeText(OpAddNewsActivity.this, "Artikel telah dihapus", Toast.LENGTH_SHORT).show();
@@ -312,12 +313,13 @@ public class OpAddNewsActivity extends AppCompatActivity {
     }
 
     private void addNewsToFirestore(String downloadURL) {
-        try {
-            dateCreated = Timestamp.now().getSeconds();
-        } catch (Exception e) {
+        if (!CommonMethod.isInternetAvailable(OpAddNewsActivity.this)){
             progressDialog.dismiss();
             return;
         }
+
+        dateCreated = CommonMethod.getTimeStamp();
+
         if (dateCreated != 0) {
             final NewsModel newsModel = new NewsModel(edtJudul.getText().toString(), edtIsi.getText().toString(), downloadURL, dateCreated);
             newsRef
@@ -327,7 +329,7 @@ public class OpAddNewsActivity extends AppCompatActivity {
                         public void onSuccess(DocumentReference documentReference) {
                             progressDialog.dismiss();
                             Intent intent = new Intent(OpAddNewsActivity.this, OpNewsActivity.class);
-                            intent.putExtra("newsModel", newsModel);
+                            intent.putExtra(CommonMethod.intentNewsModel, newsModel);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             startActivityForResult(intent, ADD_REQUEST_CODE);
                             Toast.makeText(OpAddNewsActivity.this, "Artikel telah ditambahkan", Toast.LENGTH_SHORT).show();
@@ -389,12 +391,13 @@ public class OpAddNewsActivity extends AppCompatActivity {
     }
 
     private void updateNewstoFirestore(String downloadURL) {
-        try {
-            dateCreated = Timestamp.now().getSeconds();
-        } catch (Exception e) {
+        if (!CommonMethod.isInternetAvailable(OpAddNewsActivity.this)){
             progressDialog.dismiss();
             return;
         }
+
+        dateCreated = CommonMethod.getTimeStamp();
+
         if (dateCreated != 0) {
             final NewsModel newsModel = new NewsModel(edtJudul.getText().toString(), edtIsi.getText().toString(), downloadURL, dateCreated);
             newsRef.document(this.newsModel.getNewsId())
@@ -404,8 +407,8 @@ public class OpAddNewsActivity extends AppCompatActivity {
                         public void onSuccess(Void aVoid) {
                             progressDialog.dismiss();
                             Intent intent = new Intent(OpAddNewsActivity.this, OpNewsActivity.class);
-                            intent.putExtra("newsModel", newsModel);
-                            intent.putExtra("index", index);
+                            intent.putExtra(CommonMethod.intentNewsModel, newsModel);
+                            intent.putExtra(CommonMethod.intentIndex, index);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             startActivityForResult(intent, UPDATE_REQUEST_CODE);
                             Toast.makeText(OpAddNewsActivity.this, "Artikel telah disunting", Toast.LENGTH_SHORT).show();

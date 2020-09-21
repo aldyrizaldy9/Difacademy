@@ -72,27 +72,13 @@
                 app:layout_constraintVertical_bias="0.0">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edt_op_add_blended_materi_harga"
+                    android:id="@+id/edt_op_add_blended_materi_lampiran"
                     style="@style/Difacademy.Body1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Harga Materi"
+                    android:hint="Link Lampiran"
                     android:inputType="number" />
             </com.google.android.material.textfield.TextInputLayout>
-
-            <Button
-                android:id="@+id/btn_op_add_blended_materi_hapus"
-                style="@style/Difacademy.Button"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="8dp"
-                android:text="hapus materi"
-                android:visibility="gone"
-                app:layout_constraintBottom_toTopOf="@+id/btn_op_add_blended_materi_simpan"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
 
             <Button
                 android:id="@+id/btn_op_add_blended_materi_simpan"
@@ -153,7 +139,7 @@
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="8dp"
                 android:text="daftar soal"
-                app:layout_constraintBottom_toTopOf="@+id/btn_op_add_blended_materi_hapus"
+                app:layout_constraintBottom_toTopOf="@+id/btn_op_add_blended_materi_simpan"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent" />

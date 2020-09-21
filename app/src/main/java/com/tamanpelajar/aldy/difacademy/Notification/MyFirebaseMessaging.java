@@ -16,6 +16,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.tamanpelajar.aldy.difacademy.CommonMethod;
 
 import static com.tamanpelajar.aldy.difacademy.ActivityCommon.LoginActivity.USERID_PREFS;
 
@@ -49,7 +50,7 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
 
         double j = Double.valueOf(user.replaceAll("[\\D]", ""));
         Intent intent = new Intent(this, OpNotifActivity.class);
-        intent.putExtra("fromNotif", "ya");
+        intent.putExtra(CommonMethod.intentFromNotification, "ya");
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, (int) j, intent, PendingIntent.FLAG_ONE_SHOT);
 
@@ -74,7 +75,7 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
 
         int j = Integer.parseInt(user.replaceAll("[\\D]", ""));
         Intent intent = new Intent(this, OpNotifActivity.class);
-        intent.putExtra("fromNotif", "ya");
+        intent.putExtra(CommonMethod.intentFromNotification, "ya");
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, j, intent, PendingIntent.FLAG_ONE_SHOT);
 

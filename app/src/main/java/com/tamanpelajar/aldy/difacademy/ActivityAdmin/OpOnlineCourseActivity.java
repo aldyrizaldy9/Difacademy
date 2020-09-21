@@ -31,7 +31,6 @@ import java.util.ArrayList;
 
 import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpMainActivity.ADD_REQUEST_CODE;
 import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpMainActivity.DELETE_REQUEST_CODE;
-import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpMainActivity.OP_JENIS_KELAS;
 import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpMainActivity.UPDATE_REQUEST_CODE;
 
 public class OpOnlineCourseActivity extends AppCompatActivity {
@@ -55,8 +54,6 @@ public class OpOnlineCourseActivity extends AppCompatActivity {
         setContentView(R.layout.activity_op_online_course);
 
         courseModels = new ArrayList<>();
-
-        OP_JENIS_KELAS = "online";
 
         initView();
         onClick();

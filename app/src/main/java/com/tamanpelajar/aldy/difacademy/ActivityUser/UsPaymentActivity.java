@@ -47,7 +47,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 import static com.tamanpelajar.aldy.difacademy.ActivityCommon.LoginActivity.SHARE_PREFS;
 import static com.tamanpelajar.aldy.difacademy.ActivityCommon.LoginActivity.USERID_PREFS;
-import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpMainActivity.ADMIN_USER_ID;
+import static com.tamanpelajar.aldy.difacademy.BuildConfig.ADMIN_USER_ID;
 
 public class UsPaymentActivity extends AppCompatActivity {
     private static final String TAG = "PaymentActivity";
@@ -68,7 +68,7 @@ public class UsPaymentActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_payment);
+        setContentView(R.layout.activity_us_payment);
         initView();
         createOnClick();
         onClick();

@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.tamanpelajar.aldy.difacademy.ActivityUser.UsWatchYoutubeVideoActivity;
+import com.tamanpelajar.aldy.difacademy.CommonMethod;
 import com.tamanpelajar.aldy.difacademy.Model.VideoFreeModel;
 import com.tamanpelajar.aldy.difacademy.R;
 
@@ -48,7 +49,7 @@ public class FreeCourseAdapter extends RecyclerView.Adapter<FreeCourseAdapter.Vi
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, UsWatchYoutubeVideoActivity.class);
-                intent.putExtra("video_free_model", videoFreeModel);
+                intent.putExtra(CommonMethod.intentVideoFreeModel, videoFreeModel);
                 context.startActivity(intent);
             }
         });

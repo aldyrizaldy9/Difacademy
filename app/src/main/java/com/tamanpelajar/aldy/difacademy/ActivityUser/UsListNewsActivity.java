@@ -42,7 +42,7 @@ public class UsListNewsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list_news);
+        setContentView(R.layout.activity_us_list_news);
         initView();
         onClick();
         setRecyclerView();

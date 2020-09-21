@@ -29,7 +29,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
-import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpAddBlendedCourseActivity.blendedCourseDocId;
+import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpAddBlendedKelasActivity.kelasBlendedDocId;
 import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpAddBlendedMateriActivity.blendedMateriDocId;
 import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpMainActivity.ADD_REQUEST_CODE;
 import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpMainActivity.DELETE_REQUEST_CODE;
@@ -46,7 +46,7 @@ public class OpBlendedSoalActivity extends AppCompatActivity {
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     CollectionReference blendedSoalRef = db.collection("BlendedCourse")
-            .document(blendedCourseDocId)
+            .document(kelasBlendedDocId)
             .collection("BlendedMateri")
             .document(blendedMateriDocId)
             .collection("BlendedSoal");

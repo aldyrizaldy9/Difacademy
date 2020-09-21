@@ -44,7 +44,7 @@ public class UsEditProfileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_profile);
+        setContentView(R.layout.activity_us_edit_profile);
         initView();
         onClick();
         getUserData();

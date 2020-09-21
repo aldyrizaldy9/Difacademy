@@ -20,8 +20,6 @@ import com.tamanpelajar.aldy.difacademy.R;
 
 import java.util.ArrayList;
 
-import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpMainActivity.OP_JENIS_KELAS;
-
 public class OpMateriAdapter extends RecyclerView.Adapter<OpMateriAdapter.ViewHolder> {
     private Context context;
     private ArrayList<MateriModel> materiModels;
@@ -54,17 +52,17 @@ public class OpMateriAdapter extends RecyclerView.Adapter<OpMateriAdapter.ViewHo
             @Override
             public void onClick(View v) {
                 Intent intent;
-                if (OP_JENIS_KELAS.equals("blended")) {
-                    intent = new Intent(context, OpAddBlendedMateriActivity.class);
-                    intent.putExtra("blended_materi_model", model);
-                    intent.putExtra("index", position);
-                    context.startActivity(intent);
-                } else if (OP_JENIS_KELAS.equals("online")) {
-                    intent = new Intent(context, OpAddOnlineMateriActivity.class);
-                    intent.putExtra("online_materi_model", model);
-                    intent.putExtra("index", position);
-                    context.startActivity(intent);
-                }
+//                if (OP_JENIS_KELAS.equals("blended")) {
+//                    intent = new Intent(context, OpAddBlendedMateriActivity.class);
+//                    intent.putExtra("blended_materi_model", model);
+//                    intent.putExtra("index", position);
+//                    context.startActivity(intent);
+//                } else if (OP_JENIS_KELAS.equals("online")) {
+//                    intent = new Intent(context, OpAddOnlineMateriActivity.class);
+//                    intent.putExtra("online_materi_model", model);
+//                    intent.putExtra("index", position);
+//                    context.startActivity(intent);
+//                }
             }
         });
     }

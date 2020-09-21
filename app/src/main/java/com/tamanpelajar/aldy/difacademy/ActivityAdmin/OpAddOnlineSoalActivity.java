@@ -24,6 +24,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.tamanpelajar.aldy.difacademy.CommonMethod;
 import com.tamanpelajar.aldy.difacademy.Model.SoalModel;
 import com.tamanpelajar.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -213,7 +214,7 @@ public class OpAddOnlineSoalActivity extends AppCompatActivity {
                     public void onSuccess(Void aVoid) {
                         pd.dismiss();
                         Intent intent = new Intent(OpAddOnlineSoalActivity.this, OpOnlineSoalActivity.class);
-                        intent.putExtra("index", index);
+                        intent.putExtra(CommonMethod.intentIndex, index);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivityForResult(intent, DELETE_REQUEST_CODE);
                     }
@@ -243,8 +244,8 @@ public class OpAddOnlineSoalActivity extends AppCompatActivity {
                     public void onSuccess(Void aVoid) {
                         pd.dismiss();
                         Intent intent = new Intent(OpAddOnlineSoalActivity.this, OpOnlineSoalActivity.class);
-                        intent.putExtra("index", index);
-                        intent.putExtra("online_soal_model", model);
+                        intent.putExtra(CommonMethod.intentSoalOnlineModel, model);
+                        intent.putExtra(CommonMethod.intentIndex, index);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivityForResult(intent, UPDATE_REQUEST_CODE);
                     }
@@ -259,12 +260,11 @@ public class OpAddOnlineSoalActivity extends AppCompatActivity {
     }
 
     private void tambah() {
-        try {
-            dateCreated = Timestamp.now().getSeconds();
-        } catch (Exception e) {
-            Toast.makeText(this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+        if (!CommonMethod.isInternetAvailable(OpAddOnlineSoalActivity.this)){
             return;
         }
+
+        dateCreated = CommonMethod.getTimeStamp();
 
         String soal = edtSoal.getText().toString();
         String jwbA = edtA.getText().toString();
@@ -280,7 +280,7 @@ public class OpAddOnlineSoalActivity extends AppCompatActivity {
                     public void onSuccess(DocumentReference documentReference) {
                         pd.dismiss();
                         Intent intent = new Intent(OpAddOnlineSoalActivity.this, OpOnlineSoalActivity.class);
-                        intent.putExtra("online_soal_model", model);
+                        intent.putExtra(CommonMethod.intentSoalOnlineModel, model);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivityForResult(intent, ADD_REQUEST_CODE);
                     }

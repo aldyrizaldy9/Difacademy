@@ -16,11 +16,11 @@
         <activity android:name="com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpBlendedSoalActivity" />
         <activity android:name="com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpBlendedVideoActivity" />
         <activity android:name="com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpBlendedMateriActivity" />
-        <activity android:name="com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpBlendedCourseActivity" />
+        <activity android:name="com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpBlendedKelasActivity" />
         <activity android:name="com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpAddBlendedVideoActivity" />
         <activity android:name="com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpAddBlendedSoalActivity" />
         <activity android:name="com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpAddBlendedMateriActivity" />
-        <activity android:name="com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpAddBlendedCourseActivity" />
+        <activity android:name="com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpAddBlendedKelasActivity" />
         <activity android:name="com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpOnlineSoalActivity" />
         <activity android:name="com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpAddOnlineSoalActivity" />
         <activity android:name="com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpOnlineVideoActivity" />

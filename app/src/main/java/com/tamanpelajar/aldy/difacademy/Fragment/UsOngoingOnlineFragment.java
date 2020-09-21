@@ -58,7 +58,7 @@ public class UsOngoingOnlineFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
-        rootView = inflater.inflate(R.layout.fragment_ongoing_online, container, false);
+        rootView = inflater.inflate(R.layout.fragment_us_ongoing_online, container, false);
         initView();
         setRecyclerView();
         loadOngoingMateri();

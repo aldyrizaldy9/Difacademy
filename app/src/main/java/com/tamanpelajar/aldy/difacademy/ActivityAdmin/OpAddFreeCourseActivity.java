@@ -24,6 +24,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.tamanpelajar.aldy.difacademy.CommonMethod;
 import com.tamanpelajar.aldy.difacademy.JsonApiRetrofit;
 import com.tamanpelajar.aldy.difacademy.Model.TagModel;
 import com.tamanpelajar.aldy.difacademy.Model.VideoFreeModel;
@@ -235,7 +236,7 @@ public class OpAddFreeCourseActivity extends AppCompatActivity {
                     public void onSuccess(Void aVoid) {
                         pd.dismiss();
                         Intent intent = new Intent(OpAddFreeCourseActivity.this, OpFreeCourseActivity.class);
-                        intent.putExtra("index", index);
+                        intent.putExtra(CommonMethod.intentIndex, index);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivityForResult(intent, DELETE_REQUEST_CODE);
                     }
@@ -250,12 +251,11 @@ public class OpAddFreeCourseActivity extends AppCompatActivity {
     }
 
     private void edit(String title, String description, String thumbnail, String yId) {
-        try {
-            dateCreated = Timestamp.now().getSeconds();
-        } catch (Exception e) {
-            Toast.makeText(OpAddFreeCourseActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+        if (!CommonMethod.isInternetAvailable(OpAddFreeCourseActivity.this)){
             return;
         }
+
+        dateCreated = CommonMethod.getTimeStamp();
 
         final VideoFreeModel videoFreeModel = new VideoFreeModel(thumbnail, yId, title, description, tagId, tag, dateCreated);
         DocumentReference docRef = videoFreeRef.document(this.videoFreeModel.getDocumentId());
@@ -265,8 +265,8 @@ public class OpAddFreeCourseActivity extends AppCompatActivity {
                     public void onSuccess(Void aVoid) {
                         pd.dismiss();
                         Intent intent = new Intent(OpAddFreeCourseActivity.this, OpFreeCourseActivity.class);
-                        intent.putExtra("index", index);
-                        intent.putExtra("videoFreeModel", videoFreeModel);
+                        intent.putExtra(CommonMethod.intentIndex, index);
+                        intent.putExtra(CommonMethod.intentVideoFreeModel, videoFreeModel);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivityForResult(intent, UPDATE_REQUEST_CODE);
                     }
@@ -281,12 +281,11 @@ public class OpAddFreeCourseActivity extends AppCompatActivity {
     }
 
     private void tambah(String title, String description, String thumbnail, String yId) {
-        try {
-            dateCreated = Timestamp.now().getSeconds();
-        } catch (Exception e) {
-            Toast.makeText(OpAddFreeCourseActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+        if (!CommonMethod.isInternetAvailable(OpAddFreeCourseActivity.this)){
             return;
         }
+
+        dateCreated = CommonMethod.getTimeStamp();
 
         final VideoFreeModel videoFreeModel = new VideoFreeModel(thumbnail, yId, title, description, tagId, tag, dateCreated);
         videoFreeRef.add(videoFreeModel)
@@ -295,7 +294,7 @@ public class OpAddFreeCourseActivity extends AppCompatActivity {
                     public void onSuccess(DocumentReference documentReference) {
                         pd.dismiss();
                         Intent intent = new Intent(OpAddFreeCourseActivity.this, OpFreeCourseActivity.class);
-                        intent.putExtra("videoFreeModel", videoFreeModel);
+                        intent.putExtra(CommonMethod.intentVideoFreeModel, videoFreeModel);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivityForResult(intent, ADD_REQUEST_CODE);
                     }

@@ -56,7 +56,7 @@ public class UsOnlineCourseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_online_course);
+        setContentView(R.layout.activity_us_online_course);
         initView();
         onClick();
         setRecyclerView();

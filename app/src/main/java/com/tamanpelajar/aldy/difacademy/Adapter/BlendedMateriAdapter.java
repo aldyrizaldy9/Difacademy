@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.tamanpelajar.aldy.difacademy.ActivityUser.UsListVideoBlendedActivity;
+import com.tamanpelajar.aldy.difacademy.CommonMethod;
 import com.tamanpelajar.aldy.difacademy.Model.MateriModel;
 import com.tamanpelajar.aldy.difacademy.R;
 
@@ -49,8 +50,8 @@ public class BlendedMateriAdapter extends RecyclerView.Adapter<BlendedMateriAdap
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, UsListVideoBlendedActivity.class);
-                intent.putExtra("jenisKelas", "blended");
-                intent.putExtra("materiModel", materiModel);
+                intent.putExtra(CommonMethod.intentJenisKelas, "blended");
+                intent.putExtra(CommonMethod.intentMateriBlendedModel, materiModel);
                 context.startActivity(intent);
             }
         });

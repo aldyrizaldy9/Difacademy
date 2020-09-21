@@ -18,12 +18,15 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpMainActivity;
 import com.tamanpelajar.aldy.difacademy.ActivityUser.UsMainActivity;
+import com.tamanpelajar.aldy.difacademy.CommonMethod;
 import com.tamanpelajar.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
+import static com.tamanpelajar.aldy.difacademy.BuildConfig.ADMIN_USER_ID;
 
 public class LoginActivity extends AppCompatActivity {
     public static final String SHARE_PREFS = "share_prefs";
@@ -44,7 +47,6 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
 
         auth = FirebaseAuth.getInstance();
         firebaseUser = auth.getCurrentUser();
@@ -71,9 +73,6 @@ public class LoginActivity extends AppCompatActivity {
             initView();
             onClick();
         }
-        if (!isNetworkConnected()) {
-            Toast.makeText(this, "Tidak ada koneksi internet!", Toast.LENGTH_SHORT).show();
-        }
     }
 
     private void initView() {
@@ -89,14 +88,11 @@ public class LoginActivity extends AppCompatActivity {
         imgLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!isNetworkConnected()) {
-                    Toast.makeText(LoginActivity.this, "Tidak ada koneksi internet!", Toast.LENGTH_SHORT).show();
-                } else {
+                if (CommonMethod.isInternetAvailable(LoginActivity.this)) {
                     if (edtEmail.getText().length() != 0 || edtKataSandi.getText().length() != 0) {
                         login(edtEmail.getText().toString(), edtKataSandi.getText().toString());
                     }
                 }
-
             }
         });
         clDaftar.setOnClickListener(new View.OnClickListener() {
@@ -135,7 +131,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void checkJenisUser(final String userId) {
-        if (userId.equals(OpMainActivity.ADMIN_USER_ID)) {
+        if (userId.equals(ADMIN_USER_ID)) {
             //admin
 
             SharedPreferences sharedPreferences = getSharedPreferences(SHARE_PREFS, MODE_PRIVATE);
@@ -185,11 +181,5 @@ public class LoginActivity extends AppCompatActivity {
                 doubleBackToExitPressedOnce = false;
             }
         }, 2000);
-    }
-
-    private boolean isNetworkConnected() {
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
     }
 }

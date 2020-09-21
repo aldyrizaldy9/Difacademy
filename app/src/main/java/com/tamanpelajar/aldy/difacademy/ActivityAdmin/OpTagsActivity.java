@@ -17,8 +17,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.tamanpelajar.aldy.difacademy.Adapter.TagAdapter;
+import com.tamanpelajar.aldy.difacademy.CommonMethod;
 import com.tamanpelajar.aldy.difacademy.Model.TagModel;
 import com.tamanpelajar.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -36,21 +38,21 @@ public class OpTagsActivity extends AppCompatActivity {
 
     private static final String TAG = "OpTagsActivity";
 
-    TextView tvNavbar;
-    ConstraintLayout clBack;
-    ImageView imgBack;
+    private TextView tvNavbar;
+    private ConstraintLayout clBack;
+    private ImageView imgBack;
 
-    RecyclerView rvTags;
-    EditText edtAddTag;
-    Button btnTambah;
+    private RecyclerView rvTags;
+    private EditText edtAddTag;
+    private Button btnTambah;
 
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
-    CollectionReference tagsRef = db.collection("Tags");
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private CollectionReference tagsRef = db.collection(CommonMethod.refTags);
 
-    ArrayList<TagModel> tagModels;
-    TagAdapter tagAdapter;
+    private ArrayList<TagModel> tagModels;
+    private TagAdapter tagAdapter;
 
-    private ProgressDialog progressDialog;
+    private SwipeRefreshLayout srl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,9 +75,18 @@ public class OpTagsActivity extends AppCompatActivity {
         rvTags = findViewById(R.id.rv_op_tags_tags);
         edtAddTag = findViewById(R.id.edt_op_tags_tag);
         btnTambah = findViewById(R.id.btn_op_tags_simpan);
+        srl = findViewById(R.id.srl_op_tags);
 
         edtAddTag.requestFocus();
-        progressDialog = new ProgressDialog(this);
+
+        srl.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                tagModels.clear();
+                tagAdapter.notifyDataSetChanged();
+                loadTag();
+            }
+        });
     }
 
     private void onClick() {
@@ -89,9 +100,7 @@ public class OpTagsActivity extends AppCompatActivity {
         btnTambah.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!isNetworkConnected()) {
-                    Toast.makeText(OpTagsActivity.this, "Tidak ada koneksi internet!", Toast.LENGTH_SHORT).show();
-                } else {
+                if (CommonMethod.isInternetAvailable(OpTagsActivity.this)) {
                     String tag = edtAddTag.getText().toString();
                     if (tag.length() != 0) {
                         edtAddTag.setText("");
@@ -105,12 +114,7 @@ public class OpTagsActivity extends AppCompatActivity {
     }
 
     private void loadTag() {
-        progressDialog.setMessage("Memuat...");
-        progressDialog.setCancelable(false);
-        progressDialog.show();
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference tagRef = db.collection("Tags");
-        tagRef
+        tagsRef
                 .orderBy("tag", Query.Direction.ASCENDING)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -123,13 +127,13 @@ public class OpTagsActivity extends AppCompatActivity {
                             tagModels.add(new TagModel(tagModel.getTag(), tagModel.getTagid()));
                         }
                         tagAdapter.notifyDataSetChanged();
-                        progressDialog.dismiss();
+                        srl.setRefreshing(false);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        progressDialog.dismiss();
+                        srl.setRefreshing(false);
                         Log.d(TAG, e.toString());
                     }
                 });
@@ -152,7 +156,7 @@ public class OpTagsActivity extends AppCompatActivity {
                         tagModels.add(newtagModel);
                         tagAdapter.notifyDataSetChanged();
 
-                        Toast.makeText(OpTagsActivity.this, "Tag berhasil ditambahkan", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(OpTagsActivity.this, "Tag berhasil ditambahkan", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -161,11 +165,5 @@ public class OpTagsActivity extends AppCompatActivity {
                         Toast.makeText(OpTagsActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
                     }
                 });
-    }
-
-    private boolean isNetworkConnected() {
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
     }
 }

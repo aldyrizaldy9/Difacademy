@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.tamanpelajar.aldy.difacademy.ActivityUser.UsListVideoOnlineActivity;
+import com.tamanpelajar.aldy.difacademy.CommonMethod;
 import com.tamanpelajar.aldy.difacademy.Model.MateriModel;
 import com.tamanpelajar.aldy.difacademy.R;
 
@@ -49,7 +50,7 @@ public class OnlineMateriAdapter extends RecyclerView.Adapter<OnlineMateriAdapte
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, UsListVideoOnlineActivity.class);
-                intent.putExtra("jenisKelas", "online");
+                intent.putExtra(CommonMethod.intentJenisKelas, "online");
                 intent.putExtra("materiModel", materiModel);
                 context.startActivity(intent);
             }

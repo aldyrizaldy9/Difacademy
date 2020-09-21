@@ -41,7 +41,7 @@ public class UsOnlineMateriActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_online_materi);
+        setContentView(R.layout.activity_us_online_materi);
         initView();
         onClick();
         setRecyclerView();

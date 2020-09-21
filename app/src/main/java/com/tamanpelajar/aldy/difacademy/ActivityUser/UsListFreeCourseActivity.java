@@ -54,7 +54,7 @@ public class UsListFreeCourseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list_free_course);
+        setContentView(R.layout.activity_us_list_free_course);
         initView();
         onClick();
         setRecyclerView();

@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.tamanpelajar.aldy.difacademy.ActivityUser.UsDetailCourseActivity;
+import com.tamanpelajar.aldy.difacademy.CommonMethod;
 import com.tamanpelajar.aldy.difacademy.Model.CourseModel;
 import com.tamanpelajar.aldy.difacademy.R;
 
@@ -49,8 +50,8 @@ public class BlendedCourseAdapter extends RecyclerView.Adapter<BlendedCourseAdap
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, UsDetailCourseActivity.class);
-                intent.putExtra("jenisKelas", "blended");
-                intent.putExtra("courseModel", courseModel);
+                intent.putExtra(CommonMethod.intentJenisKelas, "blended");
+                intent.putExtra(CommonMethod.intentKelasBlendedModel, courseModel);
                 context.startActivity(intent);
             }
         });

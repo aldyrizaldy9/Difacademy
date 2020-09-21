@@ -22,6 +22,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.tamanpelajar.aldy.difacademy.CommonMethod;
 import com.tamanpelajar.aldy.difacademy.Model.VideoModel;
 import com.tamanpelajar.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -310,15 +311,14 @@ public class OpAddOnlineVideoActivity extends AppCompatActivity {
     }
 
     private void simpanVideo() {
-        String title = edtJudul.getText().toString();
-        String description = edtDeskripsi.getText().toString();
-
-        try {
-            dateCreated = Timestamp.now().getSeconds();
-        } catch (Exception e) {
-            Toast.makeText(OpAddOnlineVideoActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+        if (!CommonMethod.isInternetAvailable(OpAddOnlineVideoActivity.this)){
             return;
         }
+
+        dateCreated = CommonMethod.getTimeStamp();
+
+        String title = edtJudul.getText().toString();
+        String description = edtDeskripsi.getText().toString();
 
         VideoModel model = new VideoModel(title, description, urlVideo, onlineCourseDocId, onlineMateriDocId, dateCreated);
 
@@ -339,8 +339,8 @@ public class OpAddOnlineVideoActivity extends AppCompatActivity {
                             deleteThanUpdateVideoInFirebase(model);
                         } else {
                             Intent intent = new Intent(OpAddOnlineVideoActivity.this, OpOnlineVideoActivity.class);
-                            intent.putExtra("online_video_model", model);
-                            intent.putExtra("index", index);
+                            intent.putExtra(CommonMethod.intentVideoOnlineModel, model);
+                            intent.putExtra(CommonMethod.intentIndex, index);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             startActivityForResult(intent, UPDATE_REQUEST_CODE);
                         }
@@ -360,8 +360,8 @@ public class OpAddOnlineVideoActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
                         Intent intent = new Intent(OpAddOnlineVideoActivity.this, OpOnlineVideoActivity.class);
-                        intent.putExtra("online_video_model", model);
-                        intent.putExtra("index", index);
+                        intent.putExtra(CommonMethod.intentVideoOnlineModel, model);
+                        intent.putExtra(CommonMethod.intentIndex, index);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivityForResult(intent, ADD_REQUEST_CODE);
                     }
@@ -381,8 +381,8 @@ public class OpAddOnlineVideoActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Intent intent = new Intent(OpAddOnlineVideoActivity.this, OpOnlineVideoActivity.class);
-                        intent.putExtra("online_video_model", model);
-                        intent.putExtra("index", index);
+                        intent.putExtra(CommonMethod.intentVideoOnlineModel, model);
+                        intent.putExtra(CommonMethod.intentIndex, index);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivityForResult(intent, UPDATE_REQUEST_CODE);
                     }
@@ -402,7 +402,7 @@ public class OpAddOnlineVideoActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Intent intent = new Intent(OpAddOnlineVideoActivity.this, OpOnlineVideoActivity.class);
-                        intent.putExtra("index", index);
+                        intent.putExtra(CommonMethod.intentIndex, index);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivityForResult(intent, DELETE_REQUEST_CODE);
                     }

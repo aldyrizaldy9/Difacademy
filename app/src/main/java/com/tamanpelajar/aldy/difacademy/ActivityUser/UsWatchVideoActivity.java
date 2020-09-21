@@ -40,7 +40,7 @@ public class UsWatchVideoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_watch_video);
+        setContentView(R.layout.activity_us_watch_video);
         initView();
         checkIntent();
         videoPlayer();

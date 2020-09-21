@@ -19,8 +19,6 @@ import com.tamanpelajar.aldy.difacademy.R;
 
 import java.util.ArrayList;
 
-import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpMainActivity.OP_JENIS_KELAS;
-
 public class OpSoalAdapter extends RecyclerView.Adapter<OpSoalAdapter.ViewHolder> {
     private Context context;
     private ArrayList<SoalModel> soalModels;
@@ -50,17 +48,17 @@ public class OpSoalAdapter extends RecyclerView.Adapter<OpSoalAdapter.ViewHolder
             @Override
             public void onClick(View v) {
                 Intent intent;
-                if (OP_JENIS_KELAS.equals("blended")) {
-                    intent = new Intent(context, OpAddBlendedSoalActivity.class);
-                    intent.putExtra("blended_soal_model", model);
-                    intent.putExtra("index", position);
-                    context.startActivity(intent);
-                } else if (OP_JENIS_KELAS.equals("online")) {
-                    intent = new Intent(context, OpAddOnlineSoalActivity.class);
-                    intent.putExtra("online_soal_model", model);
-                    intent.putExtra("index", position);
-                    context.startActivity(intent);
-                }
+//                if (OP_JENIS_KELAS.equals("blended")) {
+//                    intent = new Intent(context, OpAddBlendedSoalActivity.class);
+//                    intent.putExtra("blended_soal_model", model);
+//                    intent.putExtra("index", position);
+//                    context.startActivity(intent);
+//                } else if (OP_JENIS_KELAS.equals("online")) {
+//                    intent = new Intent(context, OpAddOnlineSoalActivity.class);
+//                    intent.putExtra("online_soal_model", model);
+//                    intent.putExtra("index", position);
+//                    context.startActivity(intent);
+//                }
             }
         });
     }

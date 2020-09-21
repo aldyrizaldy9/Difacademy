@@ -19,8 +19,6 @@ import com.tamanpelajar.aldy.difacademy.R;
 
 import java.util.ArrayList;
 
-import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpMainActivity.OP_JENIS_KELAS;
-
 public class OpVideoAdapter extends RecyclerView.Adapter<OpVideoAdapter.ViewHolder> {
     private Context context;
     private ArrayList<VideoModel> videoModels;
@@ -50,17 +48,17 @@ public class OpVideoAdapter extends RecyclerView.Adapter<OpVideoAdapter.ViewHold
             @Override
             public void onClick(View v) {
                 Intent intent;
-                if (OP_JENIS_KELAS.equals("blended")) {
-                    intent = new Intent(context, OpAddBlendedVideoActivity.class);
-                    intent.putExtra("blended_video_model", model);
-                    intent.putExtra("index", position);
-                    context.startActivity(intent);
-                } else if (OP_JENIS_KELAS.equals("online")) {
-                    intent = new Intent(context, OpAddOnlineVideoActivity.class);
-                    intent.putExtra("online_video_model", model);
-                    intent.putExtra("index", position);
-                    context.startActivity(intent);
-                }
+//                if (OP_JENIS_KELAS.equals("blended")) {
+//                    intent = new Intent(context, OpAddBlendedVideoActivity.class);
+//                    intent.putExtra("blended_video_model", model);
+//                    intent.putExtra("index", position);
+//                    context.startActivity(intent);
+//                } else if (OP_JENIS_KELAS.equals("online")) {
+//                    intent = new Intent(context, OpAddOnlineVideoActivity.class);
+//                    intent.putExtra("online_video_model", model);
+//                    intent.putExtra("index", position);
+//                    context.startActivity(intent);
+//                }
             }
         });
     }

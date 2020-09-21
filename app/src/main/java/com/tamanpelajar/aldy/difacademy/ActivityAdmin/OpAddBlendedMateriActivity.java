@@ -21,6 +21,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.bumptech.glide.Glide;
+import com.tamanpelajar.aldy.difacademy.CommonMethod;
 import com.tamanpelajar.aldy.difacademy.Model.MateriModel;
 import com.tamanpelajar.aldy.difacademy.Model.VideoModel;
 import com.tamanpelajar.aldy.difacademy.R;
@@ -39,7 +40,7 @@ import com.google.firebase.storage.UploadTask;
 import java.util.ArrayList;
 import java.util.UUID;
 
-import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpAddBlendedCourseActivity.blendedCourseDocId;
+import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpAddBlendedKelasActivity.kelasBlendedDocId;
 import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpMainActivity.ADD_REQUEST_CODE;
 import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpMainActivity.DELETE_REQUEST_CODE;
 import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpMainActivity.PHOTO_PICK_REQUEST_CODE;
@@ -59,7 +60,7 @@ public class OpAddBlendedMateriActivity extends AppCompatActivity {
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     CollectionReference blendedMateriRef = db.collection("BlendedCourse")
-            .document(blendedCourseDocId)
+            .document(kelasBlendedDocId)
             .collection("BlendedMateri");
     boolean thereIsData = false;
     boolean addVideo = false;
@@ -109,11 +110,11 @@ public class OpAddBlendedMateriActivity extends AppCompatActivity {
         imgThumbnail = findViewById(R.id.img_op_add_blended_materi_thumbnail);
         btnAddVideo = findViewById(R.id.btn_op_add_blended_materi_add_video);
         btnAddSoal = findViewById(R.id.btn_op_add_blended_materi_add_soal);
-        btnHapus = findViewById(R.id.btn_op_add_blended_materi_hapus);
+//        btnHapus = findViewById(R.id.btn_op_add_blended_materi_hapus);
         btnSimpan = findViewById(R.id.btn_op_add_blended_materi_simpan);
         clAddPhoto = findViewById(R.id.cl_op_add_blended_materi_add_photo);
         edtJudul = findViewById(R.id.edt_op_add_blended_materi_judul);
-        edtHarga = findViewById(R.id.edt_op_add_blended_materi_harga);
+        edtHarga = findViewById(R.id.edt_op_add_blended_materi_lampiran);
     }
 
     private void checkIntent() {
@@ -256,15 +257,13 @@ public class OpAddBlendedMateriActivity extends AppCompatActivity {
         String title = edtJudul.getText().toString();
         String harga = edtHarga.getText().toString();
 
-        try {
-            dateCreated = Timestamp.now().getSeconds();
-        } catch (Exception e) {
-            pd.dismiss();
-            Toast.makeText(OpAddBlendedMateriActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+        if (!CommonMethod.isInternetAvailable(OpAddBlendedMateriActivity.this)) {
             return;
         }
 
-        MateriModel model = new MateriModel(title, thumbnailUrl, harga, blendedCourseDocId, dateCreated);
+        dateCreated = CommonMethod.getTimeStamp();
+
+        MateriModel model = new MateriModel(title, thumbnailUrl, harga, kelasBlendedDocId, dateCreated);
 
         if (thereIsData) {
             editMateri(model);
@@ -294,8 +293,8 @@ public class OpAddBlendedMateriActivity extends AppCompatActivity {
                                 startActivity(intent);
                             } else {
                                 Intent intent = new Intent(OpAddBlendedMateriActivity.this, OpBlendedMateriActivity.class);
-                                intent.putExtra("blended_materi_model", model);
-                                intent.putExtra("index", index);
+                                intent.putExtra(CommonMethod.intentMateriBlendedModel, model);
+                                intent.putExtra(CommonMethod.intentIndex, index);
                                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 startActivityForResult(intent, UPDATE_REQUEST_CODE);
                             }
@@ -319,7 +318,7 @@ public class OpAddBlendedMateriActivity extends AppCompatActivity {
                         blendedMateriDocId = documentReference.getId();
                         if (addSoal) {
                             thereIsData = true;
-                            materiModel = new MateriModel(edtJudul.getText().toString(), thumbnailUrl, edtHarga.getText().toString(), blendedCourseDocId, dateCreated);
+                            materiModel = new MateriModel(edtJudul.getText().toString(), thumbnailUrl, edtHarga.getText().toString(), kelasBlendedDocId, dateCreated);
                             oldMateriModel = materiModel;
                             imageUri = null;
                             pd.dismiss();
@@ -327,7 +326,7 @@ public class OpAddBlendedMateriActivity extends AppCompatActivity {
                             startActivity(intent);
                         } else if (addVideo) {
                             thereIsData = true;
-                            materiModel = new MateriModel(edtJudul.getText().toString(), thumbnailUrl, edtHarga.getText().toString(), blendedCourseDocId, dateCreated);
+                            materiModel = new MateriModel(edtJudul.getText().toString(), thumbnailUrl, edtHarga.getText().toString(), kelasBlendedDocId, dateCreated);
                             oldMateriModel = materiModel;
                             imageUri = null;
                             pd.dismiss();
@@ -335,8 +334,8 @@ public class OpAddBlendedMateriActivity extends AppCompatActivity {
                             startActivity(intent);
                         } else {
                             Intent intent = new Intent(OpAddBlendedMateriActivity.this, OpBlendedMateriActivity.class);
-                            intent.putExtra("blended_materi_model", model);
-                            intent.putExtra("index", index);
+                            intent.putExtra(CommonMethod.intentMateriBlendedModel, model);
+                            intent.putExtra(CommonMethod.intentIndex, index);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             startActivityForResult(intent, ADD_REQUEST_CODE);
                         }
@@ -394,8 +393,8 @@ public class OpAddBlendedMateriActivity extends AppCompatActivity {
                             startActivity(intent);
                         } else {
                             Intent intent = new Intent(OpAddBlendedMateriActivity.this, OpBlendedMateriActivity.class);
-                            intent.putExtra("blended_materi_model", model);
-                            intent.putExtra("index", index);
+                            intent.putExtra(CommonMethod.intentMateriBlendedModel, model);
+                            intent.putExtra(CommonMethod.intentIndex, index);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             startActivityForResult(intent, UPDATE_REQUEST_CODE);
                         }
@@ -555,7 +554,7 @@ public class OpAddBlendedMateriActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Intent intent = new Intent(OpAddBlendedMateriActivity.this, OpBlendedMateriActivity.class);
-                        intent.putExtra("index", index);
+                        intent.putExtra(CommonMethod.intentIndex, index);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivityForResult(intent, DELETE_REQUEST_CODE);
                     }

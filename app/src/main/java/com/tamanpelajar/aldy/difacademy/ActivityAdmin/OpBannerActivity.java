@@ -103,6 +103,17 @@ public class OpBannerActivity extends AppCompatActivity {
     }
 
     private void onClick() {
+
+        /**
+         * HAI SELAMAT DATANG KEMBALI
+         * YANG MAU KAMU LAKUIN SEBELUMNYA ITU
+         * GANTI INNETWORKCONNECTED ITU KE COMMONMETHOD
+         * TAPI COBA DULU DI APLIKASI DUMMY
+         * DI LUAR TAMAN PELAJAR YA
+         * SEMANGAT!!
+         */
+
+
         btnFile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

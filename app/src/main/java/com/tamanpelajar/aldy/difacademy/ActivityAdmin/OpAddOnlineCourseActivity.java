@@ -26,6 +26,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.bumptech.glide.Glide;
+import com.tamanpelajar.aldy.difacademy.CommonMethod;
 import com.tamanpelajar.aldy.difacademy.Model.CourseModel;
 import com.tamanpelajar.aldy.difacademy.Model.MateriModel;
 import com.tamanpelajar.aldy.difacademy.Model.TagModel;
@@ -318,19 +319,18 @@ public class OpAddOnlineCourseActivity extends AppCompatActivity {
     }
 
     private void simpanKelas() {
+        if (!CommonMethod.isInternetAvailable(OpAddOnlineCourseActivity.this)){
+            pd.dismiss();
+            return;
+        }
+
+        dateCreated = CommonMethod.getTimeStamp();
+
         String title = edtJudul.getText().toString();
         String description = edtDeskripsi.getText().toString();
         String googleDrive = edtLinkGDrive.getText().toString();
         String tag = tagCourse;
         String tagId = tagCourseId;
-
-        try {
-            dateCreated = Timestamp.now().getSeconds();
-        } catch (Exception e) {
-            pd.dismiss();
-            Toast.makeText(OpAddOnlineCourseActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
-            return;
-        }
 
         CourseModel model = new CourseModel(title, description, thumbnailUrl, googleDrive, tagId, tag, dateCreated);
 
@@ -357,8 +357,8 @@ public class OpAddOnlineCourseActivity extends AppCompatActivity {
                                 startActivity(intent);
                             } else {
                                 Intent intent = new Intent(OpAddOnlineCourseActivity.this, OpOnlineCourseActivity.class);
-                                intent.putExtra("online_course_model", model);
-                                intent.putExtra("index", index);
+                                intent.putExtra(CommonMethod.intentKelasOnlineModel, model);
+                                intent.putExtra(CommonMethod.intentIndex, index);
                                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 startActivityForResult(intent, UPDATE_REQUEST_CODE);
                             }
@@ -388,7 +388,7 @@ public class OpAddOnlineCourseActivity extends AppCompatActivity {
                             startActivity(intent);
                         } else {
                             Intent intent = new Intent(OpAddOnlineCourseActivity.this, OpOnlineCourseActivity.class);
-                            intent.putExtra("online_course_model", model);
+                            intent.putExtra(CommonMethod.intentKelasOnlineModel, model);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             startActivityForResult(intent, ADD_REQUEST_CODE);
                         }
@@ -441,8 +441,8 @@ public class OpAddOnlineCourseActivity extends AppCompatActivity {
                             startActivity(intent);
                         } else {
                             Intent intent = new Intent(OpAddOnlineCourseActivity.this, OpOnlineCourseActivity.class);
-                            intent.putExtra("online_course_model", model);
-                            intent.putExtra("index", index);
+                            intent.putExtra(CommonMethod.intentKelasOnlineModel, model);
+                            intent.putExtra(CommonMethod.intentIndex, index);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             startActivityForResult(intent, UPDATE_REQUEST_CODE);
                         }
@@ -676,7 +676,7 @@ public class OpAddOnlineCourseActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Intent intent = new Intent(OpAddOnlineCourseActivity.this, OpOnlineCourseActivity.class);
-                        intent.putExtra("index", index);
+                        intent.putExtra(CommonMethod.intentIndex, index);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivityForResult(intent, DELETE_REQUEST_CODE);
                     }

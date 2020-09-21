@@ -21,6 +21,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.bumptech.glide.Glide;
+import com.tamanpelajar.aldy.difacademy.CommonMethod;
 import com.tamanpelajar.aldy.difacademy.Model.MateriModel;
 import com.tamanpelajar.aldy.difacademy.Model.VideoModel;
 import com.tamanpelajar.aldy.difacademy.R;
@@ -253,16 +254,15 @@ public class OpAddOnlineMateriActivity extends AppCompatActivity {
     }
 
     private void simpanMateri() {
-        String title = edtJudul.getText().toString();
-        String harga = edtHarga.getText().toString();
-
-        try {
-            dateCreated = Timestamp.now().getSeconds();
-        } catch (Exception e) {
+        if (!CommonMethod.isInternetAvailable(OpAddOnlineMateriActivity.this)){
             pd.dismiss();
-            Toast.makeText(OpAddOnlineMateriActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
             return;
         }
+
+        dateCreated = CommonMethod.getTimeStamp();
+
+        String title = edtJudul.getText().toString();
+        String harga = edtHarga.getText().toString();
 
         MateriModel model = new MateriModel(title, thumbnailUrl, harga, onlineCourseDocId, dateCreated);
 
@@ -294,8 +294,8 @@ public class OpAddOnlineMateriActivity extends AppCompatActivity {
                                 startActivity(intent);
                             } else {
                                 Intent intent = new Intent(OpAddOnlineMateriActivity.this, OpOnlineMateriActivity.class);
-                                intent.putExtra("online_materi_model", model);
-                                intent.putExtra("index", index);
+                                intent.putExtra(CommonMethod.intentMateriOnlineModel, model);
+                                intent.putExtra(CommonMethod.intentIndex, index);
                                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 startActivityForResult(intent, UPDATE_REQUEST_CODE);
                             }
@@ -335,8 +335,8 @@ public class OpAddOnlineMateriActivity extends AppCompatActivity {
                             startActivity(intent);
                         } else {
                             Intent intent = new Intent(OpAddOnlineMateriActivity.this, OpOnlineMateriActivity.class);
-                            intent.putExtra("online_materi_model", model);
-                            intent.putExtra("index", index);
+                            intent.putExtra(CommonMethod.intentMateriOnlineModel, model);
+                            intent.putExtra(CommonMethod.intentIndex, index);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             startActivityForResult(intent, ADD_REQUEST_CODE);
                         }
@@ -394,8 +394,8 @@ public class OpAddOnlineMateriActivity extends AppCompatActivity {
                             startActivity(intent);
                         } else {
                             Intent intent = new Intent(OpAddOnlineMateriActivity.this, OpOnlineMateriActivity.class);
-                            intent.putExtra("online_materi_model", model);
-                            intent.putExtra("index", index);
+                            intent.putExtra(CommonMethod.intentMateriOnlineModel, model);
+                            intent.putExtra(CommonMethod.intentIndex, index);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             startActivityForResult(intent, UPDATE_REQUEST_CODE);
                         }
@@ -555,7 +555,7 @@ public class OpAddOnlineMateriActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Intent intent = new Intent(OpAddOnlineMateriActivity.this, OpOnlineMateriActivity.class);
-                        intent.putExtra("index", index);
+                        intent.putExtra(CommonMethod.intentIndex, index);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivityForResult(intent, DELETE_REQUEST_CODE);
                     }

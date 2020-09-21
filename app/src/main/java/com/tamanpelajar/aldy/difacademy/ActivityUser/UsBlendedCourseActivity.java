@@ -56,7 +56,7 @@ public class UsBlendedCourseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_blended_course);
+        setContentView(R.layout.activity_us_blended_course);
         initView();
         onClick();
         setRecyclerView();
