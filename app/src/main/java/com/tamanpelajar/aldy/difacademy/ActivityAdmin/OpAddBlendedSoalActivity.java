@@ -1,11 +1,9 @@
 package com.tamanpelajar.aldy.difacademy.ActivityAdmin;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
-import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,11 +23,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.tamanpelajar.aldy.difacademy.CommonMethod;
+import com.tamanpelajar.aldy.difacademy.Model.SoalBlendedModel;
 import com.tamanpelajar.aldy.difacademy.Model.SoalModel;
 import com.tamanpelajar.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -46,24 +44,24 @@ public class OpAddBlendedSoalActivity extends AppCompatActivity {
     public static String blendedSoalDocId = "";
 
     TextView tvNavbar;
-    ConstraintLayout clBack;
-    ImageView imgBack;
+    ConstraintLayout clBack, clHapus;
+    ImageView imgBack, imgHapus;
 
     EditText edtSoal, edtA, edtB, edtC, edtD, edtE;
     Spinner spnJawaban;
-    Button btnHapus, btnSimpan;
+    Button btnSimpan;
 
     String jawabanBenar = "";
     SoalModel soalModel;
-    ArrayList<String> listJawabanBenar;
+    ArrayList<String> listPilihanJawaban;
     boolean thereIsData = false;
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
-    CollectionReference collRef = db.collection("BlendedCourse")
+    CollectionReference collRef = db.collection(CommonMethod.refKelasBlended)
             .document(kelasBlendedDocId)
-            .collection("BlendedMateri")
+            .collection(CommonMethod.refMateriBlended)
             .document(blendedMateriDocId)
-            .collection("BlendedSoal");
+            .collection(CommonMethod.refSoalBlended);
 
     long dateCreated = 0;
     int index;
@@ -98,6 +96,10 @@ public class OpAddBlendedSoalActivity extends AppCompatActivity {
         });
         imgBack = findViewById(R.id.img_icon1);
         imgBack.setImageResource(R.drawable.ic_arrow_back);
+        clHapus = findViewById(R.id.cl_icon3);
+        clHapus.setVisibility(View.VISIBLE);
+        imgHapus = findViewById(R.id.img_icon3);
+        imgHapus.setImageResource(R.drawable.ic_delete);
 
         edtSoal = findViewById(R.id.edt_op_add_blended_soal_soal);
         edtA = findViewById(R.id.edt_op_add_blended_soal_jawaban_a);
@@ -106,20 +108,19 @@ public class OpAddBlendedSoalActivity extends AppCompatActivity {
         edtD = findViewById(R.id.edt_op_add_blended_soal_jawaban_d);
         edtE = findViewById(R.id.edt_op_add_blended_soal_jawaban_e);
         spnJawaban = findViewById(R.id.spn_op_add_blended_soal_jawaban);
-//        btnHapus = findViewById(R.id.btn_op_add_blended_soal_hapus);
         btnSimpan = findViewById(R.id.btn_op_add_blended_soal_simpan);
     }
 
     private void customSpinner() {
-        listJawabanBenar = new ArrayList<>();
-        listJawabanBenar.add("Pilih");
-        listJawabanBenar.add("A");
-        listJawabanBenar.add("B");
-        listJawabanBenar.add("C");
-        listJawabanBenar.add("D");
-        listJawabanBenar.add("E");
+        listPilihanJawaban = new ArrayList<>();
+        listPilihanJawaban.add("Pilih");
+        listPilihanJawaban.add("A");
+        listPilihanJawaban.add("B");
+        listPilihanJawaban.add("C");
+        listPilihanJawaban.add("D");
+        listPilihanJawaban.add("E");
 
-        ArrayAdapter<String> spnArrayAdapter = new ArrayAdapter<String>(OpAddBlendedSoalActivity.this, R.layout.support_simple_spinner_dropdown_item, listJawabanBenar) {
+        ArrayAdapter<String> spnArrayAdapter = new ArrayAdapter<String>(OpAddBlendedSoalActivity.this, R.layout.support_simple_spinner_dropdown_item, listPilihanJawaban) {
             @Override
             public boolean isEnabled(int position) {
                 return position != 0;
@@ -146,7 +147,7 @@ public class OpAddBlendedSoalActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 if (i != 0) {
-                    jawabanBenar = listJawabanBenar.get(i);
+                    jawabanBenar = listPilihanJawaban.get(i);
                 }
             }
 
@@ -159,10 +160,9 @@ public class OpAddBlendedSoalActivity extends AppCompatActivity {
 
     private void checkIntent() {
         Intent intent = getIntent();
-        soalModel = intent.getParcelableExtra("blended_soal_model");
+        soalModel = intent.getParcelableExtra(CommonMethod.intentSoalBlendedModel);
         if (soalModel != null) {
             thereIsData = true;
-            btnHapus.setVisibility(View.VISIBLE);
             blendedSoalDocId = soalModel.getDocumentId();
             edtSoal.setText(soalModel.getSoal());
             edtA.setText(soalModel.getJwbA());
@@ -171,9 +171,9 @@ public class OpAddBlendedSoalActivity extends AppCompatActivity {
             edtD.setText(soalModel.getJwbD());
             edtE.setText(soalModel.getJwbE());
             dateCreated = soalModel.getDateCreated();
-            index = intent.getIntExtra("index", -1);
-            for (int i = 1; i < listJawabanBenar.size(); i++) {
-                if (listJawabanBenar.get(i).equals(soalModel.getJawabanBenar())) {
+            index = intent.getIntExtra(CommonMethod.intentIndex, -1);
+            for (int i = 1; i < listPilihanJawaban.size(); i++) {
+                if (listPilihanJawaban.get(i).equals(soalModel.getJawabanBenar())) {
                     spnJawaban.setSelection(i);
                     break;
                 }
@@ -182,7 +182,7 @@ public class OpAddBlendedSoalActivity extends AppCompatActivity {
     }
 
     private void onClick() {
-        btnHapus.setOnClickListener(new View.OnClickListener() {
+        clHapus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showHapusDialog();
@@ -197,7 +197,8 @@ public class OpAddBlendedSoalActivity extends AppCompatActivity {
                         edtC.getText().toString().equals("") ||
                         edtD.getText().toString().equals("") ||
                         edtE.getText().toString().equals("") ||
-                        jawabanBenar.equals("") || spnJawaban.getSelectedItemPosition() == 0) {
+                        jawabanBenar.equals("") ||
+                        spnJawaban.getSelectedItemPosition() == 0) {
                     Toast.makeText(OpAddBlendedSoalActivity.this, getString(R.string.data_not_complete), Toast.LENGTH_SHORT).show();
                 } else {
                     showKonfirmasiDialog();
@@ -237,7 +238,7 @@ public class OpAddBlendedSoalActivity extends AppCompatActivity {
         String jwbD = edtD.getText().toString();
         String jwbE = edtE.getText().toString();
 
-        final SoalModel model = new SoalModel(dateCreated, soal, jwbA, jwbB, jwbC, jwbD, jwbE, jawabanBenar);
+        final SoalBlendedModel model = new SoalBlendedModel(soal, jwbA, jwbB, jwbC, jwbD, jwbE, jawabanBenar, dateCreated);
         docRef.set(model)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -302,9 +303,7 @@ public class OpAddBlendedSoalActivity extends AppCompatActivity {
         builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if (!isNetworkConnected()) {
-                    Toast.makeText(OpAddBlendedSoalActivity.this, "Tidak ada koneksi internet!", Toast.LENGTH_SHORT).show();
-                } else {
+                if (CommonMethod.isInternetAvailable(OpAddBlendedSoalActivity.this)) {
                     pd.show();
                     hapus();
                 }
@@ -329,9 +328,7 @@ public class OpAddBlendedSoalActivity extends AppCompatActivity {
         builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if (!isNetworkConnected()) {
-                    Toast.makeText(OpAddBlendedSoalActivity.this, "Tidak ada koneksi internet!", Toast.LENGTH_SHORT).show();
-                } else {
+                if (CommonMethod.isInternetAvailable(OpAddBlendedSoalActivity.this)) {
                     pd.show();
                     if (thereIsData) {
                         edit();
@@ -350,10 +347,5 @@ public class OpAddBlendedSoalActivity extends AppCompatActivity {
         });
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
-    }
-
-    private boolean isNetworkConnected() {
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
     }
 }

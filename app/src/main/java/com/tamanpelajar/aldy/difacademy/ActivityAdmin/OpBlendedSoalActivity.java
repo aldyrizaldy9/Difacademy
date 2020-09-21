@@ -14,14 +14,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.tamanpelajar.aldy.difacademy.Adapter.OpSoalAdapter;
+import com.tamanpelajar.aldy.difacademy.Adapter.OpSoalBlendedAdapter;
+import com.tamanpelajar.aldy.difacademy.CommonMethod;
+import com.tamanpelajar.aldy.difacademy.Model.SoalBlendedModel;
 import com.tamanpelajar.aldy.difacademy.Model.SoalModel;
 import com.tamanpelajar.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -36,31 +39,29 @@ import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpMainActivity.DELE
 import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpMainActivity.UPDATE_REQUEST_CODE;
 
 public class OpBlendedSoalActivity extends AppCompatActivity {
-    TextView tvNavbar;
-    ConstraintLayout clBack, clAdd;
-    ImageView imgBack, imgAdd;
-    RecyclerView rvBlendedSoal;
+    private TextView tvNavbar;
+    private ConstraintLayout clBack, clAdd;
+    private ImageView imgBack, imgAdd;
+    private RecyclerView rvBlendedSoal;
 
-    ArrayList<SoalModel> soalModels;
-    OpSoalAdapter adapter;
+    private ArrayList<SoalBlendedModel> soalBlendedModels;
+    private OpSoalBlendedAdapter adapter;
 
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
-    CollectionReference blendedSoalRef = db.collection("BlendedCourse")
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private CollectionReference blendedSoalRef = db.collection(CommonMethod.refKelasBlended)
             .document(kelasBlendedDocId)
-            .collection("BlendedMateri")
+            .collection(CommonMethod.refMateriBlended)
             .document(blendedMateriDocId)
-            .collection("BlendedSoal");
+            .collection(CommonMethod.refSoalBlended);
 
-    DocumentSnapshot lastVisible;
-    boolean loadbaru;
-    private ProgressDialog pd;
+    private SwipeRefreshLayout srl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_op_blended_soal);
 
-        soalModels = new ArrayList<>();
+        soalBlendedModels = new ArrayList<>();
 
         initView();
         onClick();
@@ -72,20 +73,20 @@ public class OpBlendedSoalActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Intent intent = getIntent();
-        SoalModel model = intent.getParcelableExtra("blended_soal_model");
-        int index = intent.getIntExtra("index", -1);
+        SoalBlendedModel model = intent.getParcelableExtra(CommonMethod.intentSoalBlendedModel);
+        int index = intent.getIntExtra(CommonMethod.intentIndex, -1);
 
         if (requestCode == ADD_REQUEST_CODE && resultCode == RESULT_OK) {
             if (model != null) {
-                soalModels.add(model);
+                soalBlendedModels.add(model);
             }
         } else if (requestCode == DELETE_REQUEST_CODE && resultCode == RESULT_OK) {
             if (index != -1) {
-                soalModels.remove(index);
+                soalBlendedModels.remove(index);
             }
         } else if (requestCode == UPDATE_REQUEST_CODE && resultCode == RESULT_OK) {
             if (model != null) {
-                soalModels.set(index, model);
+                soalBlendedModels.set(index, model);
             }
         }
         adapter.notifyDataSetChanged();
@@ -109,7 +110,17 @@ public class OpBlendedSoalActivity extends AppCompatActivity {
         imgAdd = findViewById(R.id.img_icon3);
         imgAdd.setImageResource(R.drawable.ic_add);
         rvBlendedSoal = findViewById(R.id.rv_op_blended_soal);
-        pd = new ProgressDialog(this);
+        srl = findViewById(R.id.srl_op_blended_soal);
+
+        srl.setRefreshing(true);
+        srl.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                soalBlendedModels.clear();
+                adapter.notifyDataSetChanged();
+                loadData();
+            }
+        });
     }
 
     private void onClick() {
@@ -125,97 +136,32 @@ public class OpBlendedSoalActivity extends AppCompatActivity {
     private void setRecyclerView() {
         final LinearLayoutManager manager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
         rvBlendedSoal.setLayoutManager(manager);
-        adapter = new OpSoalAdapter(this, soalModels);
+        adapter = new OpSoalBlendedAdapter(this, soalBlendedModels);
         rvBlendedSoal.setAdapter(adapter);
-
-        rvBlendedSoal.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                if (manager.findLastVisibleItemPosition() >= soalModels.size() - 10 &&
-                        lastVisible != null &&
-                        loadbaru) {
-                    loadbaru = false;
-                    Query load = blendedSoalRef
-                            .orderBy("dateCreated", Query.Direction.DESCENDING)
-                            .startAfter(lastVisible)
-                            .limit(20);
-                    load.get()
-                            .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                                @Override
-                                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                    if (queryDocumentSnapshots.size() > 0) {
-                                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                                            SoalModel newModel = documentSnapshot.toObject(SoalModel.class);
-                                            newModel.setDocumentId(documentSnapshot.getId());
-                                            soalModels.add(newModel);
-                                        }
-
-                                        if (queryDocumentSnapshots.size() < 20) {
-                                            lastVisible = null;
-                                        } else {
-                                            lastVisible = queryDocumentSnapshots.getDocuments()
-                                                    .get(queryDocumentSnapshots.size() - 1);
-                                        }
-
-                                        adapter.notifyDataSetChanged();
-                                    }
-                                    loadbaru = true;
-                                }
-                            })
-                            .addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    loadbaru = true;
-                                    Toast.makeText(OpBlendedSoalActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                }
-            }
-
-            @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-            }
-        });
     }
 
     private void loadData() {
-        pd.setMessage("Memuat...");
-        pd.show();
-
         Query first = blendedSoalRef
-                .orderBy("dateCreated", Query.Direction.DESCENDING)
-                .limit(20);
+                .orderBy(CommonMethod.fieldDateCreated, Query.Direction.DESCENDING);
 
         first.get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        soalModels.clear();
-                        if (queryDocumentSnapshots.size() > 0) {
-                            for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                                SoalModel newModel = documentSnapshot.toObject(SoalModel.class);
-                                newModel.setDocumentId(documentSnapshot.getId());
-                                soalModels.add(newModel);
-                            }
-
-                            if (queryDocumentSnapshots.size() < 20) {
-                                lastVisible = null;
-                            } else {
-                                lastVisible = queryDocumentSnapshots.getDocuments()
-                                        .get(queryDocumentSnapshots.size() - 1);
-                            }
-
-                            adapter.notifyDataSetChanged();
+                        soalBlendedModels.clear();
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                            SoalBlendedModel newModel = documentSnapshot.toObject(SoalBlendedModel.class);
+                            newModel.setDocumentId(documentSnapshot.getId());
+                            soalBlendedModels.add(newModel);
                         }
-                        pd.dismiss();
+                        adapter.notifyDataSetChanged();
+                        srl.setRefreshing(false);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        pd.dismiss();
+                        srl.setRefreshing(false);
                         Toast.makeText(OpBlendedSoalActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
                     }
                 });

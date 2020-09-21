@@ -10,8 +10,6 @@ import com.google.firebase.Timestamp;
 public class CommonMethod {
 
     public final static String refUser = "User";
-    public final static String refKelasBlended = "KelasBlended-dev";
-    public final static String refKelasOnline = "KelasOnline-dev";
     public final static String refBannerPhotoUrl = "BannerPhotoUrl";
     public final static String refPaymentKelasBlended = "PaymentBlended-dev";
     public final static String refPaymentKelasOnline = "PaymentOnline-dev";
@@ -20,11 +18,16 @@ public class CommonMethod {
     public final static String refOngoingKelasBlended = "OngoingKelasBlended-dev";
     public final static String refOngoingKelasOnline = "OngoingKelasOnline-dev";
     public final static String refMember = "Members-dev";
+
+    public final static String refKelasBlended = "KelasBlended-dev";
     public final static String refMateriBlended = "MateriBlended-dev";
-    public final static String refMateriOnline = "MateriOnline-dev";
-    public final static String refVideoBlended = "VideoBlended-dev";
-    public final static String refVideoOnline = "VideoOnline-dev";
     public final static String refSoalBlended = "SoalBlended-dev";
+    public final static String refVideoBlended = "VideoBlended-dev";
+
+    public final static String refKelasOnline = "KelasOnline-dev";
+    public final static String refMateriOnline = "MateriOnline-dev";
+    public final static String refVideoOnline = "VideoOnline-dev";
+    public final static String refSoalOnline = "SoalOnline-dev";
 
     public final static String intentKelasBlendedModel = "KelasBlendedModel";
     public final static String intentMateriBlendedModel = "MateriBlendedModel";
