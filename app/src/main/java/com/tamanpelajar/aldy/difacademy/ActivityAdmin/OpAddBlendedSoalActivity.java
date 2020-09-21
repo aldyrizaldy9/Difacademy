@@ -52,7 +52,7 @@ public class OpAddBlendedSoalActivity extends AppCompatActivity {
     Button btnSimpan;
 
     String jawabanBenar = "";
-    SoalModel soalModel;
+    SoalBlendedModel soalModel;
     ArrayList<String> listPilihanJawaban;
     boolean thereIsData = false;
 
