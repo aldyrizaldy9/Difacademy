@@ -51,35 +51,34 @@ public class OpAddBlendedKelasActivity extends AppCompatActivity {
 
     public static String kelasBlendedDocId = "";
 
-    TextView tvNavbar;
-    ConstraintLayout clBack, clHapus;
-    ImageView imgBack, imgHapus;
+    private TextView tvNavbar;
+    private ConstraintLayout clBack, clHapus;
+    private ImageView imgBack, imgHapus;
+    private ImageView imgThumbnail;
+    private Button btnAddMateri, btnSimpan, btnMember;
+    private EditText edtJudul, edtDeskripsi, edtHarga;
+    private Spinner spnTag;
+    private ConstraintLayout clAddPhoto;
 
-    ImageView imgThumbnail;
-    Button btnAddMateri, btnSimpan, btnMember;
-    EditText edtJudul, edtDeskripsi, edtHarga;
-    Spinner spnTag;
-    ConstraintLayout clAddPhoto;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private CollectionReference refKelasBlended = db.collection(CommonMethod.refKelasBlended);
 
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
-    CollectionReference refKelasBlended = db.collection(CommonMethod.refKelasBlended);
+    private String tagCourse = "";
+    private String tagCourseId = "";
+    private boolean thereIsData = false;
+    private boolean addMateri = false;
 
-    String tagCourse = "";
-    String tagCourseId = "";
-    boolean thereIsData = false;
-    boolean addMateri = false;
+    private KelasBlendedModel kelasModel, oldKelasModel;
+    private Uri imageUri;
+    private String thumbnailUrl = "";
 
-    KelasBlendedModel kelasModel, oldKelasModel;
-    Uri imageUri;
-    String thumbnailUrl = "";
+    private FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
+    private int index;
+    private long dateCreated = 0;
+    private ProgressDialog pd;
 
-    FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
-    int index;
-    long dateCreated = 0;
-    ProgressDialog pd;
-
-    ArrayList<String> listBlendedVideoUrl;
-    ArrayList<String> listBlendedMateriThumbnailUrl;
+    private ArrayList<String> listBlendedVideoUrl;
+    private ArrayList<String> listBlendedMateriThumbnailUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,7 +101,7 @@ public class OpAddBlendedKelasActivity extends AppCompatActivity {
 
     private void initView() {
         tvNavbar = findViewById(R.id.tv_navbar);
-        tvNavbar.setText("Detail Kelas Blended");
+        tvNavbar.setText("Kelas Blended");
         clBack = findViewById(R.id.cl_icon1);
         clBack.setVisibility(View.VISIBLE);
         clBack.setOnClickListener(new View.OnClickListener() {

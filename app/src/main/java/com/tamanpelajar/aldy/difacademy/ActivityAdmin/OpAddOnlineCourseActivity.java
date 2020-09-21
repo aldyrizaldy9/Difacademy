@@ -106,7 +106,7 @@ public class OpAddOnlineCourseActivity extends AppCompatActivity {
 
     private void initView() {
         tvNavbar = findViewById(R.id.tv_navbar);
-        tvNavbar.setText("Detail Kelas Online");
+        tvNavbar.setText("Kelas Online");
         clBack = findViewById(R.id.cl_icon1);
         clBack.setVisibility(View.VISIBLE);
         clBack.setOnClickListener(new View.OnClickListener() {

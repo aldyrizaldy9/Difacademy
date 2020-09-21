@@ -22,12 +22,12 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.bumptech.glide.Glide;
 import com.tamanpelajar.aldy.difacademy.CommonMethod;
+import com.tamanpelajar.aldy.difacademy.Model.MateriBlendedModel;
 import com.tamanpelajar.aldy.difacademy.Model.MateriModel;
 import com.tamanpelajar.aldy.difacademy.Model.VideoModel;
 import com.tamanpelajar.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -49,32 +49,32 @@ import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpMainActivity.UPDA
 public class OpAddBlendedMateriActivity extends AppCompatActivity {
     public static String blendedMateriDocId = "";
 
-    TextView tvNavbar;
-    ConstraintLayout clBack;
-    ImageView imgBack;
+    private TextView tvNavbar;
+    private ConstraintLayout clBack, clHapus;
+    private ImageView imgBack, imgHapus;
+    private ImageView imgThumbnail;
+    private Button btnAddVideo, btnAddSoal, btnSimpan;
+    private EditText edtJudul, edtDeskripsi, edtLampiran;
+    private ConstraintLayout clAddPhoto;
 
-    ImageView imgThumbnail;
-    Button btnAddVideo, btnAddSoal, btnHapus, btnSimpan;
-    EditText edtJudul, edtHarga;
-    ConstraintLayout clAddPhoto;
-
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
-    CollectionReference blendedMateriRef = db.collection("BlendedCourse")
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private CollectionReference blendedMateriRef = db.collection(CommonMethod.refKelasBlended)
             .document(kelasBlendedDocId)
-            .collection("BlendedMateri");
-    boolean thereIsData = false;
-    boolean addVideo = false;
-    boolean addSoal = false;
-    FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
+            .collection(CommonMethod.refMateriBlended);
 
-    MateriModel materiModel, oldMateriModel;
-    Uri imageUri;
-    String thumbnailUrl = "";
-    int index;
-    long dateCreated = 0;
-    ProgressDialog pd;
+    private boolean thereIsData = false;
+    private boolean addVideo = false;
+    private boolean addSoal = false;
+    private FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
 
-    ArrayList<String> listVideoUrl;
+    private MateriBlendedModel materiModel, oldMateriModel;
+    private Uri imageUri;
+    private String thumbnailUrl = "";
+    private int index;
+    private long dateCreated = 0;
+    private ProgressDialog pd;
+
+    private ArrayList<String> listVideoUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,7 +95,7 @@ public class OpAddBlendedMateriActivity extends AppCompatActivity {
 
     private void initView() {
         tvNavbar = findViewById(R.id.tv_navbar);
-        tvNavbar.setText("Detail Materi Kelas Blended");
+        tvNavbar.setText("Materi Kelas Blended");
         clBack = findViewById(R.id.cl_icon1);
         clBack.setVisibility(View.VISIBLE);
         clBack.setOnClickListener(new View.OnClickListener() {
@@ -106,31 +106,35 @@ public class OpAddBlendedMateriActivity extends AppCompatActivity {
         });
         imgBack = findViewById(R.id.img_icon1);
         imgBack.setImageResource(R.drawable.ic_arrow_back);
+        clHapus = findViewById(R.id.cl_icon3);
+        clHapus.setVisibility(View.VISIBLE);
+        imgHapus = findViewById(R.id.img_icon3);
+        imgHapus.setImageResource(R.drawable.ic_delete);
 
         imgThumbnail = findViewById(R.id.img_op_add_blended_materi_thumbnail);
         btnAddVideo = findViewById(R.id.btn_op_add_blended_materi_add_video);
         btnAddSoal = findViewById(R.id.btn_op_add_blended_materi_add_soal);
-//        btnHapus = findViewById(R.id.btn_op_add_blended_materi_hapus);
         btnSimpan = findViewById(R.id.btn_op_add_blended_materi_simpan);
         clAddPhoto = findViewById(R.id.cl_op_add_blended_materi_add_photo);
         edtJudul = findViewById(R.id.edt_op_add_blended_materi_judul);
-        edtHarga = findViewById(R.id.edt_op_add_blended_materi_lampiran);
+        edtDeskripsi = findViewById(R.id.edt_op_add_blended_materi_deskripsi);
+        edtLampiran = findViewById(R.id.edt_op_add_blended_materi_lampiran);
     }
 
     private void checkIntent() {
         Intent intent = getIntent();
-        materiModel = intent.getParcelableExtra("blended_materi_model");
+        materiModel = intent.getParcelableExtra(CommonMethod.intentMateriBlendedModel);
         if (materiModel != null) {
             oldMateriModel = materiModel;
-            index = intent.getIntExtra("index", -1);
+            index = intent.getIntExtra(CommonMethod.intentIndex, -1);
             thereIsData = true;
             thumbnailUrl = materiModel.getThumbnailUrl();
-            btnHapus.setVisibility(View.VISIBLE);
             Glide.with(this)
                     .load(thumbnailUrl)
                     .into(imgThumbnail);
             edtJudul.setText(materiModel.getTitle());
-            edtHarga.setText(materiModel.getHarga());
+            edtDeskripsi.setText(materiModel.getDescription());
+            edtLampiran.setText(materiModel.getLampiranUrl());
             blendedMateriDocId = materiModel.getDocumentId();
         }
     }
@@ -164,10 +168,13 @@ public class OpAddBlendedMateriActivity extends AppCompatActivity {
                     addVideo = true;
 
                     String title = edtJudul.getText().toString();
-                    String harga = edtHarga.getText().toString();
+                    String deskripsi = edtDeskripsi.getText().toString();
+                    String lampiran = edtLampiran.getText().toString();
+
                     if (thereIsData) {
                         if (title.equals(oldMateriModel.getTitle())
-                                && harga.equals(oldMateriModel.getHarga())
+                                && deskripsi.equals(oldMateriModel.getDescription())
+                                && lampiran.equals(oldMateriModel.getLampiranUrl())
                                 && imageUri == null) {
                             Intent intent = new Intent(OpAddBlendedMateriActivity.this, OpBlendedVideoActivity.class);
                             startActivity(intent);
@@ -191,10 +198,13 @@ public class OpAddBlendedMateriActivity extends AppCompatActivity {
                     addVideo = false;
 
                     String title = edtJudul.getText().toString();
-                    String harga = edtHarga.getText().toString();
+                    String deskripsi = edtDeskripsi.getText().toString();
+                    String lampiran = edtLampiran.getText().toString();
+
                     if (thereIsData) {
                         if (title.equals(oldMateriModel.getTitle())
-                                && harga.equals(oldMateriModel.getHarga())
+                                && deskripsi.equals(oldMateriModel.getDescription())
+                                && lampiran.equals(oldMateriModel.getLampiranUrl())
                                 && imageUri == null) {
                             Intent intent = new Intent(OpAddBlendedMateriActivity.this, OpBlendedSoalActivity.class);
                             startActivity(intent);
@@ -209,7 +219,7 @@ public class OpAddBlendedMateriActivity extends AppCompatActivity {
                 }
             }
         });
-        btnHapus.setOnClickListener(new View.OnClickListener() {
+        clHapus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //hapus materi
@@ -231,12 +241,6 @@ public class OpAddBlendedMateriActivity extends AppCompatActivity {
         });
     }
 
-    private boolean isNetworkConnected() {
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
-    }
-
     private void getImageFromGallery() {
         Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setType("image/*");
@@ -245,17 +249,17 @@ public class OpAddBlendedMateriActivity extends AppCompatActivity {
 
     private boolean isDataComplete() {
         if (thereIsData) {
-            return !edtJudul.getText().toString().equals("") && !edtHarga.getText().toString().equals("");
+            return !edtJudul.getText().toString().equals("");
         } else {
             return !edtJudul.getText().toString().equals("")
-                    && !edtHarga.getText().toString().equals("")
                     && imageUri != null;
         }
     }
 
     private void simpanMateri() {
         String title = edtJudul.getText().toString();
-        String harga = edtHarga.getText().toString();
+        String deskripsi = edtDeskripsi.getText().toString();
+        String lampiran = edtLampiran.getText().toString();
 
         if (!CommonMethod.isInternetAvailable(OpAddBlendedMateriActivity.this)) {
             return;
@@ -263,7 +267,7 @@ public class OpAddBlendedMateriActivity extends AppCompatActivity {
 
         dateCreated = CommonMethod.getTimeStamp();
 
-        MateriModel model = new MateriModel(title, thumbnailUrl, harga, kelasBlendedDocId, dateCreated);
+        MateriBlendedModel model = new MateriBlendedModel(title, deskripsi, thumbnailUrl, lampiran, kelasBlendedDocId, dateCreated);
 
         if (thereIsData) {
             editMateri(model);
@@ -272,7 +276,7 @@ public class OpAddBlendedMateriActivity extends AppCompatActivity {
         }
     }
 
-    private void editMateri(final MateriModel model) {
+    private void editMateri(final MateriBlendedModel model) {
         DocumentReference docRef = blendedMateriRef.document(blendedMateriDocId);
         docRef.set(model)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -310,26 +314,25 @@ public class OpAddBlendedMateriActivity extends AppCompatActivity {
                 });
     }
 
-    private void tambahMateri(final MateriModel model) {
+    private void tambahMateri(final MateriBlendedModel model) {
         blendedMateriRef.add(model)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
                         blendedMateriDocId = documentReference.getId();
+                        materiModel = model;
+//                        materiModel.setDocumentId(blendedMateriDocId);
+
+                        oldMateriModel = materiModel;
+                        imageUri = null;
+                        thereIsData = true;
+
+                        pd.dismiss();
+
                         if (addSoal) {
-                            thereIsData = true;
-                            materiModel = new MateriModel(edtJudul.getText().toString(), thumbnailUrl, edtHarga.getText().toString(), kelasBlendedDocId, dateCreated);
-                            oldMateriModel = materiModel;
-                            imageUri = null;
-                            pd.dismiss();
                             Intent intent = new Intent(OpAddBlendedMateriActivity.this, OpBlendedSoalActivity.class);
                             startActivity(intent);
                         } else if (addVideo) {
-                            thereIsData = true;
-                            materiModel = new MateriModel(edtJudul.getText().toString(), thumbnailUrl, edtHarga.getText().toString(), kelasBlendedDocId, dateCreated);
-                            oldMateriModel = materiModel;
-                            imageUri = null;
-                            pd.dismiss();
                             Intent intent = new Intent(OpAddBlendedMateriActivity.this, OpBlendedVideoActivity.class);
                             startActivity(intent);
                         } else {
@@ -351,7 +354,7 @@ public class OpAddBlendedMateriActivity extends AppCompatActivity {
     }
 
     private void uploadPhotoToFirebase() {
-        final StorageReference ref = firebaseStorage.getReference().child("BlendedMateri/" + UUID.randomUUID().toString());
+        final StorageReference ref = firebaseStorage.getReference().child(CommonMethod.storageBlendedMateri + UUID.randomUUID().toString());
         ref.putFile(imageUri)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
@@ -375,20 +378,20 @@ public class OpAddBlendedMateriActivity extends AppCompatActivity {
                 });
     }
 
-    private void deletePhotoInFirebase(final MateriModel model) {
+    private void deletePhotoInFirebase(final MateriBlendedModel model) {
+        //method ini khusus untuk edit materi saja
         StorageReference deleteRef = firebaseStorage.getReferenceFromUrl(oldMateriModel.getThumbnailUrl());
         deleteRef.delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        if (addVideo) {
-                            imageUri = null;
-                            pd.dismiss();
-                            Intent intent = new Intent(OpAddBlendedMateriActivity.this, OpBlendedVideoActivity.class);
+                        imageUri = null;
+                        pd.dismiss();
+
+                        if (addSoal) {
+                            Intent intent = new Intent(OpAddBlendedMateriActivity.this, OpBlendedSoalActivity.class);
                             startActivity(intent);
-                        } else if (addSoal) {
-                            imageUri = null;
-                            pd.dismiss();
+                        } else if (addVideo) {
                             Intent intent = new Intent(OpAddBlendedMateriActivity.this, OpBlendedVideoActivity.class);
                             startActivity(intent);
                         } else {
@@ -410,9 +413,7 @@ public class OpAddBlendedMateriActivity extends AppCompatActivity {
         builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if (!isNetworkConnected()) {
-                    Toast.makeText(OpAddBlendedMateriActivity.this, "Tidak ada koneksi intenet!", Toast.LENGTH_SHORT).show();
-                } else {
+                if (CommonMethod.isInternetAvailable(OpAddBlendedMateriActivity.this)) {
                     pd.show();
                     if (imageUri != null) {
                         uploadPhotoToFirebase();
@@ -436,128 +437,128 @@ public class OpAddBlendedMateriActivity extends AppCompatActivity {
     }
 
     private void showHapusDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Apakah anda yakin ingin menghapus materi ini?");
-        builder.setTitle("Hapus Materi Kelas Blended");
-        builder.setCancelable(false);
-        builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if (!isNetworkConnected()) {
-                    Toast.makeText(OpAddBlendedMateriActivity.this, "Tidak ada koneksi intenet!", Toast.LENGTH_SHORT).show();
-                } else {
-                    pd.show();
-                    hapusMateri();
-                }
-            }
-        });
-
-        builder.setNegativeButton("Tidak", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-                addSoal = false;
-                addVideo = false;
-            }
-        });
-        AlertDialog alertDialog = builder.create();
-        alertDialog.show();
+//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//        builder.setMessage("Apakah anda yakin ingin menghapus materi ini?");
+//        builder.setTitle("Hapus Materi Kelas Blended");
+//        builder.setCancelable(false);
+//        builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                if (!isNetworkConnected()) {
+//                    Toast.makeText(OpAddBlendedMateriActivity.this, "Tidak ada koneksi intenet!", Toast.LENGTH_SHORT).show();
+//                } else {
+//                    pd.show();
+//                    hapusMateri();
+//                }
+//            }
+//        });
+//
+//        builder.setNegativeButton("Tidak", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                dialog.cancel();
+//                addSoal = false;
+//                addVideo = false;
+//            }
+//        });
+//        AlertDialog alertDialog = builder.create();
+//        alertDialog.show();
     }
 
-    private void hapusMateri() {
-        //ambil link blended video di storage
-        //hapus blended video document
-        //hapus blended video collection
-        //hapus blended video storage
-        //hapus blended soal document
-        //hapus blended soal collection
-        //ambil link blended materi thumbnail
-        //hapus blended materi document
-        //hapus blended materi thumbnail storage
-        getListVideoUrl();
-    }
-
-    private void getListVideoUrl() {
-        CollectionReference ref = blendedMateriRef.document(blendedMateriDocId)
-                .collection("BlendedVideo");
-
-        ref.get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                            VideoModel model = documentSnapshot.toObject(VideoModel.class);
-                            listVideoUrl.add(model.getVideoUrl());
-                        }
-                        hapusBlendedVideoDoc();
-                    }
-                });
-    }
-
-    private void hapusBlendedVideoDoc() {
-        final CollectionReference ref = blendedMateriRef.document(blendedMateriDocId)
-                .collection("BlendedVideo");
-
-        ref.get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                            DocumentReference docRef = ref.document(documentSnapshot.getId());
-                            docRef.delete();
-                        }
-                        hapusBlendedVideoStorage();
-                    }
-                });
-    }
-
-    private void hapusBlendedVideoStorage() {
-        for (String url : listVideoUrl) {
-            StorageReference ref = firebaseStorage.getReferenceFromUrl(url);
-            ref.delete();
-        }
-        hapusBlendedSoalDoc();
-    }
-
-    private void hapusBlendedSoalDoc() {
-        final CollectionReference ref = blendedMateriRef.document(blendedMateriDocId)
-                .collection("BlendedSoal");
-
-        ref.get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                            DocumentReference docRef = ref.document(documentSnapshot.getId());
-                            docRef.delete();
-                        }
-                        hapusBlendedMateriDoc();
-                    }
-                });
-    }
-
-    private void hapusBlendedMateriDoc() {
-        DocumentReference ref = blendedMateriRef.document(blendedMateriDocId);
-        ref.delete()
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        hapusBlendedMateriStorage();
-                    }
-                });
-    }
-
-    private void hapusBlendedMateriStorage() {
-        StorageReference ref = firebaseStorage.getReferenceFromUrl(thumbnailUrl);
-        ref.delete()
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Intent intent = new Intent(OpAddBlendedMateriActivity.this, OpBlendedMateriActivity.class);
-                        intent.putExtra(CommonMethod.intentIndex, index);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivityForResult(intent, DELETE_REQUEST_CODE);
-                    }
-                });
-    }
+//    private void hapusMateri() {
+//        //ambil link blended video di storage
+//        //hapus blended video document
+//        //hapus blended video collection
+//        //hapus blended video storage
+//        //hapus blended soal document
+//        //hapus blended soal collection
+//        //ambil link blended materi thumbnail
+//        //hapus blended materi document
+//        //hapus blended materi thumbnail storage
+//        getListVideoUrl();
+//    }
+//
+//    private void getListVideoUrl() {
+//        CollectionReference ref = blendedMateriRef.document(blendedMateriDocId)
+//                .collection("BlendedVideo");
+//
+//        ref.get()
+//                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+//                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+//                            VideoModel model = documentSnapshot.toObject(VideoModel.class);
+//                            listVideoUrl.add(model.getVideoUrl());
+//                        }
+//                        hapusBlendedVideoDoc();
+//                    }
+//                });
+//    }
+//
+//    private void hapusBlendedVideoDoc() {
+//        final CollectionReference ref = blendedMateriRef.document(blendedMateriDocId)
+//                .collection("BlendedVideo");
+//
+//        ref.get()
+//                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+//                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+//                            DocumentReference docRef = ref.document(documentSnapshot.getId());
+//                            docRef.delete();
+//                        }
+//                        hapusBlendedVideoStorage();
+//                    }
+//                });
+//    }
+//
+//    private void hapusBlendedVideoStorage() {
+//        for (String url : listVideoUrl) {
+//            StorageReference ref = firebaseStorage.getReferenceFromUrl(url);
+//            ref.delete();
+//        }
+//        hapusBlendedSoalDoc();
+//    }
+//
+//    private void hapusBlendedSoalDoc() {
+//        final CollectionReference ref = blendedMateriRef.document(blendedMateriDocId)
+//                .collection("BlendedSoal");
+//
+//        ref.get()
+//                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+//                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+//                            DocumentReference docRef = ref.document(documentSnapshot.getId());
+//                            docRef.delete();
+//                        }
+//                        hapusBlendedMateriDoc();
+//                    }
+//                });
+//    }
+//
+//    private void hapusBlendedMateriDoc() {
+//        DocumentReference ref = blendedMateriRef.document(blendedMateriDocId);
+//        ref.delete()
+//                .addOnSuccessListener(new OnSuccessListener<Void>() {
+//                    @Override
+//                    public void onSuccess(Void aVoid) {
+//                        hapusBlendedMateriStorage();
+//                    }
+//                });
+//    }
+//
+//    private void hapusBlendedMateriStorage() {
+//        StorageReference ref = firebaseStorage.getReferenceFromUrl(thumbnailUrl);
+//        ref.delete()
+//                .addOnSuccessListener(new OnSuccessListener<Void>() {
+//                    @Override
+//                    public void onSuccess(Void aVoid) {
+//                        Intent intent = new Intent(OpAddBlendedMateriActivity.this, OpBlendedMateriActivity.class);
+//                        intent.putExtra(CommonMethod.intentIndex, index);
+//                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                        startActivityForResult(intent, DELETE_REQUEST_CODE);
+//                    }
+//                });
+//    }
 }

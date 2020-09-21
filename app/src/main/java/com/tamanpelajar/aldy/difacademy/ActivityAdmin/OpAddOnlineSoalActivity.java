@@ -87,7 +87,7 @@ public class OpAddOnlineSoalActivity extends AppCompatActivity {
         pd.setCancelable(false);
 
         tvNavbar = findViewById(R.id.tv_navbar);
-        tvNavbar.setText("Detail Soal Materi Online");
+        tvNavbar.setText("Soal Materi Online");
         clBack = findViewById(R.id.cl_icon1);
         clBack.setVisibility(View.VISIBLE);
         clBack.setOnClickListener(new View.OnClickListener() {

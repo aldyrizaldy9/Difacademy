@@ -90,7 +90,7 @@ public class OpAddBlendedVideoActivity extends AppCompatActivity {
 
     private void initView() {
         tvNavbar = findViewById(R.id.tv_navbar);
-        tvNavbar.setText("Detail Video Materi Blended");
+        tvNavbar.setText("Video Materi Blended");
         clBack = findViewById(R.id.cl_icon1);
         clBack.setVisibility(View.VISIBLE);
         clBack.setOnClickListener(new View.OnClickListener() {
