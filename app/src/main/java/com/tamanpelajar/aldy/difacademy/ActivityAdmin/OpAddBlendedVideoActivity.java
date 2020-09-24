@@ -105,7 +105,7 @@ public class OpAddBlendedVideoActivity extends AppCompatActivity {
         imgBack = findViewById(R.id.img_icon1);
         imgBack.setImageResource(R.drawable.ic_arrow_back);
         clHapus = findViewById(R.id.cl_icon3);
-        clHapus.setVisibility(View.VISIBLE);
+//        clHapus.setVisibility(View.VISIBLE);
         imgHapus = findViewById(R.id.img_icon3);
         imgHapus.setImageResource(R.drawable.ic_delete);
         edtJudul = findViewById(R.id.edt_op_add_blended_video_judul);
@@ -124,13 +124,14 @@ public class OpAddBlendedVideoActivity extends AppCompatActivity {
         if (videoModel != null) {
             oldVideoModel = videoModel;
             thereIsData = true;
+            clHapus.setVisibility(View.VISIBLE);
 
             edtJudul.setText(videoModel.getTitle());
             edtDeskripsi.setText(videoModel.getDescription());
             blendedVideoDocId = videoModel.getDocumentId();
             dateCreated = videoModel.getDateCreated();
             urlVideo = videoModel.getVideoUrl();
-            index = intent.getIntExtra("index", -1);
+            index = intent.getIntExtra(CommonMethod.intentIndex, -1);
         }
     }
 

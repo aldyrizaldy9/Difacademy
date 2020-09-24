@@ -43,7 +43,7 @@ public class OpSoalBlendedAdapter extends RecyclerView.Adapter<OpSoalBlendedAdap
         holder.tvDeskripsi.setVisibility(View.GONE);
 
         final SoalBlendedModel model = soalBlendedModels.get(position);
-        holder.tvJudul.setText((position + 1) + ". " + model.getSoal());
+        holder.tvJudul.setText(model.getSoal());
         holder.container.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

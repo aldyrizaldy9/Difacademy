@@ -97,7 +97,7 @@ public class OpAddBlendedSoalActivity extends AppCompatActivity {
         imgBack = findViewById(R.id.img_icon1);
         imgBack.setImageResource(R.drawable.ic_arrow_back);
         clHapus = findViewById(R.id.cl_icon3);
-        clHapus.setVisibility(View.VISIBLE);
+//        clHapus.setVisibility(View.VISIBLE);
         imgHapus = findViewById(R.id.img_icon3);
         imgHapus.setImageResource(R.drawable.ic_delete);
 
@@ -171,6 +171,7 @@ public class OpAddBlendedSoalActivity extends AppCompatActivity {
             edtD.setText(soalModel.getJwbD());
             edtE.setText(soalModel.getJwbE());
             dateCreated = soalModel.getDateCreated();
+            clHapus.setVisibility(View.VISIBLE);
             index = intent.getIntExtra(CommonMethod.intentIndex, -1);
             for (int i = 1; i < listPilihanJawaban.size(); i++) {
                 if (listPilihanJawaban.get(i).equals(soalModel.getJawabanBenar())) {
