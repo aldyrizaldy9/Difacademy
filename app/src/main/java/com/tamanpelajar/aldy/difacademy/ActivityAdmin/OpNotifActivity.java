@@ -15,8 +15,10 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-import com.tamanpelajar.aldy.difacademy.Fragment.OpNotifGraduationFragment;
-import com.tamanpelajar.aldy.difacademy.Fragment.OpNotifPaymentFragment;
+import com.tamanpelajar.aldy.difacademy.CommonMethod;
+import com.tamanpelajar.aldy.difacademy.Fragment.OpGraduationFragment;
+import com.tamanpelajar.aldy.difacademy.Fragment.OpPaymentBlendedFragment;
+import com.tamanpelajar.aldy.difacademy.Fragment.OpPaymentOnlineFragment;
 import com.tamanpelajar.aldy.difacademy.R;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
@@ -49,7 +51,7 @@ public class OpNotifActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         Intent intent = getIntent();
-        String fromNotif = "" + intent.getStringExtra("fromNotif");
+        String fromNotif = "" + intent.getStringExtra(CommonMethod.intentFromNotification);
         if (fromNotif.equals("ya")) {
             startActivity(new Intent(OpNotifActivity.this, OpMainActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
         } else {
@@ -76,8 +78,9 @@ public class OpNotifActivity extends AppCompatActivity {
 
     private void setViewPager() {
         final ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-        viewPagerAdapter.addFragment(new OpNotifPaymentFragment(), "Payment");
-        viewPagerAdapter.addFragment(new OpNotifGraduationFragment(), "Graduation");
+        viewPagerAdapter.addFragment(new OpPaymentBlendedFragment(OpNotifActivity.this), "Payment Blended");
+        viewPagerAdapter.addFragment(new OpPaymentOnlineFragment(OpNotifActivity.this), "Payment Online");
+        viewPagerAdapter.addFragment(new OpGraduationFragment(), "Graduation");
 
         viewPager.setAdapter(viewPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);

@@ -187,8 +187,9 @@ public class OpMainActivity extends AppCompatActivity {
         btnFree.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(OpMainActivity.this, OpFreeCourseActivity.class);
-                startActivity(intent);
+//                Intent intent = new Intent(OpMainActivity.this, OpFreeCourseActivity.class);
+//                startActivity(intent);
+                Toast.makeText(OpMainActivity.this, "Fitur ini telah dihapus", Toast.LENGTH_SHORT).show();
             }
         });
         clNotif.setOnClickListener(new View.OnClickListener() {

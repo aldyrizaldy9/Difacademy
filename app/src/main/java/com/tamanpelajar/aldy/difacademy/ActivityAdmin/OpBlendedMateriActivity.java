@@ -22,7 +22,6 @@ import com.tamanpelajar.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -36,6 +35,8 @@ import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpMainActivity.DELE
 import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpMainActivity.UPDATE_REQUEST_CODE;
 
 public class OpBlendedMateriActivity extends AppCompatActivity {
+    public static boolean isMateriChanged;
+
     private TextView tvNavbar;
     private ConstraintLayout clBack, clAdd;
     private ImageView imgBack, imgAdd;
@@ -62,6 +63,18 @@ public class OpBlendedMateriActivity extends AppCompatActivity {
         onClick();
         setRecyclerView();
         getData();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (isMateriChanged){
+            isMateriChanged = false;
+            srl.setRefreshing(true);
+            materiBlendedModels.clear();
+            adapter.notifyDataSetChanged();
+            getData();
+        }
     }
 
     @Override

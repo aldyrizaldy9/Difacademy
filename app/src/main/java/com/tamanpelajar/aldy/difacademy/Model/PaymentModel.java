@@ -7,6 +7,63 @@ import com.google.firebase.firestore.Exclude;
 
 public class PaymentModel implements Parcelable {
 
+    private String documentId, userId, namaUser, email, noWa, kelasId, namaKelas, hargaKelas, namaBank;
+    private long dateCreated;
+    private boolean isSeen, isPaid;
+
+    public PaymentModel() {
+    }
+
+    public PaymentModel(String userId, String namaUser, String email, String noWa, String kelasId, String namaKelas, String hargaKelas, String namaBank, long dateCreated, boolean isSeen, boolean isPaid) {
+        this.userId = userId;
+        this.namaUser = namaUser;
+        this.email = email;
+        this.noWa = noWa;
+        this.kelasId = kelasId;
+        this.namaKelas = namaKelas;
+        this.hargaKelas = hargaKelas;
+        this.namaBank = namaBank;
+        this.dateCreated = dateCreated;
+        this.isSeen = isSeen;
+        this.isPaid = isPaid;
+    }
+
+    protected PaymentModel(Parcel in) {
+        documentId = in.readString();
+        userId = in.readString();
+        namaUser = in.readString();
+        email = in.readString();
+        noWa = in.readString();
+        kelasId = in.readString();
+        namaKelas = in.readString();
+        hargaKelas = in.readString();
+        namaBank = in.readString();
+        dateCreated = in.readLong();
+        isSeen = in.readByte() != 0;
+        isPaid = in.readByte() != 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(documentId);
+        dest.writeString(userId);
+        dest.writeString(namaUser);
+        dest.writeString(email);
+        dest.writeString(noWa);
+        dest.writeString(kelasId);
+        dest.writeString(namaKelas);
+        dest.writeString(hargaKelas);
+        dest.writeString(namaBank);
+        dest.writeLong(dateCreated);
+        dest.writeByte((byte) (isSeen ? 1 : 0));
+        dest.writeByte((byte) (isPaid ? 1 : 0));
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
     public static final Creator<PaymentModel> CREATOR = new Creator<PaymentModel>() {
         @Override
         public PaymentModel createFromParcel(Parcel in) {
@@ -18,132 +75,85 @@ public class PaymentModel implements Parcelable {
             return new PaymentModel[size];
         }
     };
-    private String userId, namaUser, email, noWa, jenisKelas, courseId, materiId, namaMateri, hargaMateri, namaBank, paymentId;
-    private long dateCreated;
-    private boolean isSeen, isPaid;
 
-    public PaymentModel() {
+    public String getDocumentId() {
+        return documentId;
     }
 
-    public PaymentModel(String userId,
-                        String namaUser,
-                        String email,
-                        String noWa,
-                        String jenisKelas,
-                        String courseId,
-                        String materiId,
-                        String namaMateri,
-                        String hargaMateri,
-                        String namaBank,
-                        long dateCreated,
-                        boolean isSeen,
-                        boolean isPaid) {
-        this.userId = userId;
-        this.namaUser = namaUser;
-        this.email = email;
-        this.noWa = noWa;
-        this.jenisKelas = jenisKelas;
-        this.courseId = courseId;
-        this.materiId = materiId;
-        this.namaMateri = namaMateri;
-        this.hargaMateri = hargaMateri;
-        this.namaBank = namaBank;
-        this.dateCreated = dateCreated;
-        this.isSeen = isSeen;
-        this.isPaid = isPaid;
-    }
-
-    protected PaymentModel(Parcel in) {
-        userId = in.readString();
-        namaUser = in.readString();
-        email = in.readString();
-        noWa = in.readString();
-        jenisKelas = in.readString();
-        courseId = in.readString();
-        materiId = in.readString();
-        namaMateri = in.readString();
-        hargaMateri = in.readString();
-        namaBank = in.readString();
-        paymentId = in.readString();
-        dateCreated = in.readLong();
-        isSeen = in.readByte() != 0;
-        isPaid = in.readByte() != 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(userId);
-        dest.writeString(namaUser);
-        dest.writeString(email);
-        dest.writeString(noWa);
-        dest.writeString(jenisKelas);
-        dest.writeString(courseId);
-        dest.writeString(materiId);
-        dest.writeString(namaMateri);
-        dest.writeString(hargaMateri);
-        dest.writeString(namaBank);
-        dest.writeString(paymentId);
-        dest.writeLong(dateCreated);
-        dest.writeByte((byte) (isSeen ? 1 : 0));
-        dest.writeByte((byte) (isPaid ? 1 : 0));
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
+    public void setDocumentId(String documentId) {
+        this.documentId = documentId;
     }
 
     public String getUserId() {
         return userId;
     }
 
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
     public String getNamaUser() {
         return namaUser;
+    }
+
+    public void setNamaUser(String namaUser) {
+        this.namaUser = namaUser;
     }
 
     public String getEmail() {
         return email;
     }
 
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public String getNoWa() {
         return noWa;
     }
 
-    public String getJenisKelas() {
-        return jenisKelas;
+    public void setNoWa(String noWa) {
+        this.noWa = noWa;
     }
 
-    public String getCourseId() {
-        return courseId;
+    public String getKelasId() {
+        return kelasId;
     }
 
-    public String getMateriId() {
-        return materiId;
+    public void setKelasId(String kelasId) {
+        this.kelasId = kelasId;
     }
 
-    public String getNamaMateri() {
-        return namaMateri;
+    public String getNamaKelas() {
+        return namaKelas;
     }
 
-    public String getHargaMateri() {
-        return hargaMateri;
+    public void setNamaKelas(String namaKelas) {
+        this.namaKelas = namaKelas;
+    }
+
+    public String getHargaKelas() {
+        return hargaKelas;
+    }
+
+    public void setHargaKelas(String hargaKelas) {
+        this.hargaKelas = hargaKelas;
     }
 
     public String getNamaBank() {
         return namaBank;
     }
 
-    @Exclude
-    public String getPaymentId() {
-        return paymentId;
-    }
-
-    public void setPaymentId(String paymentId) {
-        this.paymentId = paymentId;
+    public void setNamaBank(String namaBank) {
+        this.namaBank = namaBank;
     }
 
     public long getDateCreated() {
         return dateCreated;
+    }
+
+    public void setDateCreated(long dateCreated) {
+        this.dateCreated = dateCreated;
     }
 
     public boolean isSeen() {

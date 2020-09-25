@@ -14,7 +14,6 @@ android {
         versionName "1.01"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-        buildConfigField("String", "YOUTUBE_API_KEY", YOUTUBE_API_KEY)
         buildConfigField("String", "ADMIN_USER_ID", ADMIN_USER_ID)
     }
     buildTypes {

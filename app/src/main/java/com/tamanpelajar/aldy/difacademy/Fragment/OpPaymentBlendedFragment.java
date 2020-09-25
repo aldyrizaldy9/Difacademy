@@ -2,6 +2,7 @@ package com.tamanpelajar.aldy.difacademy.Fragment;
 
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,7 +14,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.tamanpelajar.aldy.difacademy.Adapter.OpNotifPaymentAdapter;
+import com.tamanpelajar.aldy.difacademy.Adapter.OpPaymentBlendedAdapter;
+import com.tamanpelajar.aldy.difacademy.CommonMethod;
 import com.tamanpelajar.aldy.difacademy.Model.PaymentModel;
 import com.tamanpelajar.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -30,25 +32,30 @@ import java.util.ArrayList;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class OpNotifPaymentFragment extends Fragment {
+public class OpPaymentBlendedFragment extends Fragment {
     private static final String TAG = "OpNotifPaymentFragment";
-    public static OpNotifPaymentAdapter OP_NOTIF_PAYMENT_ADAPTER;
+
+    private Context context;
+    private OpPaymentBlendedAdapter adapter;
     private View rootView;
     private RecyclerView rvNotifPayment;
     private ArrayList<PaymentModel> paymentModels;
     private ProgressDialog progressDialog;
     private CollectionReference paymentRef;
 
-    public OpNotifPaymentFragment() {
+    public OpPaymentBlendedFragment() {
         // Required empty public constructor
     }
 
+    public OpPaymentBlendedFragment(Context context) {
+        this.context = context;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        rootView = inflater.inflate(R.layout.fragment_op_notif_payment, container, false);
+        rootView = inflater.inflate(R.layout.fragment_op_payment_blended, container, false);
         initView();
         setRecyclerView();
         return rootView;
@@ -61,17 +68,17 @@ public class OpNotifPaymentFragment extends Fragment {
     }
 
     private void initView() {
-        rvNotifPayment = rootView.findViewById(R.id.rv_op_notif_payment);
+        rvNotifPayment = rootView.findViewById(R.id.rv_op_payment_blended);
         progressDialog = new ProgressDialog(rootView.getContext());
         FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
-        paymentRef = firebaseFirestore.collection("Payment");
+        paymentRef = firebaseFirestore.collection(CommonMethod.refPaymentKelasBlended);
     }
 
     private void setRecyclerView() {
         paymentModels = new ArrayList<>();
-        OP_NOTIF_PAYMENT_ADAPTER = new OpNotifPaymentAdapter(rootView.getContext(), paymentModels);
+        adapter = new OpPaymentBlendedAdapter(rootView.getContext(), paymentModels);
         rvNotifPayment.setLayoutManager(new LinearLayoutManager(rootView.getContext(), RecyclerView.VERTICAL, false));
-        rvNotifPayment.setAdapter(OP_NOTIF_PAYMENT_ADAPTER);
+        rvNotifPayment.setAdapter(adapter);
     }
 
     private void loadData() {
@@ -80,7 +87,7 @@ public class OpNotifPaymentFragment extends Fragment {
         progressDialog.show();
 
         paymentRef
-                .orderBy("dateCreated", Query.Direction.DESCENDING)
+                .orderBy(CommonMethod.fieldDateCreated, Query.Direction.DESCENDING)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
@@ -88,12 +95,12 @@ public class OpNotifPaymentFragment extends Fragment {
                         paymentModels.clear();
                         for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
                             PaymentModel paymentModel = queryDocumentSnapshot.toObject(PaymentModel.class);
-                            paymentModel.setPaymentId(queryDocumentSnapshot.getId());
+                            paymentModel.setDocumentId(queryDocumentSnapshot.getId());
 
                             paymentModels.add(paymentModel);
                         }
                         progressDialog.dismiss();
-                        OP_NOTIF_PAYMENT_ADAPTER.notifyDataSetChanged();
+                        adapter.notifyDataSetChanged();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {

@@ -45,6 +45,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpBlendedKelasActivity.isKelasChanged;
 import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpMainActivity.ADD_REQUEST_CODE;
 import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpMainActivity.DELETE_REQUEST_CODE;
 import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpMainActivity.PHOTO_PICK_REQUEST_CODE;
@@ -463,6 +464,7 @@ public class OpAddBlendedKelasActivity extends AppCompatActivity {
                     return;
                 }
 
+                isKelasChanged = true;
                 pd.show();
                 if (imageUri != null) {
                     uploadPhotoToFirebase();

@@ -43,6 +43,7 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpAddBlendedKelasActivity.kelasBlendedDocId;
+import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpBlendedMateriActivity.isMateriChanged;
 import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpMainActivity.ADD_REQUEST_CODE;
 import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpMainActivity.DELETE_REQUEST_CODE;
 import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpMainActivity.PHOTO_PICK_REQUEST_CODE;
@@ -418,13 +419,16 @@ public class OpAddBlendedMateriActivity extends AppCompatActivity {
         builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if (CommonMethod.isInternetAvailable(OpAddBlendedMateriActivity.this)) {
-                    pd.show();
-                    if (imageUri != null) {
-                        uploadPhotoToFirebase();
-                    } else {
-                        simpanMateri();
-                    }
+                if (!CommonMethod.isInternetAvailable(OpAddBlendedMateriActivity.this)) {
+                    return;
+                }
+
+                isMateriChanged = true;
+                pd.show();
+                if (imageUri != null) {
+                    uploadPhotoToFirebase();
+                } else {
+                    simpanMateri();
                 }
             }
         });

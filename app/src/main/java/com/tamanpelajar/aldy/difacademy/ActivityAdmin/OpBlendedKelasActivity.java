@@ -35,6 +35,7 @@ import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpMainActivity.DELE
 import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpMainActivity.UPDATE_REQUEST_CODE;
 
 public class OpBlendedKelasActivity extends AppCompatActivity {
+    public static boolean isKelasChanged;
 
     private TextView tvNavbar;
     private ConstraintLayout clBack, clAdd;
@@ -61,6 +62,18 @@ public class OpBlendedKelasActivity extends AppCompatActivity {
         onClick();
         setRecyclerView();
         getFirstData();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (isKelasChanged){
+            isKelasChanged = false;
+            srl.setRefreshing(true);
+            kelasBlendedModels.clear();
+            adapter.notifyDataSetChanged();
+            getFirstData();
+        }
     }
 
     @Override
@@ -163,9 +176,9 @@ public class OpBlendedKelasActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                            KelasBlendedModel newModel = documentSnapshot.toObject(KelasBlendedModel.class);
-                            newModel.setDocumentId(documentSnapshot.getId());
-                            kelasBlendedModels.add(newModel);
+                            KelasBlendedModel model = documentSnapshot.toObject(KelasBlendedModel.class);
+                            model.setDocumentId(documentSnapshot.getId());
+                            kelasBlendedModels.add(model);
                         }
 
                         if (queryDocumentSnapshots.size() >= CommonMethod.paginationMaxLoad) {

@@ -17,25 +17,25 @@ import com.tamanpelajar.aldy.difacademy.R;
 
 import java.util.ArrayList;
 
-public class OpNotifGraduationAdapter extends RecyclerView.Adapter<OpNotifGraduationAdapter.ViewHolder> {
+public class OpGraduationAdapter extends RecyclerView.Adapter<OpGraduationAdapter.ViewHolder> {
     private Context context;
     private ArrayList<GraduationModel> graduationModels;
 
-    public OpNotifGraduationAdapter(Context context, ArrayList<GraduationModel> graduationModels) {
+    public OpGraduationAdapter(Context context, ArrayList<GraduationModel> graduationModels) {
         this.context = context;
         this.graduationModels = graduationModels;
     }
 
     @NonNull
     @Override
-    public OpNotifGraduationAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public OpGraduationAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-        View view = layoutInflater.inflate(R.layout.card_op_notif_graduation, parent, false);
-        return new OpNotifGraduationAdapter.ViewHolder(view);
+        View view = layoutInflater.inflate(R.layout.card_op_graduation, parent, false);
+        return new OpGraduationAdapter.ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull OpNotifGraduationAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull OpGraduationAdapter.ViewHolder holder, int position) {
         final GraduationModel graduationModel = graduationModels.get(position);
         holder.tvNama.setText(graduationModel.getNamaUser());
         holder.tvKelas.setText(graduationModel.getNamaMateri());
@@ -65,10 +65,10 @@ public class OpNotifGraduationAdapter extends RecyclerView.Adapter<OpNotifGradua
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvNama = itemView.findViewById(R.id.tv_c_op_notif_hubungi_nama);
-            tvKelas = itemView.findViewById(R.id.tv_c_op_notif_hubungi_kelas);
-            tvStatus = itemView.findViewById(R.id.tv_c_op_notif_status_hubungi);
-            clContainer = itemView.findViewById(R.id.cl_c_op_notif_hubungi);
+            tvNama = itemView.findViewById(R.id.tv_c_op_graduation_hubungi_nama);
+            tvKelas = itemView.findViewById(R.id.tv_c_op_graduation_hubungi_kelas);
+            tvStatus = itemView.findViewById(R.id.tv_c_op_graduation_status_hubungi);
+            clContainer = itemView.findViewById(R.id.cl_c_op_graduation_hubungi);
         }
     }
 }

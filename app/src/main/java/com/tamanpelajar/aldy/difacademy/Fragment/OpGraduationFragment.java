@@ -13,7 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.tamanpelajar.aldy.difacademy.Adapter.OpNotifGraduationAdapter;
+import com.tamanpelajar.aldy.difacademy.Adapter.OpGraduationAdapter;
 import com.tamanpelajar.aldy.difacademy.Model.GraduationModel;
 import com.tamanpelajar.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -30,16 +30,16 @@ import java.util.ArrayList;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class OpNotifGraduationFragment extends Fragment {
+public class OpGraduationFragment extends Fragment {
     private static final String TAG = "OpNotifGraduationFragme";
-    public static OpNotifGraduationAdapter OP_NOTIF_GRADUATION_ADAPTER;
+    public static OpGraduationAdapter OP_NOTIF_GRADUATION_ADAPTER;
     private View rootView;
     private RecyclerView rvNotifGrad;
     private ArrayList<GraduationModel> graduationModels;
     private ProgressDialog progressDialog;
     private CollectionReference graduationRef;
 
-    public OpNotifGraduationFragment() {
+    public OpGraduationFragment() {
         // Required empty public constructor
     }
 
@@ -48,7 +48,7 @@ public class OpNotifGraduationFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        rootView = inflater.inflate(R.layout.fragment_op_notif_graduation, container, false);
+        rootView = inflater.inflate(R.layout.fragment_op_graduation, container, false);
         initView();
         setRecyclerView();
         return rootView;
@@ -69,7 +69,7 @@ public class OpNotifGraduationFragment extends Fragment {
 
     private void setRecyclerView() {
         graduationModels = new ArrayList<>();
-        OP_NOTIF_GRADUATION_ADAPTER = new OpNotifGraduationAdapter(rootView.getContext(), graduationModels);
+        OP_NOTIF_GRADUATION_ADAPTER = new OpGraduationAdapter(rootView.getContext(), graduationModels);
         rvNotifGrad.setLayoutManager(new LinearLayoutManager(rootView.getContext(), RecyclerView.VERTICAL, false));
         rvNotifGrad.setAdapter(OP_NOTIF_GRADUATION_ADAPTER);
     }

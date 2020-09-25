@@ -1,42 +1,34 @@
 {
   "project_info": {
-    "project_number": "943772231994",
-    "firebase_url": "https://difacademy-aa944.firebaseio.com",
-    "project_id": "difacademy-aa944",
-    "storage_bucket": "difacademy-aa944.appspot.com"
+    "project_number": "835602937808",
+    "firebase_url": "https://tamanpelajar-48bfb.firebaseio.com",
+    "project_id": "tamanpelajar-48bfb",
+    "storage_bucket": "tamanpelajar-48bfb.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:943772231994:android:7f4f471246a177bdc24803",
+        "mobilesdk_app_id": "1:835602937808:android:5e25dde1d85bcb86962bd5",
         "android_client_info": {
           "package_name": "com.tamanpelajar.aldy.difacademy"
         }
       },
       "oauth_client": [
         {
-          "client_id": "943772231994-q1ha9btaprggcp4212loebiidu97c96t.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.tamanpelajar.aldy.difacademy",
-            "certificate_hash": "f8a2e6482354bf6b162a5541827edd298c13ffbe"
-          }
-        },
-        {
-          "client_id": "943772231994-qn4o472odoou2rge20rdpivgip3iip5a.apps.googleusercontent.com",
+          "client_id": "835602937808-nrd4gma3fhe0562vtkebplc1dpbc7og4.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBnpNubMlI37e68FvmsUVv0d-1B_a45Zwo"
+          "current_key": "AIzaSyAnI4TB7h92dV3P5yzor6n14g8iRhrY5qc"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "943772231994-qn4o472odoou2rge20rdpivgip3iip5a.apps.googleusercontent.com",
+              "client_id": "835602937808-nrd4gma3fhe0562vtkebplc1dpbc7og4.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
