@@ -50,6 +50,7 @@ public class OpPaymentOnlineAdapter extends RecyclerView.Adapter<OpPaymentOnline
             public void onClick(View v) {
                 Intent intent = new Intent(context, OpNotifPaymentActivity.class);
                 intent.putExtra(CommonMethod.intentPaymentModel, model);
+                intent.putExtra(CommonMethod.intentJenisKelas, "online");
                 context.startActivity(intent);
             }
         });

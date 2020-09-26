@@ -26,7 +26,6 @@ import com.tamanpelajar.aldy.difacademy.Model.NewsModel;
 import com.tamanpelajar.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -210,7 +209,7 @@ public class OpAddNewsActivity extends AppCompatActivity {
     }
 
     private void deleteNewsFromFirestore() {
-        newsRef.document(newsModel.getNewsId())
+        newsRef.document(newsModel.getDocumentId())
                 .delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -400,7 +399,7 @@ public class OpAddNewsActivity extends AppCompatActivity {
 
         if (dateCreated != 0) {
             final NewsModel newsModel = new NewsModel(edtJudul.getText().toString(), edtIsi.getText().toString(), downloadURL, dateCreated);
-            newsRef.document(this.newsModel.getNewsId())
+            newsRef.document(this.newsModel.getDocumentId())
                     .set(newsModel)
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override

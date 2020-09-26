@@ -89,7 +89,7 @@ public class OpMainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        checkIfPaymentExist();
+//        checkIfPaymentExist();
     }
 
     private void showDialogAskPermission() {
@@ -308,7 +308,7 @@ public class OpMainActivity extends AppCompatActivity {
                 } else {
                     for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
                         PaymentModel paymentModel = queryDocumentSnapshot.toObject(PaymentModel.class);
-                        paymentModel.setPaymentId(queryDocumentSnapshot.getId());
+                        paymentModel.setDocumentId(queryDocumentSnapshot.getId());
                         if (!paymentModel.isSeen()) {
                             imgNotif.setImageResource(R.drawable.ic_notifications_active);
                             return;
@@ -332,7 +332,7 @@ public class OpMainActivity extends AppCompatActivity {
                 } else {
                     for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
                         GraduationModel graduationModel = queryDocumentSnapshot.toObject(GraduationModel.class);
-                        graduationModel.setGraduationId(queryDocumentSnapshot.getId());
+                        graduationModel.setDocumentId(queryDocumentSnapshot.getId());
                         if (!graduationModel.isSeen()) {
                             imgNotif.setImageResource(R.drawable.ic_notifications_active);
                             return;

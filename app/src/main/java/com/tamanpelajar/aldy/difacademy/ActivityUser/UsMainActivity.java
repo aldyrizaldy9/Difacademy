@@ -371,7 +371,7 @@ public class UsMainActivity extends AppCompatActivity {
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
                             NewsModel newsModel = queryDocumentSnapshot.toObject(NewsModel.class);
-                            newsModel.setNewsId(queryDocumentSnapshot.getId());
+                            newsModel.setDocumentId(queryDocumentSnapshot.getId());
 
                             newsModels.add(newsModel);
                         }

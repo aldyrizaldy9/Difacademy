@@ -49,6 +49,8 @@ public class CommonMethod {
     public final static String intentJenisKelas = "JenisKelas";
 
     public final static String fieldDateCreated = "dateCreated";
+    public final static String fieldUserId = "userId";
+    public final static String fieldKelasId = "kelasId";
 
     public final static String storageBlendedKelas = "BlendedKelas-dev/";
     public final static String storageBlendedMateri = "BlendedMateri-dev/";

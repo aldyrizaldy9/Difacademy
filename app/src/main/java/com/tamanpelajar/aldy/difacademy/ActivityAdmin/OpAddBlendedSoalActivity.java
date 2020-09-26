@@ -275,7 +275,7 @@ public class OpAddBlendedSoalActivity extends AppCompatActivity {
         String jwbD = edtD.getText().toString();
         String jwbE = edtE.getText().toString();
 
-        final SoalModel model = new SoalModel(dateCreated, soal, jwbA, jwbB, jwbC, jwbD, jwbE, jawabanBenar);
+        final SoalModel model = new SoalModel(soal, jwbA, jwbB, jwbC, jwbD, jwbE, jawabanBenar, dateCreated);
         collRef.add(model)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override

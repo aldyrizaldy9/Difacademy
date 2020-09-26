@@ -4,6 +4,46 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class VideoModel implements Parcelable {
+    String documentId, title, description, videoUrl, kelasId, materiId;
+    long dateCreated;
+
+    public VideoModel() {
+    }
+
+    public VideoModel(String title, String description, String videoUrl, String kelasId, String materiId, long dateCreated) {
+        this.title = title;
+        this.description = description;
+        this.videoUrl = videoUrl;
+        this.kelasId = kelasId;
+        this.materiId = materiId;
+        this.dateCreated = dateCreated;
+    }
+
+    protected VideoModel(Parcel in) {
+        documentId = in.readString();
+        title = in.readString();
+        description = in.readString();
+        videoUrl = in.readString();
+        kelasId = in.readString();
+        materiId = in.readString();
+        dateCreated = in.readLong();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(documentId);
+        dest.writeString(title);
+        dest.writeString(description);
+        dest.writeString(videoUrl);
+        dest.writeString(kelasId);
+        dest.writeString(materiId);
+        dest.writeLong(dateCreated);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
 
     public static final Creator<VideoModel> CREATOR = new Creator<VideoModel>() {
         @Override
@@ -16,45 +56,13 @@ public class VideoModel implements Parcelable {
             return new VideoModel[size];
         }
     };
-    String title, description, videoUrl, documentId, courseId, materiId;
-    long dateCreated;
 
-    public VideoModel() {
+    public String getDocumentId() {
+        return documentId;
     }
 
-    public VideoModel(String title, String description, String videoUrl, String courseId, String materiId, long dateCreated) {
-        this.title = title;
-        this.description = description;
-        this.videoUrl = videoUrl;
-        this.courseId = courseId;
-        this.materiId = materiId;
-        this.dateCreated = dateCreated;
-    }
-
-    protected VideoModel(Parcel in) {
-        title = in.readString();
-        description = in.readString();
-        videoUrl = in.readString();
-        documentId = in.readString();
-        courseId = in.readString();
-        materiId = in.readString();
-        dateCreated = in.readLong();
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(title);
-        dest.writeString(description);
-        dest.writeString(videoUrl);
-        dest.writeString(documentId);
-        dest.writeString(courseId);
-        dest.writeString(materiId);
-        dest.writeLong(dateCreated);
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
+    public void setDocumentId(String documentId) {
+        this.documentId = documentId;
     }
 
     public String getTitle() {
@@ -69,17 +77,32 @@ public class VideoModel implements Parcelable {
         return description;
     }
 
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
     public String getVideoUrl() {
         return videoUrl;
     }
 
-    public String getDocumentId() {
-        return documentId;
+    public void setVideoUrl(String videoUrl) {
+        this.videoUrl = videoUrl;
     }
 
-    public void setDocumentId(String documentId) {
-        this.documentId = documentId;
+    public String getKelasId() {
+        return kelasId;
+    }
+
+    public void setKelasId(String kelasId) {
+        this.kelasId = kelasId;
+    }
+
+    public String getMateriId() {
+        return materiId;
+    }
+
+    public void setMateriId(String materiId) {
+        this.materiId = materiId;
     }
 
     public long getDateCreated() {
@@ -88,13 +111,5 @@ public class VideoModel implements Parcelable {
 
     public void setDateCreated(long dateCreated) {
         this.dateCreated = dateCreated;
-    }
-
-    public String getCourseId() {
-        return courseId;
-    }
-
-    public String getMateriId() {
-        return materiId;
     }
 }

@@ -136,7 +136,7 @@ public class OpNewsActivity extends AppCompatActivity {
                                             if (queryDocumentSnapshots.size() > 0) {
                                                 for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                                                     NewsModel newsModel = documentSnapshot.toObject(NewsModel.class);
-                                                    newsModel.setNewsId(documentSnapshot.getId());
+                                                    newsModel.setDocumentId(documentSnapshot.getId());
                                                     newsModels.add(newsModel);
                                                 }
 
@@ -188,7 +188,7 @@ public class OpNewsActivity extends AppCompatActivity {
                         if (queryDocumentSnapshots.size() > 0) {
                             for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
                                 NewsModel newsModel = queryDocumentSnapshot.toObject(NewsModel.class);
-                                newsModel.setNewsId(queryDocumentSnapshot.getId());
+                                newsModel.setDocumentId(queryDocumentSnapshot.getId());
                                 newsModels.add(newsModel);
                             }
 

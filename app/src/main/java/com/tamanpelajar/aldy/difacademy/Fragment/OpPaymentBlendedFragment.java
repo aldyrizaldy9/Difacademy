@@ -8,12 +8,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.tamanpelajar.aldy.difacademy.Adapter.OpPaymentBlendedAdapter;
 import com.tamanpelajar.aldy.difacademy.CommonMethod;
 import com.tamanpelajar.aldy.difacademy.Model.PaymentModel;
@@ -38,10 +41,15 @@ public class OpPaymentBlendedFragment extends Fragment {
     private Context context;
     private OpPaymentBlendedAdapter adapter;
     private View rootView;
-    private RecyclerView rvNotifPayment;
+    private RecyclerView rvPaymentBlended;
     private ArrayList<PaymentModel> paymentModels;
-    private ProgressDialog progressDialog;
-    private CollectionReference paymentRef;
+    private SwipeRefreshLayout srl;
+    private boolean loadNewData;
+    private DocumentSnapshot lastVisible;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private CollectionReference paymentBlendedRef = db.collection(CommonMethod.refPaymentKelasBlended);
+
+    public static boolean isPaymentBlendedChanged;
 
     public OpPaymentBlendedFragment() {
         // Required empty public constructor
@@ -58,58 +66,130 @@ public class OpPaymentBlendedFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_op_payment_blended, container, false);
         initView();
         setRecyclerView();
+        getFirstData();
         return rootView;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        loadData();
+        if (isPaymentBlendedChanged) {
+            srl.setRefreshing(true);
+            paymentModels.clear();
+            adapter.notifyDataSetChanged();
+            getFirstData();
+        }
     }
 
     private void initView() {
-        rvNotifPayment = rootView.findViewById(R.id.rv_op_payment_blended);
-        progressDialog = new ProgressDialog(rootView.getContext());
-        FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
-        paymentRef = firebaseFirestore.collection(CommonMethod.refPaymentKelasBlended);
+        paymentModels = new ArrayList<>();
+        rvPaymentBlended = rootView.findViewById(R.id.rv_op_payment_blended);
+        srl = rootView.findViewById(R.id.srl_op_payment_blended);
+        srl.setRefreshing(true);
+        srl.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                paymentModels.clear();
+                adapter.notifyDataSetChanged();
+                getFirstData();
+            }
+        });
     }
 
     private void setRecyclerView() {
-        paymentModels = new ArrayList<>();
+        final LinearLayoutManager manager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
+        rvPaymentBlended.setLayoutManager(manager);
+
         adapter = new OpPaymentBlendedAdapter(rootView.getContext(), paymentModels);
-        rvNotifPayment.setLayoutManager(new LinearLayoutManager(rootView.getContext(), RecyclerView.VERTICAL, false));
-        rvNotifPayment.setAdapter(adapter);
+        rvPaymentBlended.setAdapter(adapter);
+
+        rvPaymentBlended.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (manager.findLastVisibleItemPosition() >= paymentModels.size() - CommonMethod.paginationLoadNewData &&
+                        lastVisible != null &&
+                        loadNewData) {
+                    loadNewData = false;
+                    getNewData();
+                }
+            }
+
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+            }
+        });
     }
 
-    private void loadData() {
-        progressDialog.setMessage("Memuat...");
-        progressDialog.setCancelable(false);
-        progressDialog.show();
-
-        paymentRef
+    private void getNewData(){
+        Query load = paymentBlendedRef
                 .orderBy(CommonMethod.fieldDateCreated, Query.Direction.DESCENDING)
-                .get()
+                .startAfter(lastVisible)
+                .limit(CommonMethod.paginationMaxLoad);
+
+        load.get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        paymentModels.clear();
-                        for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
-                            PaymentModel paymentModel = queryDocumentSnapshot.toObject(PaymentModel.class);
-                            paymentModel.setDocumentId(queryDocumentSnapshot.getId());
-
-                            paymentModels.add(paymentModel);
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
+                            PaymentModel model = documentSnapshot.toObject(PaymentModel.class);
+                            model.setDocumentId(documentSnapshot.getId());
+                            paymentModels.add(model);
                         }
-                        progressDialog.dismiss();
+
+                        if (queryDocumentSnapshots.size() >= CommonMethod.paginationMaxLoad){
+                            lastVisible = queryDocumentSnapshots.getDocuments()
+                                    .get(queryDocumentSnapshots.size() - 1);
+                        } else {
+                            lastVisible = null;
+                        }
+
                         adapter.notifyDataSetChanged();
+                        loadNewData = true;
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        progressDialog.dismiss();
-                        Log.d(TAG, e.toString());
+                        loadNewData = true;
+                        Toast.makeText(context, context.getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
                     }
                 });
     }
 
+    private void getFirstData(){
+        Query first = paymentBlendedRef
+                .orderBy(CommonMethod.fieldDateCreated, Query.Direction.DESCENDING)
+                .limit(CommonMethod.paginationMaxLoad);
+
+        first.get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
+                            PaymentModel model = documentSnapshot.toObject(PaymentModel.class);
+                            model.setDocumentId(documentSnapshot.getId());
+                            paymentModels.add(model);
+                        }
+
+                        if (queryDocumentSnapshots.size() >= CommonMethod.paginationMaxLoad){
+                            lastVisible = queryDocumentSnapshots.getDocuments()
+                                    .get(queryDocumentSnapshots.size() - 1);
+                        } else {
+                            lastVisible = null;
+                        }
+
+                        adapter.notifyDataSetChanged();
+                        srl.setRefreshing(false);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        srl.setRefreshing(false);
+                        Toast.makeText(context, context.getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
 }

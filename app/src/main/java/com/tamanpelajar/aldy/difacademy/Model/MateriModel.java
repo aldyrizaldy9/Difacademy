@@ -6,18 +6,6 @@ import android.os.Parcelable;
 import com.google.firebase.firestore.Exclude;
 
 public class MateriModel implements Parcelable {
-
-    public static final Creator<MateriModel> CREATOR = new Creator<MateriModel>() {
-        @Override
-        public MateriModel createFromParcel(Parcel in) {
-            return new MateriModel(in);
-        }
-
-        @Override
-        public MateriModel[] newArray(int size) {
-            return new MateriModel[size];
-        }
-    };
     private String documentId, title, thumbnailUrl, harga, courseId;
     private long dateCreated;
 
@@ -56,7 +44,18 @@ public class MateriModel implements Parcelable {
         return 0;
     }
 
-    @Exclude
+    public static final Creator<MateriModel> CREATOR = new Creator<MateriModel>() {
+        @Override
+        public MateriModel createFromParcel(Parcel in) {
+            return new MateriModel(in);
+        }
+
+        @Override
+        public MateriModel[] newArray(int size) {
+            return new MateriModel[size];
+        }
+    };
+
     public String getDocumentId() {
         return documentId;
     }
@@ -77,12 +76,24 @@ public class MateriModel implements Parcelable {
         return thumbnailUrl;
     }
 
+    public void setThumbnailUrl(String thumbnailUrl) {
+        this.thumbnailUrl = thumbnailUrl;
+    }
+
     public String getHarga() {
         return harga;
     }
 
+    public void setHarga(String harga) {
+        this.harga = harga;
+    }
+
     public String getCourseId() {
         return courseId;
+    }
+
+    public void setCourseId(String courseId) {
+        this.courseId = courseId;
     }
 
     public long getDateCreated() {

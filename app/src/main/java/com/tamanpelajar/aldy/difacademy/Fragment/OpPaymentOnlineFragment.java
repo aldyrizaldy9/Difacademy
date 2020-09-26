@@ -30,6 +30,7 @@ import com.tamanpelajar.aldy.difacademy.R;
 import java.util.ArrayList;
 
 public class OpPaymentOnlineFragment extends Fragment {
+    private Context context;
     private OpPaymentOnlineAdapter adapter;
     private View rootView;
     private RecyclerView rvPaymentOnline;
@@ -39,7 +40,6 @@ public class OpPaymentOnlineFragment extends Fragment {
     private DocumentSnapshot lastVisible;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference paymentOnlineRef = db.collection(CommonMethod.refPaymentKelasOnline);
-    private Context context;
 
     public static boolean isPaymentOnlineChanged;
 
@@ -73,6 +73,7 @@ public class OpPaymentOnlineFragment extends Fragment {
     }
 
     private void initView() {
+        paymentModels = new ArrayList<>();
         rvPaymentOnline = rootView.findViewById(R.id.rv_op_payment_online);
         srl = rootView.findViewById(R.id.srl_op_payment_online);
         srl.setRefreshing(true);

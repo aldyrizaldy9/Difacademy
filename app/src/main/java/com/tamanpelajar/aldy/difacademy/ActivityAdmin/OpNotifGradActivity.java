@@ -122,7 +122,7 @@ public class OpNotifGradActivity extends AppCompatActivity {
     }
 
     private void setSeen() {
-        DocumentReference graduationRef = firebaseFirestore.collection("Graduation").document(graduationModel.getGraduationId());
+        DocumentReference graduationRef = firebaseFirestore.collection("Graduation").document(graduationModel.getDocumentId());
         graduationRef
                 .update("seen", true)
                 .addOnFailureListener(new OnFailureListener() {

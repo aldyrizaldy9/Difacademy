@@ -207,27 +207,28 @@ public class UsPaymentActivity extends AppCompatActivity {
 
     private void sendPaymentDetailsToAdmin() {
 
-        long dateCreated = Timestamp.now().getSeconds();
-        PaymentModel paymentModel = new PaymentModel(userId, namaUser, email, noWa, jenisKelas, videoModel.getCourseId(), videoModel.getMateriId(), namaMateri, hargaMateri, namaBank, dateCreated, false, false);
-
-        CollectionReference paymentRef = firebaseFirestore.collection("Payment");
-        paymentRef
-                .add(paymentModel)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        progressDialog.dismiss();
-                        sendNotificationPayment();
-                        Toast.makeText(UsPaymentActivity.this, "Detail pembelian telah dikirim ke admin", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        progressDialog.dismiss();
-                        Log.d(TAG, e.toString());
-                    }
-                });
+//        long dateCreated = Timestamp.now().getSeconds();
+//        //String userId, String namaUser, String email, String noWa, String kelasId, String namaKelas, String hargaKelas, String namaBank, long dateCreated, boolean isSeen, boolean isPaid
+//        PaymentModel paymentModel = new PaymentModel(userId, namaUser, email, noWa, jenisKelas, videoModel.getKelasId(), videoModel.getMateriId(), namaMateri, hargaMateri, namaBank, dateCreated, false, false);
+//
+//        CollectionReference paymentRef = firebaseFirestore.collection("Payment");
+//        paymentRef
+//                .add(paymentModel)
+//                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+//                    @Override
+//                    public void onSuccess(DocumentReference documentReference) {
+//                        progressDialog.dismiss();
+//                        sendNotificationPayment();
+//                        Toast.makeText(UsPaymentActivity.this, "Detail pembelian telah dikirim ke admin", Toast.LENGTH_SHORT).show();
+//                    }
+//                })
+//                .addOnFailureListener(new OnFailureListener() {
+//                    @Override
+//                    public void onFailure(@NonNull Exception e) {
+//                        progressDialog.dismiss();
+//                        Log.d(TAG, e.toString());
+//                    }
+//                });
     }
 
     private void sendNotificationPayment() {
@@ -306,10 +307,10 @@ public class UsPaymentActivity extends AppCompatActivity {
     private void getMateriData() {
         DocumentReference courseRef;
         if (jenisKelas.equalsIgnoreCase("online")) {
-            courseRef = firebaseFirestore.collection("OnlineCourse").document(videoModel.getCourseId())
+            courseRef = firebaseFirestore.collection("OnlineCourse").document(videoModel.getKelasId())
                     .collection("OnlineMateri").document(videoModel.getMateriId());
         } else {
-            courseRef = firebaseFirestore.collection("BlendedCourse").document(videoModel.getCourseId())
+            courseRef = firebaseFirestore.collection("BlendedCourse").document(videoModel.getKelasId())
                     .collection("BlendedMateri").document(videoModel.getMateriId());
         }
         courseRef

@@ -12,6 +12,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpNotifPaymentActivity;
+import com.tamanpelajar.aldy.difacademy.CommonMethod;
 import com.tamanpelajar.aldy.difacademy.Model.PaymentModel;
 import com.tamanpelajar.aldy.difacademy.R;
 
@@ -38,7 +39,7 @@ public class OpPaymentBlendedAdapter extends RecyclerView.Adapter<OpPaymentBlend
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         final PaymentModel paymentModel = paymentModels.get(position);
         holder.tvNama.setText(paymentModel.getNamaUser());
-//        holder.tvMateri.setText(paymentModel.getNamaMateri());
+        holder.tvKelas.setText(paymentModel.getNamaKelas());
         if (paymentModel.isPaid()) {
             holder.tvStatus.setText("SUDAH DIPROSES");
         } else {
@@ -48,7 +49,8 @@ public class OpPaymentBlendedAdapter extends RecyclerView.Adapter<OpPaymentBlend
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, OpNotifPaymentActivity.class);
-                intent.putExtra("paymentModel", paymentModel);
+                intent.putExtra(CommonMethod.intentPaymentModel, paymentModel);
+                intent.putExtra(CommonMethod.intentJenisKelas, "blended");
                 context.startActivity(intent);
             }
         });
@@ -60,13 +62,13 @@ public class OpPaymentBlendedAdapter extends RecyclerView.Adapter<OpPaymentBlend
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView tvNama, tvMateri, tvStatus;
+        private TextView tvNama, tvKelas, tvStatus;
         private ConstraintLayout clContainer;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tvNama = itemView.findViewById(R.id.tv_c_op_payment_nama);
-            tvMateri = itemView.findViewById(R.id.tv_c_op_payment_kelas);
+            tvKelas = itemView.findViewById(R.id.tv_c_op_payment_kelas);
             tvStatus = itemView.findViewById(R.id.tv_c_op_status_beli);
             clContainer = itemView.findViewById(R.id.cl_c_op_payment);
         }

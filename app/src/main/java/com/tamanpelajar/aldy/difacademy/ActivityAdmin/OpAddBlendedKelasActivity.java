@@ -71,6 +71,7 @@ public class OpAddBlendedKelasActivity extends AppCompatActivity {
     private String tagCourseId = "";
     private boolean thereIsData = false;
     private boolean addMateri = false;
+    private boolean dataHasChanged;
 
     private KelasBlendedModel kelasModel, oldKelasModel;
     private Uri imageUri;
@@ -101,6 +102,14 @@ public class OpAddBlendedKelasActivity extends AppCompatActivity {
         onClick();
         checkIntent();
         loadTags();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        if (thereIsData && dataHasChanged){
+            isKelasChanged = true;
+        }
     }
 
     private void initView() {
@@ -464,7 +473,7 @@ public class OpAddBlendedKelasActivity extends AppCompatActivity {
                     return;
                 }
 
-                isKelasChanged = true;
+                dataHasChanged = true;
                 pd.show();
                 if (imageUri != null) {
                     uploadPhotoToFirebase();

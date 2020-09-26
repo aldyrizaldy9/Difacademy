@@ -75,35 +75,35 @@ public class OpGraduationFragment extends Fragment {
     }
 
     private void loadData() {
-        progressDialog.setMessage("Memuat...");
-        progressDialog.setCancelable(false);
-        progressDialog.show();
-
-
-        graduationRef
-                .orderBy("dateCreated", Query.Direction.DESCENDING)
-                .get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        graduationModels.clear();
-                        for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
-                            GraduationModel graduationModel = queryDocumentSnapshot.toObject(GraduationModel.class);
-                            graduationModel.setGraduationId(queryDocumentSnapshot.getId());
-
-                            graduationModels.add(graduationModel);
-                        }
-                        progressDialog.dismiss();
-                        OP_NOTIF_GRADUATION_ADAPTER.notifyDataSetChanged();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        progressDialog.dismiss();
-                        Log.d(TAG, e.toString());
-                    }
-                });
+//        progressDialog.setMessage("Memuat...");
+//        progressDialog.setCancelable(false);
+//        progressDialog.show();
+//
+//
+//        graduationRef
+//                .orderBy("dateCreated", Query.Direction.DESCENDING)
+//                .get()
+//                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+//                        graduationModels.clear();
+//                        for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
+//                            GraduationModel graduationModel = queryDocumentSnapshot.toObject(GraduationModel.class);
+//                            graduationModel.setGraduationId(queryDocumentSnapshot.getId());
+//
+//                            graduationModels.add(graduationModel);
+//                        }
+//                        progressDialog.dismiss();
+//                        OP_NOTIF_GRADUATION_ADAPTER.notifyDataSetChanged();
+//                    }
+//                })
+//                .addOnFailureListener(new OnFailureListener() {
+//                    @Override
+//                    public void onFailure(@NonNull Exception e) {
+//                        progressDialog.dismiss();
+//                        Log.d(TAG, e.toString());
+//                    }
+//                });
     }
 
 }

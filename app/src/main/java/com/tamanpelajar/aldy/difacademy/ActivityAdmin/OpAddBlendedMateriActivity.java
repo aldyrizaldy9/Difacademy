@@ -64,11 +64,12 @@ public class OpAddBlendedMateriActivity extends AppCompatActivity {
     private CollectionReference blendedMateriRef = db.collection(CommonMethod.refKelasBlended)
             .document(kelasBlendedDocId)
             .collection(CommonMethod.refMateriBlended);
+    private FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
 
     private boolean thereIsData = false;
     private boolean addVideo = false;
     private boolean addSoal = false;
-    private FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
+    private boolean dataHasChanged;
 
     private MateriBlendedModel materiModel, oldMateriModel;
     private Uri imageUri;
@@ -94,6 +95,14 @@ public class OpAddBlendedMateriActivity extends AppCompatActivity {
         initView();
         onClick();
         checkIntent();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        if (thereIsData && dataHasChanged){
+            isMateriChanged = true;
+        }
     }
 
     private void initView() {
@@ -423,7 +432,7 @@ public class OpAddBlendedMateriActivity extends AppCompatActivity {
                     return;
                 }
 
-                isMateriChanged = true;
+                dataHasChanged = true;
                 pd.show();
                 if (imageUri != null) {
                     uploadPhotoToFirebase();

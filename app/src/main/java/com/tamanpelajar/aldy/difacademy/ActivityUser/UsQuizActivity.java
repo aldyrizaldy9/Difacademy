@@ -417,25 +417,25 @@ public class UsQuizActivity extends AppCompatActivity {
 
     private void sendGraduationDetailsToAdmin() {
 
-        long dateCreated = Timestamp.now().getSeconds();
-        GraduationModel graduationModel = new GraduationModel(userId, namaUser, email, noWa, materiModel.getDocumentId(), namaMateri, dateCreated, false, false);
-
-        CollectionReference gradRef = db.collection("Graduation");
-        gradRef
-                .add(graduationModel)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        sendOpNotification();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        pd.dismiss();
-                        Log.d(TAG, e.toString());
-                    }
-                });
+//        long dateCreated = Timestamp.now().getSeconds();
+//        GraduationModel graduationModel = new GraduationModel(userId, namaUser, email, noWa, materiModel.getDocumentId(), namaMateri, dateCreated, false, false);
+//
+//        CollectionReference gradRef = db.collection("Graduation");
+//        gradRef
+//                .add(graduationModel)
+//                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+//                    @Override
+//                    public void onSuccess(DocumentReference documentReference) {
+//                        sendOpNotification();
+//                    }
+//                })
+//                .addOnFailureListener(new OnFailureListener() {
+//                    @Override
+//                    public void onFailure(@NonNull Exception e) {
+//                        pd.dismiss();
+//                        Log.d(TAG, e.toString());
+//                    }
+//                });
     }
 
     private void sendOpNotification() {

@@ -6,6 +6,53 @@ import android.os.Parcelable;
 import com.google.firebase.firestore.Exclude;
 
 public class SoalModel implements Parcelable {
+    String documentId, soal, jwbA, jwbB, jwbC, jwbD, jwbE, jawabanBenar;
+    long dateCreated;
+
+    public SoalModel() {
+    }
+
+    public SoalModel(String soal, String jwbA, String jwbB, String jwbC, String jwbD, String jwbE, String jawabanBenar, long dateCreated) {
+        this.soal = soal;
+        this.jwbA = jwbA;
+        this.jwbB = jwbB;
+        this.jwbC = jwbC;
+        this.jwbD = jwbD;
+        this.jwbE = jwbE;
+        this.jawabanBenar = jawabanBenar;
+        this.dateCreated = dateCreated;
+    }
+
+    protected SoalModel(Parcel in) {
+        documentId = in.readString();
+        soal = in.readString();
+        jwbA = in.readString();
+        jwbB = in.readString();
+        jwbC = in.readString();
+        jwbD = in.readString();
+        jwbE = in.readString();
+        jawabanBenar = in.readString();
+        dateCreated = in.readLong();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(documentId);
+        dest.writeString(soal);
+        dest.writeString(jwbA);
+        dest.writeString(jwbB);
+        dest.writeString(jwbC);
+        dest.writeString(jwbD);
+        dest.writeString(jwbE);
+        dest.writeString(jawabanBenar);
+        dest.writeLong(dateCreated);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
     public static final Creator<SoalModel> CREATOR = new Creator<SoalModel>() {
         @Override
         public SoalModel createFromParcel(Parcel in) {
@@ -17,55 +64,13 @@ public class SoalModel implements Parcelable {
             return new SoalModel[size];
         }
     };
-    long dateCreated;
-    String soal, jwbA, jwbB, jwbC, jwbD, jwbE, jawabanBenar, documentId;
 
-    public SoalModel() {
+    public String getDocumentId() {
+        return documentId;
     }
 
-    public SoalModel(long dateCreated, String soal, String jwbA, String jwbB, String jwbC, String jwbD, String jwbE, String jawabanBenar) {
-        this.dateCreated = dateCreated;
-        this.soal = soal;
-        this.jwbA = jwbA;
-        this.jwbB = jwbB;
-        this.jwbC = jwbC;
-        this.jwbD = jwbD;
-        this.jwbE = jwbE;
-        this.jawabanBenar = jawabanBenar;
-    }
-
-    protected SoalModel(Parcel in) {
-        dateCreated = in.readLong();
-        soal = in.readString();
-        jwbA = in.readString();
-        jwbB = in.readString();
-        jwbC = in.readString();
-        jwbD = in.readString();
-        jwbE = in.readString();
-        jawabanBenar = in.readString();
-        documentId = in.readString();
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLong(dateCreated);
-        dest.writeString(soal);
-        dest.writeString(jwbA);
-        dest.writeString(jwbB);
-        dest.writeString(jwbC);
-        dest.writeString(jwbD);
-        dest.writeString(jwbE);
-        dest.writeString(jawabanBenar);
-        dest.writeString(documentId);
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    public long getDateCreated() {
-        return dateCreated;
+    public void setDocumentId(String documentId) {
+        this.documentId = documentId;
     }
 
     public String getSoal() {
@@ -124,12 +129,11 @@ public class SoalModel implements Parcelable {
         this.jawabanBenar = jawabanBenar;
     }
 
-    @Exclude
-    public String getDocumentId() {
-        return documentId;
+    public long getDateCreated() {
+        return dateCreated;
     }
 
-    public void setDocumentId(String documentId) {
-        this.documentId = documentId;
+    public void setDateCreated(long dateCreated) {
+        this.dateCreated = dateCreated;
     }
 }
