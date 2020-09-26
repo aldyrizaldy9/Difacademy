@@ -202,7 +202,7 @@ public class OpAddBlendedSoalActivity extends AppCompatActivity {
                         spnJawaban.getSelectedItemPosition() == 0) {
                     Toast.makeText(OpAddBlendedSoalActivity.this, getString(R.string.data_not_complete), Toast.LENGTH_SHORT).show();
                 } else {
-                    showKonfirmasiDialog();
+                    showSimpanDialog();
                 }
             }
         });
@@ -321,7 +321,7 @@ public class OpAddBlendedSoalActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
-    private void showKonfirmasiDialog() {
+    private void showSimpanDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Apakah anda yakin ingin menyimpan soal ini?");
         builder.setTitle("Simpan Soal");

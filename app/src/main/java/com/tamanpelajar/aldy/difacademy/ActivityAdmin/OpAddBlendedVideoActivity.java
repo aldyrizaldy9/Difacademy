@@ -105,7 +105,6 @@ public class OpAddBlendedVideoActivity extends AppCompatActivity {
         imgBack = findViewById(R.id.img_icon1);
         imgBack.setImageResource(R.drawable.ic_arrow_back);
         clHapus = findViewById(R.id.cl_icon3);
-//        clHapus.setVisibility(View.VISIBLE);
         imgHapus = findViewById(R.id.img_icon3);
         imgHapus.setImageResource(R.drawable.ic_delete);
         edtJudul = findViewById(R.id.edt_op_add_blended_video_judul);
@@ -308,12 +307,6 @@ public class OpAddBlendedVideoActivity extends AppCompatActivity {
     }
 
     private void simpanVideo() {
-        if (!CommonMethod.isInternetAvailable(OpAddBlendedVideoActivity.this)) {
-            return;
-        }
-
-        dateCreated = CommonMethod.getTimeStamp();
-
         String title = edtJudul.getText().toString();
         String description = edtDeskripsi.getText().toString();
 
@@ -468,6 +461,8 @@ public class OpAddBlendedVideoActivity extends AppCompatActivity {
                 if (!CommonMethod.isInternetAvailable(OpAddBlendedVideoActivity.this)) {
                     return;
                 }
+
+                dateCreated = CommonMethod.getTimeStamp();
 
                 if (videoUri != null) {
                     edtDeskripsi.setEnabled(false);

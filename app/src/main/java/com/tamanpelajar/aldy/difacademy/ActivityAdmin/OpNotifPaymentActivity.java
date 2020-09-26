@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -19,13 +18,11 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.tamanpelajar.aldy.difacademy.CommonMethod;
 import com.tamanpelajar.aldy.difacademy.Model.OngoingKelasModel;
-import com.tamanpelajar.aldy.difacademy.Model.OngoingMateriModel;
 import com.tamanpelajar.aldy.difacademy.Model.PaymentModel;
 import com.tamanpelajar.aldy.difacademy.Model.UserModel;
 import com.tamanpelajar.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -100,14 +97,8 @@ public class OpNotifPaymentActivity extends AppCompatActivity {
             jenisKelas = intent.getStringExtra(CommonMethod.intentJenisKelas);
 
             if (jenisKelas.equals("blended")) {
-                ongoingKelasRef = db.collection(CommonMethod.refUser)
-                        .document(paymentModel.getUserId())
-                        .collection(CommonMethod.refOngoingKelasBlended);
                 paymentRef = db.collection(CommonMethod.refPaymentKelasBlended);
             } else {
-                ongoingKelasRef = db.collection(CommonMethod.refUser)
-                        .document(paymentModel.getUserId())
-                        .collection(CommonMethod.refOngoingKelasOnline);
                 paymentRef = db.collection(CommonMethod.refPaymentKelasOnline);
             }
 
@@ -196,9 +187,9 @@ public class OpNotifPaymentActivity extends AppCompatActivity {
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
                             userModel = queryDocumentSnapshot.toObject(UserModel.class);
-                            userModel.setUserDocId(queryDocumentSnapshot.getId());
+                            userModel.setDocumentId(queryDocumentSnapshot.getId());
                         }
-                        bukaMateri();
+                        bukaKelas();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -210,10 +201,20 @@ public class OpNotifPaymentActivity extends AppCompatActivity {
                 });
     }
 
-    private void bukaMateri() {
+    private void bukaKelas() {
         long dateCreated = CommonMethod.getTimeStamp();
 
         OngoingKelasModel ongoingKelasModel = new OngoingKelasModel(paymentModel.getKelasId(), dateCreated);
+
+        if (jenisKelas.equals("blended")){
+            ongoingKelasRef = db.collection(CommonMethod.refUser)
+                    .document(userModel.getDocumentId())
+                    .collection(CommonMethod.refOngoingKelasBlended);
+        } else {
+            ongoingKelasRef = db.collection(CommonMethod.refUser)
+                    .document(userModel.getDocumentId())
+                    .collection(CommonMethod.refOngoingKelasBlended);
+        }
 
         ongoingKelasRef
                 .add(ongoingKelasModel)

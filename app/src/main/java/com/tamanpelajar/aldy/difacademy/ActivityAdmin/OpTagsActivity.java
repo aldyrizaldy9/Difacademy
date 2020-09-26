@@ -1,8 +1,5 @@
 package com.tamanpelajar.aldy.difacademy.ActivityAdmin;
 
-import android.app.ProgressDialog;
-import android.content.Context;
-import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -19,7 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.tamanpelajar.aldy.difacademy.Adapter.TagAdapter;
+import com.tamanpelajar.aldy.difacademy.Adapter.OpTagAdapter;
 import com.tamanpelajar.aldy.difacademy.CommonMethod;
 import com.tamanpelajar.aldy.difacademy.Model.TagModel;
 import com.tamanpelajar.aldy.difacademy.R;
@@ -50,7 +47,7 @@ public class OpTagsActivity extends AppCompatActivity {
     private CollectionReference tagsRef = db.collection(CommonMethod.refTags);
 
     private ArrayList<TagModel> tagModels;
-    private TagAdapter tagAdapter;
+    private OpTagAdapter opTagAdapter;
 
     private SwipeRefreshLayout srl;
 
@@ -83,7 +80,7 @@ public class OpTagsActivity extends AppCompatActivity {
             @Override
             public void onRefresh() {
                 tagModels.clear();
-                tagAdapter.notifyDataSetChanged();
+                opTagAdapter.notifyDataSetChanged();
                 loadTag();
             }
         });
@@ -126,7 +123,7 @@ public class OpTagsActivity extends AppCompatActivity {
 
                             tagModels.add(new TagModel(tagModel.getTag(), tagModel.getTagid()));
                         }
-                        tagAdapter.notifyDataSetChanged();
+                        opTagAdapter.notifyDataSetChanged();
                         srl.setRefreshing(false);
                     }
                 })
@@ -141,9 +138,9 @@ public class OpTagsActivity extends AppCompatActivity {
 
     private void setRecyclerView() {
         tagModels = new ArrayList<>();
-        tagAdapter = new TagAdapter(OpTagsActivity.this, tagModels);
+        opTagAdapter = new OpTagAdapter(OpTagsActivity.this, tagModels);
         rvTags.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        rvTags.setAdapter(tagAdapter);
+        rvTags.setAdapter(opTagAdapter);
     }
 
     private void tambahTag(final String tag) {
@@ -154,7 +151,7 @@ public class OpTagsActivity extends AppCompatActivity {
                     public void onSuccess(DocumentReference documentReference) {
                         TagModel newtagModel = new TagModel(tag, documentReference.getId());
                         tagModels.add(newtagModel);
-                        tagAdapter.notifyDataSetChanged();
+                        opTagAdapter.notifyDataSetChanged();
 
 //                        Toast.makeText(OpTagsActivity.this, "Tag berhasil ditambahkan", Toast.LENGTH_SHORT).show();
                     }

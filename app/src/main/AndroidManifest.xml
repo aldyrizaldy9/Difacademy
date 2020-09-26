@@ -13,112 +13,100 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpBlendedSoalActivity" />
-        <activity android:name="com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpBlendedVideoActivity" />
-        <activity android:name="com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpBlendedMateriActivity" />
-        <activity android:name="com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpBlendedKelasActivity" />
-        <activity android:name="com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpAddBlendedVideoActivity" />
-        <activity android:name="com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpAddBlendedSoalActivity" />
-        <activity android:name="com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpAddBlendedMateriActivity" />
-        <activity android:name="com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpAddBlendedKelasActivity" />
-        <activity android:name="com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpOnlineSoalActivity" />
-        <activity android:name="com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpAddOnlineSoalActivity" />
-        <activity android:name="com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpOnlineVideoActivity" />
-        <activity android:name="com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpOnlineMateriActivity" />
-        <activity android:name="com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpAddOnlineVideoActivity" />
-        <activity android:name="com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpAddOnlineCourseActivity" />
-        <activity android:name="com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpAddOnlineMateriActivity" />
-        <activity android:name="com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpOnlineCourseActivity" />
-        <activity android:name="com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpBannerActivity" />
+        <activity android:name=".ActivityAdmin.OpBlendedSoalActivity" />
+        <activity android:name=".ActivityAdmin.OpBlendedVideoActivity" />
+        <activity android:name=".ActivityAdmin.OpBlendedMateriActivity" />
+        <activity android:name=".ActivityAdmin.OpBlendedKelasActivity" />
+        <activity android:name=".ActivityAdmin.OpAddBlendedVideoActivity" />
+        <activity android:name=".ActivityAdmin.OpAddBlendedSoalActivity" />
+        <activity android:name=".ActivityAdmin.OpAddBlendedMateriActivity" />
+        <activity android:name=".ActivityAdmin.OpAddBlendedKelasActivity" />
+        <activity android:name=".ActivityAdmin.OpOnlineSoalActivity" />
+        <activity android:name=".ActivityAdmin.OpAddOnlineSoalActivity" />
+        <activity android:name=".ActivityAdmin.OpOnlineVideoActivity" />
+        <activity android:name=".ActivityAdmin.OpOnlineMateriActivity" />
+        <activity android:name=".ActivityAdmin.OpAddOnlineVideoActivity" />
+        <activity android:name=".ActivityAdmin.OpAddOnlineCourseActivity" />
+        <activity android:name=".ActivityAdmin.OpAddOnlineMateriActivity" />
+        <activity android:name=".ActivityAdmin.OpOnlineCourseActivity" />
+        <activity android:name=".ActivityAdmin.OpBannerActivity" />
         <activity
-            android:name="com.tamanpelajar.aldy.difacademy.ActivityUser.UsOnlineMateriActivity"
+            android:name=".ActivityUser.UsOnlineMateriActivity"
             android:screenOrientation="sensorPortrait" />
         <activity
-            android:name="com.tamanpelajar.aldy.difacademy.ActivityUser.UsBlendedMateriActivity"
+            android:name=".ActivityUser.UsBlendedMateriActivity"
             android:screenOrientation="sensorPortrait" />
         <activity
-            android:name="com.tamanpelajar.aldy.difacademy.ActivityUser.UsOnlineCourseActivity"
+            android:name=".ActivityUser.UsOnlineCourseActivity"
             android:screenOrientation="sensorPortrait" />
         <activity
-            android:name="com.tamanpelajar.aldy.difacademy.ActivityUser.UsBlendedCourseActivity"
+            android:name=".ActivityUser.UsBlendedCourseActivity"
             android:screenOrientation="sensorPortrait" />
         <activity
-            android:name="com.tamanpelajar.aldy.difacademy.ActivityUser.UsWatchVideoActivity"
+            android:name=".ActivityUser.UsWatchVideoActivity"
             android:configChanges="orientation|screenSize|layoutDirection" />
         <activity
-            android:name="com.tamanpelajar.aldy.difacademy.ActivityCommon.ChangePasswordActivity"
+            android:name=".ActivityCommon.ChangePasswordActivity"
             android:screenOrientation="sensorPortrait" />
         <activity
-            android:name="com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpNotifGradActivity"
+            android:name=".ActivityAdmin.OpNotifGradActivity"
             android:screenOrientation="sensorPortrait" />
         <activity
-            android:name="com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpNotifActivity"
+            android:name=".ActivityAdmin.OpNotifActivity"
             android:screenOrientation="sensorPortrait" />
         <activity
-            android:name="com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpNotifPaymentActivity"
+            android:name=".ActivityAdmin.OpNotifPaymentActivity"
             android:screenOrientation="sensorPortrait" />
         <activity
-            android:name="com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpTagsActivity"
+            android:name=".ActivityAdmin.OpTagsActivity"
             android:screenOrientation="sensorPortrait" />
         <activity
-            android:name="com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpAddNewsActivity"
+            android:name=".ActivityAdmin.OpAddNewsActivity"
             android:screenOrientation="sensorPortrait" />
         <activity
-            android:name="com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpNewsActivity"
+            android:name=".ActivityAdmin.OpNewsActivity"
             android:screenOrientation="sensorPortrait" />
         <activity
-            android:name="com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpAddFreeCourseActivity"
+            android:name=".ActivityAdmin.OpMainActivity"
             android:screenOrientation="sensorPortrait" />
         <activity
-            android:name="com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpFreeCourseActivity"
+            android:name=".ActivityUser.UsQuizActivity"
             android:screenOrientation="sensorPortrait" />
         <activity
-            android:name="com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpMainActivity"
+            android:name=".ActivityUser.UsPaymentActivity"
             android:screenOrientation="sensorPortrait" />
         <activity
-            android:name="com.tamanpelajar.aldy.difacademy.ActivityUser.UsQuizActivity"
+            android:name=".ActivityUser.UsListVideoOnlineActivity"
             android:screenOrientation="sensorPortrait" />
         <activity
-            android:name="com.tamanpelajar.aldy.difacademy.ActivityUser.UsPaymentActivity"
+            android:name=".ActivityUser.UsListVideoBlendedActivity"
             android:screenOrientation="sensorPortrait" />
         <activity
-            android:name="com.tamanpelajar.aldy.difacademy.ActivityUser.UsListVideoOnlineActivity"
+            android:name=".ActivityUser.UsDetailCourseActivity"
             android:screenOrientation="sensorPortrait" />
         <activity
-            android:name="com.tamanpelajar.aldy.difacademy.ActivityUser.UsListVideoBlendedActivity"
+            android:name=".ActivityUser.UsDetailNewsActivity"
             android:screenOrientation="sensorPortrait" />
         <activity
-            android:name="com.tamanpelajar.aldy.difacademy.ActivityUser.UsDetailCourseActivity"
+            android:name=".ActivityUser.UsListNewsActivity"
             android:screenOrientation="sensorPortrait" />
         <activity
-            android:name="com.tamanpelajar.aldy.difacademy.ActivityUser.UsDetailNewsActivity"
+            android:name=".ActivityUser.UsEditProfileActivity"
             android:screenOrientation="sensorPortrait" />
         <activity
-            android:name="com.tamanpelajar.aldy.difacademy.ActivityUser.UsListNewsActivity"
+            android:name=".ActivityUser.UsSettingsActivity"
             android:screenOrientation="sensorPortrait" />
         <activity
-            android:name="com.tamanpelajar.aldy.difacademy.ActivityUser.UsEditProfileActivity"
+            android:name=".ActivityUser.UsOngoingCourseActivity"
             android:screenOrientation="sensorPortrait" />
         <activity
-            android:name="com.tamanpelajar.aldy.difacademy.ActivityUser.UsSettingsActivity"
+            android:name=".ActivityCommon.ForgetPasswordActivity"
             android:screenOrientation="sensorPortrait" />
         <activity
-            android:name="com.tamanpelajar.aldy.difacademy.ActivityUser.UsWatchYoutubeVideoActivity"
-            android:configChanges="orientation|keyboard|keyboardHidden|screenSize|screenLayout|uiMode" />
-        <activity
-            android:name="com.tamanpelajar.aldy.difacademy.ActivityUser.UsListFreeCourseActivity"
+            android:name=".ActivityCommon.RegisterActivity"
             android:screenOrientation="sensorPortrait" />
         <activity
-            android:name="com.tamanpelajar.aldy.difacademy.ActivityUser.UsOngoingCourseActivity"
-            android:screenOrientation="sensorPortrait" />
-        <activity
-            android:name="com.tamanpelajar.aldy.difacademy.ActivityCommon.ForgetPasswordActivity"
-            android:screenOrientation="sensorPortrait" />
-        <activity
-            android:name="com.tamanpelajar.aldy.difacademy.ActivityCommon.RegisterActivity"
-            android:screenOrientation="sensorPortrait" />
-        <activity
-            android:name="com.tamanpelajar.aldy.difacademy.ActivityCommon.LoginActivity"
+            android:name=".ActivityCommon.LoginActivity"
             android:screenOrientation="sensorPortrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -127,11 +115,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.tamanpelajar.aldy.difacademy.ActivityUser.UsMainActivity"
+            android:name=".ActivityUser.UsMainActivity"
             android:screenOrientation="sensorPortrait" />
 
         <service
-            android:name="com.tamanpelajar.aldy.difacademy.Notification.MyFirebaseIdService"
+            android:name=".Notification.MyFirebaseIdService"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
@@ -139,7 +127,7 @@
             </intent-filter>
         </service>
         <service
-            android:name="com.tamanpelajar.aldy.difacademy.Notification.MyFirebaseMessaging"
+            android:name=".Notification.MyFirebaseMessaging"
             android:enabled="true"
             android:exported="true">
             <intent-filter>

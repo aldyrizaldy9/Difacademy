@@ -119,7 +119,6 @@ public class OpAddBlendedMateriActivity extends AppCompatActivity {
         imgBack = findViewById(R.id.img_icon1);
         imgBack.setImageResource(R.drawable.ic_arrow_back);
         clHapus = findViewById(R.id.cl_icon3);
-//        clHapus.setVisibility(View.VISIBLE);
         imgHapus = findViewById(R.id.img_icon3);
         imgHapus.setImageResource(R.drawable.ic_delete);
 
@@ -273,10 +272,6 @@ public class OpAddBlendedMateriActivity extends AppCompatActivity {
         String title = edtJudul.getText().toString();
         String deskripsi = edtDeskripsi.getText().toString();
         String lampiran = edtLampiran.getText().toString();
-
-        if (!CommonMethod.isInternetAvailable(OpAddBlendedMateriActivity.this)) {
-            return;
-        }
 
         dateCreated = CommonMethod.getTimeStamp();
 
@@ -462,10 +457,12 @@ public class OpAddBlendedMateriActivity extends AppCompatActivity {
         builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if (CommonMethod.isInternetAvailable(OpAddBlendedMateriActivity.this)) {
-                    pd.show();
-                    hapusMateri();
+                if (!CommonMethod.isInternetAvailable(OpAddBlendedMateriActivity.this)) {
+                    return;
                 }
+
+                pd.show();
+                hapusMateri();
             }
         });
 

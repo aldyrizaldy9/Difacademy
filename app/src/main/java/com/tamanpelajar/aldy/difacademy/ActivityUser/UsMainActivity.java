@@ -143,8 +143,9 @@ public class UsMainActivity extends AppCompatActivity {
         imgKelasGratis.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(UsMainActivity.this, UsListFreeCourseActivity.class);
-                startActivity(intent);
+//                Intent intent = new Intent(UsMainActivity.this, UsListFreeCourseActivity.class);
+//                startActivity(intent);
+                Toast.makeText(UsMainActivity.this, "Coming Soon", Toast.LENGTH_SHORT).show();
             }
         });
         imgKelasOnline.setOnClickListener(new View.OnClickListener() {

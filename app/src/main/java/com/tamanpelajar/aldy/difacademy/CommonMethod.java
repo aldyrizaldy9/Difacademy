@@ -30,6 +30,8 @@ public class CommonMethod {
     public final static String refVideoOnline = "VideoOnline-dev";
     public final static String refSoalOnline = "SoalOnline-dev";
 
+    public final static String refNews = "News-dev";
+
     public final static String intentKelasBlendedModel = "KelasBlendedModel";
     public final static String intentMateriBlendedModel = "MateriBlendedModel";
     public final static String intentVideoBlendedModel = "VideoBlendedModel";
@@ -58,7 +60,8 @@ public class CommonMethod {
     public final static String storageOnlineKelas = "OnlineKelas-dev/";
     public final static String storageOnlineMateri = "OnlineMateri-dev/";
     public final static String storageOnlineVideo = "OnlineVideo-dev/";
-    public final static String storageBannerPhoto = "BannerPhoto/";
+    public final static String storageBannerPhoto = "BannerPhoto-dev/";
+    public final static String storageNews = "NewsPhoto-dev/";
 
     public final static int paginationMaxLoad = 30;
     public final static int paginationLoadNewData = 15;

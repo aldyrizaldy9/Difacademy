@@ -15,6 +15,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.tamanpelajar.aldy.difacademy.CommonMethod;
 import com.tamanpelajar.aldy.difacademy.Model.TagModel;
 import com.tamanpelajar.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -24,20 +25,18 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.WriteBatch;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class TagAdapter extends RecyclerView.Adapter<TagAdapter.ViewHolder> {
-    private static final String TAG = "TagAdapter";
+public class OpTagAdapter extends RecyclerView.Adapter<OpTagAdapter.ViewHolder> {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     private Context context;
     private ArrayList<TagModel> tagModels;
     private ProgressDialog pd;
 
-    public TagAdapter(Context context, ArrayList<TagModel> tagModels) {
+    public OpTagAdapter(Context context, ArrayList<TagModel> tagModels) {
         this.context = context;
         this.tagModels = tagModels;
         pd = new ProgressDialog(context);
@@ -45,14 +44,14 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.ViewHolder> {
 
     @NonNull
     @Override
-    public TagAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public OpTagAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         View v = layoutInflater.inflate(R.layout.card_op, parent, false);
-        return new TagAdapter.ViewHolder(v);
+        return new OpTagAdapter.ViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull TagAdapter.ViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull OpTagAdapter.ViewHolder holder, final int position) {
         final TagModel tagModel = tagModels.get(position);
         holder.tvDeskripsi.setVisibility(View.GONE);
         holder.tvJudul.setVisibility(View.GONE);
@@ -77,13 +76,13 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.ViewHolder> {
         pd.setMessage("Menghapus");
         pd.setCancelable(false);
         pd.show();
-        DocumentReference tagRef = db.collection("Tags").document(tagId);
+        DocumentReference tagRef = db.collection(CommonMethod.refTags).document(tagId);
 
         tagRef.delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        hapusTagDiVideoFree(tagId);
+                        hapusTagDiKelasBlended(tagId);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -95,33 +94,22 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.ViewHolder> {
                 });
     }
 
-    private void hapusTagDiVideoFree(final String tagId) {
-        final WriteBatch batch = db.batch();
-        final CollectionReference videoFreeRef = db.collection("VideoFree");
-        videoFreeRef.whereEqualTo("tagId", tagId)
+    private void hapusTagDiKelasBlended(final String tagId) {
+        final CollectionReference kelasBlendedRef = db.collection(CommonMethod.refKelasBlended);
+
+        kelasBlendedRef.whereEqualTo("tagId", tagId)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                            DocumentReference docRef = videoFreeRef.document(documentSnapshot.getId());
-                            batch.update(docRef, "tagId", "");
-                            batch.update(docRef, "tag", "");
+                            DocumentReference docRef = kelasBlendedRef.document(documentSnapshot.getId());
+                            Map<String, Object> updates = new HashMap<>();
+                            updates.put("tagId", "");
+                            updates.put("tag", "");
+                            docRef.update(updates);
                         }
-                        batch.commit()
-                                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void aVoid) {
-                                        hapusTagDiBlendedCourse(tagId);
-                                    }
-                                })
-                                .addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        pd.dismiss();
-                                        Toast.makeText(context, context.getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
-                                    }
-                                });
+                        hapusTagDiKelasOnline(tagId);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -133,17 +121,16 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.ViewHolder> {
                 });
     }
 
-    private void hapusTagDiBlendedCourse(String tagId) {
-//        final WriteBatch batch = db.batch();
-        final CollectionReference blendedCourseRef = db.collection("BlendedCourse");
+    private void hapusTagDiKelasOnline(String tagId) {
+        final CollectionReference kelasOnlineRef = db.collection(CommonMethod.refKelasOnline);
 
-        blendedCourseRef.whereEqualTo("tagId", tagId)
+        kelasOnlineRef.whereEqualTo("tagId", tagId)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                            DocumentReference docRef = blendedCourseRef.document(documentSnapshot.getId());
+                            DocumentReference docRef = kelasOnlineRef.document(documentSnapshot.getId());
                             Map<String, Object> updates = new HashMap<>();
                             updates.put("tagId", "");
                             updates.put("tag", "");

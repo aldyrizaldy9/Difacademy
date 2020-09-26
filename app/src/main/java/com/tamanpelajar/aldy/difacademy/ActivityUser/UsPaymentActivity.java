@@ -286,7 +286,7 @@ public class UsPaymentActivity extends AppCompatActivity {
                         UserModel userModel = new UserModel();
                         for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
                             userModel = queryDocumentSnapshot.toObject(UserModel.class);
-                            userModel.setUserDocId(queryDocumentSnapshot.getId());
+                            userModel.setDocumentId(queryDocumentSnapshot.getId());
                         }
                         namaUser = userModel.getNama();
                         email = userModel.getEmail();

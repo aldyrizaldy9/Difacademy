@@ -3,7 +3,7 @@ package com.tamanpelajar.aldy.difacademy.Model;
 import com.google.firebase.firestore.Exclude;
 
 public class UserModel {
-    private String userId, nama, email, noTelp, userDocId;
+    private String documentId, userId, nama, email, noTelp;
 
     public UserModel() {
     }
@@ -31,12 +31,11 @@ public class UserModel {
         return noTelp;
     }
 
-    @Exclude
-    public String getUserDocId() {
-        return userDocId;
+    public String getDocumentId() {
+        return documentId;
     }
 
-    public void setUserDocId(String userDocId) {
-        this.userDocId = userDocId;
+    public void setDocumentId(String documentId) {
+        this.documentId = documentId;
     }
 }

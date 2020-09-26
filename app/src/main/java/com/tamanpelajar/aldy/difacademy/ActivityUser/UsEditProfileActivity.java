@@ -99,11 +99,11 @@ public class UsEditProfileActivity extends AppCompatActivity {
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
                             userModel = queryDocumentSnapshot.toObject(UserModel.class);
-                            userModel.setUserDocId(queryDocumentSnapshot.getId());
+                            userModel.setDocumentId(queryDocumentSnapshot.getId());
                         }
                         edtNama.setText(userModel.getNama());
                         edtNoWa.setText(userModel.getNoTelp());
-                        userDocRef = userRef.document(userModel.getUserDocId());
+                        userDocRef = userRef.document(userModel.getDocumentId());
                         progressDialog.dismiss();
                     }
                 })
