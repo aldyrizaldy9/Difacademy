@@ -17,6 +17,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
+import com.tamanpelajar.aldy.difacademy.CommonMethod;
 import com.tamanpelajar.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -84,7 +85,7 @@ public class OpBannerActivity extends AppCompatActivity {
     }
 
     private void loadBanner() {
-        DocumentReference doc = db.collection("BannerPhotoUrl")
+        DocumentReference doc = db.collection(CommonMethod.refBannerPhotoUrl)
                 .document("bannerphotourl");
         doc.get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -103,17 +104,6 @@ public class OpBannerActivity extends AppCompatActivity {
     }
 
     private void onClick() {
-
-        /**
-         * HAI SELAMAT DATANG KEMBALI
-         * YANG MAU KAMU LAKUIN SEBELUMNYA ITU
-         * GANTI INNETWORKCONNECTED ITU KE COMMONMETHOD
-         * TAPI COBA DULU DI APLIKASI DUMMY
-         * DI LUAR TAMAN PELAJAR YA
-         * SEMANGAT!!
-         */
-
-
         btnFile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -123,12 +113,12 @@ public class OpBannerActivity extends AppCompatActivity {
         btnSimpan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isNetworkConnected()) {
-                    pd.show();
-                    uploadImageToFirebase();
-                } else {
-                    Toast.makeText(OpBannerActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+                if (!CommonMethod.isInternetAvailable(OpBannerActivity.this)) {
+                    return;
                 }
+
+                pd.show();
+                uploadImageToFirebase();
             }
         });
     }
@@ -180,7 +170,7 @@ public class OpBannerActivity extends AppCompatActivity {
         HashMap<String, Object> update = new HashMap<>();
         update.put("url", bannerUrl);
 
-        DocumentReference docRef = db.collection("BannerPhotoUrl")
+        DocumentReference docRef = db.collection(CommonMethod.refBannerPhotoUrl)
                 .document("bannerphotourl");
         docRef.set(update)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -189,11 +179,5 @@ public class OpBannerActivity extends AppCompatActivity {
                         deleteCurrentImage();
                     }
                 });
-    }
-
-    private boolean isNetworkConnected() {
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
     }
 }

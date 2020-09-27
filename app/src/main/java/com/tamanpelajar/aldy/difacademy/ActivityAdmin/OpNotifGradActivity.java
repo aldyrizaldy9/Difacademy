@@ -19,6 +19,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.tamanpelajar.aldy.difacademy.CommonMethod;
 import com.tamanpelajar.aldy.difacademy.Model.GraduationModel;
 import com.tamanpelajar.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -142,11 +143,11 @@ public class OpNotifGradActivity extends AppCompatActivity {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if (!isNetworkConnected()) {
-                    Toast.makeText(OpNotifGradActivity.this, "Tidak ada koneksi internet!", Toast.LENGTH_SHORT).show();
-                } else {
-                    getGraduationDocuments();
+                if (!CommonMethod.isInternetAvailable(OpNotifGradActivity.this)) {
+                    return;
                 }
+
+                getGraduationDocuments();
             }
         });
 
@@ -218,11 +219,4 @@ public class OpNotifGradActivity extends AppCompatActivity {
                 });
 
     }
-
-    private boolean isNetworkConnected() {
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
-    }
-
 }

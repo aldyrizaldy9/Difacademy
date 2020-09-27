@@ -1,9 +1,7 @@
 package com.tamanpelajar.aldy.difacademy.ActivityUser;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.graphics.Color;
-import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -21,7 +19,8 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.tamanpelajar.aldy.difacademy.Adapter.OnlineCourseAdapter;
+import com.tamanpelajar.aldy.difacademy.Adapter.OnlineKelasAdapter;
+import com.tamanpelajar.aldy.difacademy.CommonMethod;
 import com.tamanpelajar.aldy.difacademy.Model.CourseModel;
 import com.tamanpelajar.aldy.difacademy.Model.TagModel;
 import com.tamanpelajar.aldy.difacademy.R;
@@ -45,7 +44,7 @@ public class UsOnlineCourseActivity extends AppCompatActivity {
     private String tag = "";
     private ConstraintLayout clBack, clSearch, clSearchContainer, clNavbar;
     private RecyclerView rvCourse;
-    private OnlineCourseAdapter adapter;
+    private OnlineKelasAdapter adapter;
     private ArrayList<CourseModel> courseModels;
     private ArrayList<String> tags;
     private ProgressDialog pd;
@@ -107,7 +106,7 @@ public class UsOnlineCourseActivity extends AppCompatActivity {
 
     private void setRecyclerView() {
         courseModels = new ArrayList<>();
-        adapter = new OnlineCourseAdapter(this, courseModels);
+        adapter = new OnlineKelasAdapter(this, courseModels);
 
         final LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         rvCourse.setLayoutManager(layoutManager);
@@ -317,23 +316,22 @@ public class UsOnlineCourseActivity extends AppCompatActivity {
                     tag = tags.get(position);
                     clSearchContainer.setVisibility(View.GONE);
                     loadFromTag = true;
-                    if (!isNetworkConnected()) {
-                        Toast.makeText(UsOnlineCourseActivity.this, "Tidak ada koneksi internet!", Toast.LENGTH_SHORT).show();
-                    } else {
-                        loadCourseWithTheSameTag();
+                    if (!CommonMethod.isInternetAvailable(UsOnlineCourseActivity.this)) {
+                        return;
                     }
+
+                    loadCourseWithTheSameTag();
                 } else if (firstClick) {
                     firstClick = false;
                 } else {
                     tag = "";
                     clSearchContainer.setVisibility(View.GONE);
                     loadFromTag = false;
-                    if (!isNetworkConnected()) {
-                        Toast.makeText(UsOnlineCourseActivity.this, "Tidak ada koneksi internet!", Toast.LENGTH_SHORT).show();
-                    } else {
-                        loadCourseData();
+                    if (!CommonMethod.isInternetAvailable(UsOnlineCourseActivity.this)) {
+                        return;
                     }
 
+                    loadCourseData();
                 }
             }
 
@@ -341,11 +339,5 @@ public class UsOnlineCourseActivity extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
-    }
-
-    private boolean isNetworkConnected() {
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
     }
 }

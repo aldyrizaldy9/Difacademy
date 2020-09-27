@@ -109,7 +109,7 @@ public class OpOnlineCourseActivity extends AppCompatActivity {
         clAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(OpOnlineCourseActivity.this, OpAddOnlineCourseActivity.class);
+                Intent intent = new Intent(OpOnlineCourseActivity.this, OpAddOnlineKelasActivity.class);
                 startActivity(intent);
             }
         });

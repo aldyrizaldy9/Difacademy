@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.tamanpelajar.aldy.difacademy.CommonMethod;
 import com.tamanpelajar.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -51,14 +52,14 @@ public class ForgetPasswordActivity extends AppCompatActivity {
         btnLupaSandi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!isNetworkConnected()) {
-                    Toast.makeText(ForgetPasswordActivity.this, "Tidak ada koneksi internet!", Toast.LENGTH_SHORT).show();
+                if (!CommonMethod.isInternetAvailable(ForgetPasswordActivity.this)) {
+                    return;
+                }
+
+                if (edtEmail.getText().length() != 0) {
+                    resetPassword(edtEmail.getText().toString());
                 } else {
-                    if (edtEmail.getText().length() != 0) {
-                        resetPassword(edtEmail.getText().toString());
-                    } else {
-                        Toast.makeText(ForgetPasswordActivity.this, "Email tidak boleh kosong", Toast.LENGTH_SHORT).show();
-                    }
+                    Toast.makeText(ForgetPasswordActivity.this, "Email tidak boleh kosong", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -82,11 +83,5 @@ public class ForgetPasswordActivity extends AppCompatActivity {
                     public void onFailure(@NonNull Exception e) {
                     }
                 });
-    }
-
-    private boolean isNetworkConnected() {
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
     }
 }

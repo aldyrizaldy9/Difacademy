@@ -1,9 +1,7 @@
 package com.tamanpelajar.aldy.difacademy.ActivityCommon;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -14,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.tamanpelajar.aldy.difacademy.CommonMethod;
 import com.tamanpelajar.aldy.difacademy.Model.UserModel;
 import com.tamanpelajar.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -35,7 +34,7 @@ public class RegisterActivity extends AppCompatActivity {
     private static final String TAG = "RegisterActivity";
     FirebaseAuth auth = FirebaseAuth.getInstance();
     FirebaseFirestore db = FirebaseFirestore.getInstance();
-    CollectionReference userRef = db.collection("User");
+    CollectionReference userRef = db.collection(CommonMethod.refUser);
     ProgressDialog pd;
     private EditText edtNama, edtEmail, edtWa, edtSandi, edtKonfSandi;
     private ImageView imgDaftar;
@@ -66,19 +65,19 @@ public class RegisterActivity extends AppCompatActivity {
         imgDaftar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!isNetworkConnected()) {
-                    Toast.makeText(RegisterActivity.this, "Tidak ada koneksi internet!", Toast.LENGTH_SHORT).show();
-                } else {
-                    if (checkText()) {
-                        pd.setCancelable(false);
-                        pd.setMessage("Memuat...");
-                        pd.show();
-                        String nama = edtNama.getText().toString();
-                        String email = edtEmail.getText().toString();
-                        String wa = edtWa.getText().toString();
-                        String sandi = edtSandi.getText().toString();
-                        register(nama, email, wa, sandi);
-                    }
+                if (!CommonMethod.isInternetAvailable(RegisterActivity.this)) {
+                    return;
+                }
+
+                if (isDataComplete()) {
+                    pd.setCancelable(false);
+                    pd.setMessage("Memuat...");
+                    pd.show();
+                    String nama = edtNama.getText().toString();
+                    String email = edtEmail.getText().toString();
+                    String wa = edtWa.getText().toString();
+                    String sandi = edtSandi.getText().toString();
+                    register(nama, email, wa, sandi);
                 }
             }
         });
@@ -91,7 +90,7 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
-    private boolean checkText() {
+    private boolean isDataComplete() {
         if (edtNama.getText().length() == 0 ||
                 edtSandi.getText().length() == 0 ||
                 edtEmail.getText().length() == 0 ||
@@ -157,11 +156,5 @@ public class RegisterActivity extends AppCompatActivity {
                         }
                     }
                 });
-    }
-
-    private boolean isNetworkConnected() {
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
     }
 }

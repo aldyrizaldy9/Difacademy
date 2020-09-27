@@ -1,11 +1,9 @@
 package com.tamanpelajar.aldy.difacademy.ActivityAdmin;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
-import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,14 +27,13 @@ import com.tamanpelajar.aldy.difacademy.Model.SoalModel;
 import com.tamanpelajar.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
-import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpAddOnlineCourseActivity.onlineCourseDocId;
+import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpAddOnlineKelasActivity.onlineCourseDocId;
 import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpAddOnlineMateriActivity.onlineMateriDocId;
 import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpMainActivity.ADD_REQUEST_CODE;
 import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpMainActivity.DELETE_REQUEST_CODE;
@@ -260,7 +257,7 @@ public class OpAddOnlineSoalActivity extends AppCompatActivity {
     }
 
     private void tambah() {
-        if (!CommonMethod.isInternetAvailable(OpAddOnlineSoalActivity.this)){
+        if (!CommonMethod.isInternetAvailable(OpAddOnlineSoalActivity.this)) {
             return;
         }
 
@@ -302,12 +299,12 @@ public class OpAddOnlineSoalActivity extends AppCompatActivity {
         builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if (!isNetworkConnected()) {
-                    Toast.makeText(OpAddOnlineSoalActivity.this, "Tidak ada koneksi internet!", Toast.LENGTH_SHORT).show();
-                } else {
-                    pd.show();
-                    hapus();
+                if (!CommonMethod.isInternetAvailable(OpAddOnlineSoalActivity.this)) {
+                    return;
                 }
+
+                pd.show();
+                hapus();
             }
         });
 
@@ -329,15 +326,15 @@ public class OpAddOnlineSoalActivity extends AppCompatActivity {
         builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if (!isNetworkConnected()) {
-                    Toast.makeText(OpAddOnlineSoalActivity.this, "Tidak ada koneksi internet!", Toast.LENGTH_SHORT).show();
+                if (!CommonMethod.isInternetAvailable(OpAddOnlineSoalActivity.this)) {
+                    return;
+                }
+
+                pd.show();
+                if (thereIsData) {
+                    edit();
                 } else {
-                    pd.show();
-                    if (thereIsData) {
-                        edit();
-                    } else {
-                        tambah();
-                    }
+                    tambah();
                 }
             }
         });
@@ -350,10 +347,5 @@ public class OpAddOnlineSoalActivity extends AppCompatActivity {
         });
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
-    }
-
-    private boolean isNetworkConnected() {
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
     }
 }

@@ -20,25 +20,25 @@ import com.tamanpelajar.aldy.difacademy.R;
 
 import java.util.ArrayList;
 
-public class BlendedCourseAdapter extends RecyclerView.Adapter<BlendedCourseAdapter.ViewHolder> {
+public class BlendedKelasAdapter extends RecyclerView.Adapter<BlendedKelasAdapter.ViewHolder> {
     private Context context;
     private ArrayList<CourseModel> courseModels;
 
-    public BlendedCourseAdapter(Context context, ArrayList<CourseModel> courseModels) {
+    public BlendedKelasAdapter(Context context, ArrayList<CourseModel> courseModels) {
         this.context = context;
         this.courseModels = courseModels;
     }
 
     @NonNull
     @Override
-    public BlendedCourseAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public BlendedKelasAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         View view = layoutInflater.inflate(R.layout.card_video_with_thumbnail, parent, false);
-        return new BlendedCourseAdapter.ViewHolder(view);
+        return new BlendedKelasAdapter.ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull BlendedCourseAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull BlendedKelasAdapter.ViewHolder holder, int position) {
         final CourseModel courseModel = courseModels.get(position);
         holder.tvJudul.setText(courseModel.getTitle());
         holder.tvTag.setText(courseModel.getTag());

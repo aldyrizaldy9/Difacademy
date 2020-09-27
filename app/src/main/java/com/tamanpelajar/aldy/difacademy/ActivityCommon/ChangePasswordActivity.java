@@ -17,6 +17,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.tamanpelajar.aldy.difacademy.CommonMethod;
 import com.tamanpelajar.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -135,16 +136,16 @@ public class ChangePasswordActivity extends AppCompatActivity {
         builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if (!isNetworkConnected()) {
-                    Toast.makeText(ChangePasswordActivity.this, "Tidak ada koneksi internet!", Toast.LENGTH_SHORT).show();
+                if (!CommonMethod.isInternetAvailable(ChangePasswordActivity.this)) {
+                    return;
+                }
+
+                if (!edtNewPass.getText().toString().equals(edtNewPassConfirm.getText().toString())) {
+                    Toast.makeText(ChangePasswordActivity.this, "Kata sandi baru tidak cocok", Toast.LENGTH_SHORT).show();
+                } else if (edtNewPass.length() < 8) {
+                    Toast.makeText(ChangePasswordActivity.this, "Kata sandi baru minimal 8 karakter", Toast.LENGTH_SHORT).show();
                 } else {
-                    if (!edtNewPass.getText().toString().equals(edtNewPassConfirm.getText().toString())) {
-                        Toast.makeText(ChangePasswordActivity.this, "Kata sandi baru tidak cocok", Toast.LENGTH_SHORT).show();
-                    } else if (edtNewPass.length() < 8) {
-                        Toast.makeText(ChangePasswordActivity.this, "Kata sandi baru minimal 8 karakter", Toast.LENGTH_SHORT).show();
-                    } else {
-                        updatePassword();
-                    }
+                    updatePassword();
                 }
             }
         });
@@ -157,11 +158,5 @@ public class ChangePasswordActivity extends AppCompatActivity {
         });
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
-    }
-
-    private boolean isNetworkConnected() {
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
     }
 }

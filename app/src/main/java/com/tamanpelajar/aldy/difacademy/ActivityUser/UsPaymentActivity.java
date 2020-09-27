@@ -19,6 +19,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.tamanpelajar.aldy.difacademy.CommonMethod;
 import com.tamanpelajar.aldy.difacademy.Model.MateriModel;
 import com.tamanpelajar.aldy.difacademy.Model.PaymentModel;
 import com.tamanpelajar.aldy.difacademy.Model.UserModel;
@@ -186,11 +187,11 @@ public class UsPaymentActivity extends AppCompatActivity {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if (!isNetworkConnected()) {
-                    Toast.makeText(UsPaymentActivity.this, "Tidak ada koneksi internet!", Toast.LENGTH_SHORT).show();
-                } else {
-                    getUserData();
+                if (!CommonMethod.isInternetAvailable(UsPaymentActivity.this)) {
+                    return;
                 }
+
+                getUserData();
             }
         });
 
@@ -333,11 +334,5 @@ public class UsPaymentActivity extends AppCompatActivity {
                         Log.d(TAG, e.toString());
                     }
                 });
-    }
-
-    private boolean isNetworkConnected() {
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
     }
 }

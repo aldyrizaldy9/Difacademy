@@ -1,10 +1,8 @@
 package com.tamanpelajar.aldy.difacademy.ActivityAdmin;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
-import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.OpenableColumns;
@@ -29,7 +27,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -40,7 +37,7 @@ import com.google.firebase.storage.UploadTask;
 
 import java.util.UUID;
 
-import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpAddOnlineCourseActivity.onlineCourseDocId;
+import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpAddOnlineKelasActivity.onlineCourseDocId;
 import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpAddOnlineMateriActivity.onlineMateriDocId;
 import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpMainActivity.ADD_REQUEST_CODE;
 import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpMainActivity.DELETE_REQUEST_CODE;
@@ -185,11 +182,6 @@ public class OpAddOnlineVideoActivity extends AppCompatActivity {
         }
     }
 
-    private boolean isNetworkConnected() {
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
-    }
-
     private boolean isDataComplete() {
         if (thereIsData) {
             return !edtJudul.getText().toString().equals("") &&
@@ -311,7 +303,7 @@ public class OpAddOnlineVideoActivity extends AppCompatActivity {
     }
 
     private void simpanVideo() {
-        if (!CommonMethod.isInternetAvailable(OpAddOnlineVideoActivity.this)){
+        if (!CommonMethod.isInternetAvailable(OpAddOnlineVideoActivity.this)) {
             return;
         }
 
@@ -440,12 +432,12 @@ public class OpAddOnlineVideoActivity extends AppCompatActivity {
         builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if (!isNetworkConnected()) {
-                    Toast.makeText(OpAddOnlineVideoActivity.this, "Tidak ada koneksi internet!", Toast.LENGTH_SHORT).show();
-                } else {
-                    uploadTask.cancel();
-                    Toast.makeText(OpAddOnlineVideoActivity.this, "Cancelling...", Toast.LENGTH_SHORT).show();
+                if (!CommonMethod.isInternetAvailable(OpAddOnlineVideoActivity.this)) {
+                    return;
                 }
+
+                uploadTask.cancel();
+                Toast.makeText(OpAddOnlineVideoActivity.this, "Cancelling...", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -467,20 +459,20 @@ public class OpAddOnlineVideoActivity extends AppCompatActivity {
         builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if (!isNetworkConnected()) {
-                    Toast.makeText(OpAddOnlineVideoActivity.this, "Tidak ada koneksi internet!", Toast.LENGTH_SHORT).show();
+                if (!CommonMethod.isInternetAvailable(OpAddOnlineVideoActivity.this)) {
+                    return;
+                }
+
+                if (videoUri != null) {
+                    edtDeskripsi.setEnabled(false);
+                    edtJudul.setEnabled(false);
+                    btnHapus.setEnabled(false);
+                    btnPilihFile.setEnabled(false);
+                    btnSimpan.setEnabled(false);
+                    btnCancelUpload.setVisibility(View.VISIBLE);
+                    uploadVideoToFirebase();
                 } else {
-                    if (videoUri != null) {
-                        edtDeskripsi.setEnabled(false);
-                        edtJudul.setEnabled(false);
-                        btnHapus.setEnabled(false);
-                        btnPilihFile.setEnabled(false);
-                        btnSimpan.setEnabled(false);
-                        btnCancelUpload.setVisibility(View.VISIBLE);
-                        uploadVideoToFirebase();
-                    } else {
-                        simpanVideo();
-                    }
+                    simpanVideo();
                 }
             }
         });
@@ -503,11 +495,11 @@ public class OpAddOnlineVideoActivity extends AppCompatActivity {
         builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if (!isNetworkConnected()) {
-                    Toast.makeText(OpAddOnlineVideoActivity.this, "Tidak ada koneksi internet!", Toast.LENGTH_SHORT).show();
-                } else {
-                    hapusVideo();
+                if (!CommonMethod.isInternetAvailable(OpAddOnlineVideoActivity.this)) {
+                    return;
                 }
+
+                hapusVideo();
             }
         });
 

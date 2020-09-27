@@ -13,8 +13,6 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpAddBlendedKelasActivity;
-import com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpAddOnlineCourseActivity;
 import com.tamanpelajar.aldy.difacademy.Model.CourseModel;
 import com.tamanpelajar.aldy.difacademy.R;
 

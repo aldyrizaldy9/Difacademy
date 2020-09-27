@@ -1,10 +1,8 @@
 package com.tamanpelajar.aldy.difacademy.ActivityAdmin;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -27,7 +25,6 @@ import com.tamanpelajar.aldy.difacademy.Model.VideoModel;
 import com.tamanpelajar.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -40,7 +37,7 @@ import com.google.firebase.storage.UploadTask;
 import java.util.ArrayList;
 import java.util.UUID;
 
-import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpAddOnlineCourseActivity.onlineCourseDocId;
+import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpAddOnlineKelasActivity.onlineCourseDocId;
 import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpMainActivity.ADD_REQUEST_CODE;
 import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpMainActivity.DELETE_REQUEST_CODE;
 import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpMainActivity.PHOTO_PICK_REQUEST_CODE;
@@ -231,12 +228,6 @@ public class OpAddOnlineMateriActivity extends AppCompatActivity {
         });
     }
 
-    private boolean isNetworkConnected() {
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
-    }
-
     private void getImageFromGallery() {
         Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setType("image/*");
@@ -254,7 +245,7 @@ public class OpAddOnlineMateriActivity extends AppCompatActivity {
     }
 
     private void simpanMateri() {
-        if (!CommonMethod.isInternetAvailable(OpAddOnlineMateriActivity.this)){
+        if (!CommonMethod.isInternetAvailable(OpAddOnlineMateriActivity.this)) {
             pd.dismiss();
             return;
         }
@@ -411,15 +402,15 @@ public class OpAddOnlineMateriActivity extends AppCompatActivity {
         builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if (!isNetworkConnected()) {
-                    Toast.makeText(OpAddOnlineMateriActivity.this, "Tidak ada koneksi intenet!", Toast.LENGTH_SHORT).show();
+                if (!CommonMethod.isInternetAvailable(OpAddOnlineMateriActivity.this)) {
+                    return;
+                }
+
+                pd.show();
+                if (imageUri != null) {
+                    uploadPhotoToFirebase();
                 } else {
-                    pd.show();
-                    if (imageUri != null) {
-                        uploadPhotoToFirebase();
-                    } else {
-                        simpanMateri();
-                    }
+                    simpanMateri();
                 }
             }
         });
@@ -444,12 +435,12 @@ public class OpAddOnlineMateriActivity extends AppCompatActivity {
         builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if (!isNetworkConnected()) {
-                    Toast.makeText(OpAddOnlineMateriActivity.this, "Tidak ada koneksi intenet!", Toast.LENGTH_SHORT).show();
-                } else {
-                    pd.show();
-                    hapusMateri();
+                if (!CommonMethod.isInternetAvailable(OpAddOnlineMateriActivity.this)) {
+                    return;
                 }
+
+                pd.show();
+                hapusMateri();
             }
         });
 
