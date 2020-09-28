@@ -35,21 +35,6 @@ import com.tamanpelajar.aldy.difacademy.R;
 import java.util.ArrayList;
 
 public class UsMainActivity extends AppCompatActivity {
-//
-//    private static final String TAG = "MainActivity";
-//    private ConstraintLayout clSettings, clOngoing;
-//    private ImageView imgKelasGratis, imgKelasOnline, imgKelasCampuran, imgOngoing, imgBanner;
-//    private Button btnBeritaLainnya;
-//    private TextView tvDiikutiSemua, tvJudulOngoing, tvTagOngoing;
-//    private RecyclerView rvMainBerita;
-//    private UsNewsAdapter usNewsAdapter;
-//    private ArrayList<NewsModel> newsModels;
-//    private FirebaseFirestore firebaseFirestore;
-//    private MateriModel materiModel;
-//    private String userDocId;
-//    private OngoingMateriModel ongoingOnlineMateri;
-//    private OngoingMateriModel ongoingBlendedMateri;
-//    private boolean doubleBackToExitPressedOnce = false;
 
     private static final String TAG = "MainActivity";
     private ConstraintLayout clSettings, clOngoing;
@@ -60,9 +45,9 @@ public class UsMainActivity extends AppCompatActivity {
     private UsNewsAdapter usNewsAdapter;
     private ArrayList<NewsModel> newsModels;
     private FirebaseFirestore firebaseFirestore;
-//    private MateriModel materiModel;
+    //    private MateriModel materiModel;
     private String userDocId;
-//    private OngoingMateriModel ongoingOnlineMateri;
+    //    private OngoingMateriModel ongoingOnlineMateri;
 //    private OngoingMateriModel ongoingBlendedMateri;
     private boolean doubleBackToExitPressedOnce = false;
 
@@ -70,84 +55,91 @@ public class UsMainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_us_main);
-//        initView();
-//        setBanner();
-//        onClick();
-//        setRecyclerView();
-//        getUserDocId();
-//        loadNews();
+        initView();
+        setBanner();
+        onClick();
+        setRecyclerView();
+        getUserDocId();
+        loadNews();
     }
-//
-//    @Override
-//    public void onBackPressed() {
-//        if (doubleBackToExitPressedOnce) {
-//            super.onBackPressed();
-//            Intent intent = new Intent(Intent.ACTION_MAIN);
-//            intent.addCategory(Intent.CATEGORY_HOME);
-//            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//            startActivity(intent);
-//            return;
-//        }
-//
-//        this.doubleBackToExitPressedOnce = true;
-//        Toast.makeText(this, "Tekan sekali lagi untuk keluar", Toast.LENGTH_SHORT).show();
-//
-//        new Handler().postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                doubleBackToExitPressedOnce = false;
-//            }
-//        }, 2000);
-//    }
-//
-//    private void initView() {
-//        clSettings = findViewById(R.id.cl_main_settings);
-//        clOngoing = findViewById(R.id.cl_main_ongoing_class);
-//        imgKelasGratis = findViewById(R.id.img_main_kelas_gratis);
-//        imgKelasOnline = findViewById(R.id.img_main_kelas_online);
-//        imgKelasCampuran = findViewById(R.id.img_main_kelas_campuran);
-//        imgOngoing = findViewById(R.id.img_main_ongoing_thumbnail);
-//        imgOngoing.setClipToOutline(true);
-//        imgBanner = findViewById(R.id.img_main_banner);
-//        btnBeritaLainnya = findViewById(R.id.btn_main_berita_lainnya);
-//        tvDiikutiSemua = findViewById(R.id.tv_main_diikuti_semua);
-//        tvJudulOngoing = findViewById(R.id.tv_main_ongoing_judul);
-//        tvTagOngoing = findViewById(R.id.tv_main_ongoing_tag);
-//        rvMainBerita = findViewById(R.id.rv_main_berita);
-//
-//        rvMainBerita.setNestedScrollingEnabled(false);
-//        firebaseFirestore = FirebaseFirestore.getInstance();
-//    }
-//
-//    private void setBanner() {
-//        DocumentReference docRef = firebaseFirestore.collection("BannerPhotoUrl").document("bannerphotourl");
-//        docRef.get()
-//                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-//                    @Override
-//                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-//                        if (documentSnapshot != null) {
-//                            String url = documentSnapshot.getString("url");
-//                            Glide.with(UsMainActivity.this)
-//                                    .load(url)
-//                                    .into(imgBanner);
-//                        }
-//                    }
-//                });
-//    }
-//
-//    private void setRecyclerView() {
-//        newsModels = new ArrayList<>();
-//        usNewsAdapter = new UsNewsAdapter(this, newsModels);
-//        rvMainBerita.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
-//        rvMainBerita.setAdapter(usNewsAdapter);
-//    }
-//
-//    private void onClick() {
-//        clSettings.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(UsMainActivity.this, UsSettingsActivity.class);
-//                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+    @Override
+    public void onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed();
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.addCategory(Intent.CATEGORY_HOME);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            return;
+        }
+
+        this.doubleBackToExitPressedOnce = true;
+        Toast.makeText(this, "Tekan sekali lagi untuk keluar", Toast.LENGTH_SHORT).show();
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce = false;
+            }
+        }, 2000);
+    }
+
+    private void initView() {
+        clSettings = findViewById(R.id.cl_main_settings);
+        clOngoing = findViewById(R.id.cl_main_ongoing_class);
+        imgKelasGratis = findViewById(R.id.img_main_kelas_gratis);
+        imgKelasOnline = findViewById(R.id.img_main_kelas_online);
+        imgKelasCampuran = findViewById(R.id.img_main_kelas_campuran);
+        imgOngoing = findViewById(R.id.img_main_ongoing_thumbnail);
+        imgOngoing.setClipToOutline(true);
+        imgBanner = findViewById(R.id.img_main_banner);
+        btnBeritaLainnya = findViewById(R.id.btn_main_berita_lainnya);
+        tvDiikutiSemua = findViewById(R.id.tv_main_diikuti_semua);
+        tvJudulOngoing = findViewById(R.id.tv_main_ongoing_judul);
+        tvTagOngoing = findViewById(R.id.tv_main_ongoing_tag);
+        rvMainBerita = findViewById(R.id.rv_main_berita);
+
+        rvMainBerita.setNestedScrollingEnabled(false);
+        firebaseFirestore = FirebaseFirestore.getInstance();
+    }
+
+    private void setBanner() {
+        DocumentReference docRef = firebaseFirestore.collection("BannerPhotoUrl").document("bannerphotourl");
+        docRef.get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot != null) {
+                            String url = documentSnapshot.getString("url");
+                            Glide.with(UsMainActivity.this)
+                                    .load(url)
+                                    .into(imgBanner);
+                        }
+                    }
+                });
+    }
+
+    private void setRecyclerView() {
+        newsModels = new ArrayList<>();
+        usNewsAdapter = new UsNewsAdapter(this, newsModels);
+        rvMainBerita.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
+        rvMainBerita.setAdapter(usNewsAdapter);
+    }
+
+    private void onClick() {
+        clSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(UsMainActivity.this, UsSettingsActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            }
+        });
+        imgKelasGratis.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                Intent intent = new Intent(UsMainActivity.this, UsListFreeCourseActivity.class);
 //                startActivity(intent);
                 Toast.makeText(UsMainActivity.this, "Coming Soon", Toast.LENGTH_SHORT).show();
             }
