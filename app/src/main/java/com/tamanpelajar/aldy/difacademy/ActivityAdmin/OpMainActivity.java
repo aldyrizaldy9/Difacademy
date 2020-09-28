@@ -25,6 +25,7 @@ import androidx.core.content.ContextCompat;
 
 import com.tamanpelajar.aldy.difacademy.ActivityCommon.LoginActivity;
 import com.tamanpelajar.aldy.difacademy.BuildConfig;
+import com.tamanpelajar.aldy.difacademy.CommonMethod;
 import com.tamanpelajar.aldy.difacademy.Model.GraduationModel;
 import com.tamanpelajar.aldy.difacademy.Model.PaymentModel;
 import com.tamanpelajar.aldy.difacademy.Notification.Token;
@@ -60,8 +61,10 @@ public class OpMainActivity extends AppCompatActivity {
     private ImageView imgLogout, imgNotif;
     private Button btnFree, btnOnline, btnBlended, btnBerita, btnTags, btnBanner;
     private TextView tvNavbar;
-    private FirebaseFirestore firebaseFirestore;
-    private CollectionReference paymentRef, graduationRef;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private CollectionReference paymentBlendedRef = db.collection(CommonMethod.refPaymentKelasBlended);
+    private CollectionReference paymentOnlineRef = db.collection(CommonMethod.refPaymentKelasOnline);
+    private CollectionReference graduationRef = db.collection(CommonMethod.refGraduation);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,13 +131,9 @@ public class OpMainActivity extends AppCompatActivity {
     }
 
     private void updateToken() {
-        firebaseFirestore = FirebaseFirestore.getInstance();
-        paymentRef = firebaseFirestore.collection("Payment");
-        graduationRef = firebaseFirestore.collection("Graduation");
-
         //update token
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        final DocumentReference docRef = firebaseFirestore.collection("Tokens").document(firebaseUser.getUid());
+        final DocumentReference docRef = db.collection(CommonMethod.refTokens).document(firebaseUser.getUid());
         FirebaseInstanceId.getInstance().getInstanceId()
                 .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
                     @Override
@@ -187,8 +186,6 @@ public class OpMainActivity extends AppCompatActivity {
         btnFree.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Intent intent = new Intent(OpMainActivity.this, OpFreeCourseActivity.class);
-//                startActivity(intent);
                 Toast.makeText(OpMainActivity.this, "Fitur ini telah dihapus", Toast.LENGTH_SHORT).show();
             }
         });
@@ -295,8 +292,8 @@ public class OpMainActivity extends AppCompatActivity {
         }, 2000);
     }
 
-    private void checkIfPaymentExist() {
-        paymentRef.addSnapshotListener(this, new EventListener<QuerySnapshot>() {
+    private void isPaymentBlendedExist() {
+        paymentBlendedRef.addSnapshotListener(this, new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                 if (e != null) {
@@ -314,13 +311,38 @@ public class OpMainActivity extends AppCompatActivity {
                             return;
                         }
                     }
-                    checkIfGraduationExist();
+                    isPaymentOnlineExist();
                 }
             }
         });
     }
 
-    private void checkIfGraduationExist() {
+    private void isPaymentOnlineExist() {
+        paymentOnlineRef.addSnapshotListener(this, new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    return;
+                }
+
+                if (queryDocumentSnapshots == null) {
+                    imgNotif.setImageResource(R.drawable.ic_notifications);
+                } else {
+                    for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
+                        PaymentModel paymentModel = queryDocumentSnapshot.toObject(PaymentModel.class);
+                        paymentModel.setDocumentId(queryDocumentSnapshot.getId());
+                        if (!paymentModel.isSeen()) {
+                            imgNotif.setImageResource(R.drawable.ic_notifications_active);
+                            return;
+                        }
+                    }
+                    isGraduationExist();
+                }
+            }
+        });
+    }
+
+    private void isGraduationExist() {
         graduationRef.addSnapshotListener(this, new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {

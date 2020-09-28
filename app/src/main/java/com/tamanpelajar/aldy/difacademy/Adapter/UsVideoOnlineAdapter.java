@@ -20,8 +20,6 @@ import com.tamanpelajar.aldy.difacademy.R;
 
 import java.util.ArrayList;
 
-import static com.tamanpelajar.aldy.difacademy.ActivityUser.UsListVideoOnlineActivity.IS_PAID;
-
 public class UsVideoOnlineAdapter extends RecyclerView.Adapter<UsVideoOnlineAdapter.ViewHolder> {
     private Context context;
     private ArrayList<VideoOnlineModel> models;

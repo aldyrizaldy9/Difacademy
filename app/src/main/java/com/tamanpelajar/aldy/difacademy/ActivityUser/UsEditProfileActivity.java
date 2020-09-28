@@ -32,22 +32,22 @@ import static com.tamanpelajar.aldy.difacademy.ActivityCommon.LoginActivity.USER
 
 public class UsEditProfileActivity extends AppCompatActivity {
 
-    private static final String TAG = "EditProfileActivity";
-    private ConstraintLayout clBack, clSave, clNavbar;
-    private EditText edtNama, edtNoWa;
-    private ProgressDialog progressDialog;
-    private CollectionReference userRef;
-    private DocumentReference userDocRef;
-    private UserModel userModel;
-    private SharedPreferences sharedPreferences;
+//    private static final String TAG = "EditProfileActivity";
+//    private ConstraintLayout clBack, clSave, clNavbar;
+//    private EditText edtNama, edtNoWa;
+//    private ProgressDialog progressDialog;
+//    private CollectionReference userRef;
+//    private DocumentReference userDocRef;
+//    private UserModel userModel;
+//    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_us_edit_profile);
-        initView();
-        onClick();
-        getUserData();
+//        initView();
+//        onClick();
+//        getUserData();
     }
 
     private void initView() {

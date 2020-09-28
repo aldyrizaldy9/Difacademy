@@ -44,6 +44,7 @@ public class OpBannerActivity extends AppCompatActivity {
     FirebaseFirestore db;
     String bannerUrl = "";
     ProgressDialog pd;
+    boolean thereIsData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +93,7 @@ public class OpBannerActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         if (documentSnapshot != null) {
+                            thereIsData = true;
                             String coba = documentSnapshot.getString("url");
                             bannerUrl = coba;
                             Glide.with(OpBannerActivity.this)
@@ -142,7 +144,7 @@ public class OpBannerActivity extends AppCompatActivity {
     }
 
     private void uploadImageToFirebase() {
-        final StorageReference ref = firebaseStorage.getReference().child("BannerPhoto/" + UUID.randomUUID().toString());
+        final StorageReference ref = firebaseStorage.getReference().child(CommonMethod.storageBannerPhoto + UUID.randomUUID().toString());
         ref.putFile(imageUri)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
@@ -176,7 +178,8 @@ public class OpBannerActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        deleteCurrentImage();
+                        if (thereIsData)
+                            deleteCurrentImage();
                     }
                 });
     }
