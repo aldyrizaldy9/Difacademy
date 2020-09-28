@@ -17,7 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.tamanpelajar.aldy.difacademy.CommonMethod;
-import com.tamanpelajar.aldy.difacademy.Model.OngoingKelasModel;
+import com.tamanpelajar.aldy.difacademy.Model.OngoingKelasBlendedModel;
 import com.tamanpelajar.aldy.difacademy.Model.PaymentModel;
 import com.tamanpelajar.aldy.difacademy.Model.UserModel;
 import com.tamanpelajar.aldy.difacademy.R;
@@ -204,7 +204,7 @@ public class OpNotifPaymentActivity extends AppCompatActivity {
     private void bukaKelas() {
         long dateCreated = CommonMethod.getTimeStamp();
 
-        OngoingKelasModel ongoingKelasModel = new OngoingKelasModel(paymentModel.getKelasId(), dateCreated);
+        OngoingKelasBlendedModel ongoingKelasBlendedModel = new OngoingKelasBlendedModel(paymentModel.getKelasId(), dateCreated);
 
         if (jenisKelas.equals("blended")){
             ongoingKelasRef = db.collection(CommonMethod.refUser)
@@ -217,7 +217,7 @@ public class OpNotifPaymentActivity extends AppCompatActivity {
         }
 
         ongoingKelasRef
-                .add(ongoingKelasModel)
+                .add(ongoingKelasBlendedModel)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {

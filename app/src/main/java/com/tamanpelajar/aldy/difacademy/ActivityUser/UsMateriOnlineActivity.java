@@ -13,8 +13,6 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.tamanpelajar.aldy.difacademy.Adapter.UsMateriOnlineAdapter;
-import com.tamanpelajar.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
@@ -22,19 +20,23 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.tamanpelajar.aldy.difacademy.Adapter.UsMateriOnlineAdapter;
+import com.tamanpelajar.aldy.difacademy.CommonMethod;
+import com.tamanpelajar.aldy.difacademy.Model.KelasOnlineModel;
+import com.tamanpelajar.aldy.difacademy.Model.MateriOnlineModel;
+import com.tamanpelajar.aldy.difacademy.R;
 
 import java.util.ArrayList;
 
-public class UsOnlineMateriActivity extends AppCompatActivity {
-    private static final String TAG = "OnlineMateriActivity";
-    private ConstraintLayout clBack, clNavbar;
+public class UsMateriOnlineActivity extends AppCompatActivity {
+    private static final String TAG = "MateriOnlineActivity";
+    private ConstraintLayout clBack;
     private RecyclerView rvVideo;
     private UsMateriOnlineAdapter adapter;
-    private ArrayList<MateriModel> materiModels;
+    private ArrayList<MateriOnlineModel> materiOnlineModels;
     private ProgressDialog progressDialog;
     private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
-    private CollectionReference materiRef;
-    private CourseModel courseModel;
+    private KelasOnlineModel kelasOnlineModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +49,7 @@ public class UsOnlineMateriActivity extends AppCompatActivity {
     }
 
     private void initView() {
-        clNavbar = findViewById(R.id.cl_navbar);
+        ConstraintLayout clNavbar = findViewById(R.id.cl_navbar);
         clNavbar.setBackgroundColor(getResources().getColor(R.color.navCoklat));
         clBack = findViewById(R.id.cl_icon1);
         clBack.setVisibility(View.VISIBLE);
@@ -57,7 +59,7 @@ public class UsOnlineMateriActivity extends AppCompatActivity {
         tvNavBar.setText("Materi");
         rvVideo = findViewById(R.id.rv_online_materi_materi);
         Intent intent = getIntent();
-        courseModel = intent.getParcelableExtra("courseModel");
+        kelasOnlineModel = intent.getParcelableExtra(CommonMethod.intentKelasOnlineModel);
 
         progressDialog = new ProgressDialog(this);
     }
@@ -72,13 +74,10 @@ public class UsOnlineMateriActivity extends AppCompatActivity {
     }
 
     private void setRecyclerView() {
-        materiModels = new ArrayList<>();
-        adapter = new UsMateriOnlineAdapter(this, materiModels);
-
-        final LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        rvVideo.setLayoutManager(layoutManager);
+        materiOnlineModels = new ArrayList<>();
+        adapter = new UsMateriOnlineAdapter(this, materiOnlineModels);
+        rvVideo.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         rvVideo.setAdapter(adapter);
-
     }
 
     private void loadMateriData() {
@@ -86,10 +85,10 @@ public class UsOnlineMateriActivity extends AppCompatActivity {
         progressDialog.setCancelable(false);
         progressDialog.show();
 
-        materiRef = firebaseFirestore
-                .collection("OnlineCourse")
-                .document(courseModel.getDocumentId())
-                .collection("OnlineMateri");
+        CollectionReference materiRef = firebaseFirestore
+                .collection(CommonMethod.refKelasOnline)
+                .document(kelasOnlineModel.getDocumentId())
+                .collection(CommonMethod.refMateriOnline);
 
         materiRef
                 .orderBy("dateCreated", Query.Direction.DESCENDING)
@@ -97,13 +96,13 @@ public class UsOnlineMateriActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        materiModels.clear();
+                        materiOnlineModels.clear();
                         if (queryDocumentSnapshots.size() > 0) {
                             for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                                MateriModel materiModel = documentSnapshot.toObject(MateriModel.class);
-                                materiModel.setDocumentId(documentSnapshot.getId());
+                                MateriOnlineModel materiOnlineModel = documentSnapshot.toObject(MateriOnlineModel.class);
+                                materiOnlineModel.setDocumentId(documentSnapshot.getId());
 
-                                materiModels.add(materiModel);
+                                materiOnlineModels.add(materiOnlineModel);
                             }
                             adapter.notifyDataSetChanged();
                         }

@@ -13,7 +13,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.tamanpelajar.aldy.difacademy.ActivityUser.UsDetailCourseActivity;
+import com.tamanpelajar.aldy.difacademy.ActivityUser.UsDetailKelasOnlineActivity;
 import com.tamanpelajar.aldy.difacademy.CommonMethod;
 import com.tamanpelajar.aldy.difacademy.Model.KelasOnlineModel;
 import com.tamanpelajar.aldy.difacademy.R;
@@ -49,8 +49,7 @@ public class UsKelasOnlineAdapter extends RecyclerView.Adapter<UsKelasOnlineAdap
         holder.clContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, UsDetailCourseActivity.class);
-                intent.putExtra(CommonMethod.intentJenisKelas, "online");
+                Intent intent = new Intent(context, UsDetailKelasOnlineActivity.class);
                 intent.putExtra(CommonMethod.intentKelasOnlineModel, model);
                 context.startActivity(intent);
             }

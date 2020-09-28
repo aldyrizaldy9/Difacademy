@@ -17,7 +17,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -46,10 +45,10 @@ public class UsMainActivity extends AppCompatActivity {
     private UsNewsAdapter usNewsAdapter;
     private ArrayList<NewsModel> newsModels;
     private FirebaseFirestore firebaseFirestore;
-    private MateriModel materiModel;
+//    private MateriModel materiModel;
     private String userDocId;
-    private OngoingMateriModel ongoingOnlineMateri;
-    private OngoingMateriModel ongoingBlendedMateri;
+//    private OngoingMateriModel ongoingOnlineMateri;
+//    private OngoingMateriModel ongoingBlendedMateri;
     private boolean doubleBackToExitPressedOnce = false;
 
     @Override
@@ -148,14 +147,14 @@ public class UsMainActivity extends AppCompatActivity {
         imgKelasOnline.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(UsMainActivity.this, UsOnlineCourseActivity.class);
+                Intent intent = new Intent(UsMainActivity.this, UsKelasOnlineActivity.class);
                 startActivity(intent);
             }
         });
         imgKelasCampuran.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(UsMainActivity.this, UsBlendedCourseActivity.class);
+                Intent intent = new Intent(UsMainActivity.this, UsKelasBlendedActivity.class);
                 startActivity(intent);
             }
         });
@@ -214,7 +213,7 @@ public class UsMainActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
-                            ongoingBlendedMateri = queryDocumentSnapshot.toObject(OngoingMateriModel.class);
+//                            ongoingBlendedMateri = queryDocumentSnapshot.toObject(OngoingMateriModel.class);
                         }
                         getOngoingOnlineMateri();
                     }
@@ -241,7 +240,7 @@ public class UsMainActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
-                            ongoingOnlineMateri = queryDocumentSnapshot.toObject(OngoingMateriModel.class);
+//                            ongoingOnlineMateri = queryDocumentSnapshot.toObject(OngoingMateriModel.class);
                         }
                         compareOngoingMateri();
                     }
@@ -255,17 +254,17 @@ public class UsMainActivity extends AppCompatActivity {
     }
 
     private void compareOngoingMateri() {
-        if (ongoingBlendedMateri != null) {
-            if (ongoingOnlineMateri == null) {
-                setOngoingMateri("blended", ongoingBlendedMateri.getCourseId(), ongoingBlendedMateri.getMateriId());
-            } else if (ongoingBlendedMateri.getDateCreated() > ongoingOnlineMateri.getDateCreated()) {
-                setOngoingMateri("blended", ongoingBlendedMateri.getCourseId(), ongoingBlendedMateri.getMateriId());
-            } else {
-                setOngoingMateri("online", ongoingOnlineMateri.getCourseId(), ongoingOnlineMateri.getMateriId());
-            }
-        } else if (ongoingOnlineMateri != null) {
-            setOngoingMateri("online", ongoingOnlineMateri.getCourseId(), ongoingOnlineMateri.getMateriId());
-        }
+//        if (ongoingBlendedMateri != null) {
+//            if (ongoingOnlineMateri == null) {
+//                setOngoingMateri("blended", ongoingBlendedMateri.getCourseId(), ongoingBlendedMateri.getMateriId());
+//            } else if (ongoingBlendedMateri.getDateCreated() > ongoingOnlineMateri.getDateCreated()) {
+//                setOngoingMateri("blended", ongoingBlendedMateri.getCourseId(), ongoingBlendedMateri.getMateriId());
+//            } else {
+//                setOngoingMateri("online", ongoingOnlineMateri.getCourseId(), ongoingOnlineMateri.getMateriId());
+//            }
+//        } else if (ongoingOnlineMateri != null) {
+//            setOngoingMateri("online", ongoingOnlineMateri.getCourseId(), ongoingOnlineMateri.getMateriId());
+//        }
     }
 
     private void setOngoingMateri(final String jenisKelas, String courseId, final String materiId) {
@@ -293,26 +292,26 @@ public class UsMainActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        materiModel = documentSnapshot.toObject(MateriModel.class);
-                        if (materiModel != null) {
-                            materiModel.setDocumentId(documentSnapshot.getId());
-
-                            Glide.with(UsMainActivity.this)
-                                    .load(materiModel.getThumbnailUrl())
-                                    .apply(new RequestOptions().centerCrop())
-                                    .into(imgOngoing);
-                            tvJudulOngoing.setText(materiModel.getTitle());
-                            clOngoing.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    intent.putExtra("jenisKelas", jenisKelas);
-                                    intent.putExtra("materiModel", materiModel);
-                                    startActivity(intent);
-                                }
-                            });
-
-                            setOngoingView();
-                        }
+//                        materiModel = documentSnapshot.toObject(MateriModel.class);
+//                        if (materiModel != null) {
+//                            materiModel.setDocumentId(documentSnapshot.getId());
+//
+//                            Glide.with(UsMainActivity.this)
+//                                    .load(materiModel.getThumbnailUrl())
+//                                    .apply(new RequestOptions().centerCrop())
+//                                    .into(imgOngoing);
+//                            tvJudulOngoing.setText(materiModel.getTitle());
+//                            clOngoing.setOnClickListener(new View.OnClickListener() {
+//                                @Override
+//                                public void onClick(View v) {
+//                                    intent.putExtra("jenisKelas", jenisKelas);
+//                                    intent.putExtra("materiModel", materiModel);
+//                                    startActivity(intent);
+//                                }
+//                            });
+//
+//                            setOngoingView();
+//                        }
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -331,10 +330,10 @@ public class UsMainActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        CourseModel courseModel = documentSnapshot.toObject(CourseModel.class);
-                        if (courseModel != null) {
-                            tvTagOngoing.setText(courseModel.getTag());
-                        }
+//                        CourseModel courseModel = documentSnapshot.toObject(CourseModel.class);
+//                        if (courseModel != null) {
+//                            tvTagOngoing.setText(courseModel.getTag());
+//                        }
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -351,7 +350,7 @@ public class UsMainActivity extends AppCompatActivity {
         tvDiikutiSemua.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(UsMainActivity.this, UsOngoingCourseActivity.class);
+                Intent intent = new Intent(UsMainActivity.this, UsOngoingActivity.class);
                 intent.putExtra("userDocId", userDocId);
                 startActivity(intent);
             }

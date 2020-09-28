@@ -148,17 +148,17 @@ public class UsEditProfileActivity extends AppCompatActivity {
         builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if (!isNetworkConnected()) {
-                    Toast.makeText(UsEditProfileActivity.this, "Tidak ada koneksi internet!", Toast.LENGTH_SHORT).show();
-                } else {
-                    if (edtNama.length() == 0 || edtNoWa.length() == 0) {
-                        Toast.makeText(UsEditProfileActivity.this, "Form tidak boleh kosong", Toast.LENGTH_SHORT).show();
-                    } else if (edtNoWa.length() < 8) {
-                        Toast.makeText(UsEditProfileActivity.this, "Nomor Whatsapp minimal 8 digit", Toast.LENGTH_SHORT).show();
-                    } else {
-                        updateProfile();
-                    }
-                }
+//                if (!isNetworkConnected()) {
+//                    Toast.makeText(UsEditProfileActivity.this, "Tidak ada koneksi internet!", Toast.LENGTH_SHORT).show();
+//                } else {
+//                    if (edtNama.length() == 0 || edtNoWa.length() == 0) {
+//                        Toast.makeText(UsEditProfileActivity.this, "Form tidak boleh kosong", Toast.LENGTH_SHORT).show();
+//                    } else if (edtNoWa.length() < 8) {
+//                        Toast.makeText(UsEditProfileActivity.this, "Nomor Whatsapp minimal 8 digit", Toast.LENGTH_SHORT).show();
+//                    } else {
+//                        updateProfile();
+//                    }
+//                }
             }
         });
 

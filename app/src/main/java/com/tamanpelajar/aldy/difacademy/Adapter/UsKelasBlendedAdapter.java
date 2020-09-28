@@ -13,7 +13,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.tamanpelajar.aldy.difacademy.ActivityUser.UsDetailCourseActivity;
+import com.tamanpelajar.aldy.difacademy.ActivityUser.UsDetailKelasBlendedActivity;
 import com.tamanpelajar.aldy.difacademy.CommonMethod;
 import com.tamanpelajar.aldy.difacademy.Model.KelasBlendedModel;
 import com.tamanpelajar.aldy.difacademy.R;
@@ -49,7 +49,7 @@ public class UsKelasBlendedAdapter extends RecyclerView.Adapter<UsKelasBlendedAd
         holder.clContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, UsDetailCourseActivity.class);
+                Intent intent = new Intent(context, UsDetailKelasBlendedActivity.class);
                 intent.putExtra(CommonMethod.intentJenisKelas, "blended");
                 intent.putExtra(CommonMethod.intentKelasBlendedModel, model);
                 context.startActivity(intent);

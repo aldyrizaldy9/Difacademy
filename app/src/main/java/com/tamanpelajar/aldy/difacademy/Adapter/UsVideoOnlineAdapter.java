@@ -13,7 +13,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.tamanpelajar.aldy.difacademy.ActivityUser.UsPaymentActivity;
-import com.tamanpelajar.aldy.difacademy.ActivityUser.UsWatchVideoActivity;
+import com.tamanpelajar.aldy.difacademy.ActivityUser.UsWatchVideoOnlineActivity;
 import com.tamanpelajar.aldy.difacademy.CommonMethod;
 import com.tamanpelajar.aldy.difacademy.Model.VideoOnlineModel;
 import com.tamanpelajar.aldy.difacademy.R;
@@ -54,7 +54,6 @@ public class UsVideoOnlineAdapter extends RecyclerView.Adapter<UsVideoOnlineAdap
                     public void onClick(View v) {
                         Intent intent = new Intent(context, UsPaymentActivity.class);
                         intent.putExtra(CommonMethod.intentVideoOnlineModel, model);
-                        intent.putExtra(CommonMethod.intentJenisKelas, "online");
                         context.startActivity(intent);
                     }
                 });
@@ -63,7 +62,7 @@ public class UsVideoOnlineAdapter extends RecyclerView.Adapter<UsVideoOnlineAdap
                 holder.clContainer.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(context, UsWatchVideoActivity.class);
+                        Intent intent = new Intent(context, UsWatchVideoOnlineActivity.class);
                         intent.putExtra(CommonMethod.intentVideoOnlineModel, model);
                         context.startActivity(intent);
                     }
@@ -74,7 +73,7 @@ public class UsVideoOnlineAdapter extends RecyclerView.Adapter<UsVideoOnlineAdap
             holder.clContainer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(context, UsWatchVideoActivity.class);
+                    Intent intent = new Intent(context, UsWatchVideoOnlineActivity.class);
                     intent.putExtra(CommonMethod.intentVideoOnlineModel, model);
                     context.startActivity(intent);
                 }

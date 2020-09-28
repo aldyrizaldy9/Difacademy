@@ -17,7 +17,7 @@ public class CommonMethod {
     public final static String refTags = "Tags-dev";
     public final static String refTokens = "Tokens-dev";
     public final static String refOngoingKelasBlended = "OngoingKelasBlended-dev";
-    public final static String refOngoingKelasOnline = "OngoingKelasOnline-dev";
+    public final static String refOngoingMateriOnline = "OngoingMateriOnline-dev";
     public final static String refMember = "Members-dev";
 
     public final static String refKelasBlended = "KelasBlended-dev";

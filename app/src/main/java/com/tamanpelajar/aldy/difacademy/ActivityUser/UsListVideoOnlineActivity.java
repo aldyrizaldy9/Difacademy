@@ -16,8 +16,6 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.tamanpelajar.aldy.difacademy.Adapter.UsVideoOnlineAdapter;
-import com.tamanpelajar.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
@@ -26,6 +24,11 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.Source;
+import com.tamanpelajar.aldy.difacademy.Adapter.UsVideoOnlineAdapter;
+import com.tamanpelajar.aldy.difacademy.CommonMethod;
+import com.tamanpelajar.aldy.difacademy.Model.MateriOnlineModel;
+import com.tamanpelajar.aldy.difacademy.Model.VideoOnlineModel;
+import com.tamanpelajar.aldy.difacademy.R;
 
 import java.util.ArrayList;
 
@@ -38,14 +41,13 @@ public class UsListVideoOnlineActivity extends AppCompatActivity {
     private ConstraintLayout clBack;
     private ConstraintLayout clQuiz;
     private RecyclerView rvListVideoCourse;
-    private ArrayList<VideoModel> videoModels;
+    private ArrayList<VideoOnlineModel> videoOnlineModels;
     private UsVideoOnlineAdapter usVideoOnlineAdapter;
     private ProgressDialog progressDialog;
     private FirebaseFirestore firebaseFirestore;
     private String userDocId;
     private SharedPreferences sharedPreferences;
-    private MateriModel materiModel;
-    private String jenisKelas;
+    private MateriOnlineModel materiOnlineModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,8 +84,7 @@ public class UsListVideoOnlineActivity extends AppCompatActivity {
         clQuiz = findViewById(R.id.cl_list_video_course_quiz);
         progressDialog = new ProgressDialog(this);
         Intent intent = getIntent();
-        materiModel = intent.getParcelableExtra("materiModel");
-        jenisKelas = intent.getStringExtra("jenisKelas");
+        materiOnlineModel = intent.getParcelableExtra(CommonMethod.intentMateriOnlineModel);
         sharedPreferences = getSharedPreferences(SHARE_PREFS, MODE_PRIVATE);
     }
 
@@ -98,9 +99,8 @@ public class UsListVideoOnlineActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (IS_PAID) {
-                    Intent intent = new Intent(UsListVideoOnlineActivity.this, UsQuizActivity.class);
-                    intent.putExtra("jenisKelas", jenisKelas);
-                    intent.putExtra("materiModel", materiModel);
+                    Intent intent = new Intent(UsListVideoOnlineActivity.this, UsQuizOnlineActivity.class);
+                    intent.putExtra(CommonMethod.intentMateriOnlineModel, materiOnlineModel);
                     startActivity(intent);
                 } else {
                     Toast.makeText(UsListVideoOnlineActivity.this, "Anda belum membeli materi ini!", Toast.LENGTH_SHORT).show();
@@ -111,8 +111,8 @@ public class UsListVideoOnlineActivity extends AppCompatActivity {
     }
 
     private void setRecyclerView() {
-        videoModels = new ArrayList<>();
-        usVideoOnlineAdapter = new UsVideoOnlineAdapter(this, videoModels);
+        videoOnlineModels = new ArrayList<>();
+        usVideoOnlineAdapter = new UsVideoOnlineAdapter(this, videoOnlineModels);
         rvListVideoCourse.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
         rvListVideoCourse.setAdapter(usVideoOnlineAdapter);
     }
@@ -120,11 +120,11 @@ public class UsListVideoOnlineActivity extends AppCompatActivity {
 
     private void loadData() {
         CollectionReference videoRef = firebaseFirestore
-                .collection("OnlineCourse")
-                .document(materiModel.getCourseId())
-                .collection("OnlineMateri")
-                .document(materiModel.getDocumentId())
-                .collection("OnlineVideo");
+                .collection(CommonMethod.refKelasOnline)
+                .document(materiOnlineModel.getKelasId())
+                .collection(CommonMethod.refMateriOnline)
+                .document(materiOnlineModel.getDocumentId())
+                .collection(CommonMethod.refVideoOnline);
 
 
         videoRef
@@ -134,10 +134,10 @@ public class UsListVideoOnlineActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
-                            VideoModel videoModel = queryDocumentSnapshot.toObject(VideoModel.class);
-                            videoModel.setDocumentId(queryDocumentSnapshot.getId());
+                            VideoOnlineModel videoOnlineModel = queryDocumentSnapshot.toObject(VideoOnlineModel.class);
+                            videoOnlineModel.setDocumentId(queryDocumentSnapshot.getId());
 
-                            videoModels.add(videoModel);
+                            videoOnlineModels.add(videoOnlineModel);
                         }
                         progressDialog.dismiss();
                         clQuiz.setVisibility(View.VISIBLE);
@@ -160,7 +160,7 @@ public class UsListVideoOnlineActivity extends AppCompatActivity {
         String userId = sharedPreferences.getString(USERID_PREFS, "");
         firebaseFirestore = FirebaseFirestore.getInstance();
 
-        CollectionReference userRef = firebaseFirestore.collection("User");
+        CollectionReference userRef = firebaseFirestore.collection(CommonMethod.refUser);
         userRef
                 .whereEqualTo("userId", userId)
                 .get(Source.SERVER)
@@ -186,21 +186,22 @@ public class UsListVideoOnlineActivity extends AppCompatActivity {
 
     private void checkOngoing(final String userDocId) {
         CollectionReference onGoingRef = firebaseFirestore
-                .collection("User")
+                .collection(CommonMethod.refUser)
                 .document(userDocId)
-                .collection("OngoingOnlineMateri");
+                .collection(CommonMethod.refOngoingMateriOnline);
         onGoingRef
                 .get(Source.SERVER)
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
-                            OngoingMateriModel ongoingMateriModel = queryDocumentSnapshot.toObject(OngoingMateriModel.class);
-                            if (ongoingMateriModel.getMateriId().equals(materiModel.getDocumentId())) {
-                                IS_PAID = true;
-                                break;
-                            }
+//                            OngoingMateriModel ongoingMateriModel = queryDocumentSnapshot.toObject(OngoingMateriModel.class);
+//                            if (ongoingMateriModel.getMateriId().equals(materiOnlineModel.getDocumentId())) {
+//                            IS_PAID = true;
+//                            break;
+//                            }
                         }
+                        IS_PAID = true; //hapus ini kalo udah bisa ngecek ongoing user
                         loadData();
                     }
                 })

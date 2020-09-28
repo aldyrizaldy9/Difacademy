@@ -17,6 +17,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.tamanpelajar.aldy.difacademy.Adapter.UsVideoBlendedAdapter;
+import com.tamanpelajar.aldy.difacademy.Model.MateriBlendedModel;
+import com.tamanpelajar.aldy.difacademy.Model.VideoBlendedModel;
 import com.tamanpelajar.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -38,13 +40,13 @@ public class UsListVideoBlendedActivity extends AppCompatActivity {
     private ConstraintLayout clBack;
     private ConstraintLayout clQuiz;
     private RecyclerView rvListVideoCourse;
-    private ArrayList<VideoModel> videoModels;
+    private ArrayList<VideoBlendedModel> videoBlendedModels;
     private UsVideoBlendedAdapter usVideoBlendedAdapter;
     private ProgressDialog progressDialog;
     private FirebaseFirestore firebaseFirestore;
     private String userDocId;
     private SharedPreferences sharedPreferences;
-    private MateriModel materiModel;
+    private MateriBlendedModel materiBlendedModel;
     private String jenisKelas;
 
     @Override
@@ -82,7 +84,7 @@ public class UsListVideoBlendedActivity extends AppCompatActivity {
         clQuiz = findViewById(R.id.cl_list_video_course_quiz);
         progressDialog = new ProgressDialog(this);
         Intent intent = getIntent();
-        materiModel = intent.getParcelableExtra("materiModel");
+        materiBlendedModel = intent.getParcelableExtra("materiModel");
         jenisKelas = intent.getStringExtra("jenisKelas");
         sharedPreferences = getSharedPreferences(SHARE_PREFS, MODE_PRIVATE);
     }
@@ -98,9 +100,9 @@ public class UsListVideoBlendedActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (IS_PAID) {
-                    Intent intent = new Intent(UsListVideoBlendedActivity.this, UsQuizActivity.class);
+                    Intent intent = new Intent(UsListVideoBlendedActivity.this, UsQuizBlendedActivity.class);
                     intent.putExtra("jenisKelas", jenisKelas);
-                    intent.putExtra("materiModel", materiModel);
+                    intent.putExtra("materiModel", materiBlendedModel);
                     startActivity(intent);
                 } else {
                     Toast.makeText(UsListVideoBlendedActivity.this, "Anda belum membeli materi ini!", Toast.LENGTH_SHORT).show();
@@ -111,8 +113,8 @@ public class UsListVideoBlendedActivity extends AppCompatActivity {
     }
 
     private void setRecyclerView() {
-        videoModels = new ArrayList<>();
-        usVideoBlendedAdapter = new UsVideoBlendedAdapter(this, videoModels);
+        videoBlendedModels = new ArrayList<>();
+        usVideoBlendedAdapter = new UsVideoBlendedAdapter(this, videoBlendedModels);
         rvListVideoCourse.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
         rvListVideoCourse.setAdapter(usVideoBlendedAdapter);
     }
@@ -121,9 +123,9 @@ public class UsListVideoBlendedActivity extends AppCompatActivity {
     private void loadData() {
         CollectionReference videoRef = firebaseFirestore
                 .collection("BlendedCourse")
-                .document(materiModel.getCourseId())
+                .document(materiBlendedModel.getKelasId())
                 .collection("BlendedMateri")
-                .document(materiModel.getDocumentId())
+                .document(materiBlendedModel.getDocumentId())
                 .collection("BlendedVideo");
 
 
@@ -134,10 +136,10 @@ public class UsListVideoBlendedActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
-                            VideoModel videoModel = queryDocumentSnapshot.toObject(VideoModel.class);
-                            videoModel.setDocumentId(queryDocumentSnapshot.getId());
+                            VideoBlendedModel videoBlendedModel = queryDocumentSnapshot.toObject(VideoBlendedModel.class);
+                            videoBlendedModel.setDocumentId(queryDocumentSnapshot.getId());
 
-                            videoModels.add(videoModel);
+                            videoBlendedModels.add(videoBlendedModel);
                         }
                         progressDialog.dismiss();
                         clQuiz.setVisibility(View.VISIBLE);
@@ -195,11 +197,11 @@ public class UsListVideoBlendedActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
-                            OngoingMateriModel ongoingMateriModel = queryDocumentSnapshot.toObject(OngoingMateriModel.class);
-                            if (ongoingMateriModel.getMateriId().equals(materiModel.getDocumentId())) {
-                                IS_PAID = true;
-                                break;
-                            }
+//                            OngoingMateriModel ongoingMateriModel = queryDocumentSnapshot.toObject(OngoingMateriModel.class);
+//                            if (ongoingMateriModel.getMateriId().equals(materiBlendedModel.getDocumentId())) {
+//                                IS_PAID = true;
+//                                break;
+//                            }
                         }
                         loadData();
                     }

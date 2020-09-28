@@ -14,6 +14,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.tamanpelajar.aldy.difacademy.Adapter.UsMateriBlendedAdapter;
+import com.tamanpelajar.aldy.difacademy.Model.KelasBlendedModel;
+import com.tamanpelajar.aldy.difacademy.Model.MateriBlendedModel;
 import com.tamanpelajar.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -25,16 +27,16 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
-public class UsBlendedMateriActivity extends AppCompatActivity {
+public class UsMateriBlendedActivity extends AppCompatActivity {
     private static final String TAG = "BlendedMateriActivity";
     private ConstraintLayout clBack, clNavbar;
     private RecyclerView rvVideo;
     private UsMateriBlendedAdapter adapter;
-    private ArrayList<MateriModel> materiModels;
+    private ArrayList<MateriBlendedModel> materiBlendedModels;
     private ProgressDialog progressDialog;
     private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
     private CollectionReference materiRef;
-    private CourseModel courseModel;
+    private KelasBlendedModel kelasBlendedModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +59,7 @@ public class UsBlendedMateriActivity extends AppCompatActivity {
         tvNavBar.setText("Materi");
         rvVideo = findViewById(R.id.rv_blended_materi_materi);
         Intent intent = getIntent();
-        courseModel = intent.getParcelableExtra("courseModel");
+        kelasBlendedModel = intent.getParcelableExtra("courseModel");
         progressDialog = new ProgressDialog(this);
     }
 
@@ -71,8 +73,8 @@ public class UsBlendedMateriActivity extends AppCompatActivity {
     }
 
     private void setRecyclerView() {
-        materiModels = new ArrayList<>();
-        adapter = new UsMateriBlendedAdapter(this, materiModels);
+        materiBlendedModels = new ArrayList<>();
+        adapter = new UsMateriBlendedAdapter(this, materiBlendedModels);
 
         final LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         rvVideo.setLayoutManager(layoutManager);
@@ -88,7 +90,7 @@ public class UsBlendedMateriActivity extends AppCompatActivity {
 
         materiRef = firebaseFirestore
                 .collection("BlendedCourse")
-                .document(courseModel.getDocumentId())
+                .document(kelasBlendedModel.getDocumentId())
                 .collection("BlendedMateri");
 
         materiRef
@@ -97,13 +99,13 @@ public class UsBlendedMateriActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        materiModels.clear();
+                        materiBlendedModels.clear();
                         if (queryDocumentSnapshots.size() > 0) {
                             for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                                MateriModel materiModel = documentSnapshot.toObject(MateriModel.class);
-                                materiModel.setDocumentId(documentSnapshot.getId());
+                                MateriBlendedModel materiBlendedModel = documentSnapshot.toObject(MateriBlendedModel.class);
+                                materiBlendedModel.setDocumentId(documentSnapshot.getId());
 
-                                materiModels.add(materiModel);
+                                materiBlendedModels.add(materiBlendedModel);
                             }
                             adapter.notifyDataSetChanged();
                         }

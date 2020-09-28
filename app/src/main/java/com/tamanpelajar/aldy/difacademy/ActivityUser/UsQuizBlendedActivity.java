@@ -18,6 +18,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.tamanpelajar.aldy.difacademy.Model.SoalBlendedModel;
+import com.tamanpelajar.aldy.difacademy.Model.SoalOnlineModel;
 import com.tamanpelajar.aldy.difacademy.Model.UserModel;
 import com.tamanpelajar.aldy.difacademy.Notification.APIService;
 import com.tamanpelajar.aldy.difacademy.Notification.Data;
@@ -33,7 +35,6 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.Source;
 
 import java.util.ArrayList;
 
@@ -47,10 +48,10 @@ import static com.tamanpelajar.aldy.difacademy.ActivityCommon.LoginActivity.SHAR
 import static com.tamanpelajar.aldy.difacademy.ActivityCommon.LoginActivity.USERID_PREFS;
 import static com.tamanpelajar.aldy.difacademy.BuildConfig.ADMIN_USER_ID;
 
-public class UsQuizActivity extends AppCompatActivity {
+public class UsQuizBlendedActivity extends AppCompatActivity {
     private static final String TAG = "QuizActivity";
 
-    ArrayList<SoalModel> soalModels;
+    ArrayList<SoalBlendedModel> soalModels;
     ArrayList<String> jawabanBenar;
     ArrayList<String> jawabanSaya;
 
@@ -71,7 +72,7 @@ public class UsQuizActivity extends AppCompatActivity {
     String userId, namaUser, noWa, email, namaMateri;
     SharedPreferences sharedPreferences;
 
-    MateriModel materiModel;
+//    MateriModel materiModel;
     String jenisKelas;
 
     @Override
@@ -79,15 +80,15 @@ public class UsQuizActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_us_quiz);
 
-        soalModels = new ArrayList<>();
+//        soalModels = new ArrayList<>();
         jawabanBenar = new ArrayList<>();
         jawabanSaya = new ArrayList<>();
-        pd = new ProgressDialog(UsQuizActivity.this);
+        pd = new ProgressDialog(UsQuizBlendedActivity.this);
         pd.setMessage("Loading...");
         pd.setCancelable(false);
         pd.show();
         initView();
-        loadData();
+//        loadData();
     }
 
     private void initView() {
@@ -107,7 +108,7 @@ public class UsQuizActivity extends AppCompatActivity {
         userId = sharedPreferences.getString(USERID_PREFS, "");
         Intent intent = getIntent();
         jenisKelas = intent.getStringExtra("jenisKelas");
-        materiModel = intent.getParcelableExtra("materiModel");
+//        materiModel = intent.getParcelableExtra("materiModel");
     }
 
     private void onClick() {
@@ -129,47 +130,47 @@ public class UsQuizActivity extends AppCompatActivity {
         });
     }
 
-    private void loadData() {
-        CollectionReference colRef;
-
-        if (jenisKelas.equalsIgnoreCase("online")) {
-            colRef = db
-                    .collection("OnlineCourse")
-                    .document(materiModel.getCourseId())
-                    .collection("OnlineMateri")
-                    .document(materiModel.getDocumentId())
-                    .collection("OnlineSoal");
-        } else {
-            colRef = db
-                    .collection("BlendedCourse")
-                    .document(materiModel.getCourseId())
-                    .collection("BlendedMateri")
-                    .document(materiModel.getDocumentId())
-                    .collection("BlendedSoal");
-        }
-
-        colRef.get(Source.SERVER)
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                            SoalModel soalModel = documentSnapshot.toObject(SoalModel.class);
-                            soalModel.setDocumentId(documentSnapshot.getId());
-                            soalModels.add(soalModel);
-                        }
-                        pd.dismiss();
-                        mulaiQuiz();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        pd.dismiss();
-                        Toast.makeText(UsQuizActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
-                        onBackPressed();
-                    }
-                });
-    }
+//    private void loadData() {
+//        CollectionReference colRef;
+//
+//        if (jenisKelas.equalsIgnoreCase("online")) {
+//            colRef = db
+//                    .collection("OnlineCourse")
+//                    .document(materiModel.getCourseId())
+//                    .collection("OnlineMateri")
+//                    .document(materiModel.getDocumentId())
+//                    .collection("OnlineSoal");
+//        } else {
+//            colRef = db
+//                    .collection("BlendedCourse")
+//                    .document(materiModel.getCourseId())
+//                    .collection("BlendedMateri")
+//                    .document(materiModel.getDocumentId())
+//                    .collection("BlendedSoal");
+//        }
+//
+//        colRef.get(Source.SERVER)
+//                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+//                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+//                            SoalModel soalModel = documentSnapshot.toObject(SoalModel.class);
+//                            soalModel.setDocumentId(documentSnapshot.getId());
+//                            soalModels.add(soalModel);
+//                        }
+//                        pd.dismiss();
+//                        mulaiQuiz();
+//                    }
+//                })
+//                .addOnFailureListener(new OnFailureListener() {
+//                    @Override
+//                    public void onFailure(@NonNull Exception e) {
+//                        pd.dismiss();
+//                        Toast.makeText(UsQuizActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+//                        onBackPressed();
+//                    }
+//                });
+//    }
 
     private void mulaiQuiz() {
 
@@ -206,14 +207,14 @@ public class UsQuizActivity extends AppCompatActivity {
             }
         }.start();
 
-        totalNomor = soalModels.size();
+//        totalNomor = soalModels.size();
         if (totalNomor > 0) {
             nomor = 1;
 
-            for (SoalModel soalModel : soalModels) {
-                jawabanBenar.add(soalModel.getJawabanBenar());
-                jawabanSaya.add("");
-            }
+//            for (SoalModel soalModel : soalModels) {
+//                jawabanBenar.add(soalModel.getJawabanBenar());
+//                jawabanSaya.add("");
+//            }
         } else {
             Toast.makeText(this, "Belum ada soal", Toast.LENGTH_SHORT).show();
             onBackPressed();
@@ -225,14 +226,14 @@ public class UsQuizActivity extends AppCompatActivity {
     }
 
     private void loadSoal(int nomor) {
-        tvNomor.setText(nomor + "/" + totalNomor);
-        SoalModel soalModel = soalModels.get(nomor - 1);
-        tvSoal.setText(soalModel.getSoal());
-        rbJawabanA.setText(soalModel.getJwbA());
-        rbJawabanB.setText(soalModel.getJwbB());
-        rbJawabanC.setText(soalModel.getJwbC());
-        rbJawabanD.setText(soalModel.getJwbD());
-        rbJawabanE.setText(soalModel.getJwbE());
+//        tvNomor.setText(nomor + "/" + totalNomor);
+//        SoalModel soalModel = soalModels.get(nomor - 1);
+//        tvSoal.setText(soalModel.getSoal());
+//        rbJawabanA.setText(soalModel.getJwbA());
+//        rbJawabanB.setText(soalModel.getJwbB());
+//        rbJawabanC.setText(soalModel.getJwbC());
+//        rbJawabanD.setText(soalModel.getJwbD());
+//        rbJawabanE.setText(soalModel.getJwbE());
 
         radioGroup.clearCheck();
 
@@ -368,7 +369,7 @@ public class UsQuizActivity extends AppCompatActivity {
                         namaUser = userModel.getNama();
                         email = userModel.getEmail();
                         noWa = userModel.getNoTelp();
-                        getMateriData();
+//                        getMateriData();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -381,35 +382,35 @@ public class UsQuizActivity extends AppCompatActivity {
 
     }
 
-    private void getMateriData() {
-        DocumentReference materiRef;
-        if (jenisKelas.equalsIgnoreCase("online")) {
-            materiRef = db.collection("OnlineCourse").document(materiModel.getCourseId())
-                    .collection("OnlineMateri").document(materiModel.getDocumentId());
-        } else {
-            materiRef = db.collection("BlendedCourse").document(materiModel.getCourseId())
-                    .collection("BlendedMateri").document(materiModel.getDocumentId());
-        }
-        materiRef
-                .get()
-                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                    @Override
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        MateriModel materiModel = documentSnapshot.toObject(MateriModel.class);
-                        if (materiModel != null) {
-                            namaMateri = materiModel.getTitle();
-                        }
-                        sendGraduationDetailsToAdmin();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        pd.dismiss();
-                        Log.d(TAG, e.toString());
-                    }
-                });
-    }
+//    private void getMateriData() {
+//        DocumentReference materiRef;
+//        if (jenisKelas.equalsIgnoreCase("online")) {
+//            materiRef = db.collection("OnlineCourse").document(materiModel.getCourseId())
+//                    .collection("OnlineMateri").document(materiModel.getDocumentId());
+//        } else {
+//            materiRef = db.collection("BlendedCourse").document(materiModel.getCourseId())
+//                    .collection("BlendedMateri").document(materiModel.getDocumentId());
+//        }
+//        materiRef
+//                .get()
+//                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+//                    @Override
+//                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+//                        MateriModel materiModel = documentSnapshot.toObject(MateriModel.class);
+//                        if (materiModel != null) {
+//                            namaMateri = materiModel.getTitle();
+//                        }
+//                        sendGraduationDetailsToAdmin();
+//                    }
+//                })
+//                .addOnFailureListener(new OnFailureListener() {
+//                    @Override
+//                    public void onFailure(@NonNull Exception e) {
+//                        pd.dismiss();
+//                        Log.d(TAG, e.toString());
+//                    }
+//                });
+//    }
 
     private void sendGraduationDetailsToAdmin() {
 

@@ -56,7 +56,7 @@ public class UsPaymentActivity extends AppCompatActivity {
     private String userId, namaUser, email, noWa, namaMateri, hargaMateri, namaBank;
     private ProgressDialog progressDialog;
     private FirebaseFirestore firebaseFirestore;
-    private VideoModel videoModel;
+//    private VideoModel videoModel;
     private String jenisKelas;
 
     @Override
@@ -92,7 +92,7 @@ public class UsPaymentActivity extends AppCompatActivity {
         btnBayarBni = findViewById(R.id.btn_payment_bayar_bni);
         btnBayarBri = findViewById(R.id.btn_payment_bayar_bri);
         Intent intent = getIntent();
-        videoModel = intent.getParcelableExtra("videoModel");
+//        videoModel = intent.getParcelableExtra("videoModel");
         jenisKelas = intent.getStringExtra("jenisKelas");
         SharedPreferences sharedPreferences = getSharedPreferences(SHARE_PREFS, MODE_PRIVATE);
         userId = sharedPreferences.getString(USERID_PREFS, "");
@@ -285,7 +285,7 @@ public class UsPaymentActivity extends AppCompatActivity {
                         namaUser = userModel.getNama();
                         email = userModel.getEmail();
                         noWa = userModel.getNoTelp();
-                        getMateriData();
+//                        getMateriData();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -298,34 +298,34 @@ public class UsPaymentActivity extends AppCompatActivity {
 
     }
 
-    private void getMateriData() {
-        DocumentReference courseRef;
-        if (jenisKelas.equalsIgnoreCase("online")) {
-            courseRef = firebaseFirestore.collection("OnlineCourse").document(videoModel.getKelasId())
-                    .collection("OnlineMateri").document(videoModel.getMateriId());
-        } else {
-            courseRef = firebaseFirestore.collection("BlendedCourse").document(videoModel.getKelasId())
-                    .collection("BlendedMateri").document(videoModel.getMateriId());
-        }
-        courseRef
-                .get()
-                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                    @Override
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        MateriModel materiModel = documentSnapshot.toObject(MateriModel.class);
-                        if (materiModel != null) {
-                            namaMateri = materiModel.getTitle();
-                            hargaMateri = materiModel.getHarga();
-                        }
-                        sendPaymentDetailsToAdmin();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        progressDialog.dismiss();
-                        Log.d(TAG, e.toString());
-                    }
-                });
-    }
+//    private void getMateriData() {
+//        DocumentReference courseRef;
+//        if (jenisKelas.equalsIgnoreCase("online")) {
+//            courseRef = firebaseFirestore.collection("OnlineCourse").document(videoModel.getKelasId())
+//                    .collection("OnlineMateri").document(videoModel.getMateriId());
+//        } else {
+//            courseRef = firebaseFirestore.collection("BlendedCourse").document(videoModel.getKelasId())
+//                    .collection("BlendedMateri").document(videoModel.getMateriId());
+//        }
+//        courseRef
+//                .get()
+//                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+//                    @Override
+//                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+//                        MateriModel materiModel = documentSnapshot.toObject(MateriModel.class);
+//                        if (materiModel != null) {
+//                            namaMateri = materiModel.getTitle();
+//                            hargaMateri = materiModel.getHarga();
+//                        }
+//                        sendPaymentDetailsToAdmin();
+//                    }
+//                })
+//                .addOnFailureListener(new OnFailureListener() {
+//                    @Override
+//                    public void onFailure(@NonNull Exception e) {
+//                        progressDialog.dismiss();
+//                        Log.d(TAG, e.toString());
+//                    }
+//                });
+//    }
 }

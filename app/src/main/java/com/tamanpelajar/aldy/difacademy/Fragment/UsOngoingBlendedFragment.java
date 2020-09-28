@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.tamanpelajar.aldy.difacademy.Adapter.UsMateriBlendedAdapter;
+import com.tamanpelajar.aldy.difacademy.Model.MateriBlendedModel;
 import com.tamanpelajar.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -27,7 +28,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
-import static com.tamanpelajar.aldy.difacademy.ActivityUser.UsOngoingCourseActivity.USER_DOC_ID;
+import static com.tamanpelajar.aldy.difacademy.ActivityUser.UsOngoingActivity.USER_DOC_ID;
 
 
 /**
@@ -40,7 +41,7 @@ public class UsOngoingBlendedFragment extends Fragment {
     boolean loadbaru;
     CollectionReference ongoingMateriRef;
     private RecyclerView rvOngoingBlended;
-    private ArrayList<MateriModel> materiModels;
+    private ArrayList<MateriBlendedModel> materiBlendedModels;
     private UsMateriBlendedAdapter usMateriBlendedAdapter;
     private ProgressDialog pd;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -74,8 +75,8 @@ public class UsOngoingBlendedFragment extends Fragment {
     }
 
     private void setRecyclerView() {
-        materiModels = new ArrayList<>();
-        usMateriBlendedAdapter = new UsMateriBlendedAdapter(rootView.getContext(), materiModels);
+        materiBlendedModels = new ArrayList<>();
+        usMateriBlendedAdapter = new UsMateriBlendedAdapter(rootView.getContext(), materiBlendedModels);
 
         final LinearLayoutManager manager = new LinearLayoutManager(rootView.getContext(), RecyclerView.VERTICAL, false);
         rvOngoingBlended.setLayoutManager(manager);
@@ -85,7 +86,7 @@ public class UsOngoingBlendedFragment extends Fragment {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                if (manager.findLastVisibleItemPosition() >= materiModels.size() - 10 &&
+                if (manager.findLastVisibleItemPosition() >= materiBlendedModels.size() - 10 &&
                         lastVisible != null &&
                         loadbaru) {
                     loadbaru = false;
@@ -98,38 +99,38 @@ public class UsOngoingBlendedFragment extends Fragment {
                             .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                                 @Override
                                 public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                    materiModels.clear();
+                                    materiBlendedModels.clear();
                                     if (queryDocumentSnapshots.size() > 0) {
                                         for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
-                                            OngoingMateriModel ongoingMateriModel = queryDocumentSnapshot.toObject(OngoingMateriModel.class);
-
-                                            DocumentReference blendedMateriRef = db
-                                                    .collection("BlendedCourse")
-                                                    .document(ongoingMateriModel.getCourseId())
-                                                    .collection("BlendedMateri")
-                                                    .document(ongoingMateriModel.getMateriId());
-
-                                            blendedMateriRef
-                                                    .get()
-                                                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                                        @Override
-                                                        public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                                            MateriModel materiModel = documentSnapshot.toObject(MateriModel.class);
-                                                            if (materiModel != null) {
-                                                                materiModel.setDocumentId(documentSnapshot.getId());
-                                                            }
-                                                            materiModels.add(materiModel);
-                                                            usMateriBlendedAdapter.notifyDataSetChanged();
-                                                            loadbaru = true;
-                                                        }
-                                                    })
-                                                    .addOnFailureListener(new OnFailureListener() {
-                                                        @Override
-                                                        public void onFailure(@NonNull Exception e) {
-                                                            loadbaru = true;
-                                                            Log.d(TAG, e.toString());
-                                                        }
-                                                    });
+//                                            OngoingMateriModel ongoingMateriModel = queryDocumentSnapshot.toObject(OngoingMateriModel.class);
+//
+//                                            DocumentReference blendedMateriRef = db
+//                                                    .collection("BlendedCourse")
+//                                                    .document(ongoingMateriModel.getCourseId())
+//                                                    .collection("BlendedMateri")
+//                                                    .document(ongoingMateriModel.getMateriId());
+//
+//                                            blendedMateriRef
+//                                                    .get()
+//                                                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+//                                                        @Override
+//                                                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+//                                                            MateriModel materiModel = documentSnapshot.toObject(MateriModel.class);
+//                                                            if (materiModel != null) {
+//                                                                materiModel.setDocumentId(documentSnapshot.getId());
+//                                                            }
+//                                                            materiBlendedModels.add(materiModel);
+//                                                            usMateriBlendedAdapter.notifyDataSetChanged();
+//                                                            loadbaru = true;
+//                                                        }
+//                                                    })
+//                                                    .addOnFailureListener(new OnFailureListener() {
+//                                                        @Override
+//                                                        public void onFailure(@NonNull Exception e) {
+//                                                            loadbaru = true;
+//                                                            Log.d(TAG, e.toString());
+//                                                        }
+//                                                    });
                                         }
 
                                         if (queryDocumentSnapshots.size() < 20) {
@@ -172,11 +173,11 @@ public class UsOngoingBlendedFragment extends Fragment {
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        materiModels.clear();
+                        materiBlendedModels.clear();
                         if (queryDocumentSnapshots.size() > 0) {
                             for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
-                                OngoingMateriModel ongoingMateriModel = queryDocumentSnapshot.toObject(OngoingMateriModel.class);
-                                loadOngoingMateriDetail(ongoingMateriModel.getCourseId(), ongoingMateriModel.getMateriId());
+//                                OngoingMateriModel ongoingMateriModel = queryDocumentSnapshot.toObject(OngoingMateriModel.class);
+//                                loadOngoingMateriDetail(ongoingMateriModel.getCourseId(), ongoingMateriModel.getMateriId());
                             }
 
                             if (queryDocumentSnapshots.size() < 20) {
@@ -209,12 +210,12 @@ public class UsOngoingBlendedFragment extends Fragment {
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        MateriModel materiModel = documentSnapshot.toObject(MateriModel.class);
-                        if (materiModel != null) {
-                            materiModel.setDocumentId(documentSnapshot.getId());
-                        }
-                        materiModels.add(materiModel);
-                        usMateriBlendedAdapter.notifyDataSetChanged();
+//                        MateriModel materiModel = documentSnapshot.toObject(MateriModel.class);
+//                        if (materiModel != null) {
+//                            materiModel.setDocumentId(documentSnapshot.getId());
+//                        }
+//                        materiBlendedModels.add(materiModel);
+//                        usMateriBlendedAdapter.notifyDataSetChanged();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {

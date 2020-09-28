@@ -12,20 +12,21 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
+import com.tamanpelajar.aldy.difacademy.CommonMethod;
+import com.tamanpelajar.aldy.difacademy.Model.KelasOnlineModel;
 import com.tamanpelajar.aldy.difacademy.R;
 
-public class UsDetailCourseActivity extends AppCompatActivity {
+public class UsDetailKelasOnlineActivity extends AppCompatActivity {
     private ImageView imgThumbnail;
     private TextView tvJudul, tvTag, tvDetail, tvLampiran;
     private Button btnDaftarMateri;
-    private String jenisKelas;
 
-    private CourseModel courseModel;
+    private KelasOnlineModel kelasOnlineModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_us_detail_course);
+        setContentView(R.layout.activity_us_detail_kelas);
         initView();
         setViewWithParcelable();
         onClick();
@@ -42,16 +43,15 @@ public class UsDetailCourseActivity extends AppCompatActivity {
 
     private void setViewWithParcelable() {
         Intent intent = getIntent();
-        courseModel = intent.getParcelableExtra("courseModel");
-        Glide.with(this).load(courseModel.getThumbnailUrl()).into(imgThumbnail);
-        tvJudul.setText(courseModel.getTitle());
-        tvTag.setText(courseModel.getTag());
-        tvDetail.setText(courseModel.getDescription());
-        jenisKelas = intent.getStringExtra("jenisKelas");
+        kelasOnlineModel = intent.getParcelableExtra(CommonMethod.intentKelasOnlineModel);
+        Glide.with(this).load(kelasOnlineModel.getThumbnailUrl()).into(imgThumbnail);
+        tvJudul.setText(kelasOnlineModel.getTitle());
+        tvTag.setText(kelasOnlineModel.getTag());
+        tvDetail.setText(kelasOnlineModel.getDescription());
     }
 
     private void onClick() {
-        if (courseModel.getGoogleDrive() == null || courseModel.getGoogleDrive().equals("")) {
+        if (kelasOnlineModel.getGoogleDrive() == null || kelasOnlineModel.getGoogleDrive().equals("")) {
             tvLampiran.setVisibility(View.GONE);
         } else {
             tvLampiran.setOnClickListener(new View.OnClickListener() {
@@ -59,11 +59,11 @@ public class UsDetailCourseActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     try {
                         Intent intent = new Intent(Intent.ACTION_VIEW);
-                        intent.setData(Uri.parse(courseModel.getGoogleDrive()));
+                        intent.setData(Uri.parse(kelasOnlineModel.getGoogleDrive()));
                         startActivity(intent);
                     } catch (ActivityNotFoundException e) {
                         Intent intent = new Intent(Intent.ACTION_VIEW);
-                        String urlNew = "http://" + courseModel.getGoogleDrive();
+                        String urlNew = "http://" + kelasOnlineModel.getGoogleDrive();
                         intent.setData(Uri.parse(urlNew));
                         startActivity(intent);
                     }
@@ -74,15 +74,8 @@ public class UsDetailCourseActivity extends AppCompatActivity {
         btnDaftarMateri.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent;
-                if (jenisKelas.equalsIgnoreCase("online")) {
-                    intent = new Intent(UsDetailCourseActivity.this, UsOnlineMateriActivity.class);
-
-                } else {
-                    intent = new Intent(UsDetailCourseActivity.this, UsBlendedMateriActivity.class);
-
-                }
-                intent.putExtra("courseModel", courseModel);
+                Intent intent = new Intent(UsDetailKelasOnlineActivity.this, UsMateriOnlineActivity.class);
+                intent.putExtra(CommonMethod.intentKelasOnlineModel, kelasOnlineModel);
                 startActivity(intent);
             }
         });

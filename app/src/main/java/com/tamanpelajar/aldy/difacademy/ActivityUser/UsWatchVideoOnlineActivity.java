@@ -13,7 +13,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.tamanpelajar.aldy.difacademy.R;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
@@ -23,8 +22,11 @@ import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
+import com.tamanpelajar.aldy.difacademy.CommonMethod;
+import com.tamanpelajar.aldy.difacademy.Model.VideoOnlineModel;
+import com.tamanpelajar.aldy.difacademy.R;
 
-public class UsWatchVideoActivity extends AppCompatActivity {
+public class UsWatchVideoOnlineActivity extends AppCompatActivity {
     private static final String TAG = "WatchVideoActivity";
 
     PlayerView playerView;
@@ -32,7 +34,7 @@ public class UsWatchVideoActivity extends AppCompatActivity {
     ScrollView scrollView;
 
     SimpleExoPlayer simpleExoPlayer;
-    VideoModel videoModel;
+    VideoOnlineModel videoOnlineModel;
 
     String videoUrl = "";
 
@@ -54,11 +56,11 @@ public class UsWatchVideoActivity extends AppCompatActivity {
 
     private void checkIntent() {
         Intent intent = getIntent();
-        videoModel = intent.getParcelableExtra("videoModel");
-        if (videoModel != null) {
-            videoUrl = videoModel.getVideoUrl();
-            tvJudul.setText(videoModel.getTitle());
-            tvDeskripsi.setText(videoModel.getDescription());
+        videoOnlineModel = intent.getParcelableExtra(CommonMethod.intentVideoOnlineModel);
+        if (videoOnlineModel != null) {
+            videoUrl = videoOnlineModel.getVideoUrl();
+            tvJudul.setText(videoOnlineModel.getTitle());
+            tvDeskripsi.setText(videoOnlineModel.getDescription());
         }
     }
 

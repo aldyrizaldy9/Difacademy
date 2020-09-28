@@ -1,13 +1,13 @@
 package com.tamanpelajar.aldy.difacademy.Model;
 
-public class OngoingKelasModel {
+public class OngoingKelasBlendedModel {
     private String kelasId;
     private long dateCreated;
 
-    public OngoingKelasModel() {
+    public OngoingKelasBlendedModel() {
     }
 
-    public OngoingKelasModel(String kelasId, long dateCreated) {
+    public OngoingKelasBlendedModel(String kelasId, long dateCreated) {
         this.kelasId = kelasId;
         this.dateCreated = dateCreated;
     }

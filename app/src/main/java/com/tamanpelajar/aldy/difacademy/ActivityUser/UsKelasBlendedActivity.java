@@ -19,8 +19,9 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.tamanpelajar.aldy.difacademy.Adapter.UsKelasOnlineAdapter;
+import com.tamanpelajar.aldy.difacademy.Adapter.UsKelasBlendedAdapter;
 import com.tamanpelajar.aldy.difacademy.CommonMethod;
+import com.tamanpelajar.aldy.difacademy.Model.KelasBlendedModel;
 import com.tamanpelajar.aldy.difacademy.Model.TagModel;
 import com.tamanpelajar.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -34,8 +35,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
-public class UsOnlineCourseActivity extends AppCompatActivity {
-    private static final String TAG = "OnlineCourseActivity";
+public class UsKelasBlendedActivity extends AppCompatActivity {
+    private static final String TAG = "BlendedCourseActivity";
     private DocumentSnapshot lastVisible;
     private boolean loadbaru;
     private boolean loadFromTag = false;
@@ -43,18 +44,18 @@ public class UsOnlineCourseActivity extends AppCompatActivity {
     private String tag = "";
     private ConstraintLayout clBack, clSearch, clSearchContainer, clNavbar;
     private RecyclerView rvCourse;
-    private UsKelasOnlineAdapter adapter;
-    private ArrayList<CourseModel> courseModels;
+    private UsKelasBlendedAdapter adapter;
+    private ArrayList<KelasBlendedModel> kelasBlendedModels;
     private ArrayList<String> tags;
     private ProgressDialog pd;
     private Spinner spnTags;
     private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
-    private CollectionReference courseRef = firebaseFirestore.collection("OnlineCourse");
+    private CollectionReference courseRef = firebaseFirestore.collection("BlendedCourse");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_us_online_course);
+        setContentView(R.layout.activity_us_blended_kelas);
         initView();
         onClick();
         setRecyclerView();
@@ -69,15 +70,15 @@ public class UsOnlineCourseActivity extends AppCompatActivity {
         clBack.setVisibility(View.VISIBLE);
         clSearch = findViewById(R.id.cl_icon3);
         clSearch.setVisibility(View.VISIBLE);
-        clSearchContainer = findViewById(R.id.cl_online_course_search);
+        clSearchContainer = findViewById(R.id.cl_blended_course_search);
         ImageView imgBack = findViewById(R.id.img_icon1);
         imgBack.setImageResource(R.drawable.ic_arrow_back);
         ImageView imgSearch = findViewById(R.id.img_icon3);
         imgSearch.setImageResource(R.drawable.ic_search);
         TextView tvNavBar = findViewById(R.id.tv_navbar);
-        tvNavBar.setText("Kelas Online");
-        rvCourse = findViewById(R.id.rv_online_course_course);
-        spnTags = findViewById(R.id.spn_online_course_search);
+        tvNavBar.setText("Kelas Campuran");
+        rvCourse = findViewById(R.id.rv_blended_course_course);
+        spnTags = findViewById(R.id.spn_blended_course_search);
 
         pd = new ProgressDialog(this);
         pd.setMessage("Memuat...");
@@ -104,8 +105,8 @@ public class UsOnlineCourseActivity extends AppCompatActivity {
     }
 
     private void setRecyclerView() {
-        courseModels = new ArrayList<>();
-        adapter = new UsKelasOnlineAdapter(this, courseModels);
+        kelasBlendedModels = new ArrayList<>();
+        adapter = new UsKelasBlendedAdapter(this, kelasBlendedModels);
 
         final LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         rvCourse.setLayoutManager(layoutManager);
@@ -115,7 +116,7 @@ public class UsOnlineCourseActivity extends AppCompatActivity {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                if (layoutManager.findLastVisibleItemPosition() >= courseModels.size() - 10) {
+                if (layoutManager.findLastVisibleItemPosition() >= kelasBlendedModels.size() - 10) {
                     if (lastVisible != null) {
                         if (loadbaru) {
                             loadbaru = false;
@@ -140,10 +141,10 @@ public class UsOnlineCourseActivity extends AppCompatActivity {
                                         public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                                             if (queryDocumentSnapshots.size() > 0) {
                                                 for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                                                    CourseModel courseModel = documentSnapshot.toObject(CourseModel.class);
-                                                    courseModel.setDocumentId(documentSnapshot.getId());
+                                                    KelasBlendedModel kelasBlendedModel = documentSnapshot.toObject(KelasBlendedModel.class);
+                                                    kelasBlendedModel.setDocumentId(documentSnapshot.getId());
 
-                                                    courseModels.add(courseModel);
+                                                    kelasBlendedModels.add(kelasBlendedModel);
                                                 }
 
                                                 if (queryDocumentSnapshots.size() < 20) {
@@ -162,7 +163,7 @@ public class UsOnlineCourseActivity extends AppCompatActivity {
                                         public void onFailure(@NonNull Exception e) {
                                             loadbaru = true;
                                             Log.d(TAG, e.toString());
-                                            Toast.makeText(UsOnlineCourseActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(UsKelasBlendedActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
                                         }
                                     });
                         }
@@ -188,13 +189,13 @@ public class UsOnlineCourseActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        courseModels.clear();
+                        kelasBlendedModels.clear();
                         if (queryDocumentSnapshots.size() > 0) {
                             for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                                CourseModel courseModel = documentSnapshot.toObject(CourseModel.class);
-                                courseModel.setDocumentId(documentSnapshot.getId());
+                                KelasBlendedModel kelasBlendedModel = documentSnapshot.toObject(KelasBlendedModel.class);
+                                kelasBlendedModel.setDocumentId(documentSnapshot.getId());
 
-                                courseModels.add(courseModel);
+                                kelasBlendedModels.add(kelasBlendedModel);
                             }
 
                             if (queryDocumentSnapshots.size() < 20) {
@@ -230,13 +231,13 @@ public class UsOnlineCourseActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        courseModels.clear();
+                        kelasBlendedModels.clear();
                         if (queryDocumentSnapshots.size() > 0) {
                             for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                                CourseModel courseModel = documentSnapshot.toObject(CourseModel.class);
-                                courseModel.setDocumentId(documentSnapshot.getId());
+                                KelasBlendedModel kelasBlendedModel = documentSnapshot.toObject(KelasBlendedModel.class);
+                                kelasBlendedModel.setDocumentId(documentSnapshot.getId());
 
-                                courseModels.add(courseModel);
+                                kelasBlendedModels.add(kelasBlendedModel);
                             }
 
                             if (queryDocumentSnapshots.size() < 20) {
@@ -315,7 +316,7 @@ public class UsOnlineCourseActivity extends AppCompatActivity {
                     tag = tags.get(position);
                     clSearchContainer.setVisibility(View.GONE);
                     loadFromTag = true;
-                    if (!CommonMethod.isInternetAvailable(UsOnlineCourseActivity.this)) {
+                    if (!CommonMethod.isInternetAvailable(UsKelasBlendedActivity.this)) {
                         return;
                     }
 
@@ -326,7 +327,7 @@ public class UsOnlineCourseActivity extends AppCompatActivity {
                     tag = "";
                     clSearchContainer.setVisibility(View.GONE);
                     loadFromTag = false;
-                    if (!CommonMethod.isInternetAvailable(UsOnlineCourseActivity.this)) {
+                    if (!CommonMethod.isInternetAvailable(UsKelasBlendedActivity.this)) {
                         return;
                     }
 

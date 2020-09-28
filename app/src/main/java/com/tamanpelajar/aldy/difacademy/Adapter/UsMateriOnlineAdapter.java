@@ -50,7 +50,6 @@ public class UsMateriOnlineAdapter extends RecyclerView.Adapter<UsMateriOnlineAd
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, UsListVideoOnlineActivity.class);
-                intent.putExtra(CommonMethod.intentJenisKelas, "online");
                 intent.putExtra(CommonMethod.intentMateriOnlineModel, model);
                 context.startActivity(intent);
             }
