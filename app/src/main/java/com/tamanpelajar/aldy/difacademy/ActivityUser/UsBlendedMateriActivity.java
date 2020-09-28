@@ -26,96 +26,96 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 
 public class UsBlendedMateriActivity extends AppCompatActivity {
-    private static final String TAG = "BlendedMateriActivity";
-    private ConstraintLayout clBack, clNavbar;
-    private RecyclerView rvVideo;
-    private UsMateriBlendedAdapter adapter;
-    private ArrayList<MateriModel> materiModels;
-    private ProgressDialog progressDialog;
-    private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
-    private CollectionReference materiRef;
-    private CourseModel courseModel;
+//    private static final String TAG = "BlendedMateriActivity";
+//    private ConstraintLayout clBack, clNavbar;
+//    private RecyclerView rvVideo;
+//    private UsMateriBlendedAdapter adapter;
+//    private ArrayList<MateriModel> materiModels;
+//    private ProgressDialog progressDialog;
+//    private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+//    private CollectionReference materiRef;
+//    private CourseModel courseModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_us_blended_materi);
-        initView();
-        onClick();
-        setRecyclerView();
-        loadMateriData();
+//        initView();
+//        onClick();
+//        setRecyclerView();
+//        loadMateriData();
     }
 
-    private void initView() {
-        clNavbar = findViewById(R.id.cl_navbar);
-        clNavbar.setBackgroundColor(getResources().getColor(R.color.navCoklat));
-        clBack = findViewById(R.id.cl_icon1);
-        clBack.setVisibility(View.VISIBLE);
-        ImageView imgBack = findViewById(R.id.img_icon1);
-        imgBack.setImageResource(R.drawable.ic_arrow_back);
-        TextView tvNavBar = findViewById(R.id.tv_navbar);
-        tvNavBar.setText("Materi");
-        rvVideo = findViewById(R.id.rv_blended_materi_materi);
-        Intent intent = getIntent();
-        courseModel = intent.getParcelableExtra("courseModel");
-        progressDialog = new ProgressDialog(this);
-    }
-
-    private void onClick() {
-        clBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
-    }
-
-    private void setRecyclerView() {
-        materiModels = new ArrayList<>();
-        adapter = new UsMateriBlendedAdapter(this, materiModels);
-
-        final LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        rvVideo.setLayoutManager(layoutManager);
-        rvVideo.setAdapter(adapter);
-
-    }
-
-    private void loadMateriData() {
-        progressDialog.setMessage("Memuat...");
-        progressDialog.setCancelable(false);
-        progressDialog.show();
-
-
-        materiRef = firebaseFirestore
-                .collection("BlendedCourse")
-                .document(courseModel.getDocumentId())
-                .collection("BlendedMateri");
-
-        materiRef
-                .orderBy("dateCreated", Query.Direction.DESCENDING)
-                .get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        materiModels.clear();
-                        if (queryDocumentSnapshots.size() > 0) {
-                            for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                                MateriModel materiModel = documentSnapshot.toObject(MateriModel.class);
-                                materiModel.setDocumentId(documentSnapshot.getId());
-
-                                materiModels.add(materiModel);
-                            }
-                            adapter.notifyDataSetChanged();
-                        }
-                        progressDialog.dismiss();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        progressDialog.dismiss();
-                    }
-                });
-    }
+//    private void initView() {
+//        clNavbar = findViewById(R.id.cl_navbar);
+//        clNavbar.setBackgroundColor(getResources().getColor(R.color.navCoklat));
+//        clBack = findViewById(R.id.cl_icon1);
+//        clBack.setVisibility(View.VISIBLE);
+//        ImageView imgBack = findViewById(R.id.img_icon1);
+//        imgBack.setImageResource(R.drawable.ic_arrow_back);
+//        TextView tvNavBar = findViewById(R.id.tv_navbar);
+//        tvNavBar.setText("Materi");
+//        rvVideo = findViewById(R.id.rv_blended_materi_materi);
+//        Intent intent = getIntent();
+//        courseModel = intent.getParcelableExtra("courseModel");
+//        progressDialog = new ProgressDialog(this);
+//    }
+//
+//    private void onClick() {
+//        clBack.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                onBackPressed();
+//            }
+//        });
+//    }
+//
+//    private void setRecyclerView() {
+//        materiModels = new ArrayList<>();
+//        adapter = new UsMateriBlendedAdapter(this, materiModels);
+//
+//        final LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+//        rvVideo.setLayoutManager(layoutManager);
+//        rvVideo.setAdapter(adapter);
+//
+//    }
+//
+//    private void loadMateriData() {
+//        progressDialog.setMessage("Memuat...");
+//        progressDialog.setCancelable(false);
+//        progressDialog.show();
+//
+//
+//        materiRef = firebaseFirestore
+//                .collection("BlendedCourse")
+//                .document(courseModel.getDocumentId())
+//                .collection("BlendedMateri");
+//
+//        materiRef
+//                .orderBy("dateCreated", Query.Direction.DESCENDING)
+//                .get()
+//                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+//                        materiModels.clear();
+//                        if (queryDocumentSnapshots.size() > 0) {
+//                            for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+//                                MateriModel materiModel = documentSnapshot.toObject(MateriModel.class);
+//                                materiModel.setDocumentId(documentSnapshot.getId());
+//
+//                                materiModels.add(materiModel);
+//                            }
+//                            adapter.notifyDataSetChanged();
+//                        }
+//                        progressDialog.dismiss();
+//                    }
+//                })
+//                .addOnFailureListener(new OnFailureListener() {
+//                    @Override
+//                    public void onFailure(@NonNull Exception e) {
+//                        progressDialog.dismiss();
+//                    }
+//                });
+//    }
 
 }
