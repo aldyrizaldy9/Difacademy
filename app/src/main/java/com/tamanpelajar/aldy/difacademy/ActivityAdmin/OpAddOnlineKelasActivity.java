@@ -65,7 +65,7 @@ public class OpAddOnlineKelasActivity extends AppCompatActivity {
     ConstraintLayout clAddPhoto;
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
-    CollectionReference onlineCourseRef = db.collection(CommonMethod.refKelasOnline);
+    CollectionReference refKelasOnline = db.collection(CommonMethod.refKelasOnline);
     FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
 
     String tagCourse = "";
@@ -328,7 +328,7 @@ public class OpAddOnlineKelasActivity extends AppCompatActivity {
     }
 
     private void editKelas(final KelasOnlineModel model) {
-        DocumentReference docRef = onlineCourseRef.document(kelasOnlineDocId);
+        DocumentReference docRef = refKelasOnline.document(kelasOnlineDocId);
         docRef.set(model)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -361,7 +361,7 @@ public class OpAddOnlineKelasActivity extends AppCompatActivity {
     }
 
     private void tambahKelas(final KelasOnlineModel model) {
-        onlineCourseRef.add(model)
+        refKelasOnline.add(model)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
@@ -449,6 +449,8 @@ public class OpAddOnlineKelasActivity extends AppCompatActivity {
                     return;
                 }
 
+                dateCreated = CommonMethod.getTimeStamp();
+
                 pd.show();
                 if (imageUri != null) {
                     uploadPhotoToFirebase();
@@ -518,7 +520,7 @@ public class OpAddOnlineKelasActivity extends AppCompatActivity {
     }
 
     private void getListVideoUrl() {
-        final CollectionReference ref1 = onlineCourseRef
+        final CollectionReference ref1 = refKelasOnline
                 .document(kelasOnlineDocId)
                 .collection(CommonMethod.refMateriOnline);
 
@@ -558,7 +560,7 @@ public class OpAddOnlineKelasActivity extends AppCompatActivity {
     }
 
     private void hapusOnlineVideoDoc(final String docRef) {
-        final CollectionReference ref = onlineCourseRef
+        final CollectionReference ref = refKelasOnline
                 .document(kelasOnlineDocId)
                 .collection(CommonMethod.refMateriOnline)
                 .document(docRef)
@@ -586,7 +588,7 @@ public class OpAddOnlineKelasActivity extends AppCompatActivity {
     }
 
     private void hapusOnlineSoalDoc(final String docRef) {
-        final CollectionReference ref = onlineCourseRef
+        final CollectionReference ref = refKelasOnline
                 .document(kelasOnlineDocId)
                 .collection(CommonMethod.refMateriOnline)
                 .document(docRef)
@@ -606,7 +608,7 @@ public class OpAddOnlineKelasActivity extends AppCompatActivity {
     }
 
     private void getListThumbnailUrl() {
-        CollectionReference ref = onlineCourseRef.document(kelasOnlineDocId)
+        CollectionReference ref = refKelasOnline.document(kelasOnlineDocId)
                 .collection(CommonMethod.refMateriOnline);
 
         ref.get()
@@ -623,7 +625,7 @@ public class OpAddOnlineKelasActivity extends AppCompatActivity {
     }
 
     private void hapusOnlineMateriDoc() {
-        final CollectionReference ref = onlineCourseRef
+        final CollectionReference ref = refKelasOnline
                 .document(kelasOnlineDocId)
                 .collection(CommonMethod.refMateriOnline);
 
@@ -649,7 +651,7 @@ public class OpAddOnlineKelasActivity extends AppCompatActivity {
     }
 
     private void hapusOnlineCourseDoc() {
-        DocumentReference ref = onlineCourseRef.document(kelasOnlineDocId);
+        DocumentReference ref = refKelasOnline.document(kelasOnlineDocId);
         ref.delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
