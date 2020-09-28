@@ -13,45 +13,45 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.tamanpelajar.aldy.difacademy.ActivityUser.UsDetailCourseActivity;
+import com.tamanpelajar.aldy.difacademy.ActivityUser.UsListVideoOnlineActivity;
 import com.tamanpelajar.aldy.difacademy.CommonMethod;
-import com.tamanpelajar.aldy.difacademy.Model.CourseModel;
+import com.tamanpelajar.aldy.difacademy.Model.MateriOnlineModel;
 import com.tamanpelajar.aldy.difacademy.R;
 
 import java.util.ArrayList;
 
-public class BlendedKelasAdapter extends RecyclerView.Adapter<BlendedKelasAdapter.ViewHolder> {
+public class UsMateriOnlineAdapter extends RecyclerView.Adapter<UsMateriOnlineAdapter.ViewHolder> {
     private Context context;
-    private ArrayList<CourseModel> courseModels;
+    private ArrayList<MateriOnlineModel> models;
 
-    public BlendedKelasAdapter(Context context, ArrayList<CourseModel> courseModels) {
+    public UsMateriOnlineAdapter(Context context, ArrayList<MateriOnlineModel> models) {
         this.context = context;
-        this.courseModels = courseModels;
+        this.models = models;
     }
 
     @NonNull
     @Override
-    public BlendedKelasAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public UsMateriOnlineAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         View view = layoutInflater.inflate(R.layout.card_video_with_thumbnail, parent, false);
-        return new BlendedKelasAdapter.ViewHolder(view);
+        return new UsMateriOnlineAdapter.ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull BlendedKelasAdapter.ViewHolder holder, int position) {
-        final CourseModel courseModel = courseModels.get(position);
-        holder.tvJudul.setText(courseModel.getTitle());
-        holder.tvTag.setText(courseModel.getTag());
+    public void onBindViewHolder(@NonNull UsMateriOnlineAdapter.ViewHolder holder, int position) {
+        final MateriOnlineModel model = models.get(position);
+        holder.tvJudul.setText(model.getTitle());
+        holder.tvTag.setText("Rp " + model.getHarga());
         Glide
                 .with(context)
-                .load(courseModel.getThumbnailUrl())
+                .load(model.getThumbnailUrl())
                 .into(holder.imgThumbnail);
         holder.clContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, UsDetailCourseActivity.class);
-                intent.putExtra(CommonMethod.intentJenisKelas, "blended");
-                intent.putExtra(CommonMethod.intentKelasBlendedModel, courseModel);
+                Intent intent = new Intent(context, UsListVideoOnlineActivity.class);
+                intent.putExtra(CommonMethod.intentJenisKelas, "online");
+                intent.putExtra(CommonMethod.intentMateriOnlineModel, model);
                 context.startActivity(intent);
             }
         });
@@ -59,7 +59,7 @@ public class BlendedKelasAdapter extends RecyclerView.Adapter<BlendedKelasAdapte
 
     @Override
     public int getItemCount() {
-        return courseModels.size();
+        return models.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

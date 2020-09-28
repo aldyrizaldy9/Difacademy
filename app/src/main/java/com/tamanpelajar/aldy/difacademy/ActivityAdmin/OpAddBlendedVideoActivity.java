@@ -1,10 +1,8 @@
 package com.tamanpelajar.aldy.difacademy.ActivityAdmin;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
-import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.OpenableColumns;
@@ -24,13 +22,11 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.tamanpelajar.aldy.difacademy.CommonMethod;
 import com.tamanpelajar.aldy.difacademy.Model.VideoBlendedModel;
-import com.tamanpelajar.aldy.difacademy.Model.VideoModel;
 import com.tamanpelajar.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -107,6 +103,7 @@ public class OpAddBlendedVideoActivity extends AppCompatActivity {
         clHapus = findViewById(R.id.cl_icon3);
         imgHapus = findViewById(R.id.img_icon3);
         imgHapus.setImageResource(R.drawable.ic_delete);
+
         edtJudul = findViewById(R.id.edt_op_add_blended_video_judul);
         edtDeskripsi = findViewById(R.id.edt_op_add_blended_video_deskripsi);
         pbUploadProses = findViewById(R.id.pb_op_add_blended_video_upload);

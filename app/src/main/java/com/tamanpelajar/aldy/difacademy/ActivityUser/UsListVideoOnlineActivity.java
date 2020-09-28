@@ -16,10 +16,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.tamanpelajar.aldy.difacademy.Adapter.VideoOnlineAdapter;
-import com.tamanpelajar.aldy.difacademy.Model.MateriModel;
-import com.tamanpelajar.aldy.difacademy.Model.OngoingMateriModel;
-import com.tamanpelajar.aldy.difacademy.Model.VideoModel;
+import com.tamanpelajar.aldy.difacademy.Adapter.UsVideoOnlineAdapter;
 import com.tamanpelajar.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -42,7 +39,7 @@ public class UsListVideoOnlineActivity extends AppCompatActivity {
     private ConstraintLayout clQuiz;
     private RecyclerView rvListVideoCourse;
     private ArrayList<VideoModel> videoModels;
-    private VideoOnlineAdapter videoOnlineAdapter;
+    private UsVideoOnlineAdapter usVideoOnlineAdapter;
     private ProgressDialog progressDialog;
     private FirebaseFirestore firebaseFirestore;
     private String userDocId;
@@ -115,9 +112,9 @@ public class UsListVideoOnlineActivity extends AppCompatActivity {
 
     private void setRecyclerView() {
         videoModels = new ArrayList<>();
-        videoOnlineAdapter = new VideoOnlineAdapter(this, videoModels);
+        usVideoOnlineAdapter = new UsVideoOnlineAdapter(this, videoModels);
         rvListVideoCourse.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
-        rvListVideoCourse.setAdapter(videoOnlineAdapter);
+        rvListVideoCourse.setAdapter(usVideoOnlineAdapter);
     }
 
 
@@ -144,7 +141,7 @@ public class UsListVideoOnlineActivity extends AppCompatActivity {
                         }
                         progressDialog.dismiss();
                         clQuiz.setVisibility(View.VISIBLE);
-                        videoOnlineAdapter.notifyDataSetChanged();
+                        usVideoOnlineAdapter.notifyDataSetChanged();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {

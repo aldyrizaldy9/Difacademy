@@ -5,15 +5,20 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.tamanpelajar.aldy.difacademy.Adapter.OpVideoAdapter;
-import com.tamanpelajar.aldy.difacademy.Model.VideoModel;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.tamanpelajar.aldy.difacademy.Adapter.OpVideoOnlineAdapter;
+import com.tamanpelajar.aldy.difacademy.CommonMethod;
+import com.tamanpelajar.aldy.difacademy.Model.VideoBlendedModel;
+import com.tamanpelajar.aldy.difacademy.Model.VideoOnlineModel;
 import com.tamanpelajar.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
@@ -24,7 +29,9 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
-import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpAddOnlineKelasActivity.onlineCourseDocId;
+import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpAddBlendedKelasActivity.kelasBlendedDocId;
+import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpAddBlendedMateriActivity.blendedMateriDocId;
+import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpAddOnlineKelasActivity.kelasOnlineDocId;
 import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpAddOnlineMateriActivity.onlineMateriDocId;
 import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpMainActivity.ADD_REQUEST_CODE;
 import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpMainActivity.DELETE_REQUEST_CODE;
@@ -36,39 +43,40 @@ public class OpOnlineVideoActivity extends AppCompatActivity {
     ImageView imgBack, imgAdd;
 
     RecyclerView rvOnlineVideo;
-    ArrayList<VideoModel> videoModels;
-    OpVideoAdapter adapter;
+    ArrayList<VideoOnlineModel> videoOnlineModels;
+    OpVideoOnlineAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_op_online_video);
 
-        videoModels = new ArrayList<>();
+        videoOnlineModels = new ArrayList<>();
 
         initView();
+        onClick();
         setRecyclerView();
-        loadData();
+        getData();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Intent intent = getIntent();
-        VideoModel model = intent.getParcelableExtra("online_video_model");
-        int index = intent.getIntExtra("index", -1);
+        VideoOnlineModel model = intent.getParcelableExtra(CommonMethod.intentVideoOnlineModel);
+        int index = intent.getIntExtra(CommonMethod.intentIndex, -1);
 
         if (requestCode == ADD_REQUEST_CODE && resultCode == RESULT_OK) {
             if (model != null) {
-                videoModels.add(model);
+                videoOnlineModels.add(model);
             }
         } else if (requestCode == DELETE_REQUEST_CODE && resultCode == RESULT_OK) {
             if (index != -1) {
-                videoModels.remove(index);
+                videoOnlineModels.remove(index);
             }
         } else if (requestCode == UPDATE_REQUEST_CODE && resultCode == RESULT_OK) {
             if (model != null) {
-                videoModels.set(index, model);
+                videoOnlineModels.set(index, model);
             }
         }
         adapter.notifyDataSetChanged();
@@ -89,6 +97,12 @@ public class OpOnlineVideoActivity extends AppCompatActivity {
         imgBack.setImageResource(R.drawable.ic_arrow_back);
         clAdd = findViewById(R.id.cl_icon3);
         clAdd.setVisibility(View.VISIBLE);
+        imgAdd = findViewById(R.id.img_icon3);
+        imgAdd.setImageResource(R.drawable.ic_add);
+        rvOnlineVideo = findViewById(R.id.rv_op_online_video);
+    }
+
+    private void onClick(){
         clAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -96,39 +110,41 @@ public class OpOnlineVideoActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        imgAdd = findViewById(R.id.img_icon3);
-        imgAdd.setImageResource(R.drawable.ic_add);
-
-        rvOnlineVideo = findViewById(R.id.rv_op_online_video);
-    }
-
-    private void loadData() {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference collRef = db.collection("OnlineCourse")
-                .document(onlineCourseDocId)
-                .collection("OnlineMateri")
-                .document(onlineMateriDocId)
-                .collection("OnlineVideo");
-
-        collRef.orderBy("dateCreated", Query.Direction.ASCENDING)
-                .get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        videoModels.clear();
-                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                            VideoModel model = documentSnapshot.toObject(VideoModel.class);
-                            model.setDocumentId(documentSnapshot.getId());
-                            videoModels.add(model);
-                        }
-                        adapter.notifyDataSetChanged();
-                    }
-                });
     }
 
     private void setRecyclerView() {
         rvOnlineVideo.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        adapter = new OpVideoAdapter(this, videoModels);
+        adapter = new OpVideoOnlineAdapter(this, videoOnlineModels);
         rvOnlineVideo.setAdapter(adapter);
+    }
+
+    private void getData() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference collRef = db.collection(CommonMethod.refKelasOnline)
+                .document(kelasBlendedDocId)
+                .collection(CommonMethod.refMateriOnline)
+                .document(blendedMateriDocId)
+                .collection(CommonMethod.refSoalOnline);
+
+        collRef.orderBy(CommonMethod.fieldDateCreated, Query.Direction.ASCENDING)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        videoOnlineModels.clear();
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                            VideoOnlineModel model = documentSnapshot.toObject(VideoOnlineModel.class);
+                            model.setDocumentId(documentSnapshot.getId());
+                            videoOnlineModels.add(model);
+                        }
+                        adapter.notifyDataSetChanged();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(OpOnlineVideoActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 }

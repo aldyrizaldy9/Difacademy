@@ -20,11 +20,11 @@ import java.util.ArrayList;
 
 public class OpPaymentBlendedAdapter extends RecyclerView.Adapter<OpPaymentBlendedAdapter.ViewHolder> {
     private Context context;
-    private ArrayList<PaymentModel> paymentModels;
+    private ArrayList<PaymentModel> models;
 
-    public OpPaymentBlendedAdapter(Context context, ArrayList<PaymentModel> paymentModels) {
+    public OpPaymentBlendedAdapter(Context context, ArrayList<PaymentModel> models) {
         this.context = context;
-        this.paymentModels = paymentModels;
+        this.models = models;
     }
 
     @NonNull
@@ -37,7 +37,7 @@ public class OpPaymentBlendedAdapter extends RecyclerView.Adapter<OpPaymentBlend
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
-        final PaymentModel paymentModel = paymentModels.get(position);
+        final PaymentModel paymentModel = models.get(position);
         holder.tvNama.setText(paymentModel.getNamaUser());
         holder.tvKelas.setText(paymentModel.getNamaKelas());
         if (paymentModel.isPaid()) {
@@ -58,7 +58,7 @@ public class OpPaymentBlendedAdapter extends RecyclerView.Adapter<OpPaymentBlend
 
     @Override
     public int getItemCount() {
-        return paymentModels.size();
+        return models.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

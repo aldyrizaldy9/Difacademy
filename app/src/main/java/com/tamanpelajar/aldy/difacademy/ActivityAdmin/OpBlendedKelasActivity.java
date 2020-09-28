@@ -46,7 +46,7 @@ public class OpBlendedKelasActivity extends AppCompatActivity {
     private OpKelasBlendedAdapter adapter;
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private CollectionReference blendedCourseRef = db.collection(CommonMethod.refKelasBlended);
+    private CollectionReference blendedKelasRef = db.collection(CommonMethod.refKelasBlended);
     private DocumentSnapshot lastVisible;
     private boolean loadNewData;
     private SwipeRefreshLayout srl;
@@ -167,7 +167,7 @@ public class OpBlendedKelasActivity extends AppCompatActivity {
     }
 
     private void getNewData() {
-        Query load = blendedCourseRef
+        Query load = blendedKelasRef
                 .orderBy(CommonMethod.fieldDateCreated, Query.Direction.DESCENDING)
                 .startAfter(lastVisible)
                 .limit(CommonMethod.paginationMaxLoad);
@@ -202,7 +202,7 @@ public class OpBlendedKelasActivity extends AppCompatActivity {
     }
 
     private void getFirstData() {
-        Query first = blendedCourseRef
+        Query first = blendedKelasRef
                 .orderBy(CommonMethod.fieldDateCreated, Query.Direction.DESCENDING)
                 .limit(CommonMethod.paginationMaxLoad);
 

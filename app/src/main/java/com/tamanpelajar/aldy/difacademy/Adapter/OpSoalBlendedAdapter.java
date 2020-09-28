@@ -21,11 +21,11 @@ import java.util.ArrayList;
 
 public class OpSoalBlendedAdapter extends RecyclerView.Adapter<OpSoalBlendedAdapter.ViewHolder> {
     private Context context;
-    private ArrayList<SoalBlendedModel> soalBlendedModels;
+    private ArrayList<SoalBlendedModel> models;
 
-    public OpSoalBlendedAdapter(Context context, ArrayList<SoalBlendedModel> soalBlendedModels) {
+    public OpSoalBlendedAdapter(Context context, ArrayList<SoalBlendedModel> models) {
         this.context = context;
-        this.soalBlendedModels = soalBlendedModels;
+        this.models = models;
     }
 
     @NonNull
@@ -42,7 +42,7 @@ public class OpSoalBlendedAdapter extends RecyclerView.Adapter<OpSoalBlendedAdap
         holder.imgThumbnail.setVisibility(View.GONE);
         holder.tvDeskripsi.setVisibility(View.GONE);
 
-        final SoalBlendedModel model = soalBlendedModels.get(position);
+        final SoalBlendedModel model = models.get(position);
         holder.tvJudul.setText(model.getSoal());
         holder.container.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,7 +57,7 @@ public class OpSoalBlendedAdapter extends RecyclerView.Adapter<OpSoalBlendedAdap
 
     @Override
     public int getItemCount() {
-        return soalBlendedModels.size();
+        return models.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

@@ -13,7 +13,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.tamanpelajar.aldy.difacademy.Adapter.NewsAdapter;
+import com.tamanpelajar.aldy.difacademy.Adapter.UsNewsAdapter;
 import com.tamanpelajar.aldy.difacademy.Model.NewsModel;
 import com.tamanpelajar.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -36,7 +36,7 @@ public class UsListNewsActivity extends AppCompatActivity {
     private ConstraintLayout clBack, clNavbar;
     private RecyclerView rvNews;
     private ArrayList<NewsModel> newsModels;
-    private NewsAdapter adapter;
+    private UsNewsAdapter adapter;
     private ProgressDialog progressDialog;
 
     @Override
@@ -73,7 +73,7 @@ public class UsListNewsActivity extends AppCompatActivity {
 
     private void setRecyclerView() {
         newsModels = new ArrayList<>();
-        adapter = new NewsAdapter(this, newsModels);
+        adapter = new UsNewsAdapter(this, newsModels);
 
         final LinearLayoutManager layoutManager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
         rvNews.setLayoutManager(layoutManager);

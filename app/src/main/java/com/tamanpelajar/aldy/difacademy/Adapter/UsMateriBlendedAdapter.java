@@ -15,43 +15,43 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.tamanpelajar.aldy.difacademy.ActivityUser.UsListVideoBlendedActivity;
 import com.tamanpelajar.aldy.difacademy.CommonMethod;
-import com.tamanpelajar.aldy.difacademy.Model.MateriModel;
+import com.tamanpelajar.aldy.difacademy.Model.MateriBlendedModel;
 import com.tamanpelajar.aldy.difacademy.R;
 
 import java.util.ArrayList;
 
-public class BlendedMateriAdapter extends RecyclerView.Adapter<BlendedMateriAdapter.ViewHolder> {
+public class UsMateriBlendedAdapter extends RecyclerView.Adapter<UsMateriBlendedAdapter.ViewHolder> {
     private Context context;
-    private ArrayList<MateriModel> materiModels;
+    private ArrayList<MateriBlendedModel> models;
 
-    public BlendedMateriAdapter(Context context, ArrayList<MateriModel> materiModels) {
+    public UsMateriBlendedAdapter(Context context, ArrayList<MateriBlendedModel> models) {
         this.context = context;
-        this.materiModels = materiModels;
+        this.models = models;
     }
 
     @NonNull
     @Override
-    public BlendedMateriAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public UsMateriBlendedAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         View view = layoutInflater.inflate(R.layout.card_video_with_thumbnail, parent, false);
-        return new BlendedMateriAdapter.ViewHolder(view);
+        return new UsMateriBlendedAdapter.ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull BlendedMateriAdapter.ViewHolder holder, int position) {
-        final MateriModel materiModel = materiModels.get(position);
-        holder.tvJudul.setText(materiModel.getTitle());
-        holder.tvTag.setText("Rp " + materiModel.getHarga());
+    public void onBindViewHolder(@NonNull UsMateriBlendedAdapter.ViewHolder holder, int position) {
+        final MateriBlendedModel model = models.get(position);
+        holder.tvJudul.setText(model.getTitle());
+        holder.tvTag.setVisibility(View.GONE);
         Glide
                 .with(context)
-                .load(materiModel.getThumbnailUrl())
+                .load(model.getThumbnailUrl())
                 .into(holder.imgThumbnail);
         holder.clContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, UsListVideoBlendedActivity.class);
                 intent.putExtra(CommonMethod.intentJenisKelas, "blended");
-                intent.putExtra(CommonMethod.intentMateriBlendedModel, materiModel);
+                intent.putExtra(CommonMethod.intentMateriBlendedModel, model);
                 context.startActivity(intent);
             }
         });
@@ -59,7 +59,7 @@ public class BlendedMateriAdapter extends RecyclerView.Adapter<BlendedMateriAdap
 
     @Override
     public int getItemCount() {
-        return materiModels.size();
+        return models.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

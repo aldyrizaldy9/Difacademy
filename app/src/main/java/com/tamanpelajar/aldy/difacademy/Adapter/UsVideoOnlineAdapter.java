@@ -14,34 +14,35 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.tamanpelajar.aldy.difacademy.ActivityUser.UsPaymentActivity;
 import com.tamanpelajar.aldy.difacademy.ActivityUser.UsWatchVideoActivity;
-import com.tamanpelajar.aldy.difacademy.Model.VideoModel;
+import com.tamanpelajar.aldy.difacademy.CommonMethod;
+import com.tamanpelajar.aldy.difacademy.Model.VideoOnlineModel;
 import com.tamanpelajar.aldy.difacademy.R;
 
 import java.util.ArrayList;
 
-import static com.tamanpelajar.aldy.difacademy.ActivityUser.UsListVideoBlendedActivity.IS_PAID;
+import static com.tamanpelajar.aldy.difacademy.ActivityUser.UsListVideoOnlineActivity.IS_PAID;
 
-public class VideoBlendedAdapter extends RecyclerView.Adapter<VideoBlendedAdapter.ViewHolder> {
+public class UsVideoOnlineAdapter extends RecyclerView.Adapter<UsVideoOnlineAdapter.ViewHolder> {
     private Context context;
-    private ArrayList<VideoModel> videoModels;
+    private ArrayList<VideoOnlineModel> models;
 
-    public VideoBlendedAdapter(Context context, ArrayList<VideoModel> videoModels) {
+    public UsVideoOnlineAdapter(Context context, ArrayList<VideoOnlineModel> models) {
         this.context = context;
-        this.videoModels = videoModels;
+        this.models = models;
     }
 
     @NonNull
     @Override
-    public VideoBlendedAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public UsVideoOnlineAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         View view = layoutInflater.inflate(R.layout.card_video_course, parent, false);
-        return new VideoBlendedAdapter.ViewHolder(view);
+        return new UsVideoOnlineAdapter.ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull VideoBlendedAdapter.ViewHolder holder, int position) {
-        final VideoModel videoModel = videoModels.get(position);
-        holder.tvJudul.setText(videoModel.getTitle());
+    public void onBindViewHolder(@NonNull UsVideoOnlineAdapter.ViewHolder holder, int position) {
+        final VideoOnlineModel model = models.get(position);
+        holder.tvJudul.setText(model.getTitle());
         int episode = position + 1;
         holder.tvEpisode.setText("#" + episode);
         holder.imgStatus.setImageResource(R.drawable.ic_play_arrow);
@@ -52,8 +53,8 @@ public class VideoBlendedAdapter extends RecyclerView.Adapter<VideoBlendedAdapte
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(context, UsPaymentActivity.class);
-                        intent.putExtra("videoModel", videoModel);
-                        intent.putExtra("jenisKelas", "blended");
+                        intent.putExtra(CommonMethod.intentVideoOnlineModel, model);
+                        intent.putExtra(CommonMethod.intentJenisKelas, "online");
                         context.startActivity(intent);
                     }
                 });
@@ -63,7 +64,7 @@ public class VideoBlendedAdapter extends RecyclerView.Adapter<VideoBlendedAdapte
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(context, UsWatchVideoActivity.class);
-                        intent.putExtra("videoModel", videoModel);
+                        intent.putExtra(CommonMethod.intentVideoOnlineModel, model);
                         context.startActivity(intent);
                     }
                 });
@@ -74,7 +75,7 @@ public class VideoBlendedAdapter extends RecyclerView.Adapter<VideoBlendedAdapte
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(context, UsWatchVideoActivity.class);
-                    intent.putExtra("videoModel", videoModel);
+                    intent.putExtra(CommonMethod.intentVideoOnlineModel, model);
                     context.startActivity(intent);
                 }
             });
@@ -84,7 +85,7 @@ public class VideoBlendedAdapter extends RecyclerView.Adapter<VideoBlendedAdapte
 
     @Override
     public int getItemCount() {
-        return videoModels.size();
+        return models.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

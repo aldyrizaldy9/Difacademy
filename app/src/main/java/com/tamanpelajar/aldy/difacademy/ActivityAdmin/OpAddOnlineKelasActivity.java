@@ -25,10 +25,10 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.bumptech.glide.Glide;
 import com.tamanpelajar.aldy.difacademy.CommonMethod;
-import com.tamanpelajar.aldy.difacademy.Model.CourseModel;
-import com.tamanpelajar.aldy.difacademy.Model.MateriModel;
+import com.tamanpelajar.aldy.difacademy.Model.KelasOnlineModel;
+import com.tamanpelajar.aldy.difacademy.Model.MateriOnlineModel;
 import com.tamanpelajar.aldy.difacademy.Model.TagModel;
-import com.tamanpelajar.aldy.difacademy.Model.VideoModel;
+import com.tamanpelajar.aldy.difacademy.Model.VideoOnlineModel;
 import com.tamanpelajar.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -52,7 +52,7 @@ import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpMainActivity.UPDA
 
 public class OpAddOnlineKelasActivity extends AppCompatActivity {
 
-    public static String onlineCourseDocId = "";
+    public static String kelasOnlineDocId = "";
 
     TextView tvNavbar;
     ConstraintLayout clBack;
@@ -65,16 +65,18 @@ public class OpAddOnlineKelasActivity extends AppCompatActivity {
     ConstraintLayout clAddPhoto;
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
-    CollectionReference onlineCourseRef = db.collection("OnlineCourse");
+    CollectionReference onlineCourseRef = db.collection(CommonMethod.refKelasOnline);
+    FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
+
     String tagCourse = "";
     String tagCourseId = "";
     boolean thereIsData = false;
     boolean addMateri = false;
 
-    CourseModel courseModel, oldCourseModel;
+    KelasOnlineModel kelasModel, oldKelasModel;
     Uri imageUri;
     String thumbnailUrl = "";
-    FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
+
     int index;
     long dateCreated = 0;
     ProgressDialog pd;
@@ -128,20 +130,20 @@ public class OpAddOnlineKelasActivity extends AppCompatActivity {
 
     private void checkIntent() {
         Intent intent = getIntent();
-        courseModel = intent.getParcelableExtra("online_course_model");
-        if (courseModel != null) {
-            oldCourseModel = courseModel;
-            index = intent.getIntExtra("index", -1);
+        kelasModel = intent.getParcelableExtra(CommonMethod.intentKelasOnlineModel);
+        if (kelasModel != null) {
+            oldKelasModel = kelasModel;
+            index = intent.getIntExtra(CommonMethod.intentIndex, -1);
             thereIsData = true;
-            thumbnailUrl = courseModel.getThumbnailUrl();
+            thumbnailUrl = kelasModel.getThumbnailUrl();
             btnHapus.setVisibility(View.VISIBLE);
             Glide.with(this)
                     .load(thumbnailUrl)
                     .into(imgThumbnail);
-            edtJudul.setText(courseModel.getTitle());
-            edtDeskripsi.setText(courseModel.getDescription());
-            edtLinkGDrive.setText(courseModel.getGoogleDrive());
-            onlineCourseDocId = courseModel.getDocumentId();
+            edtJudul.setText(kelasModel.getTitle());
+            edtDeskripsi.setText(kelasModel.getDescription());
+            edtLinkGDrive.setText(kelasModel.getGoogleDrive());
+            kelasOnlineDocId = kelasModel.getDocumentId();
         }
     }
 
@@ -201,7 +203,7 @@ public class OpAddOnlineKelasActivity extends AppCompatActivity {
             }
         });
 
-        CollectionReference tagRef = db.collection("Tags");
+        CollectionReference tagRef = db.collection(CommonMethod.refTags);
         tagRef.get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
@@ -218,7 +220,7 @@ public class OpAddOnlineKelasActivity extends AppCompatActivity {
                         spnArrayAdapterTag.notifyDataSetChanged();
 
                         if (thereIsData) {
-                            String tagId = courseModel.getTagId();
+                            String tagId = kelasModel.getTagId();
                             for (int i = 0; i < tagModels.size(); i++) {
                                 if (tagModels.get(i).getTagid().equals(tagId)) {
                                     spnTag.setSelection(i + 1);
@@ -249,12 +251,12 @@ public class OpAddOnlineKelasActivity extends AppCompatActivity {
                     String tagId = tagCourseId;
 
                     if (thereIsData) {
-                        if (title.equals(oldCourseModel.getTitle()) &&
-                                description.equals(oldCourseModel.getDescription()) &&
-                                googleDrive.equals(oldCourseModel.getGoogleDrive()) &&
-                                tag.equals(oldCourseModel.getTag()) &&
-                                tagId.equals(oldCourseModel.getTagId()) &&
-                                thumbnailUrl.equals(oldCourseModel.getThumbnailUrl()) &&
+                        if (title.equals(oldKelasModel.getTitle()) &&
+                                description.equals(oldKelasModel.getDescription()) &&
+                                googleDrive.equals(oldKelasModel.getGoogleDrive()) &&
+                                tag.equals(oldKelasModel.getTag()) &&
+                                tagId.equals(oldKelasModel.getTagId()) &&
+                                thumbnailUrl.equals(oldKelasModel.getThumbnailUrl()) &&
                                 imageUri == null) {
                             Intent intent = new Intent(OpAddOnlineKelasActivity.this, OpOnlineMateriActivity.class);
                             startActivity(intent);
@@ -310,20 +312,13 @@ public class OpAddOnlineKelasActivity extends AppCompatActivity {
     }
 
     private void simpanKelas() {
-        if (!CommonMethod.isInternetAvailable(OpAddOnlineKelasActivity.this)) {
-            pd.dismiss();
-            return;
-        }
-
-        dateCreated = CommonMethod.getTimeStamp();
-
         String title = edtJudul.getText().toString();
         String description = edtDeskripsi.getText().toString();
         String googleDrive = edtLinkGDrive.getText().toString();
         String tag = tagCourse;
         String tagId = tagCourseId;
 
-        CourseModel model = new CourseModel(title, description, thumbnailUrl, googleDrive, tagId, tag, dateCreated);
+        KelasOnlineModel model = new KelasOnlineModel(title, description, thumbnailUrl, googleDrive, tagId, tag, dateCreated);
 
         if (thereIsData) {
             editKelas(model);
@@ -332,8 +327,8 @@ public class OpAddOnlineKelasActivity extends AppCompatActivity {
         }
     }
 
-    private void editKelas(final CourseModel model) {
-        DocumentReference docRef = onlineCourseRef.document(onlineCourseDocId);
+    private void editKelas(final KelasOnlineModel model) {
+        DocumentReference docRef = onlineCourseRef.document(kelasOnlineDocId);
         docRef.set(model)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -347,7 +342,7 @@ public class OpAddOnlineKelasActivity extends AppCompatActivity {
                                 Intent intent = new Intent(OpAddOnlineKelasActivity.this, OpOnlineMateriActivity.class);
                                 startActivity(intent);
                             } else {
-                                Intent intent = new Intent(OpAddOnlineKelasActivity.this, OpOnlineCourseActivity.class);
+                                Intent intent = new Intent(OpAddOnlineKelasActivity.this, OpOnlineKelasActivity.class);
                                 intent.putExtra(CommonMethod.intentKelasOnlineModel, model);
                                 intent.putExtra(CommonMethod.intentIndex, index);
                                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -365,20 +360,21 @@ public class OpAddOnlineKelasActivity extends AppCompatActivity {
                 });
     }
 
-    private void tambahKelas(final CourseModel model) {
+    private void tambahKelas(final KelasOnlineModel model) {
         onlineCourseRef.add(model)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
-                        onlineCourseDocId = documentReference.getId();
+                        kelasOnlineDocId = documentReference.getId();
                         if (addMateri) {
                             thereIsData = true;
+                            btnHapus.setVisibility(View.VISIBLE);
                             imageUri = null;
                             pd.dismiss();
                             Intent intent = new Intent(OpAddOnlineKelasActivity.this, OpOnlineMateriActivity.class);
                             startActivity(intent);
                         } else {
-                            Intent intent = new Intent(OpAddOnlineKelasActivity.this, OpOnlineCourseActivity.class);
+                            Intent intent = new Intent(OpAddOnlineKelasActivity.this, OpOnlineKelasActivity.class);
                             intent.putExtra(CommonMethod.intentKelasOnlineModel, model);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             startActivityForResult(intent, ADD_REQUEST_CODE);
@@ -395,7 +391,7 @@ public class OpAddOnlineKelasActivity extends AppCompatActivity {
     }
 
     private void uploadPhotoToFirebase() {
-        final StorageReference ref = firebaseStorage.getReference().child("OnlineCourse/" + UUID.randomUUID().toString());
+        final StorageReference ref = firebaseStorage.getReference().child(CommonMethod.storageOnlineKelas + UUID.randomUUID().toString());
         ref.putFile(imageUri)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
@@ -419,8 +415,8 @@ public class OpAddOnlineKelasActivity extends AppCompatActivity {
                 });
     }
 
-    private void deletePhotoInFirebase(final CourseModel model) {
-        StorageReference deleteRef = firebaseStorage.getReferenceFromUrl(oldCourseModel.getThumbnailUrl());
+    private void deletePhotoInFirebase(final KelasOnlineModel model) {
+        StorageReference deleteRef = firebaseStorage.getReferenceFromUrl(oldKelasModel.getThumbnailUrl());
         deleteRef.delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -431,7 +427,7 @@ public class OpAddOnlineKelasActivity extends AppCompatActivity {
                             Intent intent = new Intent(OpAddOnlineKelasActivity.this, OpOnlineMateriActivity.class);
                             startActivity(intent);
                         } else {
-                            Intent intent = new Intent(OpAddOnlineKelasActivity.this, OpOnlineCourseActivity.class);
+                            Intent intent = new Intent(OpAddOnlineKelasActivity.this, OpOnlineKelasActivity.class);
                             intent.putExtra(CommonMethod.intentKelasOnlineModel, model);
                             intent.putExtra(CommonMethod.intentIndex, index);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -502,26 +498,29 @@ public class OpAddOnlineKelasActivity extends AppCompatActivity {
     }
 
     private void hapusKelas() {
-        //ambil link online video di storage
-        //hapus online video document
-        //hapus online video collection
-        //hapus online video storage
-        //hapus online soal document
-        //hapus online soal collection
-        //ambil link online materi thumbnail
-        //hapus online materi document
-        //hapus online materi collection
-        //hapus online materi thumbnail storage
-        //ambil link online course thumbnail
-        //hapus online course document
-        //hapus online course thumbnail storage
+        /**
+         * ambil link online video di storage
+         * hapus online video document
+         * hapus online video collection
+         * hapus online video storage
+         * hapus online soal document
+         * hapus online soal collection
+         * ambil link online materi thumbnail
+         * hapus online materi document
+         * hapus online materi collection
+         * hapus online materi thumbnail storage
+         * ambil link online course thumbnail
+         * hapus online course document
+         * hapus online course thumbnail storage
+         */
+
         getListVideoUrl();
     }
 
     private void getListVideoUrl() {
         final CollectionReference ref1 = onlineCourseRef
-                .document(onlineCourseDocId)
-                .collection("OnlineMateri");
+                .document(kelasOnlineDocId)
+                .collection(CommonMethod.refMateriOnline);
 
         ref1.get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -529,11 +528,11 @@ public class OpAddOnlineKelasActivity extends AppCompatActivity {
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         if (queryDocumentSnapshots.size() > 0) {
                             for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                                MateriModel model = documentSnapshot.toObject(MateriModel.class);
+                                MateriOnlineModel model = documentSnapshot.toObject(MateriOnlineModel.class);
                                 model.setDocumentId(documentSnapshot.getId());
 
                                 CollectionReference ref2 = ref1.document(model.getDocumentId())
-                                        .collection("OnlineVideo");
+                                        .collection(CommonMethod.refVideoOnline);
 
                                 getListVideoUrl2(ref2, documentSnapshot.getId());
                             }
@@ -550,7 +549,7 @@ public class OpAddOnlineKelasActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                            VideoModel model = documentSnapshot.toObject(VideoModel.class);
+                            VideoOnlineModel model = documentSnapshot.toObject(VideoOnlineModel.class);
                             listOnlineVideoUrl.add(model.getVideoUrl());
                         }
                         hapusOnlineVideoDoc(docRef);
@@ -560,10 +559,10 @@ public class OpAddOnlineKelasActivity extends AppCompatActivity {
 
     private void hapusOnlineVideoDoc(final String docRef) {
         final CollectionReference ref = onlineCourseRef
-                .document(onlineCourseDocId)
-                .collection("OnlineMateri")
+                .document(kelasOnlineDocId)
+                .collection(CommonMethod.refMateriOnline)
                 .document(docRef)
-                .collection("OnlineVideo");
+                .collection(CommonMethod.refVideoOnline);
 
         ref.get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -588,10 +587,10 @@ public class OpAddOnlineKelasActivity extends AppCompatActivity {
 
     private void hapusOnlineSoalDoc(final String docRef) {
         final CollectionReference ref = onlineCourseRef
-                .document(onlineCourseDocId)
-                .collection("OnlineMateri")
+                .document(kelasOnlineDocId)
+                .collection(CommonMethod.refMateriOnline)
                 .document(docRef)
-                .collection("OnlineSoal");
+                .collection(CommonMethod.refSoalOnline);
 
         ref.get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -607,15 +606,15 @@ public class OpAddOnlineKelasActivity extends AppCompatActivity {
     }
 
     private void getListThumbnailUrl() {
-        CollectionReference ref = onlineCourseRef.document(onlineCourseDocId)
-                .collection("OnlineMateri");
+        CollectionReference ref = onlineCourseRef.document(kelasOnlineDocId)
+                .collection(CommonMethod.refMateriOnline);
 
         ref.get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                            MateriModel model = documentSnapshot.toObject(MateriModel.class);
+                            MateriOnlineModel model = documentSnapshot.toObject(MateriOnlineModel.class);
                             listOnlineMateriThumbnailUrl.add(model.getThumbnailUrl());
                         }
                         hapusOnlineMateriDoc();
@@ -625,8 +624,8 @@ public class OpAddOnlineKelasActivity extends AppCompatActivity {
 
     private void hapusOnlineMateriDoc() {
         final CollectionReference ref = onlineCourseRef
-                .document(onlineCourseDocId)
-                .collection("OnlineMateri");
+                .document(kelasOnlineDocId)
+                .collection(CommonMethod.refMateriOnline);
 
         ref.get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -650,7 +649,7 @@ public class OpAddOnlineKelasActivity extends AppCompatActivity {
     }
 
     private void hapusOnlineCourseDoc() {
-        DocumentReference ref = onlineCourseRef.document(onlineCourseDocId);
+        DocumentReference ref = onlineCourseRef.document(kelasOnlineDocId);
         ref.delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -666,7 +665,7 @@ public class OpAddOnlineKelasActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Intent intent = new Intent(OpAddOnlineKelasActivity.this, OpOnlineCourseActivity.class);
+                        Intent intent = new Intent(OpAddOnlineKelasActivity.this, OpOnlineKelasActivity.class);
                         intent.putExtra(CommonMethod.intentIndex, index);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivityForResult(intent, DELETE_REQUEST_CODE);

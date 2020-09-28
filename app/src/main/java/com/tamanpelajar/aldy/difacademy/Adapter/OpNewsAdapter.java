@@ -21,11 +21,11 @@ import java.util.ArrayList;
 
 public class OpNewsAdapter extends RecyclerView.Adapter<OpNewsAdapter.ViewHolder> {
     private Context context;
-    private ArrayList<NewsModel> newsModels;
+    private ArrayList<NewsModel> models;
 
-    public OpNewsAdapter(Context context, ArrayList<NewsModel> newsModels) {
+    public OpNewsAdapter(Context context, ArrayList<NewsModel> models) {
         this.context = context;
-        this.newsModels = newsModels;
+        this.models = models;
     }
 
     @NonNull
@@ -38,7 +38,7 @@ public class OpNewsAdapter extends RecyclerView.Adapter<OpNewsAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull OpNewsAdapter.ViewHolder holder, final int position) {
-        final NewsModel newsModel = newsModels.get(position);
+        final NewsModel newsModel = models.get(position);
         holder.tvJudul.setText(newsModel.getJudul());
         holder.tvTag.setVisibility(View.GONE);
         holder.tvDeskripsi.setText(newsModel.getIsi());
@@ -56,7 +56,7 @@ public class OpNewsAdapter extends RecyclerView.Adapter<OpNewsAdapter.ViewHolder
 
     @Override
     public int getItemCount() {
-        return newsModels.size();
+        return models.size();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {

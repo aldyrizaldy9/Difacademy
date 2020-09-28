@@ -15,8 +15,10 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.tamanpelajar.aldy.difacademy.Adapter.OpCourseAdapter;
-import com.tamanpelajar.aldy.difacademy.Model.CourseModel;
+import com.tamanpelajar.aldy.difacademy.Adapter.OpKelasOnlineAdapter;
+import com.tamanpelajar.aldy.difacademy.CommonMethod;
+import com.tamanpelajar.aldy.difacademy.Model.KelasBlendedModel;
+import com.tamanpelajar.aldy.difacademy.Model.KelasOnlineModel;
 import com.tamanpelajar.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -33,52 +35,51 @@ import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpMainActivity.ADD_
 import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpMainActivity.DELETE_REQUEST_CODE;
 import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpMainActivity.UPDATE_REQUEST_CODE;
 
-public class OpOnlineCourseActivity extends AppCompatActivity {
+public class OpOnlineKelasActivity extends AppCompatActivity {
     TextView tvNavbar;
     ConstraintLayout clBack, clAdd;
     ImageView imgBack, imgAdd;
     RecyclerView rvOnlineCourse;
 
-    ArrayList<CourseModel> courseModels;
-    OpCourseAdapter adapter;
+    ArrayList<KelasOnlineModel> kelasOnlineModels;
+    OpKelasOnlineAdapter adapter;
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
-    CollectionReference onlineCourseRef = db.collection("OnlineCourse");
+    CollectionReference onlineKelasRef = db.collection(CommonMethod.refKelasOnline);
     DocumentSnapshot lastVisible;
-    boolean loadbaru;
-    private ProgressDialog pd;
+    boolean loadNewData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_op_online_course);
 
-        courseModels = new ArrayList<>();
+        kelasOnlineModels = new ArrayList<>();
 
         initView();
         onClick();
         setRecyclerView();
-        loadData();
+        getFirstData();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Intent intent = getIntent();
-        CourseModel model = intent.getParcelableExtra("online_course_model");
-        int index = intent.getIntExtra("index", -1);
+        KelasOnlineModel model = intent.getParcelableExtra(CommonMethod.intentKelasOnlineModel);
+        int index = intent.getIntExtra(CommonMethod.intentIndex, -1);
 
         if (requestCode == ADD_REQUEST_CODE && resultCode == RESULT_OK) {
             if (model != null) {
-                courseModels.add(model);
+                kelasOnlineModels.add(model);
             }
         } else if (requestCode == DELETE_REQUEST_CODE && resultCode == RESULT_OK) {
             if (index != -1) {
-                courseModels.remove(index);
+                kelasOnlineModels.remove(index);
             }
         } else if (requestCode == UPDATE_REQUEST_CODE && resultCode == RESULT_OK) {
             if (model != null) {
-                courseModels.set(index, model);
+                kelasOnlineModels.set(index, model);
             }
         }
         adapter.notifyDataSetChanged();
@@ -102,14 +103,13 @@ public class OpOnlineCourseActivity extends AppCompatActivity {
         imgAdd = findViewById(R.id.img_icon3);
         imgAdd.setImageResource(R.drawable.ic_add);
         rvOnlineCourse = findViewById(R.id.rv_op_online_course);
-        pd = new ProgressDialog(this);
     }
 
     private void onClick() {
         clAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(OpOnlineCourseActivity.this, OpAddOnlineKelasActivity.class);
+                Intent intent = new Intent(OpOnlineKelasActivity.this, OpAddOnlineKelasActivity.class);
                 startActivity(intent);
             }
         });
@@ -118,51 +118,18 @@ public class OpOnlineCourseActivity extends AppCompatActivity {
     private void setRecyclerView() {
         final LinearLayoutManager manager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
         rvOnlineCourse.setLayoutManager(manager);
-        adapter = new OpCourseAdapter(this, courseModels);
+        adapter = new OpKelasOnlineAdapter(this, kelasOnlineModels);
         rvOnlineCourse.setAdapter(adapter);
 
         rvOnlineCourse.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                if (manager.findLastVisibleItemPosition() >= courseModels.size() - 10 &&
+                if (manager.findLastVisibleItemPosition() >= kelasOnlineModels.size() - CommonMethod.paginationLoadNewData &&
                         lastVisible != null &&
-                        loadbaru) {
-                    loadbaru = false;
-                    Query load = onlineCourseRef
-                            .orderBy("dateCreated", Query.Direction.DESCENDING)
-                            .startAfter(lastVisible)
-                            .limit(20);
-                    load.get()
-                            .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                                @Override
-                                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                    if (queryDocumentSnapshots.size() > 0) {
-                                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                                            CourseModel newModel = documentSnapshot.toObject(CourseModel.class);
-                                            newModel.setDocumentId(documentSnapshot.getId());
-                                            courseModels.add(newModel);
-                                        }
-
-                                        if (queryDocumentSnapshots.size() < 20) {
-                                            lastVisible = null;
-                                        } else {
-                                            lastVisible = queryDocumentSnapshots.getDocuments()
-                                                    .get(queryDocumentSnapshots.size() - 1);
-                                        }
-
-                                        adapter.notifyDataSetChanged();
-                                    }
-                                    loadbaru = true;
-                                }
-                            })
-                            .addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    loadbaru = true;
-                                    Toast.makeText(OpOnlineCourseActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
-                                }
-                            });
+                        loadNewData) {
+                    loadNewData = false;
+                    getNewData();
                 }
             }
 
@@ -173,43 +140,71 @@ public class OpOnlineCourseActivity extends AppCompatActivity {
         });
     }
 
-    private void loadData() {
-        pd.setMessage("Memuat...");
-        pd.show();
-
-        Query first = onlineCourseRef
-                .orderBy("dateCreated", Query.Direction.DESCENDING)
-                .limit(20);
-
-        first.get()
+    private void getNewData() {
+        Query load = onlineKelasRef
+                .orderBy(CommonMethod.fieldDateCreated, Query.Direction.DESCENDING)
+                .startAfter(lastVisible)
+                .limit(CommonMethod.paginationMaxLoad);
+        load.get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        courseModels.clear();
-                        if (queryDocumentSnapshots.size() > 0) {
-                            for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                                CourseModel newModel = documentSnapshot.toObject(CourseModel.class);
-                                newModel.setDocumentId(documentSnapshot.getId());
-                                courseModels.add(newModel);
-                            }
-
-                            if (queryDocumentSnapshots.size() < 20) {
-                                lastVisible = null;
-                            } else {
-                                lastVisible = queryDocumentSnapshots.getDocuments()
-                                        .get(queryDocumentSnapshots.size() - 1);
-                            }
-
-                            adapter.notifyDataSetChanged();
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                            KelasOnlineModel model = documentSnapshot.toObject(KelasOnlineModel.class);
+                            model.setDocumentId(documentSnapshot.getId());
+                            kelasOnlineModels.add(model);
                         }
-                        pd.dismiss();
+
+                        if (queryDocumentSnapshots.size() >= CommonMethod.paginationMaxLoad) {
+                            lastVisible = queryDocumentSnapshots.getDocuments()
+                                    .get(queryDocumentSnapshots.size() - 1);
+                        } else {
+                            lastVisible = null;
+                        }
+
+                        adapter.notifyDataSetChanged();
+                        loadNewData = true;
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        pd.dismiss();
-                        Toast.makeText(OpOnlineCourseActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+                        loadNewData = true;
+                        Toast.makeText(OpOnlineKelasActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void getFirstData() {
+        Query first = onlineKelasRef
+                .orderBy(CommonMethod.fieldDateCreated, Query.Direction.DESCENDING)
+                .limit(CommonMethod.paginationMaxLoad);
+
+        first.get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        kelasOnlineModels.clear();
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                            KelasOnlineModel newModel = documentSnapshot.toObject(KelasOnlineModel.class);
+                            newModel.setDocumentId(documentSnapshot.getId());
+                            kelasOnlineModels.add(newModel);
+                        }
+
+                        if (queryDocumentSnapshots.size() >= CommonMethod.paginationMaxLoad) {
+                            lastVisible = queryDocumentSnapshots.getDocuments()
+                                    .get(queryDocumentSnapshots.size() - 1);
+                        } else {
+                            lastVisible = null;
+                        }
+
+                        adapter.notifyDataSetChanged();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(OpOnlineKelasActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
                     }
                 });
     }

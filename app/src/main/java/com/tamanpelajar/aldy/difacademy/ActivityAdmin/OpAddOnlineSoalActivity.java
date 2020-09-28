@@ -23,7 +23,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.tamanpelajar.aldy.difacademy.CommonMethod;
-import com.tamanpelajar.aldy.difacademy.Model.SoalModel;
+import com.tamanpelajar.aldy.difacademy.Model.SoalOnlineModel;
 import com.tamanpelajar.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -33,7 +33,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
-import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpAddOnlineKelasActivity.onlineCourseDocId;
+import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpAddOnlineKelasActivity.kelasOnlineDocId;
 import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpAddOnlineMateriActivity.onlineMateriDocId;
 import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpMainActivity.ADD_REQUEST_CODE;
 import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpMainActivity.DELETE_REQUEST_CODE;
@@ -51,16 +51,16 @@ public class OpAddOnlineSoalActivity extends AppCompatActivity {
     Button btnHapus, btnSimpan;
 
     String jawabanBenar = "";
-    SoalModel soalModel;
+    SoalOnlineModel soalModel;
     ArrayList<String> listJawabanBenar;
     boolean thereIsData = false;
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
-    CollectionReference collRef = db.collection("OnlineCourse")
-            .document(onlineCourseDocId)
-            .collection("OnlineMateri")
+    CollectionReference collRef = db.collection(CommonMethod.refKelasOnline)
+            .document(kelasOnlineDocId)
+            .collection(CommonMethod.refMateriOnline)
             .document(onlineMateriDocId)
-            .collection("OnlineSoal");
+            .collection(CommonMethod.refSoalOnline);
 
     long dateCreated = 0;
     int index;
@@ -156,7 +156,7 @@ public class OpAddOnlineSoalActivity extends AppCompatActivity {
 
     private void checkIntent() {
         Intent intent = getIntent();
-        soalModel = intent.getParcelableExtra("online_soal_model");
+        soalModel = intent.getParcelableExtra(CommonMethod.intentSoalOnlineModel);
         if (soalModel != null) {
             thereIsData = true;
             btnHapus.setVisibility(View.VISIBLE);
@@ -168,7 +168,7 @@ public class OpAddOnlineSoalActivity extends AppCompatActivity {
             edtD.setText(soalModel.getJwbD());
             edtE.setText(soalModel.getJwbE());
             dateCreated = soalModel.getDateCreated();
-            index = intent.getIntExtra("index", -1);
+            index = intent.getIntExtra(CommonMethod.intentIndex, -1);
             for (int i = 1; i < listJawabanBenar.size(); i++) {
                 if (listJawabanBenar.get(i).equals(soalModel.getJawabanBenar())) {
                     spnJawaban.setSelection(i);
@@ -234,7 +234,7 @@ public class OpAddOnlineSoalActivity extends AppCompatActivity {
         String jwbD = edtD.getText().toString();
         String jwbE = edtE.getText().toString();
 
-        final SoalModel model = new SoalModel(soal, jwbA, jwbB, jwbC, jwbD, jwbE, jawabanBenar, dateCreated);
+        final SoalOnlineModel model = new SoalOnlineModel(soal, jwbA, jwbB, jwbC, jwbD, jwbE, jawabanBenar, dateCreated);
         docRef.set(model)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -257,12 +257,6 @@ public class OpAddOnlineSoalActivity extends AppCompatActivity {
     }
 
     private void tambah() {
-        if (!CommonMethod.isInternetAvailable(OpAddOnlineSoalActivity.this)) {
-            return;
-        }
-
-        dateCreated = CommonMethod.getTimeStamp();
-
         String soal = edtSoal.getText().toString();
         String jwbA = edtA.getText().toString();
         String jwbB = edtB.getText().toString();
@@ -270,7 +264,7 @@ public class OpAddOnlineSoalActivity extends AppCompatActivity {
         String jwbD = edtD.getText().toString();
         String jwbE = edtE.getText().toString();
 
-        final SoalModel model = new SoalModel(soal, jwbA, jwbB, jwbC, jwbD, jwbE, jawabanBenar, dateCreated);
+        final SoalOnlineModel model = new SoalOnlineModel(soal, jwbA, jwbB, jwbC, jwbD, jwbE, jawabanBenar, dateCreated);
         collRef.add(model)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
@@ -329,6 +323,8 @@ public class OpAddOnlineSoalActivity extends AppCompatActivity {
                 if (!CommonMethod.isInternetAvailable(OpAddOnlineSoalActivity.this)) {
                     return;
                 }
+
+                dateCreated = CommonMethod.getTimeStamp();
 
                 pd.show();
                 if (thereIsData) {

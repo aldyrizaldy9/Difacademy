@@ -13,9 +13,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.tamanpelajar.aldy.difacademy.Adapter.OnlineMateriAdapter;
-import com.tamanpelajar.aldy.difacademy.Model.CourseModel;
-import com.tamanpelajar.aldy.difacademy.Model.MateriModel;
+import com.tamanpelajar.aldy.difacademy.Adapter.UsMateriOnlineAdapter;
 import com.tamanpelajar.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -31,7 +29,7 @@ public class UsOnlineMateriActivity extends AppCompatActivity {
     private static final String TAG = "OnlineMateriActivity";
     private ConstraintLayout clBack, clNavbar;
     private RecyclerView rvVideo;
-    private OnlineMateriAdapter adapter;
+    private UsMateriOnlineAdapter adapter;
     private ArrayList<MateriModel> materiModels;
     private ProgressDialog progressDialog;
     private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
@@ -75,7 +73,7 @@ public class UsOnlineMateriActivity extends AppCompatActivity {
 
     private void setRecyclerView() {
         materiModels = new ArrayList<>();
-        adapter = new OnlineMateriAdapter(this, materiModels);
+        adapter = new UsMateriOnlineAdapter(this, materiModels);
 
         final LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         rvVideo.setLayoutManager(layoutManager);

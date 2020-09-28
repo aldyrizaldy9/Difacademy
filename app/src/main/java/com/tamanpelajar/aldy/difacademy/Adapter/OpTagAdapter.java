@@ -33,12 +33,12 @@ import java.util.Map;
 public class OpTagAdapter extends RecyclerView.Adapter<OpTagAdapter.ViewHolder> {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     private Context context;
-    private ArrayList<TagModel> tagModels;
+    private ArrayList<TagModel> models;
     private ProgressDialog pd;
 
-    public OpTagAdapter(Context context, ArrayList<TagModel> tagModels) {
+    public OpTagAdapter(Context context, ArrayList<TagModel> models) {
         this.context = context;
-        this.tagModels = tagModels;
+        this.models = models;
         pd = new ProgressDialog(context);
     }
 
@@ -52,7 +52,7 @@ public class OpTagAdapter extends RecyclerView.Adapter<OpTagAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull OpTagAdapter.ViewHolder holder, final int position) {
-        final TagModel tagModel = tagModels.get(position);
+        final TagModel model = models.get(position);
         holder.tvDeskripsi.setVisibility(View.GONE);
         holder.tvJudul.setVisibility(View.GONE);
         holder.imgThumbnail.setVisibility(View.GONE);
@@ -61,15 +61,15 @@ public class OpTagAdapter extends RecyclerView.Adapter<OpTagAdapter.ViewHolder> 
         holder.clDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showHapusDialog(position, tagModel.getTagid());
+                showHapusDialog(position, model.getTagid());
             }
         });
-        holder.tvTag.setText(tagModel.getTag());
+        holder.tvTag.setText(model.getTag());
     }
 
     @Override
     public int getItemCount() {
-        return tagModels.size();
+        return models.size();
     }
 
     private void hapusTag(final String tagId) {
@@ -158,7 +158,7 @@ public class OpTagAdapter extends RecyclerView.Adapter<OpTagAdapter.ViewHolder> 
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
                 //hapus tagnya
-                tagModels.remove(position);
+                models.remove(position);
                 notifyDataSetChanged();
 
                 hapusTag(tagId);

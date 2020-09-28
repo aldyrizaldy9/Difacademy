@@ -20,11 +20,11 @@ import java.util.ArrayList;
 
 public class OpPaymentOnlineAdapter extends RecyclerView.Adapter<OpPaymentOnlineAdapter.ViewHolder> {
     private Context context;
-    private ArrayList<PaymentModel> paymentModels;
+    private ArrayList<PaymentModel> models;
 
-    public OpPaymentOnlineAdapter(Context context, ArrayList<PaymentModel> paymentModels) {
+    public OpPaymentOnlineAdapter(Context context, ArrayList<PaymentModel> models) {
         this.context = context;
-        this.paymentModels = paymentModels;
+        this.models = models;
     }
 
     @NonNull
@@ -37,7 +37,7 @@ public class OpPaymentOnlineAdapter extends RecyclerView.Adapter<OpPaymentOnline
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        final PaymentModel model = paymentModels.get(position);
+        final PaymentModel model = models.get(position);
         holder.tvNama.setText(model.getNamaUser());
         holder.tvKelas.setText(model.getNamaKelas());
         if (model.isPaid()){
@@ -58,7 +58,7 @@ public class OpPaymentOnlineAdapter extends RecyclerView.Adapter<OpPaymentOnline
 
     @Override
     public int getItemCount() {
-        return paymentModels.size();
+        return models.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

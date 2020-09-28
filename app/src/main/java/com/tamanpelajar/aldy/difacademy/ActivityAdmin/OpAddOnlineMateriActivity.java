@@ -20,8 +20,8 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.bumptech.glide.Glide;
 import com.tamanpelajar.aldy.difacademy.CommonMethod;
-import com.tamanpelajar.aldy.difacademy.Model.MateriModel;
-import com.tamanpelajar.aldy.difacademy.Model.VideoModel;
+import com.tamanpelajar.aldy.difacademy.Model.MateriOnlineModel;
+import com.tamanpelajar.aldy.difacademy.Model.VideoOnlineModel;
 import com.tamanpelajar.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -37,7 +37,7 @@ import com.google.firebase.storage.UploadTask;
 import java.util.ArrayList;
 import java.util.UUID;
 
-import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpAddOnlineKelasActivity.onlineCourseDocId;
+import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpAddOnlineKelasActivity.kelasOnlineDocId;
 import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpMainActivity.ADD_REQUEST_CODE;
 import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpMainActivity.DELETE_REQUEST_CODE;
 import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpMainActivity.PHOTO_PICK_REQUEST_CODE;
@@ -56,15 +56,16 @@ public class OpAddOnlineMateriActivity extends AppCompatActivity {
     ConstraintLayout clAddPhoto;
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
-    CollectionReference onlineMateriRef = db.collection("OnlineCourse")
-            .document(onlineCourseDocId)
-            .collection("OnlineMateri");
+    CollectionReference onlineMateriRef = db.collection(CommonMethod.refKelasOnline)
+            .document(kelasOnlineDocId)
+            .collection(CommonMethod.refMateriOnline);
+    FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
+
     boolean thereIsData = false;
     boolean addVideo = false;
     boolean addSoal = false;
-    FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
 
-    MateriModel materiModel, oldMateriModel;
+    MateriOnlineModel materiModel, oldMateriModel;
     Uri imageUri;
     String thumbnailUrl = "";
     int index;
@@ -116,10 +117,10 @@ public class OpAddOnlineMateriActivity extends AppCompatActivity {
 
     private void checkIntent() {
         Intent intent = getIntent();
-        materiModel = intent.getParcelableExtra("online_materi_model");
+        materiModel = intent.getParcelableExtra(CommonMethod.intentMateriOnlineModel);
         if (materiModel != null) {
             oldMateriModel = materiModel;
-            index = intent.getIntExtra("index", -1);
+            index = intent.getIntExtra(CommonMethod.intentIndex, -1);
             thereIsData = true;
             thumbnailUrl = materiModel.getThumbnailUrl();
             btnHapus.setVisibility(View.VISIBLE);
@@ -245,26 +246,20 @@ public class OpAddOnlineMateriActivity extends AppCompatActivity {
     }
 
     private void simpanMateri() {
-        if (!CommonMethod.isInternetAvailable(OpAddOnlineMateriActivity.this)) {
-            pd.dismiss();
-            return;
-        }
-
-        dateCreated = CommonMethod.getTimeStamp();
-
         String title = edtJudul.getText().toString();
         String harga = edtHarga.getText().toString();
 
-        MateriModel model = new MateriModel(title, thumbnailUrl, harga, onlineCourseDocId, dateCreated);
+        MateriOnlineModel model = new MateriOnlineModel(title, thumbnailUrl, harga, kelasOnlineDocId, dateCreated);
 
         if (thereIsData) {
+            model.setDateCreated(oldMateriModel.getDateCreated());
             editMateri(model);
         } else {
             tambahMateri(model);
         }
     }
 
-    private void editMateri(final MateriModel model) {
+    private void editMateri(final MateriOnlineModel model) {
         DocumentReference docRef = onlineMateriRef.document(onlineMateriDocId);
         docRef.set(model)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -273,14 +268,13 @@ public class OpAddOnlineMateriActivity extends AppCompatActivity {
                         if (imageUri != null) {
                             deletePhotoInFirebase(model);
                         } else {
+                            imageUri = null;
+                            pd.dismiss();
+
                             if (addSoal) {
-                                imageUri = null;
-                                pd.dismiss();
                                 Intent intent = new Intent(OpAddOnlineMateriActivity.this, OpOnlineSoalActivity.class);
                                 startActivity(intent);
                             } else if (addVideo) {
-                                imageUri = null;
-                                pd.dismiss();
                                 Intent intent = new Intent(OpAddOnlineMateriActivity.this, OpOnlineVideoActivity.class);
                                 startActivity(intent);
                             } else {
@@ -302,26 +296,25 @@ public class OpAddOnlineMateriActivity extends AppCompatActivity {
                 });
     }
 
-    private void tambahMateri(final MateriModel model) {
+    private void tambahMateri(final MateriOnlineModel model) {
         onlineMateriRef.add(model)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
                         onlineMateriDocId = documentReference.getId();
+                        materiModel = model;
+
+                        thereIsData = true;
+                        oldMateriModel = materiModel;
+                        imageUri = null;
+                        btnHapus.setVisibility(View.VISIBLE);
+
+                        pd.dismiss();
+
                         if (addSoal) {
-                            thereIsData = true;
-                            materiModel = new MateriModel(edtJudul.getText().toString(), thumbnailUrl, edtHarga.getText().toString(), onlineCourseDocId, dateCreated);
-                            oldMateriModel = materiModel;
-                            imageUri = null;
-                            pd.dismiss();
                             Intent intent = new Intent(OpAddOnlineMateriActivity.this, OpOnlineSoalActivity.class);
                             startActivity(intent);
                         } else if (addVideo) {
-                            thereIsData = true;
-                            materiModel = new MateriModel(edtJudul.getText().toString(), thumbnailUrl, edtHarga.getText().toString(), onlineCourseDocId, dateCreated);
-                            oldMateriModel = materiModel;
-                            imageUri = null;
-                            pd.dismiss();
                             Intent intent = new Intent(OpAddOnlineMateriActivity.this, OpOnlineVideoActivity.class);
                             startActivity(intent);
                         } else {
@@ -367,20 +360,19 @@ public class OpAddOnlineMateriActivity extends AppCompatActivity {
                 });
     }
 
-    private void deletePhotoInFirebase(final MateriModel model) {
+    private void deletePhotoInFirebase(final MateriOnlineModel model) {
         StorageReference deleteRef = firebaseStorage.getReferenceFromUrl(oldMateriModel.getThumbnailUrl());
         deleteRef.delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
+                        imageUri = null;
+                        pd.dismiss();
+
                         if (addVideo) {
-                            imageUri = null;
-                            pd.dismiss();
                             Intent intent = new Intent(OpAddOnlineMateriActivity.this, OpOnlineVideoActivity.class);
                             startActivity(intent);
                         } else if (addSoal) {
-                            imageUri = null;
-                            pd.dismiss();
                             Intent intent = new Intent(OpAddOnlineMateriActivity.this, OpOnlineVideoActivity.class);
                             startActivity(intent);
                         } else {
@@ -406,6 +398,7 @@ public class OpAddOnlineMateriActivity extends AppCompatActivity {
                     return;
                 }
 
+                dateCreated = CommonMethod.getTimeStamp();
                 pd.show();
                 if (imageUri != null) {
                     uploadPhotoToFirebase();
@@ -457,28 +450,30 @@ public class OpAddOnlineMateriActivity extends AppCompatActivity {
     }
 
     private void hapusMateri() {
-        //ambil link online video di storage
-        //hapus online video document
-        //hapus online video collection
-        //hapus online video storage
-        //hapus online soal document
-        //hapus online soal collection
-        //ambil link online materi thumbnail
-        //hapus online materi document
-        //hapus online materi thumbnail storage
+        /**
+         * ambil link online video di storage
+         * hapus online video document
+         * hapus online video collection
+         * hapus online video storage
+         * hapus online soal document
+         * hapus online soal collection
+         * ambil link online materi thumbnail
+         * hapus online materi document
+         * hapus online materi thumbnail storage
+         */
         getListVideoUrl();
     }
 
     private void getListVideoUrl() {
         CollectionReference ref = onlineMateriRef.document(onlineMateriDocId)
-                .collection("OnlineVideo");
+                .collection(CommonMethod.refVideoOnline);
 
         ref.get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                            VideoModel model = documentSnapshot.toObject(VideoModel.class);
+                            VideoOnlineModel model = documentSnapshot.toObject(VideoOnlineModel.class);
                             listVideoUrl.add(model.getVideoUrl());
                         }
                         hapusOnlineVideoDoc();
@@ -488,7 +483,7 @@ public class OpAddOnlineMateriActivity extends AppCompatActivity {
 
     private void hapusOnlineVideoDoc() {
         final CollectionReference ref = onlineMateriRef.document(onlineMateriDocId)
-                .collection("OnlineVideo");
+                .collection(CommonMethod.refVideoOnline);
 
         ref.get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -513,7 +508,7 @@ public class OpAddOnlineMateriActivity extends AppCompatActivity {
 
     private void hapusOnlineSoalDoc() {
         final CollectionReference ref = onlineMateriRef.document(onlineMateriDocId)
-                .collection("OnlineSoal");
+                .collection(CommonMethod.refSoalOnline);
 
         ref.get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {

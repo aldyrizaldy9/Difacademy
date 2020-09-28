@@ -29,11 +29,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.tamanpelajar.aldy.difacademy.Adapter.NewsAdapter;
-import com.tamanpelajar.aldy.difacademy.Model.CourseModel;
-import com.tamanpelajar.aldy.difacademy.Model.MateriModel;
+import com.tamanpelajar.aldy.difacademy.Adapter.UsNewsAdapter;
 import com.tamanpelajar.aldy.difacademy.Model.NewsModel;
-import com.tamanpelajar.aldy.difacademy.Model.OngoingMateriModel;
 import com.tamanpelajar.aldy.difacademy.R;
 
 import java.util.ArrayList;
@@ -46,7 +43,7 @@ public class UsMainActivity extends AppCompatActivity {
     private Button btnBeritaLainnya;
     private TextView tvDiikutiSemua, tvJudulOngoing, tvTagOngoing;
     private RecyclerView rvMainBerita;
-    private NewsAdapter newsAdapter;
+    private UsNewsAdapter usNewsAdapter;
     private ArrayList<NewsModel> newsModels;
     private FirebaseFirestore firebaseFirestore;
     private MateriModel materiModel;
@@ -126,9 +123,9 @@ public class UsMainActivity extends AppCompatActivity {
 
     private void setRecyclerView() {
         newsModels = new ArrayList<>();
-        newsAdapter = new NewsAdapter(this, newsModels);
+        usNewsAdapter = new UsNewsAdapter(this, newsModels);
         rvMainBerita.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
-        rvMainBerita.setAdapter(newsAdapter);
+        rvMainBerita.setAdapter(usNewsAdapter);
     }
 
     private void onClick() {
@@ -376,7 +373,7 @@ public class UsMainActivity extends AppCompatActivity {
 
                             newsModels.add(newsModel);
                         }
-                        newsAdapter.notifyDataSetChanged();
+                        usNewsAdapter.notifyDataSetChanged();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {

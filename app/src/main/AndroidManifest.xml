@@ -28,7 +28,7 @@
         <activity android:name=".ActivityAdmin.OpAddOnlineVideoActivity" />
         <activity android:name=".ActivityAdmin.OpAddOnlineKelasActivity" />
         <activity android:name=".ActivityAdmin.OpAddOnlineMateriActivity" />
-        <activity android:name=".ActivityAdmin.OpOnlineCourseActivity" />
+        <activity android:name=".ActivityAdmin.OpOnlineKelasActivity" />
         <activity android:name=".ActivityAdmin.OpBannerActivity" />
         <activity
             android:name=".ActivityUser.UsOnlineMateriActivity"

@@ -19,11 +19,11 @@ import java.util.ArrayList;
 
 public class OpGraduationAdapter extends RecyclerView.Adapter<OpGraduationAdapter.ViewHolder> {
     private Context context;
-    private ArrayList<GraduationModel> graduationModels;
+    private ArrayList<GraduationModel> models;
 
-    public OpGraduationAdapter(Context context, ArrayList<GraduationModel> graduationModels) {
+    public OpGraduationAdapter(Context context, ArrayList<GraduationModel> models) {
         this.context = context;
-        this.graduationModels = graduationModels;
+        this.models = models;
     }
 
     @NonNull
@@ -36,7 +36,7 @@ public class OpGraduationAdapter extends RecyclerView.Adapter<OpGraduationAdapte
 
     @Override
     public void onBindViewHolder(@NonNull OpGraduationAdapter.ViewHolder holder, int position) {
-        final GraduationModel graduationModel = graduationModels.get(position);
+        final GraduationModel graduationModel = models.get(position);
         holder.tvNama.setText(graduationModel.getNamaUser());
         holder.tvKelas.setText(graduationModel.getNamaMateri());
         if (graduationModel.isDone()) {
@@ -56,7 +56,7 @@ public class OpGraduationAdapter extends RecyclerView.Adapter<OpGraduationAdapte
 
     @Override
     public int getItemCount() {
-        return graduationModels.size();
+        return models.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

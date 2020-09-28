@@ -1,13 +1,10 @@
 package com.tamanpelajar.aldy.difacademy.ActivityAdmin;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -24,9 +21,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import com.bumptech.glide.Glide;
 import com.tamanpelajar.aldy.difacademy.CommonMethod;
 import com.tamanpelajar.aldy.difacademy.Model.MateriBlendedModel;
-import com.tamanpelajar.aldy.difacademy.Model.MateriModel;
 import com.tamanpelajar.aldy.difacademy.Model.VideoBlendedModel;
-import com.tamanpelajar.aldy.difacademy.Model.VideoModel;
 import com.tamanpelajar.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -55,6 +50,7 @@ public class OpAddBlendedMateriActivity extends AppCompatActivity {
     private TextView tvNavbar;
     private ConstraintLayout clBack, clHapus;
     private ImageView imgBack, imgHapus;
+
     private ImageView imgThumbnail;
     private Button btnAddVideo, btnAddSoal, btnSimpan;
     private EditText edtJudul, edtDeskripsi, edtLampiran;
@@ -100,7 +96,7 @@ public class OpAddBlendedMateriActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        if (thereIsData && dataHasChanged){
+        if (thereIsData && dataHasChanged) {
             isMateriChanged = true;
         }
     }
@@ -273,8 +269,6 @@ public class OpAddBlendedMateriActivity extends AppCompatActivity {
         String deskripsi = edtDeskripsi.getText().toString();
         String lampiran = edtLampiran.getText().toString();
 
-        dateCreated = CommonMethod.getTimeStamp();
-
         MateriBlendedModel model = new MateriBlendedModel(title, deskripsi, thumbnailUrl, lampiran, kelasBlendedDocId, dateCreated);
 
         if (thereIsData) {
@@ -294,14 +288,13 @@ public class OpAddBlendedMateriActivity extends AppCompatActivity {
                         if (imageUri != null) {
                             deletePhotoInFirebase(model);
                         } else {
+                            imageUri = null;
+                            pd.dismiss();
+
                             if (addSoal) {
-                                imageUri = null;
-                                pd.dismiss();
                                 Intent intent = new Intent(OpAddBlendedMateriActivity.this, OpBlendedSoalActivity.class);
                                 startActivity(intent);
                             } else if (addVideo) {
-                                imageUri = null;
-                                pd.dismiss();
                                 Intent intent = new Intent(OpAddBlendedMateriActivity.this, OpBlendedVideoActivity.class);
                                 startActivity(intent);
                             } else {
@@ -332,9 +325,9 @@ public class OpAddBlendedMateriActivity extends AppCompatActivity {
                         materiModel = model;
 //                        materiModel.setDocumentId(blendedMateriDocId);
 
+                        thereIsData = true;
                         oldMateriModel = materiModel;
                         imageUri = null;
-                        thereIsData = true;
                         clHapus.setVisibility(View.VISIBLE);
 
                         pd.dismiss();
@@ -427,6 +420,7 @@ public class OpAddBlendedMateriActivity extends AppCompatActivity {
                     return;
                 }
 
+                dateCreated = CommonMethod.getTimeStamp();
                 dataHasChanged = true;
                 pd.show();
                 if (imageUri != null) {

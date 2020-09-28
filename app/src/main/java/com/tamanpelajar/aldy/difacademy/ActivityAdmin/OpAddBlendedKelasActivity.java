@@ -58,6 +58,7 @@ public class OpAddBlendedKelasActivity extends AppCompatActivity {
     private TextView tvNavbar;
     private ConstraintLayout clBack, clHapus;
     private ImageView imgBack, imgHapus;
+
     private ImageView imgThumbnail;
     private Button btnAddMateri, btnSimpan, btnMember;
     private EditText edtJudul, edtDeskripsi, edtHarga;
@@ -66,6 +67,7 @@ public class OpAddBlendedKelasActivity extends AppCompatActivity {
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference refKelasBlended = db.collection(CommonMethod.refKelasBlended);
+    private FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
 
     private String tagCourse = "";
     private String tagCourseId = "";
@@ -77,7 +79,6 @@ public class OpAddBlendedKelasActivity extends AppCompatActivity {
     private Uri imageUri;
     private String thumbnailUrl = "";
 
-    private FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
     private int index;
     private long dateCreated = 0;
     private ProgressDialog pd;
@@ -107,7 +108,7 @@ public class OpAddBlendedKelasActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        if (thereIsData && dataHasChanged){
+        if (thereIsData && dataHasChanged) {
             isKelasChanged = true;
         }
     }
@@ -126,7 +127,6 @@ public class OpAddBlendedKelasActivity extends AppCompatActivity {
         imgBack = findViewById(R.id.img_icon1);
         imgBack.setImageResource(R.drawable.ic_arrow_back);
         clHapus = findViewById(R.id.cl_icon3);
-//        clHapus.setVisibility(View.VISIBLE);
         imgHapus = findViewById(R.id.img_icon3);
         imgHapus.setImageResource(R.drawable.ic_delete);
 
@@ -332,7 +332,7 @@ public class OpAddBlendedKelasActivity extends AppCompatActivity {
         String tag = tagCourse;
         String tagId = tagCourseId;
 
-        if (!CommonMethod.isInternetAvailable(OpAddBlendedKelasActivity.this)){
+        if (!CommonMethod.isInternetAvailable(OpAddBlendedKelasActivity.this)) {
             pd.dismiss();
             return;
         }
@@ -468,8 +468,6 @@ public class OpAddBlendedKelasActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (!CommonMethod.isInternetAvailable(OpAddBlendedKelasActivity.this)) {
-                    dialog.cancel();
-                    addMateri = false;
                     return;
                 }
 
@@ -502,10 +500,12 @@ public class OpAddBlendedKelasActivity extends AppCompatActivity {
         builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if (CommonMethod.isInternetAvailable(OpAddBlendedKelasActivity.this)) {
-                    pd.show();
-                    hapusKelas();
+                if (!CommonMethod.isInternetAvailable(OpAddBlendedKelasActivity.this)) {
+                    return;
                 }
+
+                pd.show();
+                hapusKelas();
             }
         });
 
@@ -552,7 +552,7 @@ public class OpAddBlendedKelasActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        if (queryDocumentSnapshots.size() > 0){
+                        if (queryDocumentSnapshots.size() > 0) {
                             for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                                 MateriBlendedModel model = documentSnapshot.toObject(MateriBlendedModel.class);
                                 model.setDocumentId(documentSnapshot.getId());
@@ -633,7 +633,7 @@ public class OpAddBlendedKelasActivity extends AppCompatActivity {
 
     private void getListThumbnailUrl() {
         CollectionReference ref = refKelasBlended.document(kelasBlendedDocId)
-                .collection("BlendedMateri");
+                .collection(CommonMethod.refMateriBlended);
 
         ref.get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {

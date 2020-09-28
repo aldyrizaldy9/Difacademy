@@ -13,9 +13,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.tamanpelajar.aldy.difacademy.Adapter.BlendedMateriAdapter;
-import com.tamanpelajar.aldy.difacademy.Model.CourseModel;
-import com.tamanpelajar.aldy.difacademy.Model.MateriModel;
+import com.tamanpelajar.aldy.difacademy.Adapter.UsMateriBlendedAdapter;
 import com.tamanpelajar.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -31,7 +29,7 @@ public class UsBlendedMateriActivity extends AppCompatActivity {
     private static final String TAG = "BlendedMateriActivity";
     private ConstraintLayout clBack, clNavbar;
     private RecyclerView rvVideo;
-    private BlendedMateriAdapter adapter;
+    private UsMateriBlendedAdapter adapter;
     private ArrayList<MateriModel> materiModels;
     private ProgressDialog progressDialog;
     private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
@@ -74,7 +72,7 @@ public class UsBlendedMateriActivity extends AppCompatActivity {
 
     private void setRecyclerView() {
         materiModels = new ArrayList<>();
-        adapter = new BlendedMateriAdapter(this, materiModels);
+        adapter = new UsMateriBlendedAdapter(this, materiModels);
 
         final LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         rvVideo.setLayoutManager(layoutManager);

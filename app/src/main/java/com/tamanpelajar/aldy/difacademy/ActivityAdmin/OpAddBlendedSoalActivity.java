@@ -24,7 +24,6 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.tamanpelajar.aldy.difacademy.CommonMethod;
 import com.tamanpelajar.aldy.difacademy.Model.SoalBlendedModel;
-import com.tamanpelajar.aldy.difacademy.Model.SoalModel;
 import com.tamanpelajar.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -97,7 +96,6 @@ public class OpAddBlendedSoalActivity extends AppCompatActivity {
         imgBack = findViewById(R.id.img_icon1);
         imgBack.setImageResource(R.drawable.ic_arrow_back);
         clHapus = findViewById(R.id.cl_icon3);
-//        clHapus.setVisibility(View.VISIBLE);
         imgHapus = findViewById(R.id.img_icon3);
         imgHapus.setImageResource(R.drawable.ic_delete);
 
@@ -262,12 +260,6 @@ public class OpAddBlendedSoalActivity extends AppCompatActivity {
     }
 
     private void tambah() {
-        if (!CommonMethod.isInternetAvailable(OpAddBlendedSoalActivity.this)){
-            return;
-        }
-
-        dateCreated = CommonMethod.getTimeStamp();
-
         String soal = edtSoal.getText().toString();
         String jwbA = edtA.getText().toString();
         String jwbB = edtB.getText().toString();
@@ -275,7 +267,7 @@ public class OpAddBlendedSoalActivity extends AppCompatActivity {
         String jwbD = edtD.getText().toString();
         String jwbE = edtE.getText().toString();
 
-        final SoalModel model = new SoalModel(soal, jwbA, jwbB, jwbC, jwbD, jwbE, jawabanBenar, dateCreated);
+        final SoalBlendedModel model = new SoalBlendedModel(soal, jwbA, jwbB, jwbC, jwbD, jwbE, jawabanBenar, dateCreated);
         collRef.add(model)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
@@ -304,10 +296,12 @@ public class OpAddBlendedSoalActivity extends AppCompatActivity {
         builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if (CommonMethod.isInternetAvailable(OpAddBlendedSoalActivity.this)) {
-                    pd.show();
-                    hapus();
+                if (!CommonMethod.isInternetAvailable(OpAddBlendedSoalActivity.this)) {
+                    return;
                 }
+
+                pd.show();
+                hapus();
             }
         });
 
@@ -329,13 +323,17 @@ public class OpAddBlendedSoalActivity extends AppCompatActivity {
         builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if (CommonMethod.isInternetAvailable(OpAddBlendedSoalActivity.this)) {
-                    pd.show();
-                    if (thereIsData) {
-                        edit();
-                    } else {
-                        tambah();
-                    }
+                if (!CommonMethod.isInternetAvailable(OpAddBlendedSoalActivity.this)) {
+                    return;
+                }
+
+                dateCreated = CommonMethod.getTimeStamp();
+
+                pd.show();
+                if (thereIsData) {
+                    edit();
+                } else {
+                    tambah();
                 }
             }
         });

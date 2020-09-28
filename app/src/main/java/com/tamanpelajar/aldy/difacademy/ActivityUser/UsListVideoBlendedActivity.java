@@ -16,10 +16,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.tamanpelajar.aldy.difacademy.Adapter.VideoBlendedAdapter;
-import com.tamanpelajar.aldy.difacademy.Model.MateriModel;
-import com.tamanpelajar.aldy.difacademy.Model.OngoingMateriModel;
-import com.tamanpelajar.aldy.difacademy.Model.VideoModel;
+import com.tamanpelajar.aldy.difacademy.Adapter.UsVideoBlendedAdapter;
 import com.tamanpelajar.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -42,7 +39,7 @@ public class UsListVideoBlendedActivity extends AppCompatActivity {
     private ConstraintLayout clQuiz;
     private RecyclerView rvListVideoCourse;
     private ArrayList<VideoModel> videoModels;
-    private VideoBlendedAdapter videoBlendedAdapter;
+    private UsVideoBlendedAdapter usVideoBlendedAdapter;
     private ProgressDialog progressDialog;
     private FirebaseFirestore firebaseFirestore;
     private String userDocId;
@@ -115,9 +112,9 @@ public class UsListVideoBlendedActivity extends AppCompatActivity {
 
     private void setRecyclerView() {
         videoModels = new ArrayList<>();
-        videoBlendedAdapter = new VideoBlendedAdapter(this, videoModels);
+        usVideoBlendedAdapter = new UsVideoBlendedAdapter(this, videoModels);
         rvListVideoCourse.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
-        rvListVideoCourse.setAdapter(videoBlendedAdapter);
+        rvListVideoCourse.setAdapter(usVideoBlendedAdapter);
     }
 
 
@@ -144,7 +141,7 @@ public class UsListVideoBlendedActivity extends AppCompatActivity {
                         }
                         progressDialog.dismiss();
                         clQuiz.setVisibility(View.VISIBLE);
-                        videoBlendedAdapter.notifyDataSetChanged();
+                        usVideoBlendedAdapter.notifyDataSetChanged();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {

@@ -19,9 +19,8 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.tamanpelajar.aldy.difacademy.Adapter.OnlineKelasAdapter;
+import com.tamanpelajar.aldy.difacademy.Adapter.UsKelasOnlineAdapter;
 import com.tamanpelajar.aldy.difacademy.CommonMethod;
-import com.tamanpelajar.aldy.difacademy.Model.CourseModel;
 import com.tamanpelajar.aldy.difacademy.Model.TagModel;
 import com.tamanpelajar.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -44,7 +43,7 @@ public class UsOnlineCourseActivity extends AppCompatActivity {
     private String tag = "";
     private ConstraintLayout clBack, clSearch, clSearchContainer, clNavbar;
     private RecyclerView rvCourse;
-    private OnlineKelasAdapter adapter;
+    private UsKelasOnlineAdapter adapter;
     private ArrayList<CourseModel> courseModels;
     private ArrayList<String> tags;
     private ProgressDialog pd;
@@ -106,7 +105,7 @@ public class UsOnlineCourseActivity extends AppCompatActivity {
 
     private void setRecyclerView() {
         courseModels = new ArrayList<>();
-        adapter = new OnlineKelasAdapter(this, courseModels);
+        adapter = new UsKelasOnlineAdapter(this, courseModels);
 
         final LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         rvCourse.setLayoutManager(layoutManager);

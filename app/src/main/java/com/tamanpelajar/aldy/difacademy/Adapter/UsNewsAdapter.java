@@ -20,33 +20,33 @@ import com.tamanpelajar.aldy.difacademy.R;
 
 import java.util.ArrayList;
 
-public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
+public class UsNewsAdapter extends RecyclerView.Adapter<UsNewsAdapter.ViewHolder> {
     private Context context;
-    private ArrayList<NewsModel> newsModels;
+    private ArrayList<NewsModel> models;
 
-    public NewsAdapter(Context context, ArrayList<NewsModel> newsModels) {
+    public UsNewsAdapter(Context context, ArrayList<NewsModel> models) {
         this.context = context;
-        this.newsModels = newsModels;
+        this.models = models;
     }
 
     @NonNull
     @Override
-    public NewsAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public UsNewsAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         View view = layoutInflater.inflate(R.layout.card_news, parent, false);
-        return new NewsAdapter.ViewHolder(view);
+        return new UsNewsAdapter.ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull NewsAdapter.ViewHolder holder, int position) {
-        final NewsModel newsModel = newsModels.get(position);
-        Glide.with(context).load(newsModel.getLinkfoto()).into(holder.imgThumbnail);
-        holder.tvJudul.setText(newsModel.getJudul());
+    public void onBindViewHolder(@NonNull UsNewsAdapter.ViewHolder holder, int position) {
+        final NewsModel model = models.get(position);
+        Glide.with(context).load(model.getLinkfoto()).into(holder.imgThumbnail);
+        holder.tvJudul.setText(model.getJudul());
         holder.clContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, UsDetailNewsActivity.class);
-                intent.putExtra(CommonMethod.intentNewsModel, newsModel);
+                intent.putExtra(CommonMethod.intentNewsModel, model);
                 context.startActivity(intent);
             }
         });
@@ -54,7 +54,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        return newsModels.size();
+        return models.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

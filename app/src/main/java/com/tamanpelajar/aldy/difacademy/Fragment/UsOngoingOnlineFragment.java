@@ -13,9 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.tamanpelajar.aldy.difacademy.Adapter.OnlineMateriAdapter;
-import com.tamanpelajar.aldy.difacademy.Model.MateriModel;
-import com.tamanpelajar.aldy.difacademy.Model.OngoingMateriModel;
+import com.tamanpelajar.aldy.difacademy.Adapter.UsMateriOnlineAdapter;
 import com.tamanpelajar.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -43,7 +41,7 @@ public class UsOngoingOnlineFragment extends Fragment {
     CollectionReference ongoingMateriRef;
     private RecyclerView rvOngoingOnline;
     private ArrayList<MateriModel> materiModels;
-    private OnlineMateriAdapter onlineMateriAdapter;
+    private UsMateriOnlineAdapter usMateriOnlineAdapter;
     private ProgressDialog pd;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private View rootView;
@@ -77,11 +75,11 @@ public class UsOngoingOnlineFragment extends Fragment {
 
     private void setRecyclerView() {
         materiModels = new ArrayList<>();
-        onlineMateriAdapter = new OnlineMateriAdapter(rootView.getContext(), materiModels);
+        usMateriOnlineAdapter = new UsMateriOnlineAdapter(rootView.getContext(), materiModels);
 
         final LinearLayoutManager manager = new LinearLayoutManager(rootView.getContext(), RecyclerView.VERTICAL, false);
         rvOngoingOnline.setLayoutManager(manager);
-        rvOngoingOnline.setAdapter(onlineMateriAdapter);
+        rvOngoingOnline.setAdapter(usMateriOnlineAdapter);
 
         rvOngoingOnline.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -121,7 +119,7 @@ public class UsOngoingOnlineFragment extends Fragment {
                                                                 materiModel.setDocumentId(documentSnapshot.getId());
                                                             }
                                                             materiModels.add(materiModel);
-                                                            onlineMateriAdapter.notifyDataSetChanged();
+                                                            usMateriOnlineAdapter.notifyDataSetChanged();
                                                             loadbaru = true;
                                                         }
                                                     })
@@ -216,7 +214,7 @@ public class UsOngoingOnlineFragment extends Fragment {
                             materiModel.setDocumentId(documentSnapshot.getId());
                         }
                         materiModels.add(materiModel);
-                        onlineMateriAdapter.notifyDataSetChanged();
+                        usMateriOnlineAdapter.notifyDataSetChanged();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
