@@ -94,20 +94,6 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <Button
-                android:id="@+id/btn_op_add_online_course_hapus"
-                style="@style/Difacademy.Button"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="8dp"
-                android:text="hapus kelas"
-                android:visibility="gone"
-                app:layout_constraintBottom_toTopOf="@+id/btn_op_add_online_course_simpan"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
-
-            <Button
                 android:id="@+id/btn_op_add_online_course_simpan"
                 style="@style/Difacademy.Button"
                 android:layout_width="0dp"
@@ -167,7 +153,7 @@
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="8dp"
                 android:text="daftar materi"
-                app:layout_constraintBottom_toTopOf="@+id/btn_op_add_online_course_hapus"
+                app:layout_constraintBottom_toTopOf="@+id/btn_op_add_online_course_simpan"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
 

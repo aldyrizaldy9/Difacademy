@@ -49,40 +49,41 @@ import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpMainActivity.ADD_
 import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpMainActivity.DELETE_REQUEST_CODE;
 import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpMainActivity.PHOTO_PICK_REQUEST_CODE;
 import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpMainActivity.UPDATE_REQUEST_CODE;
+import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpOnlineKelasActivity.isKelasOnlineChanged;
 
 public class OpAddOnlineKelasActivity extends AppCompatActivity {
-
     public static String kelasOnlineDocId = "";
 
-    TextView tvNavbar;
-    ConstraintLayout clBack;
-    ImageView imgBack;
+    private TextView tvNavbar;
+    private ConstraintLayout clBack, clHapus;
+    private ImageView imgBack, imgHapus;
 
-    ImageView imgThumbnail;
-    Button btnAddMateri, btnHapus, btnSimpan;
-    EditText edtJudul, edtDeskripsi, edtLinkGDrive;
-    Spinner spnTag;
-    ConstraintLayout clAddPhoto;
+    private ImageView imgThumbnail;
+    private Button btnAddMateri, btnSimpan;
+    private EditText edtJudul, edtDeskripsi, edtLinkGDrive;
+    private Spinner spnTag;
+    private ConstraintLayout clAddPhoto;
 
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
-    CollectionReference refKelasOnline = db.collection(CommonMethod.refKelasOnline);
-    FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private CollectionReference refKelasOnline = db.collection(CommonMethod.refKelasOnline);
+    private FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
 
-    String tagCourse = "";
-    String tagCourseId = "";
-    boolean thereIsData = false;
-    boolean addMateri = false;
+    private String tagCourse = "";
+    private String tagCourseId = "";
+    private boolean thereIsData = false;
+    private boolean addMateri = false;
+    private boolean dataHasChanged;
 
-    KelasOnlineModel kelasModel, oldKelasModel;
-    Uri imageUri;
-    String thumbnailUrl = "";
+    private KelasOnlineModel kelasModel, oldKelasModel;
+    private Uri imageUri;
+    private String thumbnailUrl = "";
 
-    int index;
-    long dateCreated = 0;
-    ProgressDialog pd;
+    private int index;
+    private long dateCreated = 0;
+    private ProgressDialog pd;
 
-    ArrayList<String> listOnlineVideoUrl;
-    ArrayList<String> listOnlineMateriThumbnailUrl;
+    private ArrayList<String> listOnlineVideoUrl;
+    private ArrayList<String> listOnlineMateriThumbnailUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,6 +104,14 @@ public class OpAddOnlineKelasActivity extends AppCompatActivity {
         loadTags();
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        if (thereIsData && dataHasChanged){
+            isKelasOnlineChanged = true;
+        }
+    }
+
     private void initView() {
         tvNavbar = findViewById(R.id.tv_navbar);
         tvNavbar.setText("Kelas Online");
@@ -116,10 +125,12 @@ public class OpAddOnlineKelasActivity extends AppCompatActivity {
         });
         imgBack = findViewById(R.id.img_icon1);
         imgBack.setImageResource(R.drawable.ic_arrow_back);
+        clHapus = findViewById(R.id.cl_icon3);
+        imgHapus = findViewById(R.id.img_icon3);
+        imgHapus.setImageResource(R.drawable.ic_delete);
 
         imgThumbnail = findViewById(R.id.img_op_add_online_course_thumbnail);
         btnAddMateri = findViewById(R.id.btn_op_add_online_course_add_materi);
-        btnHapus = findViewById(R.id.btn_op_add_online_course_hapus);
         btnSimpan = findViewById(R.id.btn_op_add_online_course_simpan);
         edtJudul = findViewById(R.id.edt_op_add_online_course_judul);
         edtDeskripsi = findViewById(R.id.edt_op_add_online_course_deskripsi);
@@ -136,7 +147,7 @@ public class OpAddOnlineKelasActivity extends AppCompatActivity {
             index = intent.getIntExtra(CommonMethod.intentIndex, -1);
             thereIsData = true;
             thumbnailUrl = kelasModel.getThumbnailUrl();
-            btnHapus.setVisibility(View.VISIBLE);
+            clHapus.setVisibility(View.VISIBLE);
             Glide.with(this)
                     .load(thumbnailUrl)
                     .into(imgThumbnail);
@@ -271,7 +282,7 @@ public class OpAddOnlineKelasActivity extends AppCompatActivity {
                 }
             }
         });
-        btnHapus.setOnClickListener(new View.OnClickListener() {
+        clHapus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showHapusDialog();
@@ -368,8 +379,9 @@ public class OpAddOnlineKelasActivity extends AppCompatActivity {
                         kelasOnlineDocId = documentReference.getId();
                         if (addMateri) {
                             thereIsData = true;
-                            btnHapus.setVisibility(View.VISIBLE);
+                            clHapus.setVisibility(View.VISIBLE);
                             imageUri = null;
+                            oldKelasModel = model;
                             pd.dismiss();
                             Intent intent = new Intent(OpAddOnlineKelasActivity.this, OpOnlineMateriActivity.class);
                             startActivity(intent);
@@ -451,6 +463,7 @@ public class OpAddOnlineKelasActivity extends AppCompatActivity {
 
                 dateCreated = CommonMethod.getTimeStamp();
 
+                dataHasChanged = true;
                 pd.show();
                 if (imageUri != null) {
                     uploadPhotoToFirebase();

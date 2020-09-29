@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.tamanpelajar.aldy.difacademy.Adapter.OpVideoOnlineAdapter;
@@ -41,6 +42,7 @@ public class OpOnlineVideoActivity extends AppCompatActivity {
     TextView tvNavbar;
     ConstraintLayout clBack, clAdd;
     ImageView imgBack, imgAdd;
+    SwipeRefreshLayout srl;
 
     RecyclerView rvOnlineVideo;
     ArrayList<VideoOnlineModel> videoOnlineModels;
@@ -100,6 +102,16 @@ public class OpOnlineVideoActivity extends AppCompatActivity {
         imgAdd = findViewById(R.id.img_icon3);
         imgAdd.setImageResource(R.drawable.ic_add);
         rvOnlineVideo = findViewById(R.id.rv_op_online_video);
+        srl = findViewById(R.id.srl_op_online_video);
+        srl.setRefreshing(true);
+        srl.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                videoOnlineModels.clear();
+                adapter.notifyDataSetChanged();
+                getData();
+            }
+        });
     }
 
     private void onClick(){
@@ -121,10 +133,10 @@ public class OpOnlineVideoActivity extends AppCompatActivity {
     private void getData() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference collRef = db.collection(CommonMethod.refKelasOnline)
-                .document(kelasBlendedDocId)
+                .document(kelasOnlineDocId)
                 .collection(CommonMethod.refMateriOnline)
-                .document(blendedMateriDocId)
-                .collection(CommonMethod.refSoalOnline);
+                .document(onlineMateriDocId)
+                .collection(CommonMethod.refVideoOnline);
 
         collRef.orderBy(CommonMethod.fieldDateCreated, Query.Direction.ASCENDING)
                 .get()
@@ -138,11 +150,13 @@ public class OpOnlineVideoActivity extends AppCompatActivity {
                             videoOnlineModels.add(model);
                         }
                         adapter.notifyDataSetChanged();
+                        srl.setRefreshing(false);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
+                        srl.setRefreshing(false);
                         Toast.makeText(OpOnlineVideoActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
                     }
                 });

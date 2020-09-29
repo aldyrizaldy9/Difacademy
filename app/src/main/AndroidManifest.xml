@@ -13,6 +13,8 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".ActivityAdmin.OpAnggotaMateriOnlineActivity"></activity>
+        <activity android:name=".ActivityAdmin.OpAnggotaKelasBlendedActivity" />
         <activity android:name=".ActivityAdmin.OpBlendedSoalActivity" />
         <activity android:name=".ActivityAdmin.OpBlendedVideoActivity" />
         <activity android:name=".ActivityAdmin.OpBlendedMateriActivity" />

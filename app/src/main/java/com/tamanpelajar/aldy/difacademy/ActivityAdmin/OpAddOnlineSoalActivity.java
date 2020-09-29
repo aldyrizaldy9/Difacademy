@@ -43,12 +43,12 @@ public class OpAddOnlineSoalActivity extends AppCompatActivity {
     public static String onlineSoalDocId = "";
 
     TextView tvNavbar;
-    ConstraintLayout clBack;
-    ImageView imgBack;
+    ConstraintLayout clBack, clHapus;
+    ImageView imgBack, imgHapus;
 
     EditText edtSoal, edtA, edtB, edtC, edtD, edtE;
     Spinner spnJawaban;
-    Button btnHapus, btnSimpan;
+    Button btnSimpan;
 
     String jawabanBenar = "";
     SoalOnlineModel soalModel;
@@ -95,6 +95,9 @@ public class OpAddOnlineSoalActivity extends AppCompatActivity {
         });
         imgBack = findViewById(R.id.img_icon1);
         imgBack.setImageResource(R.drawable.ic_arrow_back);
+        clHapus = findViewById(R.id.cl_icon3);
+        imgHapus = findViewById(R.id.img_icon3);
+        imgHapus.setImageResource(R.drawable.ic_delete);
 
         edtSoal = findViewById(R.id.edt_op_add_online_soal_soal);
         edtA = findViewById(R.id.edt_op_add_online_soal_jawaban_a);
@@ -103,7 +106,6 @@ public class OpAddOnlineSoalActivity extends AppCompatActivity {
         edtD = findViewById(R.id.edt_op_add_online_soal_jawaban_d);
         edtE = findViewById(R.id.edt_op_add_online_soal_jawaban_e);
         spnJawaban = findViewById(R.id.spn_op_add_online_soal_jawaban);
-        btnHapus = findViewById(R.id.btn_op_add_online_soal_hapus);
         btnSimpan = findViewById(R.id.btn_op_add_online_soal_simpan);
     }
 
@@ -159,7 +161,7 @@ public class OpAddOnlineSoalActivity extends AppCompatActivity {
         soalModel = intent.getParcelableExtra(CommonMethod.intentSoalOnlineModel);
         if (soalModel != null) {
             thereIsData = true;
-            btnHapus.setVisibility(View.VISIBLE);
+            clHapus.setVisibility(View.VISIBLE);
             onlineSoalDocId = soalModel.getDocumentId();
             edtSoal.setText(soalModel.getSoal());
             edtA.setText(soalModel.getJwbA());
@@ -179,7 +181,7 @@ public class OpAddOnlineSoalActivity extends AppCompatActivity {
     }
 
     private void onClick() {
-        btnHapus.setOnClickListener(new View.OnClickListener() {
+        clHapus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showHapusDialog();

@@ -45,14 +45,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpBlendedKelasActivity.isKelasChanged;
+import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpBlendedKelasActivity.isKelasBlendedChanged;
 import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpMainActivity.ADD_REQUEST_CODE;
 import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpMainActivity.DELETE_REQUEST_CODE;
 import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpMainActivity.PHOTO_PICK_REQUEST_CODE;
 import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpMainActivity.UPDATE_REQUEST_CODE;
 
 public class OpAddBlendedKelasActivity extends AppCompatActivity {
-
     public static String kelasBlendedDocId = "";
 
     private TextView tvNavbar;
@@ -60,7 +59,7 @@ public class OpAddBlendedKelasActivity extends AppCompatActivity {
     private ImageView imgBack, imgHapus;
 
     private ImageView imgThumbnail;
-    private Button btnAddMateri, btnSimpan, btnMember;
+    private Button btnAddMateri, btnSimpan, btnAnggota;
     private EditText edtJudul, edtDeskripsi, edtHarga;
     private Spinner spnTag;
     private ConstraintLayout clAddPhoto;
@@ -109,7 +108,7 @@ public class OpAddBlendedKelasActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         if (thereIsData && dataHasChanged) {
-            isKelasChanged = true;
+            isKelasBlendedChanged = true;
         }
     }
 
@@ -133,7 +132,7 @@ public class OpAddBlendedKelasActivity extends AppCompatActivity {
         imgThumbnail = findViewById(R.id.img_op_add_blended_course_thumbnail);
         btnAddMateri = findViewById(R.id.btn_op_add_blended_course_add_materi);
         btnSimpan = findViewById(R.id.btn_op_add_blended_course_simpan);
-        btnMember = findViewById(R.id.btn_op_add_blended_course_member);
+        btnAnggota = findViewById(R.id.btn_op_add_blended_course_member);
         edtJudul = findViewById(R.id.edt_op_add_blended_course_judul);
         edtDeskripsi = findViewById(R.id.edt_op_add_blended_course_deskripsi);
         edtHarga = findViewById(R.id.edt_op_add_blended_course_harga);
@@ -157,6 +156,7 @@ public class OpAddBlendedKelasActivity extends AppCompatActivity {
             edtHarga.setText(kelasModel.getHarga());
             kelasBlendedDocId = kelasModel.getDocumentId();
             clHapus.setVisibility(View.VISIBLE);
+            btnAnggota.setVisibility(View.VISIBLE);
         }
     }
 
@@ -304,6 +304,14 @@ public class OpAddBlendedKelasActivity extends AppCompatActivity {
                 }
             }
         });
+        btnAnggota.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(OpAddBlendedKelasActivity.this, OpAnggotaKelasBlendedActivity.class);
+                intent.putExtra(CommonMethod.intentKelasBlendedModel, kelasModel);
+                startActivity(intent);
+            }
+        });
     }
 
     private void getImageFromGallery() {
@@ -331,13 +339,6 @@ public class OpAddBlendedKelasActivity extends AppCompatActivity {
         String harga = edtHarga.getText().toString();
         String tag = tagCourse;
         String tagId = tagCourseId;
-
-        if (!CommonMethod.isInternetAvailable(OpAddBlendedKelasActivity.this)) {
-            pd.dismiss();
-            return;
-        }
-
-        dateCreated = CommonMethod.getTimeStamp();
 
         KelasBlendedModel model = new KelasBlendedModel(title, description, thumbnailUrl, harga, tagId, tag, dateCreated);
 
@@ -390,7 +391,9 @@ public class OpAddBlendedKelasActivity extends AppCompatActivity {
                         if (addMateri) {
                             thereIsData = true;
                             clHapus.setVisibility(View.VISIBLE);
+                            btnAnggota.setVisibility(View.VISIBLE);
                             imageUri = null;
+                            oldKelasModel = model;
                             pd.dismiss();
                             Intent intent = new Intent(OpAddBlendedKelasActivity.this, OpBlendedMateriActivity.class);
                             startActivity(intent);
@@ -470,6 +473,8 @@ public class OpAddBlendedKelasActivity extends AppCompatActivity {
                 if (!CommonMethod.isInternetAvailable(OpAddBlendedKelasActivity.this)) {
                     return;
                 }
+
+                dateCreated = CommonMethod.getTimeStamp();
 
                 dataHasChanged = true;
                 pd.show();

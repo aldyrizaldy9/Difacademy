@@ -38,7 +38,7 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpAddBlendedKelasActivity.kelasBlendedDocId;
-import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpBlendedMateriActivity.isMateriChanged;
+import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpBlendedMateriActivity.isMateriBlendedChanged;
 import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpMainActivity.ADD_REQUEST_CODE;
 import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpMainActivity.DELETE_REQUEST_CODE;
 import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpMainActivity.PHOTO_PICK_REQUEST_CODE;
@@ -97,7 +97,7 @@ public class OpAddBlendedMateriActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         if (thereIsData && dataHasChanged) {
-            isMateriChanged = true;
+            isMateriBlendedChanged = true;
         }
     }
 

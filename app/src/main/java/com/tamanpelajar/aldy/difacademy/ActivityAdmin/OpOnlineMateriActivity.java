@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.tamanpelajar.aldy.difacademy.Adapter.OpMateriOnlineAdapter;
 import com.tamanpelajar.aldy.difacademy.CommonMethod;
@@ -35,18 +36,22 @@ import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpMainActivity.DELE
 import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpMainActivity.UPDATE_REQUEST_CODE;
 
 public class OpOnlineMateriActivity extends AppCompatActivity {
-    TextView tvNavbar;
-    ConstraintLayout clBack, clAdd;
-    ImageView imgBack, imgAdd;
-    RecyclerView rvOnlineMateri;
+    public static boolean isMateriOnlineChanged;
 
-    ArrayList<MateriOnlineModel> materiOnlineModels;
-    OpMateriOnlineAdapter adapter;
+    private TextView tvNavbar;
+    private ConstraintLayout clBack, clAdd;
+    private ImageView imgBack, imgAdd;
+    private RecyclerView rvOnlineMateri;
 
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
-    CollectionReference onlineMateriRef = db.collection(CommonMethod.refKelasOnline)
+    private ArrayList<MateriOnlineModel> materiOnlineModels;
+    private OpMateriOnlineAdapter adapter;
+
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private CollectionReference onlineMateriRef = db.collection(CommonMethod.refKelasOnline)
             .document(kelasOnlineDocId)
             .collection(CommonMethod.refMateriOnline);
+
+    private SwipeRefreshLayout srl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +64,18 @@ public class OpOnlineMateriActivity extends AppCompatActivity {
         onClick();
         setRecyclerView();
         getData();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (isMateriOnlineChanged){
+            isMateriOnlineChanged = false;
+            srl.setRefreshing(true);
+            materiOnlineModels.clear();
+            adapter.notifyDataSetChanged();
+            getData();
+        }
     }
 
     @Override
@@ -102,6 +119,17 @@ public class OpOnlineMateriActivity extends AppCompatActivity {
         imgAdd = findViewById(R.id.img_icon3);
         imgAdd.setImageResource(R.drawable.ic_add);
         rvOnlineMateri = findViewById(R.id.rv_op_online_materi);
+        srl = findViewById(R.id.srl_op_online_materi);
+
+        srl.setRefreshing(true);
+        srl.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                materiOnlineModels.clear();
+                adapter.notifyDataSetChanged();
+                getData();
+            }
+        });
     }
 
     private void onClick() {
@@ -136,11 +164,13 @@ public class OpOnlineMateriActivity extends AppCompatActivity {
                         }
 
                         adapter.notifyDataSetChanged();
+                        srl.setRefreshing(false);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
+                        srl.setRefreshing(false);
                         Toast.makeText(OpOnlineMateriActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
                     }
                 });

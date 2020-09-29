@@ -1,6 +1,5 @@
 package com.tamanpelajar.aldy.difacademy.ActivityAdmin;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -14,10 +13,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.tamanpelajar.aldy.difacademy.Adapter.OpKelasOnlineAdapter;
 import com.tamanpelajar.aldy.difacademy.CommonMethod;
-import com.tamanpelajar.aldy.difacademy.Model.KelasBlendedModel;
 import com.tamanpelajar.aldy.difacademy.Model.KelasOnlineModel;
 import com.tamanpelajar.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -36,23 +35,26 @@ import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpMainActivity.DELE
 import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpMainActivity.UPDATE_REQUEST_CODE;
 
 public class OpOnlineKelasActivity extends AppCompatActivity {
-    TextView tvNavbar;
-    ConstraintLayout clBack, clAdd;
-    ImageView imgBack, imgAdd;
-    RecyclerView rvOnlineCourse;
+    public static boolean isKelasOnlineChanged;
 
-    ArrayList<KelasOnlineModel> kelasOnlineModels;
-    OpKelasOnlineAdapter adapter;
+    private TextView tvNavbar;
+    private ConstraintLayout clBack, clAdd;
+    private ImageView imgBack, imgAdd;
+    private RecyclerView rvOnlineCourse;
 
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
-    CollectionReference onlineKelasRef = db.collection(CommonMethod.refKelasOnline);
-    DocumentSnapshot lastVisible;
-    boolean loadNewData;
+    private ArrayList<KelasOnlineModel> kelasOnlineModels;
+    private OpKelasOnlineAdapter adapter;
+
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private CollectionReference onlineKelasRef = db.collection(CommonMethod.refKelasOnline);
+    private DocumentSnapshot lastVisible;
+    private boolean loadNewData;
+    private SwipeRefreshLayout srl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_op_online_course);
+        setContentView(R.layout.activity_op_online_kelas);
 
         kelasOnlineModels = new ArrayList<>();
 
@@ -60,6 +62,18 @@ public class OpOnlineKelasActivity extends AppCompatActivity {
         onClick();
         setRecyclerView();
         getFirstData();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (isKelasOnlineChanged){
+            isKelasOnlineChanged = false;
+            srl.setRefreshing(true);
+            kelasOnlineModels.clear();
+            adapter.notifyDataSetChanged();
+            getFirstData();
+        }
     }
 
     @Override
@@ -103,6 +117,17 @@ public class OpOnlineKelasActivity extends AppCompatActivity {
         imgAdd = findViewById(R.id.img_icon3);
         imgAdd.setImageResource(R.drawable.ic_add);
         rvOnlineCourse = findViewById(R.id.rv_op_online_course);
+        srl = findViewById(R.id.srl_op_online_kelas);
+
+        srl.setRefreshing(true);
+        srl.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                kelasOnlineModels.clear();
+                adapter.notifyDataSetChanged();
+                getFirstData();
+            }
+        });
     }
 
     private void onClick() {
@@ -199,11 +224,13 @@ public class OpOnlineKelasActivity extends AppCompatActivity {
                         }
 
                         adapter.notifyDataSetChanged();
+                        srl.setRefreshing(false);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
+                        srl.setRefreshing(false);
                         Toast.makeText(OpOnlineKelasActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
                     }
                 });

@@ -47,12 +47,12 @@ public class OpAddOnlineVideoActivity extends AppCompatActivity {
     public static String onlineVideoDocId = "";
 
     private TextView tvNavbar;
-    private ConstraintLayout clBack;
-    private ImageView imgBack;
+    private ConstraintLayout clBack, clHapus;
+    private ImageView imgBack, imgHapus;
 
     private EditText edtJudul, edtDeskripsi;
     private ProgressBar pbUploadProses;
-    private Button btnPilihFile, btnHapus, btnSimpan, btnCancelUpload;
+    private Button btnPilihFile, btnSimpan, btnCancelUpload;
     private TextView tvUploadProses, tvFileName;
 
     private VideoOnlineModel videoModel, oldVideoModel;
@@ -100,12 +100,14 @@ public class OpAddOnlineVideoActivity extends AppCompatActivity {
         });
         imgBack = findViewById(R.id.img_icon1);
         imgBack.setImageResource(R.drawable.ic_arrow_back);
+        clHapus = findViewById(R.id.cl_icon3);
+        imgHapus = findViewById(R.id.img_icon3);
+        imgHapus.setImageResource(R.drawable.ic_delete);
 
         edtJudul = findViewById(R.id.edt_op_add_online_video_judul);
         edtDeskripsi = findViewById(R.id.edt_op_add_online_video_deskripsi);
         pbUploadProses = findViewById(R.id.pb_op_add_online_video_upload);
         btnPilihFile = findViewById(R.id.btn_op_add_online_video_pilih_file);
-        btnHapus = findViewById(R.id.btn_op_add_online_video_hapus);
         btnSimpan = findViewById(R.id.btn_op_add_online_video_simpan);
         btnCancelUpload = findViewById(R.id.btn_op_add_online_video_cancel);
         tvFileName = findViewById(R.id.tv_op_add_online_video_pilih_file);
@@ -118,7 +120,7 @@ public class OpAddOnlineVideoActivity extends AppCompatActivity {
         if (videoModel != null) {
             oldVideoModel = videoModel;
             thereIsData = true;
-            btnHapus.setVisibility(View.VISIBLE);
+            clHapus.setVisibility(View.VISIBLE);
 
             edtJudul.setText(videoModel.getTitle());
             edtDeskripsi.setText(videoModel.getDescription());
@@ -203,7 +205,7 @@ public class OpAddOnlineVideoActivity extends AppCompatActivity {
                 getVideoFromGallery();
             }
         });
-        btnHapus.setOnClickListener(new View.OnClickListener() {
+        clHapus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showHapusDialog();
@@ -266,7 +268,6 @@ public class OpAddOnlineVideoActivity extends AppCompatActivity {
 
                 edtDeskripsi.setEnabled(true);
                 edtJudul.setEnabled(true);
-                btnHapus.setEnabled(true);
                 btnPilihFile.setEnabled(true);
                 btnSimpan.setEnabled(true);
                 Toast.makeText(OpAddOnlineVideoActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
@@ -297,7 +298,6 @@ public class OpAddOnlineVideoActivity extends AppCompatActivity {
 
                     edtDeskripsi.setEnabled(true);
                     edtJudul.setEnabled(true);
-                    btnHapus.setEnabled(true);
                     btnPilihFile.setEnabled(true);
                     btnSimpan.setEnabled(true);
                 }
@@ -466,7 +466,7 @@ public class OpAddOnlineVideoActivity extends AppCompatActivity {
                 if (videoUri != null) {
                     edtDeskripsi.setEnabled(false);
                     edtJudul.setEnabled(false);
-                    btnHapus.setEnabled(false);
+                    clHapus.setVisibility(View.GONE);
                     btnPilihFile.setEnabled(false);
                     btnSimpan.setEnabled(false);
                     btnCancelUpload.setVisibility(View.VISIBLE);

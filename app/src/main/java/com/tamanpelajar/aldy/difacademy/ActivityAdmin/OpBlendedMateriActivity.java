@@ -35,7 +35,7 @@ import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpMainActivity.DELE
 import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpMainActivity.UPDATE_REQUEST_CODE;
 
 public class OpBlendedMateriActivity extends AppCompatActivity {
-    public static boolean isMateriChanged;
+    public static boolean isMateriBlendedChanged;
 
     private TextView tvNavbar;
     private ConstraintLayout clBack, clAdd;
@@ -68,8 +68,8 @@ public class OpBlendedMateriActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (isMateriChanged){
-            isMateriChanged = false;
+        if (isMateriBlendedChanged){
+            isMateriBlendedChanged = false;
             srl.setRefreshing(true);
             materiBlendedModels.clear();
             adapter.notifyDataSetChanged();

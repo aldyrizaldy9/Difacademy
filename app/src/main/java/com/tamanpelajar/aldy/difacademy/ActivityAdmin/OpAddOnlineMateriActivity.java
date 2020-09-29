@@ -42,37 +42,39 @@ import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpMainActivity.ADD_
 import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpMainActivity.DELETE_REQUEST_CODE;
 import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpMainActivity.PHOTO_PICK_REQUEST_CODE;
 import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpMainActivity.UPDATE_REQUEST_CODE;
+import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpOnlineMateriActivity.isMateriOnlineChanged;
 
 public class OpAddOnlineMateriActivity extends AppCompatActivity {
     public static String onlineMateriDocId = "";
 
-    TextView tvNavbar;
-    ConstraintLayout clBack;
-    ImageView imgBack;
+    private TextView tvNavbar;
+    private ConstraintLayout clBack, clHapus;
+    private ImageView imgBack, imgHapus;
 
-    ImageView imgThumbnail;
-    Button btnAddVideo, btnAddSoal, btnHapus, btnSimpan;
-    EditText edtJudul, edtHarga;
-    ConstraintLayout clAddPhoto;
+    private ImageView imgThumbnail;
+    private Button btnAddVideo, btnAddSoal, btnSimpan, btnAnggota;
+    private EditText edtJudul, edtHarga;
+    private ConstraintLayout clAddPhoto;
 
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
-    CollectionReference onlineMateriRef = db.collection(CommonMethod.refKelasOnline)
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private CollectionReference onlineMateriRef = db.collection(CommonMethod.refKelasOnline)
             .document(kelasOnlineDocId)
             .collection(CommonMethod.refMateriOnline);
-    FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
+    private FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
 
-    boolean thereIsData = false;
-    boolean addVideo = false;
-    boolean addSoal = false;
+    private boolean thereIsData = false;
+    private boolean addVideo = false;
+    private boolean addSoal = false;
+    private boolean dataHasChanged;
 
-    MateriOnlineModel materiModel, oldMateriModel;
-    Uri imageUri;
-    String thumbnailUrl = "";
-    int index;
-    long dateCreated = 0;
-    ProgressDialog pd;
+    private MateriOnlineModel materiModel, oldMateriModel;
+    private Uri imageUri;
+    private String thumbnailUrl = "";
+    private int index;
+    private long dateCreated = 0;
+    private ProgressDialog pd;
 
-    ArrayList<String> listVideoUrl;
+    private ArrayList<String> listVideoUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +93,14 @@ public class OpAddOnlineMateriActivity extends AppCompatActivity {
         checkIntent();
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        if (thereIsData && dataHasChanged){
+            isMateriOnlineChanged = true;
+        }
+    }
+
     private void initView() {
         tvNavbar = findViewById(R.id.tv_navbar);
         tvNavbar.setText("Materi Kelas Online");
@@ -104,15 +114,18 @@ public class OpAddOnlineMateriActivity extends AppCompatActivity {
         });
         imgBack = findViewById(R.id.img_icon1);
         imgBack.setImageResource(R.drawable.ic_arrow_back);
+        clHapus = findViewById(R.id.cl_icon3);
+        imgHapus = findViewById(R.id.img_icon3);
+        imgHapus.setImageResource(R.drawable.ic_delete);
 
         imgThumbnail = findViewById(R.id.img_op_add_online_materi_thumbnail);
         btnAddVideo = findViewById(R.id.btn_op_add_online_materi_add_video);
         btnAddSoal = findViewById(R.id.btn_op_add_online_materi_add_soal);
-        btnHapus = findViewById(R.id.btn_op_add_online_materi_hapus);
         btnSimpan = findViewById(R.id.btn_op_add_online_materi_simpan);
         clAddPhoto = findViewById(R.id.cl_op_add_online_materi_add_photo);
         edtJudul = findViewById(R.id.edt_op_add_online_materi_judul);
         edtHarga = findViewById(R.id.edt_op_add_online_materi_harga);
+        btnAnggota = findViewById(R.id.btn_op_add_online_materi_anggota);
     }
 
     private void checkIntent() {
@@ -123,7 +136,8 @@ public class OpAddOnlineMateriActivity extends AppCompatActivity {
             index = intent.getIntExtra(CommonMethod.intentIndex, -1);
             thereIsData = true;
             thumbnailUrl = materiModel.getThumbnailUrl();
-            btnHapus.setVisibility(View.VISIBLE);
+            clHapus.setVisibility(View.VISIBLE);
+            btnAnggota.setVisibility(View.VISIBLE);
             Glide.with(this)
                     .load(thumbnailUrl)
                     .into(imgThumbnail);
@@ -207,7 +221,7 @@ public class OpAddOnlineMateriActivity extends AppCompatActivity {
                 }
             }
         });
-        btnHapus.setOnClickListener(new View.OnClickListener() {
+        clHapus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //hapus materi
@@ -225,6 +239,14 @@ public class OpAddOnlineMateriActivity extends AppCompatActivity {
                 } else {
                     Toast.makeText(OpAddOnlineMateriActivity.this, getString(R.string.data_not_complete), Toast.LENGTH_SHORT).show();
                 }
+            }
+        });
+        btnAnggota.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(OpAddOnlineMateriActivity.this, OpAnggotaMateriOnlineActivity.class);
+                intent.putExtra(CommonMethod.intentMateriOnlineModel, materiModel);
+                startActivity(intent);
             }
         });
     }
@@ -307,7 +329,8 @@ public class OpAddOnlineMateriActivity extends AppCompatActivity {
                         thereIsData = true;
                         oldMateriModel = materiModel;
                         imageUri = null;
-                        btnHapus.setVisibility(View.VISIBLE);
+                        clHapus.setVisibility(View.VISIBLE);
+                        btnAnggota.setVisibility(View.VISIBLE);
 
                         pd.dismiss();
 
@@ -336,7 +359,7 @@ public class OpAddOnlineMateriActivity extends AppCompatActivity {
     }
 
     private void uploadPhotoToFirebase() {
-        final StorageReference ref = firebaseStorage.getReference().child("OnlineMateri/" + UUID.randomUUID().toString());
+        final StorageReference ref = firebaseStorage.getReference().child(CommonMethod.storageOnlineMateri + UUID.randomUUID().toString());
         ref.putFile(imageUri)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
@@ -399,6 +422,7 @@ public class OpAddOnlineMateriActivity extends AppCompatActivity {
                 }
 
                 dateCreated = CommonMethod.getTimeStamp();
+                dataHasChanged = true;
                 pd.show();
                 if (imageUri != null) {
                     uploadPhotoToFirebase();

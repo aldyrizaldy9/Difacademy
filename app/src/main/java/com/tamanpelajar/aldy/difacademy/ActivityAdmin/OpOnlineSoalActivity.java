@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.tamanpelajar.aldy.difacademy.Adapter.OpSoalOnlineAdapter;
 import com.tamanpelajar.aldy.difacademy.CommonMethod;
@@ -37,20 +38,22 @@ import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpMainActivity.DELE
 import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpMainActivity.UPDATE_REQUEST_CODE;
 
 public class OpOnlineSoalActivity extends AppCompatActivity {
-    TextView tvNavbar;
-    ConstraintLayout clBack, clAdd;
-    ImageView imgBack, imgAdd;
-    RecyclerView rvOnlineSoal;
+    private TextView tvNavbar;
+    private ConstraintLayout clBack, clAdd;
+    private ImageView imgBack, imgAdd;
+    private RecyclerView rvOnlineSoal;
 
-    ArrayList<SoalOnlineModel> soalOnlineModels;
-    OpSoalOnlineAdapter adapter;
+    private ArrayList<SoalOnlineModel> soalOnlineModels;
+    private OpSoalOnlineAdapter adapter;
 
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
-    CollectionReference onlineSoalRef = db.collection(CommonMethod.refKelasOnline)
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private CollectionReference onlineSoalRef = db.collection(CommonMethod.refKelasOnline)
             .document(kelasOnlineDocId)
             .collection(CommonMethod.refMateriOnline)
             .document(onlineMateriDocId)
             .collection(CommonMethod.refSoalOnline);
+
+    private SwipeRefreshLayout srl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,6 +109,17 @@ public class OpOnlineSoalActivity extends AppCompatActivity {
         imgAdd = findViewById(R.id.img_icon3);
         imgAdd.setImageResource(R.drawable.ic_add);
         rvOnlineSoal = findViewById(R.id.rv_op_online_soal);
+        srl = findViewById(R.id.srl_op_online_soal);
+
+        srl.setRefreshing(true);
+        srl.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                soalOnlineModels.clear();
+                adapter.notifyDataSetChanged();
+                getData();
+            }
+        });
     }
 
     private void onClick() {
@@ -140,11 +154,13 @@ public class OpOnlineSoalActivity extends AppCompatActivity {
                             soalOnlineModels.add(newModel);
                         }
                         adapter.notifyDataSetChanged();
+                        srl.setRefreshing(false);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
+                        srl.setRefreshing(false);
                         Toast.makeText(OpOnlineSoalActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
                     }
                 });
