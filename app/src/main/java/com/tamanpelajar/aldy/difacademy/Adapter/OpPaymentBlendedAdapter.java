@@ -11,18 +11,18 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpNotifPaymentActivity;
+import com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpNotifPaymentKelasBlendedActivity;
 import com.tamanpelajar.aldy.difacademy.CommonMethod;
-import com.tamanpelajar.aldy.difacademy.Model.PaymentModel;
+import com.tamanpelajar.aldy.difacademy.Model.PaymentKelasBlendedModel;
 import com.tamanpelajar.aldy.difacademy.R;
 
 import java.util.ArrayList;
 
 public class OpPaymentBlendedAdapter extends RecyclerView.Adapter<OpPaymentBlendedAdapter.ViewHolder> {
     private Context context;
-    private ArrayList<PaymentModel> models;
+    private ArrayList<PaymentKelasBlendedModel> models;
 
-    public OpPaymentBlendedAdapter(Context context, ArrayList<PaymentModel> models) {
+    public OpPaymentBlendedAdapter(Context context, ArrayList<PaymentKelasBlendedModel> models) {
         this.context = context;
         this.models = models;
     }
@@ -37,10 +37,10 @@ public class OpPaymentBlendedAdapter extends RecyclerView.Adapter<OpPaymentBlend
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
-        final PaymentModel paymentModel = models.get(position);
-        holder.tvNama.setText(paymentModel.getNamaUser());
-        holder.tvKelas.setText(paymentModel.getNamaKelas());
-        if (paymentModel.isPaid()) {
+        final PaymentKelasBlendedModel paymentKelasBlendedModel = models.get(position);
+        holder.tvNama.setText(paymentKelasBlendedModel.getNamaUser());
+        holder.tvKelas.setText(paymentKelasBlendedModel.getNamaKelas());
+        if (paymentKelasBlendedModel.isPaid()) {
             holder.tvStatus.setText("SUDAH DIPROSES");
         } else {
             holder.tvStatus.setText("INGIN BELI");
@@ -48,8 +48,8 @@ public class OpPaymentBlendedAdapter extends RecyclerView.Adapter<OpPaymentBlend
         holder.clContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, OpNotifPaymentActivity.class);
-                intent.putExtra(CommonMethod.intentPaymentModel, paymentModel);
+                Intent intent = new Intent(context, OpNotifPaymentKelasBlendedActivity.class);
+                intent.putExtra(CommonMethod.intentPaymentModel, paymentKelasBlendedModel);
                 intent.putExtra(CommonMethod.intentJenisKelas, "blended");
                 context.startActivity(intent);
             }

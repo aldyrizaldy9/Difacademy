@@ -26,8 +26,8 @@ import androidx.core.content.ContextCompat;
 import com.tamanpelajar.aldy.difacademy.ActivityCommon.LoginActivity;
 import com.tamanpelajar.aldy.difacademy.BuildConfig;
 import com.tamanpelajar.aldy.difacademy.CommonMethod;
-import com.tamanpelajar.aldy.difacademy.Model.GraduationModel;
-import com.tamanpelajar.aldy.difacademy.Model.PaymentModel;
+import com.tamanpelajar.aldy.difacademy.Model.GraduationMateriOnlineModel;
+import com.tamanpelajar.aldy.difacademy.Model.PaymentKelasBlendedModel;
 import com.tamanpelajar.aldy.difacademy.Notification.Token;
 import com.tamanpelajar.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -63,8 +63,8 @@ public class OpMainActivity extends AppCompatActivity {
     private TextView tvNavbar;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference paymentBlendedRef = db.collection(CommonMethod.refPaymentKelasBlended);
-    private CollectionReference paymentOnlineRef = db.collection(CommonMethod.refPaymentKelasOnline);
-    private CollectionReference graduationRef = db.collection(CommonMethod.refGraduation);
+    private CollectionReference paymentOnlineRef = db.collection(CommonMethod.refPaymentMateriOnline);
+    private CollectionReference graduationRef = db.collection(CommonMethod.refGraduationOnline);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -304,9 +304,9 @@ public class OpMainActivity extends AppCompatActivity {
                     imgNotif.setImageResource(R.drawable.ic_notifications);
                 } else {
                     for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
-                        PaymentModel paymentModel = queryDocumentSnapshot.toObject(PaymentModel.class);
-                        paymentModel.setDocumentId(queryDocumentSnapshot.getId());
-                        if (!paymentModel.isSeen()) {
+                        PaymentKelasBlendedModel paymentKelasBlendedModel = queryDocumentSnapshot.toObject(PaymentKelasBlendedModel.class);
+                        paymentKelasBlendedModel.setDocumentId(queryDocumentSnapshot.getId());
+                        if (!paymentKelasBlendedModel.isSeen()) {
                             imgNotif.setImageResource(R.drawable.ic_notifications_active);
                             return;
                         }
@@ -329,9 +329,9 @@ public class OpMainActivity extends AppCompatActivity {
                     imgNotif.setImageResource(R.drawable.ic_notifications);
                 } else {
                     for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
-                        PaymentModel paymentModel = queryDocumentSnapshot.toObject(PaymentModel.class);
-                        paymentModel.setDocumentId(queryDocumentSnapshot.getId());
-                        if (!paymentModel.isSeen()) {
+                        PaymentKelasBlendedModel paymentKelasBlendedModel = queryDocumentSnapshot.toObject(PaymentKelasBlendedModel.class);
+                        paymentKelasBlendedModel.setDocumentId(queryDocumentSnapshot.getId());
+                        if (!paymentKelasBlendedModel.isSeen()) {
                             imgNotif.setImageResource(R.drawable.ic_notifications_active);
                             return;
                         }
@@ -353,9 +353,9 @@ public class OpMainActivity extends AppCompatActivity {
                     imgNotif.setImageResource(R.drawable.ic_notifications);
                 } else {
                     for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
-                        GraduationModel graduationModel = queryDocumentSnapshot.toObject(GraduationModel.class);
-                        graduationModel.setDocumentId(queryDocumentSnapshot.getId());
-                        if (!graduationModel.isSeen()) {
+                        GraduationMateriOnlineModel graduationMateriOnlineModel = queryDocumentSnapshot.toObject(GraduationMateriOnlineModel.class);
+                        graduationMateriOnlineModel.setDocumentId(queryDocumentSnapshot.getId());
+                        if (!graduationMateriOnlineModel.isSeen()) {
                             imgNotif.setImageResource(R.drawable.ic_notifications_active);
                             return;
                         }

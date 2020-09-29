@@ -27,8 +27,7 @@ import com.tamanpelajar.aldy.difacademy.Model.VideoOnlineModel;
 import com.tamanpelajar.aldy.difacademy.R;
 
 public class UsWatchVideoOnlineActivity extends AppCompatActivity {
-    private static final String TAG = "WatchVideoActivity";
-
+    private static final String TAG = "UsWatchVideoOnlineActiv";
     PlayerView playerView;
     TextView tvJudul, tvDeskripsi;
     ScrollView scrollView;

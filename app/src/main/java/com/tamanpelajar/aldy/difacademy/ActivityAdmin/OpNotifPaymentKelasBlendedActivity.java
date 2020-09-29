@@ -18,7 +18,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.tamanpelajar.aldy.difacademy.CommonMethod;
 import com.tamanpelajar.aldy.difacademy.Model.OngoingKelasBlendedModel;
-import com.tamanpelajar.aldy.difacademy.Model.PaymentModel;
+import com.tamanpelajar.aldy.difacademy.Model.PaymentKelasBlendedModel;
 import com.tamanpelajar.aldy.difacademy.Model.UserModel;
 import com.tamanpelajar.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -34,12 +34,12 @@ import java.util.Map;
 
 import de.cketti.mailto.EmailIntentBuilder;
 
-public class OpNotifPaymentActivity extends AppCompatActivity {
+public class OpNotifPaymentKelasBlendedActivity extends AppCompatActivity {
     private TextView tvNavBar, tvNama, tvEmail, tvNoWa, tvNamaKelas, tvHargaKelas, tvNamaBank;
     private ConstraintLayout clBack;
     private ImageView imgBack;
     private Button btnBukaKelas;
-    private PaymentModel paymentModel;
+    private PaymentKelasBlendedModel paymentKelasBlendedModel;
     private ProgressDialog pd;
     private UserModel userModel;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -79,27 +79,25 @@ public class OpNotifPaymentActivity extends AppCompatActivity {
 
     private void checkIntent() {
         Intent intent = getIntent();
-        paymentModel = intent.getParcelableExtra(CommonMethod.intentPaymentModel);
-        if (paymentModel != null) {
-            tvNama.setText(paymentModel.getNamaUser());
-            tvEmail.setText(paymentModel.getEmail());
-            tvNoWa.setText(paymentModel.getNoWa());
-            tvNamaKelas.setText(paymentModel.getNamaKelas());
-            String harga = "Rp " + paymentModel.getHargaKelas();
+        paymentKelasBlendedModel = intent.getParcelableExtra(CommonMethod.intentPaymentModel);
+        if (paymentKelasBlendedModel != null) {
+            tvNama.setText(paymentKelasBlendedModel.getNamaUser());
+            tvEmail.setText(paymentKelasBlendedModel.getEmail());
+            tvNoWa.setText(paymentKelasBlendedModel.getNoWa());
+            tvNamaKelas.setText(paymentKelasBlendedModel.getNamaKelas());
+            String harga = "Rp " + paymentKelasBlendedModel.getHargaKelas();
             tvHargaKelas.setText(harga);
-            tvNamaBank.setText(paymentModel.getNamaBank());
-            if (paymentModel.isPaid()) {
+            tvNamaBank.setText(paymentKelasBlendedModel.getNamaBank());
+            if (paymentKelasBlendedModel.isPaid()) {
                 //Kalo sudah bayar tombol buka kelas jadi disabled
                 btnBukaKelas.setEnabled(false);
                 btnBukaKelas.setText("sudah dibuka");
             }
 
-            jenisKelas = intent.getStringExtra(CommonMethod.intentJenisKelas);
-
             if (jenisKelas.equals("blended")) {
                 paymentRef = db.collection(CommonMethod.refPaymentKelasBlended);
             } else {
-                paymentRef = db.collection(CommonMethod.refPaymentKelasOnline);
+                paymentRef = db.collection(CommonMethod.refPaymentMateriOnline);
             }
 
         }
@@ -121,8 +119,8 @@ public class OpNotifPaymentActivity extends AppCompatActivity {
         tvEmail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = EmailIntentBuilder.from(OpNotifPaymentActivity.this)
-                        .to(paymentModel.getEmail())
+                Intent intent = EmailIntentBuilder.from(OpNotifPaymentKelasBlendedActivity.this)
+                        .to(paymentKelasBlendedModel.getEmail())
                         .subject("Pembayaran Kelas Taman Pelajar")
                         .build();
                 startActivity(intent);
@@ -132,7 +130,7 @@ public class OpNotifPaymentActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_VIEW);
-                String urlNew = paymentModel.getNoWa();
+                String urlNew = paymentKelasBlendedModel.getNoWa();
                 if (urlNew.substring(0, 3).equals("+62")) {
                     urlNew = "http://wa.me/" + urlNew;
                 } else {
@@ -145,7 +143,7 @@ public class OpNotifPaymentActivity extends AppCompatActivity {
     }
 
     private void setSeen() {
-        DocumentReference docRef = paymentRef.document(paymentModel.getDocumentId());
+        DocumentReference docRef = paymentRef.document(paymentKelasBlendedModel.getDocumentId());
         docRef.update("seen", true);
     }
 
@@ -158,7 +156,7 @@ public class OpNotifPaymentActivity extends AppCompatActivity {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if (!CommonMethod.isInternetAvailable(OpNotifPaymentActivity.this)) {
+                if (!CommonMethod.isInternetAvailable(OpNotifPaymentKelasBlendedActivity.this)) {
                     return;
                 }
 
@@ -180,7 +178,7 @@ public class OpNotifPaymentActivity extends AppCompatActivity {
     private void getUserDocId() {
         CollectionReference userRef = db.collection(CommonMethod.refUser);
         userRef
-                .whereEqualTo(CommonMethod.fieldUserId, paymentModel.getUserId())
+                .whereEqualTo(CommonMethod.fieldUserId, paymentKelasBlendedModel.getUserId())
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
@@ -196,7 +194,7 @@ public class OpNotifPaymentActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         pd.dismiss();
-                        Toast.makeText(OpNotifPaymentActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(OpNotifPaymentKelasBlendedActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -204,7 +202,7 @@ public class OpNotifPaymentActivity extends AppCompatActivity {
     private void bukaKelas() {
         long dateCreated = CommonMethod.getTimeStamp();
 
-        OngoingKelasBlendedModel ongoingKelasBlendedModel = new OngoingKelasBlendedModel(paymentModel.getKelasId(), dateCreated);
+        OngoingKelasBlendedModel ongoingKelasBlendedModel = new OngoingKelasBlendedModel(paymentKelasBlendedModel.getKelasId(), dateCreated);
 
         if (jenisKelas.equals("blended")){
             ongoingKelasRef = db.collection(CommonMethod.refUser)
@@ -228,15 +226,15 @@ public class OpNotifPaymentActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         pd.dismiss();
-                        Toast.makeText(OpNotifPaymentActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(OpNotifPaymentKelasBlendedActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
                     }
                 });
     }
 
     private void getPaymentDocuments() {
         paymentRef
-                .whereEqualTo(CommonMethod.fieldKelasId, paymentModel.getKelasId())
-                .whereEqualTo(CommonMethod.fieldUserId, paymentModel.getUserId())
+                .whereEqualTo(CommonMethod.fieldKelasId, paymentKelasBlendedModel.getKelasId())
+                .whereEqualTo(CommonMethod.fieldUserId, paymentKelasBlendedModel.getUserId())
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
@@ -250,7 +248,7 @@ public class OpNotifPaymentActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         pd.dismiss();
-                        Toast.makeText(OpNotifPaymentActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(OpNotifPaymentKelasBlendedActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -269,9 +267,9 @@ public class OpNotifPaymentActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(Void aVoid) {
                         pd.dismiss();
-                        Toast.makeText(OpNotifPaymentActivity.this,
+                        Toast.makeText(OpNotifPaymentKelasBlendedActivity.this,
                                 "Materi telah dibuka untuk user "
-                                        + paymentModel.getNamaUser(), Toast.LENGTH_SHORT).show();
+                                        + paymentKelasBlendedModel.getNamaUser(), Toast.LENGTH_SHORT).show();
                         finish();
                     }
                 })
@@ -279,7 +277,7 @@ public class OpNotifPaymentActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         pd.dismiss();
-                        Toast.makeText(OpNotifPaymentActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(OpNotifPaymentKelasBlendedActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
                     }
                 });
     }

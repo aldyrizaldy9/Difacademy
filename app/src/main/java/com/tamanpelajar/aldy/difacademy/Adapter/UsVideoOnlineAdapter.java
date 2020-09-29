@@ -12,7 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.tamanpelajar.aldy.difacademy.ActivityUser.UsPaymentActivity;
+import com.tamanpelajar.aldy.difacademy.ActivityUser.UsPaymentOnlineActivity;
 import com.tamanpelajar.aldy.difacademy.ActivityUser.UsWatchVideoOnlineActivity;
 import com.tamanpelajar.aldy.difacademy.CommonMethod;
 import com.tamanpelajar.aldy.difacademy.Model.VideoOnlineModel;
@@ -52,7 +52,7 @@ public class UsVideoOnlineAdapter extends RecyclerView.Adapter<UsVideoOnlineAdap
                 holder.clContainer.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(context, UsPaymentActivity.class);
+                        Intent intent = new Intent(context, UsPaymentOnlineActivity.class);
                         intent.putExtra(CommonMethod.intentVideoOnlineModel, model);
                         context.startActivity(intent);
                     }
