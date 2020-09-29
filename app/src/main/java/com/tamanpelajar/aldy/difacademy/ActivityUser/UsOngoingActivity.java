@@ -22,7 +22,7 @@ import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
 
-public class UsOngoingCourseActivity extends AppCompatActivity {
+public class UsOngoingActivity extends AppCompatActivity {
 
     public static String USER_DOC_ID = "";
     TextView tvNavbar;
@@ -34,7 +34,7 @@ public class UsOngoingCourseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_us_ongoing_course);
+        setContentView(R.layout.activity_us_ongoing_kelas);
 
         initView();
         setViewPager();
@@ -63,7 +63,7 @@ public class UsOngoingCourseActivity extends AppCompatActivity {
     }
 
     private void setViewPager() {
-        final UsOngoingCourseActivity.ViewPagerAdapter viewPagerAdapter = new UsOngoingCourseActivity.ViewPagerAdapter(getSupportFragmentManager());
+        final UsOngoingActivity.ViewPagerAdapter viewPagerAdapter = new UsOngoingActivity.ViewPagerAdapter(getSupportFragmentManager());
         viewPagerAdapter.addFragment(new UsOngoingBlendedFragment(), "Blended");
         viewPagerAdapter.addFragment(new UsOngoingOnlineFragment(), "Online");
 

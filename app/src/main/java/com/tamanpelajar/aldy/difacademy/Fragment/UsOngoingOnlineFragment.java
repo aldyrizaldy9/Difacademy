@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.tamanpelajar.aldy.difacademy.Adapter.UsMateriOnlineAdapter;
+import com.tamanpelajar.aldy.difacademy.Model.MateriOnlineModel;
 import com.tamanpelajar.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -27,7 +28,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
-import static com.tamanpelajar.aldy.difacademy.ActivityUser.UsOngoingCourseActivity.USER_DOC_ID;
+import static com.tamanpelajar.aldy.difacademy.ActivityUser.UsOngoingActivity.USER_DOC_ID;
 
 
 /**
@@ -40,7 +41,7 @@ public class UsOngoingOnlineFragment extends Fragment {
     boolean loadbaru;
     CollectionReference ongoingMateriRef;
     private RecyclerView rvOngoingOnline;
-//    private ArrayList<MateriModel> materiModels;
+    private ArrayList<MateriOnlineModel> materiOnlineModels;
     private UsMateriOnlineAdapter usMateriOnlineAdapter;
     private ProgressDialog pd;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -74,33 +75,33 @@ public class UsOngoingOnlineFragment extends Fragment {
     }
 
     private void setRecyclerView() {
-//        materiModels = new ArrayList<>();
-//        usMateriOnlineAdapter = new UsMateriOnlineAdapter(rootView.getContext(), materiModels);
-//
-//        final LinearLayoutManager manager = new LinearLayoutManager(rootView.getContext(), RecyclerView.VERTICAL, false);
-//        rvOngoingOnline.setLayoutManager(manager);
-//        rvOngoingOnline.setAdapter(usMateriOnlineAdapter);
-//
-//        rvOngoingOnline.addOnScrollListener(new RecyclerView.OnScrollListener() {
-//            @Override
-//            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-//                super.onScrollStateChanged(recyclerView, newState);
-//                if (manager.findLastVisibleItemPosition() >= materiModels.size() - 10 &&
-//                        lastVisible != null &&
-//                        loadbaru) {
-//                    loadbaru = false;
-//                    Query load = ongoingMateriRef
-//                            .orderBy("dateCreated", Query.Direction.DESCENDING)
-//                            .startAfter(lastVisible)
-//                            .limit(20);
-//
-//                    load.get()
-//                            .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-//                                @Override
-//                                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-//                                    materiModels.clear();
-//                                    if (queryDocumentSnapshots.size() > 0) {
-//                                        for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
+        materiOnlineModels = new ArrayList<>();
+        usMateriOnlineAdapter = new UsMateriOnlineAdapter(rootView.getContext(), materiOnlineModels);
+
+        final LinearLayoutManager manager = new LinearLayoutManager(rootView.getContext(), RecyclerView.VERTICAL, false);
+        rvOngoingOnline.setLayoutManager(manager);
+        rvOngoingOnline.setAdapter(usMateriOnlineAdapter);
+
+        rvOngoingOnline.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (manager.findLastVisibleItemPosition() >= materiOnlineModels.size() - 10 &&
+                        lastVisible != null &&
+                        loadbaru) {
+                    loadbaru = false;
+                    Query load = ongoingMateriRef
+                            .orderBy("dateCreated", Query.Direction.DESCENDING)
+                            .startAfter(lastVisible)
+                            .limit(20);
+
+                    load.get()
+                            .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                @Override
+                                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                    materiOnlineModels.clear();
+                                    if (queryDocumentSnapshots.size() > 0) {
+                                        for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
 //                                            OngoingMateriModel ongoingMateriModel = queryDocumentSnapshot.toObject(OngoingMateriModel.class);
 //
 //                                            DocumentReference onlineMateriRef = db
@@ -118,7 +119,7 @@ public class UsOngoingOnlineFragment extends Fragment {
 //                                                            if (materiModel != null) {
 //                                                                materiModel.setDocumentId(documentSnapshot.getId());
 //                                                            }
-//                                                            materiModels.add(materiModel);
+//                                                            materiOnlineModels.add(materiModel);
 //                                                            usMateriOnlineAdapter.notifyDataSetChanged();
 //                                                            loadbaru = true;
 //                                                        }
@@ -130,100 +131,100 @@ public class UsOngoingOnlineFragment extends Fragment {
 //                                                            Log.d(TAG, e.toString());
 //                                                        }
 //                                                    });
-//                                        }
-//
-//                                        if (queryDocumentSnapshots.size() < 20) {
-//                                            lastVisible = null;
-//                                        } else {
-//                                            lastVisible = queryDocumentSnapshots.getDocuments()
-//                                                    .get(queryDocumentSnapshots.size() - 1);
-//                                        }
-//                                    }
-//                                }
-//                            })
-//                            .addOnFailureListener(new OnFailureListener() {
-//                                @Override
-//                                public void onFailure(@NonNull Exception e) {
-//                                    loadbaru = true;
-//                                    Log.d(TAG, e.toString());
-//                                }
-//                            });
-//
-//                }
-//            }
-//
-//            @Override
-//            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-//                super.onScrolled(recyclerView, dx, dy);
-//            }
-//        });
+                                        }
+
+                                        if (queryDocumentSnapshots.size() < 20) {
+                                            lastVisible = null;
+                                        } else {
+                                            lastVisible = queryDocumentSnapshots.getDocuments()
+                                                    .get(queryDocumentSnapshots.size() - 1);
+                                        }
+                                    }
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    loadbaru = true;
+                                    Log.d(TAG, e.toString());
+                                }
+                            });
+
+                }
+            }
+
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+            }
+        });
     }
 
     private void loadOngoingMateri() {
-//        pd.setMessage("Memuat...");
-//        pd.setCancelable(false);
-//        pd.show();
-//
-//        Query first = ongoingMateriRef
-//                .orderBy("dateCreated", Query.Direction.DESCENDING)
-//                .limit(20);
-//
-//        first.get()
-//                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-//                    @Override
-//                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-//                        materiModels.clear();
-//                        if (queryDocumentSnapshots.size() > 0) {
-//                            for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
+        pd.setMessage("Memuat...");
+        pd.setCancelable(false);
+        pd.show();
+
+        Query first = ongoingMateriRef
+                .orderBy("dateCreated", Query.Direction.DESCENDING)
+                .limit(20);
+
+        first.get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        materiOnlineModels.clear();
+                        if (queryDocumentSnapshots.size() > 0) {
+                            for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
 //                                OngoingMateriModel ongoingMateriModel = queryDocumentSnapshot.toObject(OngoingMateriModel.class);
 //                                loadOngoingMateriDetail(ongoingMateriModel.getCourseId(), ongoingMateriModel.getMateriId());
-//                            }
-//
-//                            if (queryDocumentSnapshots.size() < 20) {
-//                                lastVisible = null;
-//                            } else {
-//                                lastVisible = queryDocumentSnapshots.getDocuments()
-//                                        .get(queryDocumentSnapshots.size() - 1);
-//                            }
-//                        }
-//                        pd.dismiss();
-//                    }
-//                })
-//                .addOnFailureListener(new OnFailureListener() {
-//                    @Override
-//                    public void onFailure(@NonNull Exception e) {
-//                        pd.dismiss();
-//                        Log.d(TAG, e.toString());
-//                    }
-//                });
+                            }
+
+                            if (queryDocumentSnapshots.size() < 20) {
+                                lastVisible = null;
+                            } else {
+                                lastVisible = queryDocumentSnapshots.getDocuments()
+                                        .get(queryDocumentSnapshots.size() - 1);
+                            }
+                        }
+                        pd.dismiss();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        pd.dismiss();
+                        Log.d(TAG, e.toString());
+                    }
+                });
     }
 
     private void loadOngoingMateriDetail(final String courseId, String materiId) {
-//        DocumentReference onlineMateriref = db
-//                .collection("OnlineCourse")
-//                .document(courseId)
-//                .collection("OnlineMateri")
-//                .document(materiId);
-//        onlineMateriref
-//                .get()
-//                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-//                    @Override
-//                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+        DocumentReference onlineMateriref = db
+                .collection("OnlineCourse")
+                .document(courseId)
+                .collection("OnlineMateri")
+                .document(materiId);
+        onlineMateriref
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
 //                        MateriModel materiModel = documentSnapshot.toObject(MateriModel.class);
 //                        if (materiModel != null) {
 //                            materiModel.setDocumentId(documentSnapshot.getId());
 //                        }
-//                        materiModels.add(materiModel);
+//                        materiOnlineModels.add(materiModel);
 //                        usMateriOnlineAdapter.notifyDataSetChanged();
-//                    }
-//                })
-//                .addOnFailureListener(new OnFailureListener() {
-//                    @Override
-//                    public void onFailure(@NonNull Exception e) {
-//                        pd.dismiss();
-//                        Log.d(TAG, e.toString());
-//                    }
-//                });
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        pd.dismiss();
+                        Log.d(TAG, e.toString());
+                    }
+                });
     }
 
 }

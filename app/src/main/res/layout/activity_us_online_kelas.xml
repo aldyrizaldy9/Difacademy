@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
     android:background="@color/backgroundCoklat"
-    tools:context=".ActivityUser.UsBlendedCourseActivity">
+    tools:context=".ActivityUser.UsKelasOnlineActivity">
 
     <include
         android:id="@+id/include"
@@ -15,7 +15,7 @@
         android:layout_height="@dimen/nav_bar_height" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_blended_course_course"
+        android:id="@+id/rv_online_course_course"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="16dp"
@@ -27,7 +27,7 @@
         tools:listitem="@layout/card_video_with_thumbnail" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cl_blended_course_search"
+        android:id="@+id/cl_online_course_search"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@android:color/white"
@@ -39,13 +39,13 @@
         app:layout_constraintTop_toBottomOf="@+id/include">
 
         <Spinner
-            android:id="@+id/spn_blended_course_search"
+            android:id="@+id/spn_online_course_search"
             style="@style/Difacademy.Body1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@id/cl_blended_course_search"
-            app:layout_constraintStart_toStartOf="@id/cl_blended_course_search"
+            app:layout_constraintEnd_toEndOf="@id/cl_online_course_search"
+            app:layout_constraintStart_toStartOf="@id/cl_online_course_search"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

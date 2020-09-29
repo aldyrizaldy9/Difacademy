@@ -13,12 +13,14 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.tamanpelajar.aldy.difacademy.ActivityUser.UsPaymentActivity;
-import com.tamanpelajar.aldy.difacademy.ActivityUser.UsWatchVideoActivity;
+import com.tamanpelajar.aldy.difacademy.ActivityUser.UsWatchVideoOnlineActivity;
 import com.tamanpelajar.aldy.difacademy.CommonMethod;
 import com.tamanpelajar.aldy.difacademy.Model.VideoOnlineModel;
 import com.tamanpelajar.aldy.difacademy.R;
 
 import java.util.ArrayList;
+
+import static com.tamanpelajar.aldy.difacademy.ActivityUser.UsListVideoOnlineActivity.IS_PAID;
 
 public class UsVideoOnlineAdapter extends RecyclerView.Adapter<UsVideoOnlineAdapter.ViewHolder> {
     private Context context;
@@ -39,45 +41,44 @@ public class UsVideoOnlineAdapter extends RecyclerView.Adapter<UsVideoOnlineAdap
 
     @Override
     public void onBindViewHolder(@NonNull UsVideoOnlineAdapter.ViewHolder holder, int position) {
-//        final VideoOnlineModel model = models.get(position);
-//        holder.tvJudul.setText(model.getTitle());
-//        int episode = position + 1;
-//        holder.tvEpisode.setText("#" + episode);
-//        holder.imgStatus.setImageResource(R.drawable.ic_play_arrow);
-//        if (position != 0) {
-//            if (!IS_PAID) {
-//                holder.imgStatus.setImageResource(R.drawable.ic_lock);
-//                holder.clContainer.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        Intent intent = new Intent(context, UsPaymentActivity.class);
-//                        intent.putExtra(CommonMethod.intentVideoOnlineModel, model);
-//                        intent.putExtra(CommonMethod.intentJenisKelas, "online");
-//                        context.startActivity(intent);
-//                    }
-//                });
-//            } else {
-//                holder.imgStatus.setImageResource(R.drawable.ic_play_arrow);
-//                holder.clContainer.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        Intent intent = new Intent(context, UsWatchVideoActivity.class);
-//                        intent.putExtra(CommonMethod.intentVideoOnlineModel, model);
-//                        context.startActivity(intent);
-//                    }
-//                });
-//            }
-//        } else {
-//            holder.imgStatus.setImageResource(R.drawable.ic_play_arrow);
-//            holder.clContainer.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    Intent intent = new Intent(context, UsWatchVideoActivity.class);
-//                    intent.putExtra(CommonMethod.intentVideoOnlineModel, model);
-//                    context.startActivity(intent);
-//                }
-//            });
-//        }
+        final VideoOnlineModel model = models.get(position);
+        holder.tvJudul.setText(model.getTitle());
+        int episode = position + 1;
+        holder.tvEpisode.setText("#" + episode);
+        holder.imgStatus.setImageResource(R.drawable.ic_play_arrow);
+        if (position != 0) {
+            if (!IS_PAID) {
+                holder.imgStatus.setImageResource(R.drawable.ic_lock);
+                holder.clContainer.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(context, UsPaymentActivity.class);
+                        intent.putExtra(CommonMethod.intentVideoOnlineModel, model);
+                        context.startActivity(intent);
+                    }
+                });
+            } else {
+                holder.imgStatus.setImageResource(R.drawable.ic_play_arrow);
+                holder.clContainer.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(context, UsWatchVideoOnlineActivity.class);
+                        intent.putExtra(CommonMethod.intentVideoOnlineModel, model);
+                        context.startActivity(intent);
+                    }
+                });
+            }
+        } else {
+            holder.imgStatus.setImageResource(R.drawable.ic_play_arrow);
+            holder.clContainer.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(context, UsWatchVideoOnlineActivity.class);
+                    intent.putExtra(CommonMethod.intentVideoOnlineModel, model);
+                    context.startActivity(intent);
+                }
+            });
+        }
 
     }
 

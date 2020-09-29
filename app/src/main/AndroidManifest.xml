@@ -33,19 +33,22 @@
         <activity android:name=".ActivityAdmin.OpOnlineKelasActivity" />
         <activity android:name=".ActivityAdmin.OpBannerActivity" />
         <activity
-            android:name=".ActivityUser.UsOnlineMateriActivity"
+            android:name=".ActivityUser.UsMateriOnlineActivity"
             android:screenOrientation="sensorPortrait" />
         <activity
-            android:name=".ActivityUser.UsBlendedMateriActivity"
+            android:name=".ActivityUser.UsMateriBlendedActivity"
             android:screenOrientation="sensorPortrait" />
         <activity
-            android:name=".ActivityUser.UsOnlineCourseActivity"
+            android:name=".ActivityUser.UsKelasOnlineActivity"
             android:screenOrientation="sensorPortrait" />
         <activity
-            android:name=".ActivityUser.UsBlendedCourseActivity"
+            android:name=".ActivityUser.UsKelasBlendedActivity"
             android:screenOrientation="sensorPortrait" />
         <activity
-            android:name=".ActivityUser.UsWatchVideoActivity"
+            android:name=".ActivityUser.UsWatchVideoBlendedActivity"
+            android:configChanges="orientation|screenSize|layoutDirection" />
+        <activity
+            android:name=".ActivityUser.UsWatchVideoOnlineActivity"
             android:configChanges="orientation|screenSize|layoutDirection" />
         <activity
             android:name=".ActivityCommon.ChangePasswordActivity"
@@ -72,7 +75,10 @@
             android:name=".ActivityAdmin.OpMainActivity"
             android:screenOrientation="sensorPortrait" />
         <activity
-            android:name=".ActivityUser.UsQuizActivity"
+            android:name=".ActivityUser.UsQuizBlendedActivity"
+            android:screenOrientation="sensorPortrait" />
+        <activity
+            android:name=".ActivityUser.UsQuizOnlineActivity"
             android:screenOrientation="sensorPortrait" />
         <activity
             android:name=".ActivityUser.UsPaymentActivity"
@@ -84,7 +90,10 @@
             android:name=".ActivityUser.UsListVideoBlendedActivity"
             android:screenOrientation="sensorPortrait" />
         <activity
-            android:name=".ActivityUser.UsDetailCourseActivity"
+            android:name=".ActivityUser.UsDetailKelasBlendedActivity"
+            android:screenOrientation="sensorPortrait" />
+        <activity
+            android:name=".ActivityUser.UsDetailKelasOnlineActivity"
             android:screenOrientation="sensorPortrait" />
         <activity
             android:name=".ActivityUser.UsDetailNewsActivity"
@@ -99,7 +108,7 @@
             android:name=".ActivityUser.UsSettingsActivity"
             android:screenOrientation="sensorPortrait" />
         <activity
-            android:name=".ActivityUser.UsOngoingCourseActivity"
+            android:name=".ActivityUser.UsOngoingActivity"
             android:screenOrientation="sensorPortrait" />
         <activity
             android:name=".ActivityCommon.ForgetPasswordActivity"

@@ -32,122 +32,122 @@ import static com.tamanpelajar.aldy.difacademy.ActivityCommon.LoginActivity.USER
 
 public class UsEditProfileActivity extends AppCompatActivity {
 
-//    private static final String TAG = "EditProfileActivity";
-//    private ConstraintLayout clBack, clSave, clNavbar;
-//    private EditText edtNama, edtNoWa;
-//    private ProgressDialog progressDialog;
-//    private CollectionReference userRef;
-//    private DocumentReference userDocRef;
-//    private UserModel userModel;
-//    private SharedPreferences sharedPreferences;
+    private static final String TAG = "EditProfileActivity";
+    private ConstraintLayout clBack, clSave, clNavbar;
+    private EditText edtNama, edtNoWa;
+    private ProgressDialog progressDialog;
+    private CollectionReference userRef;
+    private DocumentReference userDocRef;
+    private UserModel userModel;
+    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_us_edit_profile);
-//        initView();
-//        onClick();
-//        getUserData();
+        initView();
+        onClick();
+        getUserData();
     }
-//
-//    private void initView() {
-//        clNavbar = findViewById(R.id.cl_navbar);
-//        clNavbar.setBackgroundColor(getResources().getColor(R.color.navKuning));
-//        clBack = findViewById(R.id.cl_icon1);
-//        clBack.setVisibility(View.VISIBLE);
-//        clSave = findViewById(R.id.cl_icon3);
-//        clSave.setVisibility(View.VISIBLE);
-//        ImageView imgBack = findViewById(R.id.img_icon1);
-//        imgBack.setImageResource(R.drawable.ic_arrow_back);
-//        ImageView imgSave = findViewById(R.id.img_icon3);
-//        imgSave.setImageResource(R.drawable.ic_check);
-//        TextView tvNavBar = findViewById(R.id.tv_navbar);
-//        tvNavBar.setText("Sunting Profil");
-//        edtNama = findViewById(R.id.edt_edit_profile_nama);
-//        edtNoWa = findViewById(R.id.edt_edit_profile_nowa);
-//        progressDialog = new ProgressDialog(this);
-//        sharedPreferences = getSharedPreferences(SHARE_PREFS, MODE_PRIVATE);
-//    }
-//
-//    private void onClick() {
-//        clBack.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                onBackPressed();
-//            }
-//        });
-//        clSave.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                konfirmasiSimpan();
-//            }
-//        });
-//    }
-//
-//    private void getUserData() {
-//        progressDialog.setMessage("Memuat...");
-//        progressDialog.setCancelable(false);
-//        progressDialog.show();
-//        String userId = sharedPreferences.getString(USERID_PREFS, "");
-//        FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
-//        userRef = firebaseFirestore.collection("User");
-//        userRef
-//                .whereEqualTo("userId", userId)
-//                .get()
-//                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-//                    @Override
-//                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-//                        for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
-//                            userModel = queryDocumentSnapshot.toObject(UserModel.class);
-//                            userModel.setDocumentId(queryDocumentSnapshot.getId());
-//                        }
-//                        edtNama.setText(userModel.getNama());
-//                        edtNoWa.setText(userModel.getNoTelp());
-//                        userDocRef = userRef.document(userModel.getDocumentId());
-//                        progressDialog.dismiss();
-//                    }
-//                })
-//                .addOnFailureListener(new OnFailureListener() {
-//                    @Override
-//                    public void onFailure(@NonNull Exception e) {
-//                        progressDialog.dismiss();
-//                    }
-//                });
-//    }
-//
-//    private void updateProfile() {
-//        progressDialog.setMessage("Menyimpan");
-//        progressDialog.setCancelable(false);
-//        progressDialog.show();
-//        UserModel userModel = new UserModel(this.userModel.getUserId(), edtNama.getText().toString(), this.userModel.getEmail(), edtNoWa.getText().toString());
-//        userDocRef
-//                .set(userModel)
-//                .addOnSuccessListener(new OnSuccessListener<Void>() {
-//                    @Override
-//                    public void onSuccess(Void aVoid) {
-//                        progressDialog.dismiss();
-//                        Toast.makeText(UsEditProfileActivity.this, "Data telah disimpan", Toast.LENGTH_SHORT).show();
-//                        onBackPressed();
-//                    }
-//                })
-//                .addOnFailureListener(new OnFailureListener() {
-//                    @Override
-//                    public void onFailure(@NonNull Exception e) {
-//                        progressDialog.dismiss();
-//                    }
-//                });
-//
-//    }
-//
-//
-//    private void konfirmasiSimpan() {
-//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//        builder.setMessage("Apakah anda yakin ingin menyimpan?");
-//        builder.setTitle("Simpan");
-//        builder.setCancelable(false);
-//        builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
+
+    private void initView() {
+        clNavbar = findViewById(R.id.cl_navbar);
+        clNavbar.setBackgroundColor(getResources().getColor(R.color.navKuning));
+        clBack = findViewById(R.id.cl_icon1);
+        clBack.setVisibility(View.VISIBLE);
+        clSave = findViewById(R.id.cl_icon3);
+        clSave.setVisibility(View.VISIBLE);
+        ImageView imgBack = findViewById(R.id.img_icon1);
+        imgBack.setImageResource(R.drawable.ic_arrow_back);
+        ImageView imgSave = findViewById(R.id.img_icon3);
+        imgSave.setImageResource(R.drawable.ic_check);
+        TextView tvNavBar = findViewById(R.id.tv_navbar);
+        tvNavBar.setText("Sunting Profil");
+        edtNama = findViewById(R.id.edt_edit_profile_nama);
+        edtNoWa = findViewById(R.id.edt_edit_profile_nowa);
+        progressDialog = new ProgressDialog(this);
+        sharedPreferences = getSharedPreferences(SHARE_PREFS, MODE_PRIVATE);
+    }
+
+    private void onClick() {
+        clBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+        clSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                konfirmasiSimpan();
+            }
+        });
+    }
+
+    private void getUserData() {
+        progressDialog.setMessage("Memuat...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+        String userId = sharedPreferences.getString(USERID_PREFS, "");
+        FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+        userRef = firebaseFirestore.collection("User");
+        userRef
+                .whereEqualTo("userId", userId)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
+                            userModel = queryDocumentSnapshot.toObject(UserModel.class);
+                            userModel.setDocumentId(queryDocumentSnapshot.getId());
+                        }
+                        edtNama.setText(userModel.getNama());
+                        edtNoWa.setText(userModel.getNoTelp());
+                        userDocRef = userRef.document(userModel.getDocumentId());
+                        progressDialog.dismiss();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        progressDialog.dismiss();
+                    }
+                });
+    }
+
+    private void updateProfile() {
+        progressDialog.setMessage("Menyimpan");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+        UserModel userModel = new UserModel(this.userModel.getUserId(), edtNama.getText().toString(), this.userModel.getEmail(), edtNoWa.getText().toString());
+        userDocRef
+                .set(userModel)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        progressDialog.dismiss();
+                        Toast.makeText(UsEditProfileActivity.this, "Data telah disimpan", Toast.LENGTH_SHORT).show();
+                        onBackPressed();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        progressDialog.dismiss();
+                    }
+                });
+
+    }
+
+
+    private void konfirmasiSimpan() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Apakah anda yakin ingin menyimpan?");
+        builder.setTitle("Simpan");
+        builder.setCancelable(false);
+        builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
 //                if (!isNetworkConnected()) {
 //                    Toast.makeText(UsEditProfileActivity.this, "Tidak ada koneksi internet!", Toast.LENGTH_SHORT).show();
 //                } else {
@@ -159,16 +159,16 @@ public class UsEditProfileActivity extends AppCompatActivity {
 //                        updateProfile();
 //                    }
 //                }
-//            }
-//        });
-//
-//        builder.setNegativeButton("Tidak", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                dialog.cancel();
-//            }
-//        });
-//        AlertDialog alertDialog = builder.create();
-//        alertDialog.show();
-//    }
+            }
+        });
+
+        builder.setNegativeButton("Tidak", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
 }

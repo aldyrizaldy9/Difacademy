@@ -12,7 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.tamanpelajar.aldy.difacademy.ActivityUser.UsWatchVideoActivity;
+import com.tamanpelajar.aldy.difacademy.ActivityUser.UsWatchVideoBlendedActivity;
 import com.tamanpelajar.aldy.difacademy.CommonMethod;
 import com.tamanpelajar.aldy.difacademy.Model.VideoBlendedModel;
 import com.tamanpelajar.aldy.difacademy.R;
@@ -46,7 +46,7 @@ public class UsVideoBlendedAdapter extends RecyclerView.Adapter<UsVideoBlendedAd
         holder.clContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, UsWatchVideoActivity.class);
+                Intent intent = new Intent(context, UsWatchVideoBlendedActivity.class);
                 intent.putExtra(CommonMethod.intentVideoBlendedModel, model);
                 context.startActivity(intent);
             }
