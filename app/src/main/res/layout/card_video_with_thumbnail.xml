@@ -41,6 +41,20 @@
         app:layout_constraintVertical_bias="0.0" />
 
     <TextView
+        android:id="@+id/tv_card_video_thumbnail_harga"
+        style="@style/Difacademy.Subtitle1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:text="Harga"
+        android:textColor="@android:color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/tv_card_video_thumbnail_judul"
+        app:layout_constraintStart_toStartOf="@id/tv_card_video_thumbnail_judul"
+        app:layout_constraintTop_toBottomOf="@id/tv_card_video_thumbnail_judul"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
         android:id="@+id/tv_card_video_thumbnail_tag"
         style="@style/Difacademy.Subtitle1"
         android:layout_width="0dp"
@@ -52,7 +66,7 @@
         app:layout_constraintEnd_toEndOf="@+id/tv_card_video_thumbnail_judul"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/tv_card_video_thumbnail_judul"
-        app:layout_constraintTop_toBottomOf="@+id/tv_card_video_thumbnail_judul" />
+        app:layout_constraintTop_toBottomOf="@id/tv_card_video_thumbnail_harga" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

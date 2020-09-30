@@ -22,18 +22,18 @@ import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
-import com.tamanpelajar.aldy.difacademy.Model.VideoOnlineModel;
+import com.tamanpelajar.aldy.difacademy.CommonMethod;
+import com.tamanpelajar.aldy.difacademy.Model.VideoBlendedModel;
 import com.tamanpelajar.aldy.difacademy.R;
 
 public class UsWatchVideoBlendedActivity extends AppCompatActivity {
-    private static final String TAG = "WatchVideoActivity";
-
+    private static final String TAG = "UsWatchVideoBlendedActi";
     PlayerView playerView;
     TextView tvJudul, tvDeskripsi;
     ScrollView scrollView;
 
     SimpleExoPlayer simpleExoPlayer;
-    VideoOnlineModel videoModel;
+    VideoBlendedModel videoBlendedModel;
 
     String videoUrl = "";
 
@@ -55,12 +55,12 @@ public class UsWatchVideoBlendedActivity extends AppCompatActivity {
 
     private void checkIntent() {
         Intent intent = getIntent();
-//        videoModel = intent.getParcelableExtra("videoModel");
-//        if (videoModel != null) {
-//            videoUrl = videoModel.getVideoUrl();
-//            tvJudul.setText(videoModel.getTitle());
-//            tvDeskripsi.setText(videoModel.getDescription());
-//        }
+        videoBlendedModel = intent.getParcelableExtra(CommonMethod.intentVideoBlendedModel);
+        if (videoBlendedModel != null) {
+            videoUrl = videoBlendedModel.getVideoUrl();
+            tvJudul.setText(videoBlendedModel.getTitle());
+            tvDeskripsi.setText(videoBlendedModel.getDescription());
+        }
     }
 
     private void videoPlayer() {

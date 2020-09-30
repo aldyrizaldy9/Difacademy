@@ -54,7 +54,7 @@
             android:name=".ActivityCommon.ChangePasswordActivity"
             android:screenOrientation="sensorPortrait" />
         <activity
-            android:name=".ActivityAdmin.OpNotifGradKelasBlendedActivity"
+            android:name=".ActivityAdmin.OpNotifGradMateriBlendedActivity"
             android:screenOrientation="sensorPortrait" />
         <activity
             android:name=".ActivityAdmin.OpNotifGradMateriOnlineActivity"
@@ -100,6 +100,9 @@
             android:screenOrientation="sensorPortrait" />
         <activity
             android:name=".ActivityUser.UsDetailKelasBlendedActivity"
+            android:screenOrientation="sensorPortrait" />
+        <activity
+            android:name=".ActivityUser.UsDetailMateriBlendedActivity"
             android:screenOrientation="sensorPortrait" />
         <activity
             android:name=".ActivityUser.UsDetailKelasOnlineActivity"

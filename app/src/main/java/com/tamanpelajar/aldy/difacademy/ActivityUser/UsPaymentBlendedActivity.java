@@ -10,13 +10,25 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.tamanpelajar.aldy.difacademy.CommonMethod;
+import com.tamanpelajar.aldy.difacademy.Model.KelasBlendedModel;
+import com.tamanpelajar.aldy.difacademy.Model.PaymentKelasBlendedModel;
 import com.tamanpelajar.aldy.difacademy.Model.UserModel;
 import com.tamanpelajar.aldy.difacademy.Notification.APIService;
 import com.tamanpelajar.aldy.difacademy.Notification.Data;
@@ -24,14 +36,6 @@ import com.tamanpelajar.aldy.difacademy.Notification.MyResponse;
 import com.tamanpelajar.aldy.difacademy.Notification.Sender;
 import com.tamanpelajar.aldy.difacademy.Notification.Token;
 import com.tamanpelajar.aldy.difacademy.R;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -53,11 +57,10 @@ public class UsPaymentBlendedActivity extends AppCompatActivity {
     private Button btnBayarBni, btnBayarBri;
     private boolean isBniActive = false, isBriActive = false;
 
-    private String userId, namaUser, email, noWa, namaMateri, hargaMateri, namaBank;
+    private String userId, namaUser, email, noWa, namaKelas, hargakelas, namaBank;
     private ProgressDialog progressDialog;
     private FirebaseFirestore firebaseFirestore;
-    //    private VideoModel videoModel;
-    private String jenisKelas;
+    private KelasBlendedModel kelasBlendedModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,8 +95,7 @@ public class UsPaymentBlendedActivity extends AppCompatActivity {
         btnBayarBni = findViewById(R.id.btn_payment_bayar_bni);
         btnBayarBri = findViewById(R.id.btn_payment_bayar_bri);
         Intent intent = getIntent();
-//        videoModel = intent.getParcelableExtra("videoModel");
-        jenisKelas = intent.getStringExtra("jenisKelas");
+        kelasBlendedModel = intent.getParcelableExtra(CommonMethod.intentKelasBlendedModel);
         SharedPreferences sharedPreferences = getSharedPreferences(SHARE_PREFS, MODE_PRIVATE);
         userId = sharedPreferences.getString(USERID_PREFS, "");
         progressDialog = new ProgressDialog(this);
@@ -177,14 +179,11 @@ public class UsPaymentBlendedActivity extends AppCompatActivity {
         builder.setTitle("Beli");
         builder.setCancelable(false);
         builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
-
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if (!CommonMethod.isInternetAvailable(UsPaymentBlendedActivity.this)) {
-                    return;
+                if (CommonMethod.isInternetAvailable(UsPaymentBlendedActivity.this)) {
+                    getUserData();
                 }
-
-                getUserData();
             }
         });
 
@@ -201,32 +200,33 @@ public class UsPaymentBlendedActivity extends AppCompatActivity {
 
     private void sendPaymentDetailsToAdmin() {
 
-//        long dateCreated = Timestamp.now().getSeconds();
-//        //String userId, String namaUser, String email, String noWa, String kelasId, String namaKelas, String hargaKelas, String namaBank, long dateCreated, boolean isSeen, boolean isPaid
-//        PaymentModel paymentModel = new PaymentModel(userId, namaUser, email, noWa, jenisKelas, videoModel.getKelasId(), videoModel.getMateriId(), namaMateri, hargaMateri, namaBank, dateCreated, false, false);
-//
-//        CollectionReference paymentRef = firebaseFirestore.collection("Payment");
-//        paymentRef
-//                .add(paymentModel)
-//                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-//                    @Override
-//                    public void onSuccess(DocumentReference documentReference) {
-//                        progressDialog.dismiss();
-//                        sendNotificationPayment();
-//                        Toast.makeText(UsPaymentActivity.this, "Detail pembelian telah dikirim ke admin", Toast.LENGTH_SHORT).show();
-//                    }
-//                })
-//                .addOnFailureListener(new OnFailureListener() {
-//                    @Override
-//                    public void onFailure(@NonNull Exception e) {
-//                        progressDialog.dismiss();
-//                        Log.d(TAG, e.toString());
-//                    }
-//                });
+        long dateCreated = Timestamp.now().getSeconds();
+        PaymentKelasBlendedModel paymentKelasBlendedModel = new PaymentKelasBlendedModel(userId, namaUser, email, noWa, kelasBlendedModel.getDocumentId(), namaKelas, hargakelas, namaBank, dateCreated, false, false);
+
+        CollectionReference paymentRef = firebaseFirestore.collection(CommonMethod.refPaymentKelasBlended);
+        paymentRef
+                .add(paymentKelasBlendedModel)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        progressDialog.dismiss();
+                        sendNotificationPayment();
+                        Toast.makeText(UsPaymentBlendedActivity.this, "Detail pembelian telah dikirim ke admin", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        progressDialog.dismiss();
+                        Log.d(TAG, e.toString());
+                    }
+                });
     }
 
     private void sendNotificationPayment() {
-        DocumentReference docRef = firebaseFirestore.collection("Tokens").document(ADMIN_USER_ID);
+        DocumentReference docRef = firebaseFirestore
+                .collection(CommonMethod.refTokens)
+                .document(ADMIN_USER_ID);
         docRef.get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
@@ -270,7 +270,7 @@ public class UsPaymentBlendedActivity extends AppCompatActivity {
         progressDialog.show();
 
         firebaseFirestore = FirebaseFirestore.getInstance();
-        CollectionReference userRef = firebaseFirestore.collection("User");
+        CollectionReference userRef = firebaseFirestore.collection(CommonMethod.refUser);
         userRef
                 .whereEqualTo("userId", userId)
                 .get()
@@ -285,7 +285,7 @@ public class UsPaymentBlendedActivity extends AppCompatActivity {
                         namaUser = userModel.getNama();
                         email = userModel.getEmail();
                         noWa = userModel.getNoTelp();
-//                        getMateriData();
+                        getMateriData();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -298,34 +298,30 @@ public class UsPaymentBlendedActivity extends AppCompatActivity {
 
     }
 
-//    private void getMateriData() {
-//        DocumentReference courseRef;
-//        if (jenisKelas.equalsIgnoreCase("online")) {
-//            courseRef = firebaseFirestore.collection("OnlineCourse").document(videoModel.getKelasId())
-//                    .collection("OnlineMateri").document(videoModel.getMateriId());
-//        } else {
-//            courseRef = firebaseFirestore.collection("BlendedCourse").document(videoModel.getKelasId())
-//                    .collection("BlendedMateri").document(videoModel.getMateriId());
-//        }
-//        courseRef
-//                .get()
-//                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-//                    @Override
-//                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-//                        MateriModel materiModel = documentSnapshot.toObject(MateriModel.class);
-//                        if (materiModel != null) {
-//                            namaMateri = materiModel.getTitle();
-//                            hargaMateri = materiModel.getHarga();
-//                        }
-//                        sendPaymentDetailsToAdmin();
-//                    }
-//                })
-//                .addOnFailureListener(new OnFailureListener() {
-//                    @Override
-//                    public void onFailure(@NonNull Exception e) {
-//                        progressDialog.dismiss();
-//                        Log.d(TAG, e.toString());
-//                    }
-//                });
-//    }
+    private void getMateriData() {
+        DocumentReference courseRef = firebaseFirestore
+                .collection(CommonMethod.refKelasBlended)
+                .document(kelasBlendedModel.getDocumentId());
+
+        courseRef
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        KelasBlendedModel kelasBlendedModel = documentSnapshot.toObject(KelasBlendedModel.class);
+                        if (kelasBlendedModel != null) {
+                            namaKelas = kelasBlendedModel.getTitle();
+                            hargakelas = kelasBlendedModel.getHarga();
+                        }
+                        sendPaymentDetailsToAdmin();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        progressDialog.dismiss();
+                        Log.d(TAG, e.toString());
+                    }
+                });
+    }
 }

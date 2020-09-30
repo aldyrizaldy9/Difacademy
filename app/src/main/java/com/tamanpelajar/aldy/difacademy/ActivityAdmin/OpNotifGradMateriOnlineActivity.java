@@ -35,7 +35,7 @@ import de.cketti.mailto.EmailIntentBuilder;
 
 public class OpNotifGradMateriOnlineActivity extends AppCompatActivity {
     private static final String TAG = "OpNotifGradMateriOnline";
-    private TextView tvNavBar, tvNama, tvEmail, tvNoWa, tvNamaKelas, tvTulisanLulus;
+    private TextView tvNavBar, tvNama, tvEmail, tvNoWa, tvNamaMateri, tvTulisanLulus;
     private ConstraintLayout clBack;
     private ImageView imgBack;
     private Button btnTandai;
@@ -60,7 +60,7 @@ public class OpNotifGradMateriOnlineActivity extends AppCompatActivity {
         tvEmail = findViewById(R.id.tv_op_notif_grad_email);
         tvNoWa = findViewById(R.id.tv_op_notif_grad_nowa);
         tvTulisanLulus = findViewById(R.id.tv_op_notif_grad_tulisan_lulus);
-        tvNamaKelas = findViewById(R.id.tv_op_notif_grad_nama_kelas);
+        tvNamaMateri = findViewById(R.id.tv_op_notif_grad_nama_kelas);
         clBack = findViewById(R.id.cl_icon1);
         clBack.setVisibility(View.VISIBLE);
         imgBack = findViewById(R.id.img_icon1);
@@ -76,7 +76,7 @@ public class OpNotifGradMateriOnlineActivity extends AppCompatActivity {
         tvNama.setText(graduationMateriOnlineModel.getNamaUser());
         tvEmail.setText(graduationMateriOnlineModel.getEmail());
         tvNoWa.setText(graduationMateriOnlineModel.getNoWa());
-        tvNamaKelas.setText(graduationMateriOnlineModel.getNamaMateri());
+        tvNamaMateri.setText(graduationMateriOnlineModel.getNamaMateri());
         tvTulisanLulus.setText("Materi yang lulus");
         if (graduationMateriOnlineModel.isDone()) {
             btnTandai.setEnabled(false);

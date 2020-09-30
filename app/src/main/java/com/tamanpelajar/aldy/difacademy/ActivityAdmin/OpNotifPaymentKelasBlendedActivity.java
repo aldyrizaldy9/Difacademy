@@ -16,11 +16,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import com.tamanpelajar.aldy.difacademy.CommonMethod;
-import com.tamanpelajar.aldy.difacademy.Model.OngoingKelasBlendedModel;
-import com.tamanpelajar.aldy.difacademy.Model.PaymentKelasBlendedModel;
-import com.tamanpelajar.aldy.difacademy.Model.UserModel;
-import com.tamanpelajar.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
@@ -28,6 +23,11 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.tamanpelajar.aldy.difacademy.CommonMethod;
+import com.tamanpelajar.aldy.difacademy.Model.OngoingKelasBlendedModel;
+import com.tamanpelajar.aldy.difacademy.Model.PaymentKelasBlendedModel;
+import com.tamanpelajar.aldy.difacademy.Model.UserModel;
+import com.tamanpelajar.aldy.difacademy.R;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -44,8 +44,6 @@ public class OpNotifPaymentKelasBlendedActivity extends AppCompatActivity {
     private UserModel userModel;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference ongoingKelasRef, paymentRef;
-
-    private String jenisKelas;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,13 +91,7 @@ public class OpNotifPaymentKelasBlendedActivity extends AppCompatActivity {
                 btnBukaKelas.setEnabled(false);
                 btnBukaKelas.setText("sudah dibuka");
             }
-
-            if (jenisKelas.equals("blended")) {
-                paymentRef = db.collection(CommonMethod.refPaymentKelasBlended);
-            } else {
-                paymentRef = db.collection(CommonMethod.refPaymentMateriOnline);
-            }
-
+            paymentRef = db.collection(CommonMethod.refPaymentKelasBlended);
         }
     }
 
@@ -149,19 +141,16 @@ public class OpNotifPaymentKelasBlendedActivity extends AppCompatActivity {
 
     private void konfirmasiBukaKelas() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Apakah anda yakin ingin membuka materi ini?");
-        builder.setTitle("Buka materi");
+        builder.setMessage("Apakah anda yakin ingin membuka kelas ini?");
+        builder.setTitle("Buka kelas");
         builder.setCancelable(false);
         builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if (!CommonMethod.isInternetAvailable(OpNotifPaymentKelasBlendedActivity.this)) {
-                    return;
+                if (CommonMethod.isInternetAvailable(OpNotifPaymentKelasBlendedActivity.this)) {
+                    getUserDocId();
                 }
-
-                pd.show();
-                getUserDocId();
             }
         });
 
@@ -176,6 +165,7 @@ public class OpNotifPaymentKelasBlendedActivity extends AppCompatActivity {
     }
 
     private void getUserDocId() {
+        pd.show();
         CollectionReference userRef = db.collection(CommonMethod.refUser);
         userRef
                 .whereEqualTo(CommonMethod.fieldUserId, paymentKelasBlendedModel.getUserId())
@@ -204,15 +194,10 @@ public class OpNotifPaymentKelasBlendedActivity extends AppCompatActivity {
 
         OngoingKelasBlendedModel ongoingKelasBlendedModel = new OngoingKelasBlendedModel(paymentKelasBlendedModel.getKelasId(), dateCreated);
 
-        if (jenisKelas.equals("blended")){
-            ongoingKelasRef = db.collection(CommonMethod.refUser)
-                    .document(userModel.getDocumentId())
-                    .collection(CommonMethod.refOngoingKelasBlended);
-        } else {
-            ongoingKelasRef = db.collection(CommonMethod.refUser)
-                    .document(userModel.getDocumentId())
-                    .collection(CommonMethod.refOngoingKelasBlended);
-        }
+        ongoingKelasRef = db
+                .collection(CommonMethod.refUser)
+                .document(userModel.getDocumentId())
+                .collection(CommonMethod.refOngoingKelasBlended);
 
         ongoingKelasRef
                 .add(ongoingKelasBlendedModel)
@@ -268,7 +253,7 @@ public class OpNotifPaymentKelasBlendedActivity extends AppCompatActivity {
                     public void onSuccess(Void aVoid) {
                         pd.dismiss();
                         Toast.makeText(OpNotifPaymentKelasBlendedActivity.this,
-                                "Materi telah dibuka untuk user "
+                                "Kelas telah dibuka untuk user "
                                         + paymentKelasBlendedModel.getNamaUser(), Toast.LENGTH_SHORT).show();
                         finish();
                     }
