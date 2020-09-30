@@ -17,9 +17,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import com.tamanpelajar.aldy.difacademy.CommonMethod;
-import com.tamanpelajar.aldy.difacademy.Model.GraduationMateriOnlineModel;
-import com.tamanpelajar.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
@@ -27,15 +24,18 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.tamanpelajar.aldy.difacademy.CommonMethod;
+import com.tamanpelajar.aldy.difacademy.Model.GraduationMateriOnlineModel;
+import com.tamanpelajar.aldy.difacademy.R;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import de.cketti.mailto.EmailIntentBuilder;
 
-public class OpNotifGradActivity extends AppCompatActivity {
-    private static final String TAG = "OpNotifPaymentActivity";
-    private TextView tvNavBar, tvNama, tvEmail, tvNoWa, tvNamaKelas;
+public class OpNotifGradMateriOnlineActivity extends AppCompatActivity {
+    private static final String TAG = "OpNotifGradMateriOnline";
+    private TextView tvNavBar, tvNama, tvEmail, tvNoWa, tvNamaKelas, tvTulisanLulus;
     private ConstraintLayout clBack;
     private ImageView imgBack;
     private Button btnTandai;
@@ -59,6 +59,7 @@ public class OpNotifGradActivity extends AppCompatActivity {
         tvNama = findViewById(R.id.tv_op_notif_grad_nama);
         tvEmail = findViewById(R.id.tv_op_notif_grad_email);
         tvNoWa = findViewById(R.id.tv_op_notif_grad_nowa);
+        tvTulisanLulus = findViewById(R.id.tv_op_notif_grad_tulisan_lulus);
         tvNamaKelas = findViewById(R.id.tv_op_notif_grad_nama_kelas);
         clBack = findViewById(R.id.cl_icon1);
         clBack.setVisibility(View.VISIBLE);
@@ -71,11 +72,12 @@ public class OpNotifGradActivity extends AppCompatActivity {
 
     private void setViewWithParcelable() {
         Intent intent = getIntent();
-        graduationMateriOnlineModel = intent.getParcelableExtra("graduationModel");
+        graduationMateriOnlineModel = intent.getParcelableExtra(CommonMethod.intentGraduationModel);
         tvNama.setText(graduationMateriOnlineModel.getNamaUser());
         tvEmail.setText(graduationMateriOnlineModel.getEmail());
         tvNoWa.setText(graduationMateriOnlineModel.getNoWa());
         tvNamaKelas.setText(graduationMateriOnlineModel.getNamaMateri());
+        tvTulisanLulus.setText("Materi yang lulus");
         if (graduationMateriOnlineModel.isDone()) {
             btnTandai.setEnabled(false);
         }
@@ -97,7 +99,7 @@ public class OpNotifGradActivity extends AppCompatActivity {
         tvEmail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = EmailIntentBuilder.from(OpNotifGradActivity.this)
+                Intent intent = EmailIntentBuilder.from(OpNotifGradMateriOnlineActivity.this)
                         .to(graduationMateriOnlineModel.getEmail())
                         .subject("Kelulusan Course Taman Pelajar")
                         .build();
@@ -121,7 +123,7 @@ public class OpNotifGradActivity extends AppCompatActivity {
     }
 
     private void setSeen() {
-        DocumentReference graduationRef = firebaseFirestore.collection("Graduation").document(graduationMateriOnlineModel.getDocumentId());
+        DocumentReference graduationRef = firebaseFirestore.collection(CommonMethod.refGraduationOnline).document(graduationMateriOnlineModel.getDocumentId());
         graduationRef
                 .update("seen", true)
                 .addOnFailureListener(new OnFailureListener() {
@@ -141,7 +143,7 @@ public class OpNotifGradActivity extends AppCompatActivity {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if (!CommonMethod.isInternetAvailable(OpNotifGradActivity.this)) {
+                if (!CommonMethod.isInternetAvailable(OpNotifGradMateriOnlineActivity.this)) {
                     return;
                 }
 
@@ -164,7 +166,7 @@ public class OpNotifGradActivity extends AppCompatActivity {
         progressDialog.setMessage("Memuat...");
         progressDialog.setCancelable(false);
         progressDialog.show();
-        CollectionReference gradRef = firebaseFirestore.collection("Graduation");
+        CollectionReference gradRef = firebaseFirestore.collection(CommonMethod.refGraduationOnline);
         gradRef
                 .whereEqualTo("materiId", graduationMateriOnlineModel.getMateriId())
                 .whereEqualTo("userId", graduationMateriOnlineModel.getUserId())
@@ -189,7 +191,7 @@ public class OpNotifGradActivity extends AppCompatActivity {
 
     private void setDone(QueryDocumentSnapshot queryDocumentSnapshot) {
         DocumentReference gradRef = firebaseFirestore
-                .collection("Graduation")
+                .collection(CommonMethod.refGraduationOnline)
                 .document(queryDocumentSnapshot.getId());
         Map<String, Object> grad = new HashMap<>();
         grad.put("done", true);
@@ -201,7 +203,7 @@ public class OpNotifGradActivity extends AppCompatActivity {
                     public void onSuccess(Void aVoid) {
                         progressDialog.dismiss();
                         onBackPressed();
-                        Toast.makeText(OpNotifGradActivity.this,
+                        Toast.makeText(OpNotifGradMateriOnlineActivity.this,
                                 "Kelulusan user "
                                         + graduationMateriOnlineModel.getNamaUser()
                                         + " sudah ditandai", Toast.LENGTH_SHORT).show();

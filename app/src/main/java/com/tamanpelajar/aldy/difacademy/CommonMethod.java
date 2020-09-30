@@ -48,6 +48,7 @@ public class CommonMethod {
     public final static String intentNewsModel = "NewsModel";
     public final static String intentVideoModel = "VideoModel";
     public final static String intentPaymentModel = "PaymentModel";
+    public final static String intentGraduationModel = "GraduationModel";
     public final static String intentFromNotification = "FromNotification";
 
     public final static String fieldDateCreated = "dateCreated";

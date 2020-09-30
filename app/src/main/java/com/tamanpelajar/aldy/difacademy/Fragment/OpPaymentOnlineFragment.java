@@ -24,7 +24,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.tamanpelajar.aldy.difacademy.Adapter.OpPaymentOnlineAdapter;
 import com.tamanpelajar.aldy.difacademy.CommonMethod;
-import com.tamanpelajar.aldy.difacademy.Model.PaymentKelasBlendedModel;
+import com.tamanpelajar.aldy.difacademy.Model.PaymentMateriOnlineModel;
 import com.tamanpelajar.aldy.difacademy.R;
 
 import java.util.ArrayList;
@@ -34,7 +34,7 @@ public class OpPaymentOnlineFragment extends Fragment {
     private OpPaymentOnlineAdapter adapter;
     private View rootView;
     private RecyclerView rvPaymentOnline;
-    private ArrayList<PaymentKelasBlendedModel> paymentKelasBlendedModels;
+    private ArrayList<PaymentMateriOnlineModel> paymentMateriOnlineModels;
     private SwipeRefreshLayout srl;
     private boolean loadNewData;
     private DocumentSnapshot lastVisible;
@@ -66,21 +66,21 @@ public class OpPaymentOnlineFragment extends Fragment {
         super.onResume();
         if (isPaymentOnlineChanged) {
             srl.setRefreshing(true);
-            paymentKelasBlendedModels.clear();
+            paymentMateriOnlineModels.clear();
             adapter.notifyDataSetChanged();
             getFirstData();
         }
     }
 
     private void initView() {
-        paymentKelasBlendedModels = new ArrayList<>();
+        paymentMateriOnlineModels = new ArrayList<>();
         rvPaymentOnline = rootView.findViewById(R.id.rv_op_payment_online);
         srl = rootView.findViewById(R.id.srl_op_payment_online);
         srl.setRefreshing(true);
         srl.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                paymentKelasBlendedModels.clear();
+                paymentMateriOnlineModels.clear();
                 adapter.notifyDataSetChanged();
                 getFirstData();
             }
@@ -91,14 +91,14 @@ public class OpPaymentOnlineFragment extends Fragment {
         final LinearLayoutManager manager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
         rvPaymentOnline.setLayoutManager(manager);
 
-        adapter = new OpPaymentOnlineAdapter(context, paymentKelasBlendedModels);
+        adapter = new OpPaymentOnlineAdapter(context, paymentMateriOnlineModels);
         rvPaymentOnline.setAdapter(adapter);
 
         rvPaymentOnline.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                if (manager.findLastVisibleItemPosition() >= paymentKelasBlendedModels.size() - CommonMethod.paginationLoadNewData &&
+                if (manager.findLastVisibleItemPosition() >= paymentMateriOnlineModels.size() - CommonMethod.paginationLoadNewData &&
                         lastVisible != null &&
                         loadNewData) {
                     loadNewData = false;
@@ -124,9 +124,9 @@ public class OpPaymentOnlineFragment extends Fragment {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
-                            PaymentKelasBlendedModel model = documentSnapshot.toObject(PaymentKelasBlendedModel.class);
-                            model.setDocumentId(documentSnapshot.getId());
-                            paymentKelasBlendedModels.add(model);
+                            PaymentMateriOnlineModel paymentMateriOnlineModel = documentSnapshot.toObject(PaymentMateriOnlineModel.class);
+                            paymentMateriOnlineModel.setDocumentId(documentSnapshot.getId());
+                            paymentMateriOnlineModels.add(paymentMateriOnlineModel);
                         }
 
                         if (queryDocumentSnapshots.size() >= CommonMethod.paginationMaxLoad) {
@@ -158,11 +158,11 @@ public class OpPaymentOnlineFragment extends Fragment {
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        paymentKelasBlendedModels.clear();
+                        paymentMateriOnlineModels.clear();
                         for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                            PaymentKelasBlendedModel model = documentSnapshot.toObject(PaymentKelasBlendedModel.class);
-                            model.setDocumentId(documentSnapshot.getId());
-                            paymentKelasBlendedModels.add(model);
+                            PaymentMateriOnlineModel paymentMateriOnlineModel = documentSnapshot.toObject(PaymentMateriOnlineModel.class);
+                            paymentMateriOnlineModel.setDocumentId(documentSnapshot.getId());
+                            paymentMateriOnlineModels.add(paymentMateriOnlineModel);
                         }
 
                         if (queryDocumentSnapshots.size() >= CommonMethod.paginationMaxLoad) {

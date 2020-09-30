@@ -50,7 +50,6 @@ public class OpPaymentBlendedAdapter extends RecyclerView.Adapter<OpPaymentBlend
             public void onClick(View v) {
                 Intent intent = new Intent(context, OpNotifPaymentKelasBlendedActivity.class);
                 intent.putExtra(CommonMethod.intentPaymentModel, paymentKelasBlendedModel);
-                intent.putExtra(CommonMethod.intentJenisKelas, "blended");
                 context.startActivity(intent);
             }
         });

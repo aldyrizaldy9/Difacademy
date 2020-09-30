@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ActivityAdmin.OpNotifGradActivity">
+    tools:context=".ActivityAdmin.OpNotifGradKelasBlendedActivity">
 
     <include
         android:id="@+id/include"
@@ -13,7 +13,7 @@
         android:layout_height="@dimen/nav_bar_height" />
 
     <TextView
-        android:id="@+id/textView8"
+        android:id="@+id/tv_op_notif_grad_tulisan_lulus"
         style="@style/Difacademy.Subtitle2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

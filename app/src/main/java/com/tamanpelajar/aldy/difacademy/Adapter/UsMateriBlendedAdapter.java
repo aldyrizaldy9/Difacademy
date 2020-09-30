@@ -50,7 +50,6 @@ public class UsMateriBlendedAdapter extends RecyclerView.Adapter<UsMateriBlended
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, UsListVideoBlendedActivity.class);
-                intent.putExtra(CommonMethod.intentJenisKelas, "blended");
                 intent.putExtra(CommonMethod.intentMateriBlendedModel, model);
                 context.startActivity(intent);
             }

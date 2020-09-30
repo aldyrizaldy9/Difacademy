@@ -50,7 +50,6 @@ public class UsKelasBlendedAdapter extends RecyclerView.Adapter<UsKelasBlendedAd
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, UsDetailKelasBlendedActivity.class);
-                intent.putExtra(CommonMethod.intentJenisKelas, "blended");
                 intent.putExtra(CommonMethod.intentKelasBlendedModel, model);
                 context.startActivity(intent);
             }

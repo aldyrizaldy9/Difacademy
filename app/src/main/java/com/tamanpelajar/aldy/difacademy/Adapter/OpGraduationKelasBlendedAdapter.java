@@ -11,31 +11,31 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpNotifGradActivity;
+import com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpNotifGradKelasBlendedActivity;
 import com.tamanpelajar.aldy.difacademy.Model.GraduationMateriOnlineModel;
 import com.tamanpelajar.aldy.difacademy.R;
 
 import java.util.ArrayList;
 
-public class OpGraduationAdapter extends RecyclerView.Adapter<OpGraduationAdapter.ViewHolder> {
+public class OpGraduationKelasBlendedAdapter extends RecyclerView.Adapter<OpGraduationKelasBlendedAdapter.ViewHolder> {
     private Context context;
     private ArrayList<GraduationMateriOnlineModel> models;
 
-    public OpGraduationAdapter(Context context, ArrayList<GraduationMateriOnlineModel> models) {
+    public OpGraduationKelasBlendedAdapter(Context context, ArrayList<GraduationMateriOnlineModel> models) {
         this.context = context;
         this.models = models;
     }
 
     @NonNull
     @Override
-    public OpGraduationAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public OpGraduationKelasBlendedAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         View view = layoutInflater.inflate(R.layout.card_op_graduation, parent, false);
-        return new OpGraduationAdapter.ViewHolder(view);
+        return new OpGraduationKelasBlendedAdapter.ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull OpGraduationAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull OpGraduationKelasBlendedAdapter.ViewHolder holder, int position) {
         final GraduationMateriOnlineModel graduationMateriOnlineModel = models.get(position);
         holder.tvNama.setText(graduationMateriOnlineModel.getNamaUser());
         holder.tvKelas.setText(graduationMateriOnlineModel.getNamaMateri());
@@ -47,7 +47,7 @@ public class OpGraduationAdapter extends RecyclerView.Adapter<OpGraduationAdapte
         holder.clContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, OpNotifGradActivity.class);
+                Intent intent = new Intent(context, OpNotifGradKelasBlendedActivity.class);
                 intent.putExtra("graduationModel", graduationMateriOnlineModel);
                 context.startActivity(intent);
             }
