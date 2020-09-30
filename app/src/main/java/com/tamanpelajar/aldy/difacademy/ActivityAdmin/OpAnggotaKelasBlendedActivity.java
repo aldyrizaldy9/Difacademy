@@ -1,15 +1,15 @@
 package com.tamanpelajar.aldy.difacademy.ActivityAdmin;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -51,16 +51,16 @@ public class OpAnggotaKelasBlendedActivity extends AppCompatActivity {
         getData();
     }
 
-    private void initView(){
+    private void initView() {
         imgBanner = findViewById(R.id.img_op_anggota_kelas_banner);
         tvJudul = findViewById(R.id.tv_op_anggota_kelas_judul);
         rvAnggota = findViewById(R.id.rv_anggota_kelas);
     }
 
-    private void checkIntent(){
+    private void checkIntent() {
         Intent intent = getIntent();
         kelasBlendedModel = intent.getParcelableExtra(CommonMethod.intentKelasBlendedModel);
-        if (kelasBlendedModel != null){
+        if (kelasBlendedModel != null) {
             Glide.with(this)
                     .load(kelasBlendedModel.getThumbnailUrl())
                     .into(imgBanner);
@@ -69,13 +69,13 @@ public class OpAnggotaKelasBlendedActivity extends AppCompatActivity {
         }
     }
 
-    private void setRecyclerView(){
+    private void setRecyclerView() {
         rvAnggota.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         adapter = new OpAnggotaKelasBlendedAdapter(this, models);
         rvAnggota.setAdapter(adapter);
     }
 
-    private void getData(){
+    private void getData() {
         CollectionReference ref = db.collection(CommonMethod.refKelasBlended)
                 .document(kelasBlendedModel.getDocumentId())
                 .collection(CommonMethod.refAnggota);
@@ -85,7 +85,7 @@ public class OpAnggotaKelasBlendedActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                             AnggotaKelasBlendedModel model = documentSnapshot.toObject(AnggotaKelasBlendedModel.class);
                             model.setDocumentId(documentSnapshot.getId());
                             models.add(model);

@@ -2,13 +2,10 @@ package com.tamanpelajar.aldy.difacademy.ActivityUser;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -31,9 +28,6 @@ import com.tamanpelajar.aldy.difacademy.Model.VideoBlendedModel;
 import com.tamanpelajar.aldy.difacademy.R;
 
 import java.util.ArrayList;
-
-import static com.tamanpelajar.aldy.difacademy.ActivityCommon.LoginActivity.SHARE_PREFS;
-import static com.tamanpelajar.aldy.difacademy.ActivityCommon.LoginActivity.USERID_PREFS;
 
 public class UsListVideoBlendedActivity extends AppCompatActivity {
     private static final String TAG = "UsListVideoBlendedActiv";
@@ -82,9 +76,9 @@ public class UsListVideoBlendedActivity extends AppCompatActivity {
         clQuiz.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    Intent intent = new Intent(UsListVideoBlendedActivity.this, UsQuizBlendedActivity.class);
-                    intent.putExtra(CommonMethod.intentMateriBlendedModel, materiBlendedModel);
-                    startActivity(intent);
+                Intent intent = new Intent(UsListVideoBlendedActivity.this, UsQuizBlendedActivity.class);
+                intent.putExtra(CommonMethod.intentMateriBlendedModel, materiBlendedModel);
+                startActivity(intent);
 
             }
         });

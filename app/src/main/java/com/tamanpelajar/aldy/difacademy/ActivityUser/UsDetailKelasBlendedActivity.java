@@ -33,7 +33,7 @@ public class UsDetailKelasBlendedActivity extends AppCompatActivity {
     private static final String TAG = "UsDetailKelasBlendedAct";
     private ImageView imgThumbnail;
     private TextView tvJudul, tvTag, tvDetail;
-    private Button btnDaftarMateri,btnLampiran;
+    private Button btnDaftarMateri, btnLampiran;
     private ProgressDialog progressDialog;
     private boolean isPaid = false;
 

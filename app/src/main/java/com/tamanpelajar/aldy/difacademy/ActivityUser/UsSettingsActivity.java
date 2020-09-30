@@ -12,10 +12,10 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.tamanpelajar.aldy.difacademy.ActivityCommon.ChangePasswordActivity;
 import com.tamanpelajar.aldy.difacademy.ActivityCommon.LoginActivity;
 import com.tamanpelajar.aldy.difacademy.R;
-import com.google.firebase.auth.FirebaseAuth;
 
 import static com.tamanpelajar.aldy.difacademy.ActivityCommon.LoginActivity.JENIS_USER_PREFS;
 import static com.tamanpelajar.aldy.difacademy.ActivityCommon.LoginActivity.SHARE_PREFS;

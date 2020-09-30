@@ -70,21 +70,21 @@ public class CommonMethod {
     public final static int paginationMaxLoad = 30;
     public final static int paginationLoadNewData = 15;
 
-    public static long getTimeStamp(){
+    public static long getTimeStamp() {
         return Timestamp.now().getSeconds();
     }
 
-    public static boolean isInternetAvailable(Context context){
+    public static boolean isInternetAvailable(Context context) {
         try {
-            ConnectivityManager cm = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+            ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-            if (activeNetwork != null && activeNetwork.isConnectedOrConnecting()){
+            if (activeNetwork != null && activeNetwork.isConnectedOrConnecting()) {
                 return true;
             } else {
                 Toast.makeText(context, context.getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
                 return false;
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             return false;
         }
     }

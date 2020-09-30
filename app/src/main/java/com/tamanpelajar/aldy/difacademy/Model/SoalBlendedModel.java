@@ -4,10 +4,22 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class SoalBlendedModel implements Parcelable {
+    public static final Creator<SoalBlendedModel> CREATOR = new Creator<SoalBlendedModel>() {
+        @Override
+        public SoalBlendedModel createFromParcel(Parcel in) {
+            return new SoalBlendedModel(in);
+        }
+
+        @Override
+        public SoalBlendedModel[] newArray(int size) {
+            return new SoalBlendedModel[size];
+        }
+    };
     String documentId, soal, jwbA, jwbB, jwbC, jwbD, jwbE, jawabanBenar;
     long dateCreated;
 
-    public SoalBlendedModel() {}
+    public SoalBlendedModel() {
+    }
 
     public SoalBlendedModel(String soal, String jwbA, String jwbB, String jwbC, String jwbD, String jwbE, String jawabanBenar, long dateCreated) {
         this.soal = soal;
@@ -31,18 +43,6 @@ public class SoalBlendedModel implements Parcelable {
         jawabanBenar = in.readString();
         dateCreated = in.readLong();
     }
-
-    public static final Creator<SoalBlendedModel> CREATOR = new Creator<SoalBlendedModel>() {
-        @Override
-        public SoalBlendedModel createFromParcel(Parcel in) {
-            return new SoalBlendedModel(in);
-        }
-
-        @Override
-        public SoalBlendedModel[] newArray(int size) {
-            return new SoalBlendedModel[size];
-        }
-    };
 
     @Override
     public int describeContents() {

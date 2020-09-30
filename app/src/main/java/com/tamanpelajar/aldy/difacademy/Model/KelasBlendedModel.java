@@ -4,6 +4,17 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class KelasBlendedModel implements Parcelable {
+    public static final Creator<KelasBlendedModel> CREATOR = new Creator<KelasBlendedModel>() {
+        @Override
+        public KelasBlendedModel createFromParcel(Parcel in) {
+            return new KelasBlendedModel(in);
+        }
+
+        @Override
+        public KelasBlendedModel[] newArray(int size) {
+            return new KelasBlendedModel[size];
+        }
+    };
     private String documentId, title, description, thumbnailUrl, harga, tagId, tag;
     private long dateCreated;
 
@@ -30,18 +41,6 @@ public class KelasBlendedModel implements Parcelable {
         tag = in.readString();
         dateCreated = in.readLong();
     }
-
-    public static final Creator<KelasBlendedModel> CREATOR = new Creator<KelasBlendedModel>() {
-        @Override
-        public KelasBlendedModel createFromParcel(Parcel in) {
-            return new KelasBlendedModel(in);
-        }
-
-        @Override
-        public KelasBlendedModel[] newArray(int size) {
-            return new KelasBlendedModel[size];
-        }
-    };
 
     @Override
     public int describeContents() {

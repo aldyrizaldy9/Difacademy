@@ -26,17 +26,17 @@ public class PaymentMateriOnlineModel implements Parcelable {
     }
 
     public PaymentMateriOnlineModel(String userId,
-                        String namaUser,
-                        String email,
-                        String noWa,
-                        String kelasId,
-                        String materiId,
-                        String namaMateri,
-                        String hargaMateri,
-                        String namaBank,
-                        long dateCreated,
-                        boolean isSeen,
-                        boolean isPaid) {
+                                    String namaUser,
+                                    String email,
+                                    String noWa,
+                                    String kelasId,
+                                    String materiId,
+                                    String namaMateri,
+                                    String hargaMateri,
+                                    String namaBank,
+                                    long dateCreated,
+                                    boolean isSeen,
+                                    boolean isPaid) {
         this.userId = userId;
         this.namaUser = namaUser;
         this.email = email;

@@ -22,14 +22,14 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import com.tamanpelajar.aldy.difacademy.CommonMethod;
-import com.tamanpelajar.aldy.difacademy.Model.SoalBlendedModel;
-import com.tamanpelajar.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.tamanpelajar.aldy.difacademy.CommonMethod;
+import com.tamanpelajar.aldy.difacademy.Model.SoalBlendedModel;
+import com.tamanpelajar.aldy.difacademy.R;
 
 import java.util.ArrayList;
 

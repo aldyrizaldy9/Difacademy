@@ -1,7 +1,5 @@
 package com.tamanpelajar.aldy.difacademy.Model;
 
-import com.google.firebase.firestore.Exclude;
-
 public class UserModel {
     private String documentId, userId, nama, email, noTelp;
 

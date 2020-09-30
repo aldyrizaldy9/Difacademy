@@ -2,17 +2,16 @@ package com.tamanpelajar.aldy.difacademy.Fragment;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -30,6 +29,7 @@ import com.tamanpelajar.aldy.difacademy.R;
 import java.util.ArrayList;
 
 public class OpPaymentBlendedFragment extends Fragment {
+    public static boolean isPaymentBlendedChanged;
     private Context context;
     private OpPaymentBlendedAdapter adapter;
     private View rootView;
@@ -40,8 +40,6 @@ public class OpPaymentBlendedFragment extends Fragment {
     private DocumentSnapshot lastVisible;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference paymentBlendedRef = db.collection(CommonMethod.refPaymentKelasBlended);
-
-    public static boolean isPaymentBlendedChanged;
 
     public OpPaymentBlendedFragment() {
     }
@@ -113,7 +111,7 @@ public class OpPaymentBlendedFragment extends Fragment {
         });
     }
 
-    private void getNewData(){
+    private void getNewData() {
         Query load = paymentBlendedRef
                 .orderBy(CommonMethod.fieldDateCreated, Query.Direction.DESCENDING)
                 .startAfter(lastVisible)
@@ -123,7 +121,7 @@ public class OpPaymentBlendedFragment extends Fragment {
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                             PaymentKelasBlendedModel paymentKelasBlendedModel = documentSnapshot.toObject(PaymentKelasBlendedModel.class);
                             paymentKelasBlendedModel.setDocumentId(documentSnapshot.getId());
                             paymentKelasBlendedModels.add(paymentKelasBlendedModel);

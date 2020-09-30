@@ -25,14 +25,14 @@ public class GraduationMateriBlendedModel implements Parcelable {
     }
 
     public GraduationMateriBlendedModel(String userId,
-                                       String namaUser,
-                                       String email,
-                                       String noWa,
-                                       String materiId,
-                                       String namaMateri,
-                                       long dateCreated,
-                                       boolean isSeen,
-                                       boolean isDone) {
+                                        String namaUser,
+                                        String email,
+                                        String noWa,
+                                        String materiId,
+                                        String namaMateri,
+                                        long dateCreated,
+                                        boolean isSeen,
+                                        boolean isDone) {
         this.userId = userId;
         this.namaUser = namaUser;
         this.email = email;

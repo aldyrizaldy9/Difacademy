@@ -4,6 +4,17 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class VideoOnlineModel implements Parcelable {
+    public static final Creator<VideoOnlineModel> CREATOR = new Creator<VideoOnlineModel>() {
+        @Override
+        public VideoOnlineModel createFromParcel(Parcel in) {
+            return new VideoOnlineModel(in);
+        }
+
+        @Override
+        public VideoOnlineModel[] newArray(int size) {
+            return new VideoOnlineModel[size];
+        }
+    };
     String documentId, title, description, videoUrl, kelasId, materiId;
     long dateCreated;
 
@@ -44,18 +55,6 @@ public class VideoOnlineModel implements Parcelable {
     public int describeContents() {
         return 0;
     }
-
-    public static final Creator<VideoOnlineModel> CREATOR = new Creator<VideoOnlineModel>() {
-        @Override
-        public VideoOnlineModel createFromParcel(Parcel in) {
-            return new VideoOnlineModel(in);
-        }
-
-        @Override
-        public VideoOnlineModel[] newArray(int size) {
-            return new VideoOnlineModel[size];
-        }
-    };
 
     public String getDocumentId() {
         return documentId;

@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpAddOnlineVideoActivity;
 import com.tamanpelajar.aldy.difacademy.CommonMethod;
-import com.tamanpelajar.aldy.difacademy.Model.VideoBlendedModel;
 import com.tamanpelajar.aldy.difacademy.Model.VideoOnlineModel;
 import com.tamanpelajar.aldy.difacademy.R;
 
