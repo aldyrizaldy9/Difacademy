@@ -16,7 +16,8 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.tamanpelajar.aldy.difacademy.CommonMethod;
-import com.tamanpelajar.aldy.difacademy.Fragment.OpGraduationFragment;
+import com.tamanpelajar.aldy.difacademy.Fragment.OpGraduationBlendedFragment;
+import com.tamanpelajar.aldy.difacademy.Fragment.OpGraduationOnlineFragment;
 import com.tamanpelajar.aldy.difacademy.Fragment.OpPaymentBlendedFragment;
 import com.tamanpelajar.aldy.difacademy.Fragment.OpPaymentOnlineFragment;
 import com.tamanpelajar.aldy.difacademy.R;
@@ -80,7 +81,8 @@ public class OpNotifActivity extends AppCompatActivity {
         final ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         viewPagerAdapter.addFragment(new OpPaymentBlendedFragment(OpNotifActivity.this), "Payment Blended");
         viewPagerAdapter.addFragment(new OpPaymentOnlineFragment(OpNotifActivity.this), "Payment Online");
-        viewPagerAdapter.addFragment(new OpGraduationFragment(), "Graduation");
+        viewPagerAdapter.addFragment(new OpGraduationBlendedFragment(), "Graduation Blended");
+        viewPagerAdapter.addFragment(new OpGraduationOnlineFragment(), "Graduation Online");
 
         viewPager.setAdapter(viewPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
