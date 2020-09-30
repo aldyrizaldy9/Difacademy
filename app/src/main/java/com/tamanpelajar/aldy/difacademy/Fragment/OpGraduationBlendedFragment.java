@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.tamanpelajar.aldy.difacademy.Adapter.OpGraduationAdapter;
-import com.tamanpelajar.aldy.difacademy.Model.GraduationModel;
+import com.tamanpelajar.aldy.difacademy.Model.GraduationMateriOnlineModel;
 import com.tamanpelajar.aldy.difacademy.R;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -28,7 +28,7 @@ public class OpGraduationBlendedFragment extends Fragment {
     public static OpGraduationAdapter OP_NOTIF_GRADUATION_ADAPTER;
     private View rootView;
     private RecyclerView rvNotifGrad;
-    private ArrayList<GraduationModel> graduationModels;
+    private ArrayList<GraduationMateriOnlineModel> graduationMateriOnlineModels;
     private ProgressDialog progressDialog;
     private CollectionReference graduationRef;
 
@@ -61,8 +61,8 @@ public class OpGraduationBlendedFragment extends Fragment {
     }
 
     private void setRecyclerView() {
-        graduationModels = new ArrayList<>();
-        OP_NOTIF_GRADUATION_ADAPTER = new OpGraduationAdapter(rootView.getContext(), graduationModels);
+        graduationMateriOnlineModels = new ArrayList<>();
+        OP_NOTIF_GRADUATION_ADAPTER = new OpGraduationAdapter(rootView.getContext(), graduationMateriOnlineModels);
         rvNotifGrad.setLayoutManager(new LinearLayoutManager(rootView.getContext(), RecyclerView.VERTICAL, false));
         rvNotifGrad.setAdapter(OP_NOTIF_GRADUATION_ADAPTER);
     }

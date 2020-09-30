@@ -29,7 +29,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.Source;
 import com.tamanpelajar.aldy.difacademy.CommonMethod;
-import com.tamanpelajar.aldy.difacademy.Model.GraduationModel;
+import com.tamanpelajar.aldy.difacademy.Model.GraduationMateriOnlineModel;
 import com.tamanpelajar.aldy.difacademy.Model.MateriOnlineModel;
 import com.tamanpelajar.aldy.difacademy.Model.SoalOnlineModel;
 import com.tamanpelajar.aldy.difacademy.Model.UserModel;
@@ -347,7 +347,7 @@ public class UsQuizOnlineActivity extends AppCompatActivity {
         pd.setCancelable(false);
         pd.show();
 
-        CollectionReference userRef = db.collection("User");
+        CollectionReference userRef = db.collection(CommonMethod.refUser);
         userRef
                 .whereEqualTo("userId", userId)
                 .get()
@@ -406,11 +406,11 @@ public class UsQuizOnlineActivity extends AppCompatActivity {
     private void sendGraduationDetailsToAdmin() {
 
         long dateCreated = Timestamp.now().getSeconds();
-        GraduationModel graduationModel = new GraduationModel(userId, namaUser, email, noWa, materiOnlineModel.getDocumentId(), namaMateri, false, false, dateCreated);
+        GraduationMateriOnlineModel graduationMateriOnlineModel = new GraduationMateriOnlineModel(userId, namaUser, email, noWa, materiOnlineModel.getDocumentId(), namaMateri, dateCreated, false, false);
 
-        CollectionReference gradRef = db.collection("Graduation");
+        CollectionReference gradRef = db.collection(CommonMethod.refGraduationOnline);
         gradRef
-                .add(graduationModel)
+                .add(graduationMateriOnlineModel)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
@@ -427,7 +427,7 @@ public class UsQuizOnlineActivity extends AppCompatActivity {
     }
 
     private void sendOpNotification() {
-        DocumentReference docRef = db.collection("Tokens").document(ADMIN_USER_ID);
+        DocumentReference docRef = db.collection(CommonMethod.refTokens).document(ADMIN_USER_ID);
         docRef.get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override

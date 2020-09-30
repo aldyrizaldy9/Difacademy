@@ -12,8 +12,9 @@ public class CommonMethod {
     public final static String refUser = "User";
     public final static String refBannerPhotoUrl = "BannerPhotoUrl";
     public final static String refPaymentKelasBlended = "PaymentBlended-dev";
-    public final static String refPaymentKelasOnline = "PaymentOnline-dev";
-    public final static String refGraduation = "Graduation-dev";
+    public final static String refPaymentMateriOnline = "PaymentOnline-dev";
+    public final static String refGraduationOnline = "GraduationOnline-dev";
+    public final static String refGraduationBlended = "GraduationBlended-dev";
     public final static String refTags = "Tags-dev";
     public final static String refTokens = "Tokens";
     public final static String refOngoingKelasBlended = "OngoingKelasBlended-dev";
@@ -48,11 +49,11 @@ public class CommonMethod {
     public final static String intentVideoModel = "VideoModel";
     public final static String intentPaymentModel = "PaymentModel";
     public final static String intentFromNotification = "FromNotification";
-    public final static String intentJenisKelas = "JenisKelas";
 
     public final static String fieldDateCreated = "dateCreated";
     public final static String fieldUserId = "userId";
     public final static String fieldKelasId = "kelasId";
+    public final static String fieldMateriId = "materiId";
 
     public final static String storageBlendedKelas = "BlendedKelas-dev/";
     public final static String storageBlendedMateri = "BlendedMateri-dev/";

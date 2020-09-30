@@ -3,18 +3,16 @@ package com.tamanpelajar.aldy.difacademy.Model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.google.firebase.firestore.Exclude;
-
-public class PaymentModel implements Parcelable {
+public class PaymentKelasBlendedModel implements Parcelable {
 
     private String documentId, userId, namaUser, email, noWa, kelasId, namaKelas, hargaKelas, namaBank;
     private long dateCreated;
     private boolean isSeen, isPaid;
 
-    public PaymentModel() {
+    public PaymentKelasBlendedModel() {
     }
 
-    public PaymentModel(String userId, String namaUser, String email, String noWa, String kelasId, String namaKelas, String hargaKelas, String namaBank, long dateCreated, boolean isSeen, boolean isPaid) {
+    public PaymentKelasBlendedModel(String userId, String namaUser, String email, String noWa, String kelasId, String namaKelas, String hargaKelas, String namaBank, long dateCreated, boolean isSeen, boolean isPaid) {
         this.userId = userId;
         this.namaUser = namaUser;
         this.email = email;
@@ -28,7 +26,7 @@ public class PaymentModel implements Parcelable {
         this.isPaid = isPaid;
     }
 
-    protected PaymentModel(Parcel in) {
+    protected PaymentKelasBlendedModel(Parcel in) {
         documentId = in.readString();
         userId = in.readString();
         namaUser = in.readString();
@@ -64,15 +62,15 @@ public class PaymentModel implements Parcelable {
         return 0;
     }
 
-    public static final Creator<PaymentModel> CREATOR = new Creator<PaymentModel>() {
+    public static final Creator<PaymentKelasBlendedModel> CREATOR = new Creator<PaymentKelasBlendedModel>() {
         @Override
-        public PaymentModel createFromParcel(Parcel in) {
-            return new PaymentModel(in);
+        public PaymentKelasBlendedModel createFromParcel(Parcel in) {
+            return new PaymentKelasBlendedModel(in);
         }
 
         @Override
-        public PaymentModel[] newArray(int size) {
-            return new PaymentModel[size];
+        public PaymentKelasBlendedModel[] newArray(int size) {
+            return new PaymentKelasBlendedModel[size];
         }
     };
 

@@ -27,6 +27,7 @@ import com.google.firebase.firestore.Source;
 import com.tamanpelajar.aldy.difacademy.Adapter.UsVideoOnlineAdapter;
 import com.tamanpelajar.aldy.difacademy.CommonMethod;
 import com.tamanpelajar.aldy.difacademy.Model.MateriOnlineModel;
+import com.tamanpelajar.aldy.difacademy.Model.OngoingMateriOnlineModel;
 import com.tamanpelajar.aldy.difacademy.Model.VideoOnlineModel;
 import com.tamanpelajar.aldy.difacademy.R;
 
@@ -195,13 +196,12 @@ public class UsListVideoOnlineActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
-//                            OngoingMateriModel ongoingMateriModel = queryDocumentSnapshot.toObject(OngoingMateriModel.class);
-//                            if (ongoingMateriModel.getMateriId().equals(materiOnlineModel.getDocumentId())) {
-//                            IS_PAID = true;
-//                            break;
-//                            }
+                            OngoingMateriOnlineModel ongoingMateriOnlineModel = queryDocumentSnapshot.toObject(OngoingMateriOnlineModel.class);
+                            if (ongoingMateriOnlineModel.getMateriId().equals(materiOnlineModel.getDocumentId())) {
+                                IS_PAID = true;
+                                break;
+                            }
                         }
-                        IS_PAID = true; //hapus ini kalo udah bisa ngecek ongoing user
                         loadData();
                     }
                 })

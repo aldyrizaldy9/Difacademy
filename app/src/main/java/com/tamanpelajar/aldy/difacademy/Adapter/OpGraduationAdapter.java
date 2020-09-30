@@ -12,16 +12,16 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpNotifGradActivity;
-import com.tamanpelajar.aldy.difacademy.Model.GraduationModel;
+import com.tamanpelajar.aldy.difacademy.Model.GraduationMateriOnlineModel;
 import com.tamanpelajar.aldy.difacademy.R;
 
 import java.util.ArrayList;
 
 public class OpGraduationAdapter extends RecyclerView.Adapter<OpGraduationAdapter.ViewHolder> {
     private Context context;
-    private ArrayList<GraduationModel> models;
+    private ArrayList<GraduationMateriOnlineModel> models;
 
-    public OpGraduationAdapter(Context context, ArrayList<GraduationModel> models) {
+    public OpGraduationAdapter(Context context, ArrayList<GraduationMateriOnlineModel> models) {
         this.context = context;
         this.models = models;
     }
@@ -36,10 +36,10 @@ public class OpGraduationAdapter extends RecyclerView.Adapter<OpGraduationAdapte
 
     @Override
     public void onBindViewHolder(@NonNull OpGraduationAdapter.ViewHolder holder, int position) {
-        final GraduationModel graduationModel = models.get(position);
-        holder.tvNama.setText(graduationModel.getNamaUser());
-        holder.tvKelas.setText(graduationModel.getNamaMateri());
-        if (graduationModel.isDone()) {
+        final GraduationMateriOnlineModel graduationMateriOnlineModel = models.get(position);
+        holder.tvNama.setText(graduationMateriOnlineModel.getNamaUser());
+        holder.tvKelas.setText(graduationMateriOnlineModel.getNamaMateri());
+        if (graduationMateriOnlineModel.isDone()) {
             holder.tvStatus.setText("SUDAH DIHUBUNGI");
         } else {
             holder.tvStatus.setText("BELUM DIHUBUNGI");
@@ -48,7 +48,7 @@ public class OpGraduationAdapter extends RecyclerView.Adapter<OpGraduationAdapte
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, OpNotifGradActivity.class);
-                intent.putExtra("graduationModel", graduationModel);
+                intent.putExtra("graduationModel", graduationMateriOnlineModel);
                 context.startActivity(intent);
             }
         });

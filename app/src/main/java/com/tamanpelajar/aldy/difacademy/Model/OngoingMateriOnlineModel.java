@@ -1,13 +1,14 @@
 package com.tamanpelajar.aldy.difacademy.Model;
 
 public class OngoingMateriOnlineModel {
-    private String materiId;
+    private String kelasId, materiId;
     private long dateCreated;
 
     public OngoingMateriOnlineModel() {
     }
 
-    public OngoingMateriOnlineModel(String materiId, long dateCreated) {
+    public OngoingMateriOnlineModel(String kelasId, String materiId, long dateCreated) {
+        this.kelasId = kelasId;
         this.materiId = materiId;
         this.dateCreated = dateCreated;
     }
@@ -16,15 +17,12 @@ public class OngoingMateriOnlineModel {
         return materiId;
     }
 
-    public void setMateriId(String materiId) {
-        this.materiId = materiId;
+    public String getKelasId() {
+        return kelasId;
     }
 
     public long getDateCreated() {
         return dateCreated;
     }
 
-    public void setDateCreated(long dateCreated) {
-        this.dateCreated = dateCreated;
-    }
 }

@@ -60,7 +60,7 @@
             android:name=".ActivityAdmin.OpNotifActivity"
             android:screenOrientation="sensorPortrait" />
         <activity
-            android:name=".ActivityAdmin.OpNotifPaymentActivity"
+            android:name=".ActivityAdmin.OpNotifPaymentKelasBlendedActivity"
             android:screenOrientation="sensorPortrait" />
         <activity
             android:name=".ActivityAdmin.OpTagsActivity"
@@ -81,7 +81,10 @@
             android:name=".ActivityUser.UsQuizOnlineActivity"
             android:screenOrientation="sensorPortrait" />
         <activity
-            android:name=".ActivityUser.UsPaymentActivity"
+            android:name=".ActivityUser.UsPaymentBlendedActivity"
+            android:screenOrientation="sensorPortrait" />
+        <activity
+            android:name=".ActivityUser.UsPaymentOnlineActivity"
             android:screenOrientation="sensorPortrait" />
         <activity
             android:name=".ActivityUser.UsListVideoOnlineActivity"

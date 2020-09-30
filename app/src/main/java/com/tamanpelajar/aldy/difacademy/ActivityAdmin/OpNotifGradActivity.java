@@ -1,10 +1,8 @@
 package com.tamanpelajar.aldy.difacademy.ActivityAdmin;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,7 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.tamanpelajar.aldy.difacademy.CommonMethod;
-import com.tamanpelajar.aldy.difacademy.Model.GraduationModel;
+import com.tamanpelajar.aldy.difacademy.Model.GraduationMateriOnlineModel;
 import com.tamanpelajar.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -41,7 +39,7 @@ public class OpNotifGradActivity extends AppCompatActivity {
     private ConstraintLayout clBack;
     private ImageView imgBack;
     private Button btnTandai;
-    private GraduationModel graduationModel;
+    private GraduationMateriOnlineModel graduationMateriOnlineModel;
     private ProgressDialog progressDialog;
     private FirebaseFirestore firebaseFirestore;
 
@@ -73,12 +71,12 @@ public class OpNotifGradActivity extends AppCompatActivity {
 
     private void setViewWithParcelable() {
         Intent intent = getIntent();
-        graduationModel = intent.getParcelableExtra("graduationModel");
-        tvNama.setText(graduationModel.getNamaUser());
-        tvEmail.setText(graduationModel.getEmail());
-        tvNoWa.setText(graduationModel.getNoWa());
-        tvNamaKelas.setText(graduationModel.getNamaMateri());
-        if (graduationModel.isDone()) {
+        graduationMateriOnlineModel = intent.getParcelableExtra("graduationModel");
+        tvNama.setText(graduationMateriOnlineModel.getNamaUser());
+        tvEmail.setText(graduationMateriOnlineModel.getEmail());
+        tvNoWa.setText(graduationMateriOnlineModel.getNoWa());
+        tvNamaKelas.setText(graduationMateriOnlineModel.getNamaMateri());
+        if (graduationMateriOnlineModel.isDone()) {
             btnTandai.setEnabled(false);
         }
     }
@@ -100,7 +98,7 @@ public class OpNotifGradActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = EmailIntentBuilder.from(OpNotifGradActivity.this)
-                        .to(graduationModel.getEmail())
+                        .to(graduationMateriOnlineModel.getEmail())
                         .subject("Kelulusan Course Taman Pelajar")
                         .build();
                 startActivity(intent);
@@ -110,7 +108,7 @@ public class OpNotifGradActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_VIEW);
-                String urlNew = graduationModel.getNoWa();
+                String urlNew = graduationMateriOnlineModel.getNoWa();
                 if (urlNew.substring(0, 3).equals("+62")) {
                     urlNew = "http://wa.me/" + urlNew;
                 } else {
@@ -123,7 +121,7 @@ public class OpNotifGradActivity extends AppCompatActivity {
     }
 
     private void setSeen() {
-        DocumentReference graduationRef = firebaseFirestore.collection("Graduation").document(graduationModel.getDocumentId());
+        DocumentReference graduationRef = firebaseFirestore.collection("Graduation").document(graduationMateriOnlineModel.getDocumentId());
         graduationRef
                 .update("seen", true)
                 .addOnFailureListener(new OnFailureListener() {
@@ -168,8 +166,8 @@ public class OpNotifGradActivity extends AppCompatActivity {
         progressDialog.show();
         CollectionReference gradRef = firebaseFirestore.collection("Graduation");
         gradRef
-                .whereEqualTo("materiId", graduationModel.getMateriId())
-                .whereEqualTo("userId", graduationModel.getUserId())
+                .whereEqualTo("materiId", graduationMateriOnlineModel.getMateriId())
+                .whereEqualTo("userId", graduationMateriOnlineModel.getUserId())
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
@@ -205,7 +203,7 @@ public class OpNotifGradActivity extends AppCompatActivity {
                         onBackPressed();
                         Toast.makeText(OpNotifGradActivity.this,
                                 "Kelulusan user "
-                                        + graduationModel.getNamaUser()
+                                        + graduationMateriOnlineModel.getNamaUser()
                                         + " sudah ditandai", Toast.LENGTH_SHORT).show();
 
                     }

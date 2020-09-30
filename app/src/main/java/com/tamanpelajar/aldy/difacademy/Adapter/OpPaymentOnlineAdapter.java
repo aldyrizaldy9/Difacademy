@@ -11,18 +11,19 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpNotifPaymentActivity;
+import com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpNotifPaymentKelasBlendedActivity;
+import com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpNotifPaymentMateriOnlineActivity;
 import com.tamanpelajar.aldy.difacademy.CommonMethod;
-import com.tamanpelajar.aldy.difacademy.Model.PaymentModel;
+import com.tamanpelajar.aldy.difacademy.Model.PaymentMateriOnlineModel;
 import com.tamanpelajar.aldy.difacademy.R;
 
 import java.util.ArrayList;
 
 public class OpPaymentOnlineAdapter extends RecyclerView.Adapter<OpPaymentOnlineAdapter.ViewHolder> {
     private Context context;
-    private ArrayList<PaymentModel> models;
+    private ArrayList<PaymentMateriOnlineModel> models;
 
-    public OpPaymentOnlineAdapter(Context context, ArrayList<PaymentModel> models) {
+    public OpPaymentOnlineAdapter(Context context, ArrayList<PaymentMateriOnlineModel> models) {
         this.context = context;
         this.models = models;
     }
@@ -37,10 +38,10 @@ public class OpPaymentOnlineAdapter extends RecyclerView.Adapter<OpPaymentOnline
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        final PaymentModel model = models.get(position);
+        final PaymentMateriOnlineModel model = models.get(position);
         holder.tvNama.setText(model.getNamaUser());
-        holder.tvKelas.setText(model.getNamaKelas());
-        if (model.isPaid()){
+        holder.tvKelas.setText(model.getNamaMateri());
+        if (model.isPaid()) {
             holder.tvStatus.setText("SUDAH DIPROSES");
         } else {
             holder.tvStatus.setText("INGIN BELI");
@@ -48,9 +49,8 @@ public class OpPaymentOnlineAdapter extends RecyclerView.Adapter<OpPaymentOnline
         holder.container.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, OpNotifPaymentActivity.class);
+                Intent intent = new Intent(context, OpNotifPaymentMateriOnlineActivity.class);
                 intent.putExtra(CommonMethod.intentPaymentModel, model);
-                intent.putExtra(CommonMethod.intentJenisKelas, "online");
                 context.startActivity(intent);
             }
         });

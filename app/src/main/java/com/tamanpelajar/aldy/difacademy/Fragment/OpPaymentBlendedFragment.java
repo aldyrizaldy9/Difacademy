@@ -1,10 +1,8 @@
 package com.tamanpelajar.aldy.difacademy.Fragment;
 
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +17,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.tamanpelajar.aldy.difacademy.Adapter.OpPaymentBlendedAdapter;
 import com.tamanpelajar.aldy.difacademy.CommonMethod;
-import com.tamanpelajar.aldy.difacademy.Model.PaymentModel;
+import com.tamanpelajar.aldy.difacademy.Model.PaymentKelasBlendedModel;
 import com.tamanpelajar.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -42,7 +40,7 @@ public class OpPaymentBlendedFragment extends Fragment {
     private OpPaymentBlendedAdapter adapter;
     private View rootView;
     private RecyclerView rvPaymentBlended;
-    private ArrayList<PaymentModel> paymentModels;
+    private ArrayList<PaymentKelasBlendedModel> paymentKelasBlendedModels;
     private SwipeRefreshLayout srl;
     private boolean loadNewData;
     private DocumentSnapshot lastVisible;
@@ -75,21 +73,21 @@ public class OpPaymentBlendedFragment extends Fragment {
         super.onResume();
         if (isPaymentBlendedChanged) {
             srl.setRefreshing(true);
-            paymentModels.clear();
+            paymentKelasBlendedModels.clear();
             adapter.notifyDataSetChanged();
             getFirstData();
         }
     }
 
     private void initView() {
-        paymentModels = new ArrayList<>();
+        paymentKelasBlendedModels = new ArrayList<>();
         rvPaymentBlended = rootView.findViewById(R.id.rv_op_payment_blended);
         srl = rootView.findViewById(R.id.srl_op_payment_blended);
         srl.setRefreshing(true);
         srl.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                paymentModels.clear();
+                paymentKelasBlendedModels.clear();
                 adapter.notifyDataSetChanged();
                 getFirstData();
             }
@@ -100,14 +98,14 @@ public class OpPaymentBlendedFragment extends Fragment {
         final LinearLayoutManager manager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
         rvPaymentBlended.setLayoutManager(manager);
 
-        adapter = new OpPaymentBlendedAdapter(rootView.getContext(), paymentModels);
+        adapter = new OpPaymentBlendedAdapter(rootView.getContext(), paymentKelasBlendedModels);
         rvPaymentBlended.setAdapter(adapter);
 
         rvPaymentBlended.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                if (manager.findLastVisibleItemPosition() >= paymentModels.size() - CommonMethod.paginationLoadNewData &&
+                if (manager.findLastVisibleItemPosition() >= paymentKelasBlendedModels.size() - CommonMethod.paginationLoadNewData &&
                         lastVisible != null &&
                         loadNewData) {
                     loadNewData = false;
@@ -133,9 +131,9 @@ public class OpPaymentBlendedFragment extends Fragment {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
-                            PaymentModel model = documentSnapshot.toObject(PaymentModel.class);
+                            PaymentKelasBlendedModel model = documentSnapshot.toObject(PaymentKelasBlendedModel.class);
                             model.setDocumentId(documentSnapshot.getId());
-                            paymentModels.add(model);
+                            paymentKelasBlendedModels.add(model);
                         }
 
                         if (queryDocumentSnapshots.size() >= CommonMethod.paginationMaxLoad){
@@ -168,9 +166,9 @@ public class OpPaymentBlendedFragment extends Fragment {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
-                            PaymentModel model = documentSnapshot.toObject(PaymentModel.class);
+                            PaymentKelasBlendedModel model = documentSnapshot.toObject(PaymentKelasBlendedModel.class);
                             model.setDocumentId(documentSnapshot.getId());
-                            paymentModels.add(model);
+                            paymentKelasBlendedModels.add(model);
                         }
 
                         if (queryDocumentSnapshots.size() >= CommonMethod.paginationMaxLoad){
