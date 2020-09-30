@@ -33,6 +33,8 @@ public class CommonMethod {
 
     public final static String refNews = "News-dev";
 
+    public final static String intentUserDocId = "UserDocId";
+
     public final static String intentKelasBlendedModel = "KelasBlendedModel";
     public final static String intentMateriBlendedModel = "MateriBlendedModel";
     public final static String intentVideoBlendedModel = "VideoBlendedModel";

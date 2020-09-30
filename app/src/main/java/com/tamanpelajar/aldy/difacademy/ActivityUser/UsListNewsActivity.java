@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.tamanpelajar.aldy.difacademy.Adapter.UsNewsAdapter;
+import com.tamanpelajar.aldy.difacademy.CommonMethod;
 import com.tamanpelajar.aldy.difacademy.Model.NewsModel;
 import com.tamanpelajar.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -30,7 +31,7 @@ import java.util.ArrayList;
 public class UsListNewsActivity extends AppCompatActivity {
     private static final String TAG = "ListNewsActivity";
     FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-    CollectionReference newsRef = firestore.collection("News");
+    CollectionReference newsRef = firestore.collection(CommonMethod.refNews);
     DocumentSnapshot lastVisible;
     boolean loadbaru;
     private ConstraintLayout clBack, clNavbar;

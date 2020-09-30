@@ -8,6 +8,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
+import com.tamanpelajar.aldy.difacademy.CommonMethod;
 import com.tamanpelajar.aldy.difacademy.Model.NewsModel;
 import com.tamanpelajar.aldy.difacademy.R;
 
@@ -31,7 +32,7 @@ public class UsDetailNewsActivity extends AppCompatActivity {
 
     private void setViewWithParcelable() {
         Intent intent = getIntent();
-        NewsModel newsModel = intent.getParcelableExtra("newsModel");
+        NewsModel newsModel = intent.getParcelableExtra(CommonMethod.intentNewsModel);
         tvJudul.setText(newsModel.getJudul());
         tvIsi.setText(newsModel.getIsi());
         Glide.with(this).load(newsModel.getLinkfoto()).into(imgThumbnail);
