@@ -13,15 +13,15 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.tamanpelajar.aldy.difacademy.CommonMethod;
-import com.tamanpelajar.aldy.difacademy.Model.KelasOnlineModel;
+import com.tamanpelajar.aldy.difacademy.Model.MateriBlendedModel;
 import com.tamanpelajar.aldy.difacademy.R;
 
-public class UsDetailKelasOnlineActivity extends AppCompatActivity {
+public class UsDetailMateriBlendedActivity extends AppCompatActivity {
     private ImageView imgThumbnail;
     private TextView tvJudul, tvTag, tvDetail;
-    private Button btnDaftarMateri, btnLampiran;
+    private Button btnDaftarVideo, btnLampiran;
 
-    private KelasOnlineModel kelasOnlineModel;
+    private MateriBlendedModel materiBlendedModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,22 +36,23 @@ public class UsDetailKelasOnlineActivity extends AppCompatActivity {
         imgThumbnail = findViewById(R.id.img_detail_course_thumbnail);
         tvJudul = findViewById(R.id.tv_detail_course_judul);
         tvTag = findViewById(R.id.tv_detail_course_tag);
+        tvTag.setVisibility(View.GONE);
         tvDetail = findViewById(R.id.tv_detail_course_detail);
         btnLampiran = findViewById(R.id.btn_detail_course_lampiran);
-        btnDaftarMateri = findViewById(R.id.btn_detail_course_daftar_materi);
+        btnDaftarVideo = findViewById(R.id.btn_detail_course_daftar_materi);
+        btnDaftarVideo.setText("DAFTAR VIDEO");
     }
 
     private void setViewWithParcelable() {
         Intent intent = getIntent();
-        kelasOnlineModel = intent.getParcelableExtra(CommonMethod.intentKelasOnlineModel);
-        Glide.with(this).load(kelasOnlineModel.getThumbnailUrl()).into(imgThumbnail);
-        tvJudul.setText(kelasOnlineModel.getTitle());
-        tvTag.setText(kelasOnlineModel.getTag());
-        tvDetail.setText(kelasOnlineModel.getDescription());
+        materiBlendedModel = intent.getParcelableExtra(CommonMethod.intentMateriBlendedModel);
+        Glide.with(this).load(materiBlendedModel.getThumbnailUrl()).into(imgThumbnail);
+        tvJudul.setText(materiBlendedModel.getTitle());
+        tvDetail.setText(materiBlendedModel.getDescription());
     }
 
     private void onClick() {
-        if (kelasOnlineModel.getGoogleDrive() == null || kelasOnlineModel.getGoogleDrive().equals("")) {
+        if (materiBlendedModel.getLampiranUrl() == null || materiBlendedModel.getLampiranUrl().equals("")) {
             btnLampiran.setVisibility(View.GONE);
         } else {
             btnLampiran.setOnClickListener(new View.OnClickListener() {
@@ -59,11 +60,11 @@ public class UsDetailKelasOnlineActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     try {
                         Intent intent = new Intent(Intent.ACTION_VIEW);
-                        intent.setData(Uri.parse(kelasOnlineModel.getGoogleDrive()));
+                        intent.setData(Uri.parse(materiBlendedModel.getLampiranUrl()));
                         startActivity(intent);
                     } catch (ActivityNotFoundException e) {
                         Intent intent = new Intent(Intent.ACTION_VIEW);
-                        String urlNew = "http://" + kelasOnlineModel.getGoogleDrive();
+                        String urlNew = "http://" + materiBlendedModel.getLampiranUrl();
                         intent.setData(Uri.parse(urlNew));
                         startActivity(intent);
                     }
@@ -71,11 +72,11 @@ public class UsDetailKelasOnlineActivity extends AppCompatActivity {
             });
         }
 
-        btnDaftarMateri.setOnClickListener(new View.OnClickListener() {
+        btnDaftarVideo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(UsDetailKelasOnlineActivity.this, UsMateriOnlineActivity.class);
-                intent.putExtra(CommonMethod.intentKelasOnlineModel, kelasOnlineModel);
+                Intent intent = new Intent(UsDetailMateriBlendedActivity.this, UsListVideoBlendedActivity.class);
+                intent.putExtra(CommonMethod.intentMateriBlendedModel, materiBlendedModel);
                 startActivity(intent);
             }
         });

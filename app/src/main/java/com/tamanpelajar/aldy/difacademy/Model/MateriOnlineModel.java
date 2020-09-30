@@ -4,6 +4,17 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class MateriOnlineModel implements Parcelable {
+    public static final Creator<MateriOnlineModel> CREATOR = new Creator<MateriOnlineModel>() {
+        @Override
+        public MateriOnlineModel createFromParcel(Parcel in) {
+            return new MateriOnlineModel(in);
+        }
+
+        @Override
+        public MateriOnlineModel[] newArray(int size) {
+            return new MateriOnlineModel[size];
+        }
+    };
     private String documentId, title, thumbnailUrl, harga, kelasId;
     private long dateCreated;
 
@@ -41,18 +52,6 @@ public class MateriOnlineModel implements Parcelable {
     public int describeContents() {
         return 0;
     }
-
-    public static final Creator<MateriOnlineModel> CREATOR = new Creator<MateriOnlineModel>() {
-        @Override
-        public MateriOnlineModel createFromParcel(Parcel in) {
-            return new MateriOnlineModel(in);
-        }
-
-        @Override
-        public MateriOnlineModel[] newArray(int size) {
-            return new MateriOnlineModel[size];
-        }
-    };
 
     public String getDocumentId() {
         return documentId;

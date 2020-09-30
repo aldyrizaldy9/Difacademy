@@ -35,7 +35,7 @@ import java.util.Map;
 import de.cketti.mailto.EmailIntentBuilder;
 
 public class OpNotifPaymentMateriOnlineActivity extends AppCompatActivity {
-    private TextView tvNavBar, tvNama, tvEmail, tvNoWa, tvNamaMateri, tvHargaMateri, tvNamaBank;
+    private TextView tvNavBar, tvNama, tvEmail, tvNoWa, tvNamaMateri, tvHargaMateri, tvNamaBank, tvTulisanNamaMateri, tvTulisanHargaMateri;
     private ConstraintLayout clBack;
     private ImageView imgBack;
     private Button btnBukaMateri;
@@ -63,6 +63,10 @@ public class OpNotifPaymentMateriOnlineActivity extends AppCompatActivity {
         tvNoWa = findViewById(R.id.tv_op_notif_pay_nowa);
         tvNamaMateri = findViewById(R.id.tv_op_notif_pay_nama_kelas);
         tvHargaMateri = findViewById(R.id.tv_op_notif_pay_harga_kelas);
+        tvTulisanHargaMateri = findViewById(R.id.tv_op_notif_pay_tulisan_harga_kelas);
+        tvTulisanHargaMateri.setText("Harga materi");
+        tvTulisanNamaMateri = findViewById(R.id.tv_op_notif_pay_tulisan_nama_kelas);
+        tvTulisanNamaMateri.setText("Materi yang ingin dibeli");
         tvNamaBank = findViewById(R.id.tv_op_notif_pay_nama_bank);
         clBack = findViewById(R.id.cl_icon1);
         clBack.setVisibility(View.VISIBLE);

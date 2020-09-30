@@ -43,6 +43,7 @@ public class UsVideoBlendedAdapter extends RecyclerView.Adapter<UsVideoBlendedAd
         int episode = position + 1;
         holder.tvEpisode.setText("#" + episode);
         holder.imgStatus.setImageResource(R.drawable.ic_play_arrow);
+        holder.imgStatus.setImageResource(R.drawable.ic_play_arrow);
         holder.clContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -51,6 +52,7 @@ public class UsVideoBlendedAdapter extends RecyclerView.Adapter<UsVideoBlendedAd
                 context.startActivity(intent);
             }
         });
+
     }
 
     @Override

@@ -5,52 +5,52 @@ import android.os.Parcelable;
 
 import com.google.firebase.firestore.Exclude;
 
-public class GraduationKelasBlendedModel implements Parcelable {
-    public static final Creator<GraduationKelasBlendedModel> CREATOR = new Creator<GraduationKelasBlendedModel>() {
+public class GraduationMateriBlendedModel implements Parcelable {
+    public static final Creator<GraduationMateriBlendedModel> CREATOR = new Creator<GraduationMateriBlendedModel>() {
         @Override
-        public GraduationKelasBlendedModel createFromParcel(Parcel in) {
-            return new GraduationKelasBlendedModel(in);
+        public GraduationMateriBlendedModel createFromParcel(Parcel in) {
+            return new GraduationMateriBlendedModel(in);
         }
 
         @Override
-        public GraduationKelasBlendedModel[] newArray(int size) {
-            return new GraduationKelasBlendedModel[size];
+        public GraduationMateriBlendedModel[] newArray(int size) {
+            return new GraduationMateriBlendedModel[size];
         }
     };
-    private String userId, namaUser, email, noWa, kelasId, namaKelas, documentId;
+    private String userId, namaUser, email, noWa, materiId, namaMateri, documentId;
     private long dateCreated;
     private boolean isSeen, isDone;
 
-    public GraduationKelasBlendedModel() {
+    public GraduationMateriBlendedModel() {
     }
 
-    public GraduationKelasBlendedModel(String userId,
-                                       String namaUser,
-                                       String email,
-                                       String noWa,
-                                       String kelasId,
-                                       String namaKelas,
-                                       long dateCreated,
-                                       boolean isSeen,
-                                       boolean isDone) {
+    public GraduationMateriBlendedModel(String userId,
+                                        String namaUser,
+                                        String email,
+                                        String noWa,
+                                        String materiId,
+                                        String namaMateri,
+                                        long dateCreated,
+                                        boolean isSeen,
+                                        boolean isDone) {
         this.userId = userId;
         this.namaUser = namaUser;
         this.email = email;
         this.noWa = noWa;
-        this.kelasId = kelasId;
-        this.namaKelas = namaKelas;
+        this.materiId = materiId;
+        this.namaMateri = namaMateri;
         this.dateCreated = dateCreated;
         this.isSeen = isSeen;
         this.isDone = isDone;
     }
 
-    protected GraduationKelasBlendedModel(Parcel in) {
+    protected GraduationMateriBlendedModel(Parcel in) {
         userId = in.readString();
         namaUser = in.readString();
         email = in.readString();
         noWa = in.readString();
-        kelasId = in.readString();
-        namaKelas = in.readString();
+        materiId = in.readString();
+        namaMateri = in.readString();
         documentId = in.readString();
         dateCreated = in.readLong();
         isSeen = in.readByte() != 0;
@@ -63,8 +63,8 @@ public class GraduationKelasBlendedModel implements Parcelable {
         dest.writeString(namaUser);
         dest.writeString(email);
         dest.writeString(noWa);
-        dest.writeString(kelasId);
-        dest.writeString(namaKelas);
+        dest.writeString(materiId);
+        dest.writeString(namaMateri);
         dest.writeString(documentId);
         dest.writeLong(dateCreated);
         dest.writeByte((byte) (isSeen ? 1 : 0));
@@ -92,12 +92,12 @@ public class GraduationKelasBlendedModel implements Parcelable {
         return noWa;
     }
 
-    public String getKelasId() {
-        return kelasId;
+    public String getMateriId() {
+        return materiId;
     }
 
-    public String getNamaKelas() {
-        return namaKelas;
+    public String getNamaMateri() {
+        return namaMateri;
     }
 
     @Exclude

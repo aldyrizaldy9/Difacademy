@@ -41,7 +41,8 @@ public class UsMateriOnlineAdapter extends RecyclerView.Adapter<UsMateriOnlineAd
     public void onBindViewHolder(@NonNull UsMateriOnlineAdapter.ViewHolder holder, int position) {
         final MateriOnlineModel model = models.get(position);
         holder.tvJudul.setText(model.getTitle());
-        holder.tvTag.setText("Rp " + model.getHarga());
+        holder.tvTag.setVisibility(View.GONE);
+        holder.tvHarga.setText("Rp " + model.getHarga());
         Glide
                 .with(context)
                 .load(model.getThumbnailUrl())
@@ -63,7 +64,7 @@ public class UsMateriOnlineAdapter extends RecyclerView.Adapter<UsMateriOnlineAd
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private ImageView imgThumbnail;
-        private TextView tvJudul, tvTag;
+        private TextView tvJudul, tvTag, tvHarga;
         private ConstraintLayout clContainer;
 
         public ViewHolder(@NonNull View itemView) {
@@ -71,6 +72,7 @@ public class UsMateriOnlineAdapter extends RecyclerView.Adapter<UsMateriOnlineAd
             imgThumbnail = itemView.findViewById(R.id.img_card_video_thumbnail);
             tvJudul = itemView.findViewById(R.id.tv_card_video_thumbnail_judul);
             tvTag = itemView.findViewById(R.id.tv_card_video_thumbnail_tag);
+            tvHarga = itemView.findViewById(R.id.tv_card_video_thumbnail_harga);
             clContainer = itemView.findViewById(R.id.cl_card_video_thumbnail_container);
         }
     }

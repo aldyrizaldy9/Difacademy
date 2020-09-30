@@ -19,18 +19,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.bumptech.glide.Glide;
-import com.tamanpelajar.aldy.difacademy.CommonMethod;
-import com.tamanpelajar.aldy.difacademy.Model.NewsModel;
-import com.tamanpelajar.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.tamanpelajar.aldy.difacademy.CommonMethod;
+import com.tamanpelajar.aldy.difacademy.Model.NewsModel;
+import com.tamanpelajar.aldy.difacademy.R;
 
 import java.util.UUID;
 
@@ -166,7 +165,7 @@ public class OpAddNewsActivity extends AppCompatActivity {
         });
     }
 
-    private void uploadPhotoToFirebase(){
+    private void uploadPhotoToFirebase() {
         final StorageReference ref = firebaseStorage.getReference().child(CommonMethod.storageNews +
                 UUID.randomUUID().toString());
         ref.putFile(imageUri)
@@ -192,7 +191,7 @@ public class OpAddNewsActivity extends AppCompatActivity {
                 });
     }
 
-    private void simpanNews(){
+    private void simpanNews() {
         String title = edtJudul.getText().toString();
         String isi = edtIsi.getText().toString();
 
@@ -200,20 +199,20 @@ public class OpAddNewsActivity extends AppCompatActivity {
 
         NewsModel model = new NewsModel(title, isi, thumbnailUrl, dateCreated);
 
-        if (thereIsData){
+        if (thereIsData) {
             editNews(model);
         } else {
             tambahNews(model);
         }
     }
 
-    private void editNews(final NewsModel model){
+    private void editNews(final NewsModel model) {
         DocumentReference ref = newsRef.document(newsDocId);
         ref.set(model)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        if (imageUri != null){
+                        if (imageUri != null) {
                             deletePhotoInFirebase(model);
                         } else {
                             Intent intent = new Intent(OpAddNewsActivity.this, OpNewsActivity.class);
@@ -233,7 +232,7 @@ public class OpAddNewsActivity extends AppCompatActivity {
                 });
     }
 
-    private void deletePhotoInFirebase(final NewsModel model){
+    private void deletePhotoInFirebase(final NewsModel model) {
         //method ini khusus edit
         StorageReference ref = firebaseStorage.getReferenceFromUrl(oldThumbnailUrl);
         ref.delete()
@@ -249,7 +248,7 @@ public class OpAddNewsActivity extends AppCompatActivity {
                 });
     }
 
-    private void tambahNews(final NewsModel model){
+    private void tambahNews(final NewsModel model) {
         newsRef.add(model)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
@@ -284,7 +283,7 @@ public class OpAddNewsActivity extends AppCompatActivity {
                 }
 
                 pd.show();
-                if (imageUri != null){
+                if (imageUri != null) {
                     uploadPhotoToFirebase();
                 } else {
                     simpanNews();
@@ -330,7 +329,7 @@ public class OpAddNewsActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
-    private void hapusNews(){
+    private void hapusNews() {
         DocumentReference ref = newsRef.document(newsDocId);
         ref.delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -348,7 +347,7 @@ public class OpAddNewsActivity extends AppCompatActivity {
                 });
     }
 
-    private void deletePhotoInStorage(){
+    private void deletePhotoInStorage() {
         //method ini khusus hapus
         StorageReference ref = firebaseStorage.getReferenceFromUrl(thumbnailUrl);
         ref.delete()

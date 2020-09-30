@@ -4,6 +4,17 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class SoalOnlineModel implements Parcelable {
+    public static final Creator<SoalOnlineModel> CREATOR = new Creator<SoalOnlineModel>() {
+        @Override
+        public SoalOnlineModel createFromParcel(Parcel in) {
+            return new SoalOnlineModel(in);
+        }
+
+        @Override
+        public SoalOnlineModel[] newArray(int size) {
+            return new SoalOnlineModel[size];
+        }
+    };
     String documentId, soal, jwbA, jwbB, jwbC, jwbD, jwbE, jawabanBenar;
     long dateCreated;
 
@@ -50,18 +61,6 @@ public class SoalOnlineModel implements Parcelable {
     public int describeContents() {
         return 0;
     }
-
-    public static final Creator<SoalOnlineModel> CREATOR = new Creator<SoalOnlineModel>() {
-        @Override
-        public SoalOnlineModel createFromParcel(Parcel in) {
-            return new SoalOnlineModel(in);
-        }
-
-        @Override
-        public SoalOnlineModel[] newArray(int size) {
-            return new SoalOnlineModel[size];
-        }
-    };
 
     public String getDocumentId() {
         return documentId;

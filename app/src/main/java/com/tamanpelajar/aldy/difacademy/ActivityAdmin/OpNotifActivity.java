@@ -15,15 +15,15 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.tamanpelajar.aldy.difacademy.CommonMethod;
 import com.tamanpelajar.aldy.difacademy.Fragment.OpGraduationBlendedFragment;
 import com.tamanpelajar.aldy.difacademy.Fragment.OpGraduationOnlineFragment;
 import com.tamanpelajar.aldy.difacademy.Fragment.OpPaymentBlendedFragment;
 import com.tamanpelajar.aldy.difacademy.Fragment.OpPaymentOnlineFragment;
 import com.tamanpelajar.aldy.difacademy.R;
-import com.google.android.material.tabs.TabLayout;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 

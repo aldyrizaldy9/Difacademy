@@ -13,10 +13,6 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.tamanpelajar.aldy.difacademy.Adapter.UsMateriBlendedAdapter;
-import com.tamanpelajar.aldy.difacademy.Model.KelasBlendedModel;
-import com.tamanpelajar.aldy.difacademy.Model.MateriBlendedModel;
-import com.tamanpelajar.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
@@ -24,18 +20,22 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.tamanpelajar.aldy.difacademy.Adapter.UsMateriBlendedAdapter;
+import com.tamanpelajar.aldy.difacademy.CommonMethod;
+import com.tamanpelajar.aldy.difacademy.Model.KelasBlendedModel;
+import com.tamanpelajar.aldy.difacademy.Model.MateriBlendedModel;
+import com.tamanpelajar.aldy.difacademy.R;
 
 import java.util.ArrayList;
 
 public class UsMateriBlendedActivity extends AppCompatActivity {
-    private static final String TAG = "BlendedMateriActivity";
-    private ConstraintLayout clBack, clNavbar;
+    private static final String TAG = "UsMateriBlendedActivity";
+    private ConstraintLayout clBack;
     private RecyclerView rvVideo;
     private UsMateriBlendedAdapter adapter;
     private ArrayList<MateriBlendedModel> materiBlendedModels;
     private ProgressDialog progressDialog;
     private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
-    private CollectionReference materiRef;
     private KelasBlendedModel kelasBlendedModel;
 
     @Override
@@ -49,7 +49,7 @@ public class UsMateriBlendedActivity extends AppCompatActivity {
     }
 
     private void initView() {
-        clNavbar = findViewById(R.id.cl_navbar);
+        ConstraintLayout clNavbar = findViewById(R.id.cl_navbar);
         clNavbar.setBackgroundColor(getResources().getColor(R.color.navCoklat));
         clBack = findViewById(R.id.cl_icon1);
         clBack.setVisibility(View.VISIBLE);
@@ -59,7 +59,8 @@ public class UsMateriBlendedActivity extends AppCompatActivity {
         tvNavBar.setText("Materi");
         rvVideo = findViewById(R.id.rv_blended_materi_materi);
         Intent intent = getIntent();
-        kelasBlendedModel = intent.getParcelableExtra("courseModel");
+        kelasBlendedModel = intent.getParcelableExtra(CommonMethod.intentKelasBlendedModel);
+
         progressDialog = new ProgressDialog(this);
     }
 
@@ -75,11 +76,8 @@ public class UsMateriBlendedActivity extends AppCompatActivity {
     private void setRecyclerView() {
         materiBlendedModels = new ArrayList<>();
         adapter = new UsMateriBlendedAdapter(this, materiBlendedModels);
-
-        final LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        rvVideo.setLayoutManager(layoutManager);
+        rvVideo.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         rvVideo.setAdapter(adapter);
-
     }
 
     private void loadMateriData() {
@@ -87,11 +85,10 @@ public class UsMateriBlendedActivity extends AppCompatActivity {
         progressDialog.setCancelable(false);
         progressDialog.show();
 
-
-        materiRef = firebaseFirestore
-                .collection("BlendedCourse")
+        CollectionReference materiRef = firebaseFirestore
+                .collection(CommonMethod.refKelasBlended)
                 .document(kelasBlendedModel.getDocumentId())
-                .collection("BlendedMateri");
+                .collection(CommonMethod.refMateriBlended);
 
         materiRef
                 .orderBy("dateCreated", Query.Direction.DESCENDING)

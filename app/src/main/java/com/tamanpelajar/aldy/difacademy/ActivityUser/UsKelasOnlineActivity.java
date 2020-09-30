@@ -110,7 +110,6 @@ public class UsKelasOnlineActivity extends AppCompatActivity {
 
     private void loadKelasData() {
         pd.show();
-
         kelasRef
                 .orderBy("dateCreated", Query.Direction.DESCENDING)
                 .get()
@@ -141,7 +140,6 @@ public class UsKelasOnlineActivity extends AppCompatActivity {
 
     private void loadCourseWithTheSameTag() {
         pd.show();
-
         kelasRef
                 .whereEqualTo("tag", tag)
                 .orderBy("dateCreated", Query.Direction.DESCENDING)
@@ -174,7 +172,7 @@ public class UsKelasOnlineActivity extends AppCompatActivity {
         tags = new ArrayList<>();
         tags.add("Tags");
         firebaseFirestore = FirebaseFirestore.getInstance();
-        CollectionReference tagsRef = firebaseFirestore.collection("Tags");
+        CollectionReference tagsRef = firebaseFirestore.collection(CommonMethod.refTags);
         tagsRef.orderBy("tag", Query.Direction.ASCENDING)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -223,20 +221,17 @@ public class UsKelasOnlineActivity extends AppCompatActivity {
                 if (position != 0) {
                     tag = tags.get(position);
                     clSearchContainer.setVisibility(View.GONE);
-                    if (!CommonMethod.isInternetAvailable(UsKelasOnlineActivity.this)) {
-                        return;
+                    if (CommonMethod.isInternetAvailable(UsKelasOnlineActivity.this)) {
+                        loadCourseWithTheSameTag();
                     }
-
-                    loadCourseWithTheSameTag();
                 } else if (firstClick) {
                     firstClick = false;
                 } else {
                     tag = "";
                     clSearchContainer.setVisibility(View.GONE);
-                    if (!CommonMethod.isInternetAvailable(UsKelasOnlineActivity.this)) {
-                        return;
+                    if (CommonMethod.isInternetAvailable(UsKelasOnlineActivity.this)) {
+                        loadKelasData();
                     }
-                    loadKelasData();
                 }
             }
 

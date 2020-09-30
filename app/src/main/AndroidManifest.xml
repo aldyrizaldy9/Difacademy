@@ -13,7 +13,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ActivityAdmin.OpAnggotaMateriOnlineActivity"></activity>
+        <activity android:name=".ActivityAdmin.OpAnggotaMateriOnlineActivity"/>
         <activity android:name=".ActivityAdmin.OpAnggotaKelasBlendedActivity" />
         <activity android:name=".ActivityAdmin.OpBlendedSoalActivity" />
         <activity android:name=".ActivityAdmin.OpBlendedVideoActivity" />
@@ -54,13 +54,19 @@
             android:name=".ActivityCommon.ChangePasswordActivity"
             android:screenOrientation="sensorPortrait" />
         <activity
-            android:name=".ActivityAdmin.OpNotifGradActivity"
+            android:name=".ActivityAdmin.OpNotifGradMateriBlendedActivity"
+            android:screenOrientation="sensorPortrait" />
+        <activity
+            android:name=".ActivityAdmin.OpNotifGradMateriOnlineActivity"
             android:screenOrientation="sensorPortrait" />
         <activity
             android:name=".ActivityAdmin.OpNotifActivity"
             android:screenOrientation="sensorPortrait" />
         <activity
             android:name=".ActivityAdmin.OpNotifPaymentKelasBlendedActivity"
+            android:screenOrientation="sensorPortrait" />
+        <activity
+            android:name=".ActivityAdmin.OpNotifPaymentMateriOnlineActivity"
             android:screenOrientation="sensorPortrait" />
         <activity
             android:name=".ActivityAdmin.OpTagsActivity"
@@ -94,6 +100,9 @@
             android:screenOrientation="sensorPortrait" />
         <activity
             android:name=".ActivityUser.UsDetailKelasBlendedActivity"
+            android:screenOrientation="sensorPortrait" />
+        <activity
+            android:name=".ActivityUser.UsDetailMateriBlendedActivity"
             android:screenOrientation="sensorPortrait" />
         <activity
             android:name=".ActivityUser.UsDetailKelasOnlineActivity"

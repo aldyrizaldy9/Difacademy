@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -29,7 +30,13 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.tamanpelajar.aldy.difacademy.Adapter.UsNewsAdapter;
+import com.tamanpelajar.aldy.difacademy.CommonMethod;
+import com.tamanpelajar.aldy.difacademy.Model.KelasBlendedModel;
+import com.tamanpelajar.aldy.difacademy.Model.KelasOnlineModel;
+import com.tamanpelajar.aldy.difacademy.Model.MateriOnlineModel;
 import com.tamanpelajar.aldy.difacademy.Model.NewsModel;
+import com.tamanpelajar.aldy.difacademy.Model.OngoingKelasBlendedModel;
+import com.tamanpelajar.aldy.difacademy.Model.OngoingMateriOnlineModel;
 import com.tamanpelajar.aldy.difacademy.R;
 
 import java.util.ArrayList;
@@ -45,10 +52,9 @@ public class UsMainActivity extends AppCompatActivity {
     private UsNewsAdapter usNewsAdapter;
     private ArrayList<NewsModel> newsModels;
     private FirebaseFirestore firebaseFirestore;
-    //    private MateriModel materiModel;
     private String userDocId;
-    //    private OngoingMateriModel ongoingOnlineMateri;
-//    private OngoingMateriModel ongoingBlendedMateri;
+    private OngoingKelasBlendedModel ongoingKelasBlendedModel;
+    private OngoingMateriOnlineModel ongoingMateriOnlineModel;
     private boolean doubleBackToExitPressedOnce = false;
 
     @Override
@@ -105,7 +111,7 @@ public class UsMainActivity extends AppCompatActivity {
     }
 
     private void setBanner() {
-        DocumentReference docRef = firebaseFirestore.collection("BannerPhotoUrl").document("bannerphotourl");
+        DocumentReference docRef = firebaseFirestore.collection(CommonMethod.refBannerPhotoUrl).document("bannerphotourl");
         docRef.get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
@@ -176,7 +182,7 @@ public class UsMainActivity extends AppCompatActivity {
     private void getUserDocId() {
 
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        CollectionReference userRef = firebaseFirestore.collection("User");
+        CollectionReference userRef = firebaseFirestore.collection(CommonMethod.refUser);
         if (user != null) {
             userRef
                     .whereEqualTo("userId", user.getUid())
@@ -187,7 +193,7 @@ public class UsMainActivity extends AppCompatActivity {
                             for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
                                 userDocId = queryDocumentSnapshot.getId();
                             }
-                            getOngoingBlendedMateri();
+                            getOngoingKelasBlended();
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
@@ -199,11 +205,11 @@ public class UsMainActivity extends AppCompatActivity {
         }
     }
 
-    private void getOngoingBlendedMateri() {
+    private void getOngoingKelasBlended() {
         CollectionReference ongoingRef = firebaseFirestore
-                .collection("User")
+                .collection(CommonMethod.refUser)
                 .document(userDocId)
-                .collection("OngoingBlendedMateri");
+                .collection(CommonMethod.refOngoingKelasBlended);
 
         ongoingRef
                 .orderBy("dateCreated", Query.Direction.DESCENDING)
@@ -213,9 +219,9 @@ public class UsMainActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
-//                            ongoingBlendedMateri = queryDocumentSnapshot.toObject(OngoingMateriModel.class);
+                            ongoingKelasBlendedModel = queryDocumentSnapshot.toObject(OngoingKelasBlendedModel.class);
                         }
-                        getOngoingOnlineMateri();
+                        getOngoingMateriOnline();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -226,11 +232,11 @@ public class UsMainActivity extends AppCompatActivity {
                 });
     }
 
-    private void getOngoingOnlineMateri() {
+    private void getOngoingMateriOnline() {
         CollectionReference ongoingRef = firebaseFirestore
-                .collection("User")
+                .collection(CommonMethod.refUser)
                 .document(userDocId)
-                .collection("OngoingOnlineMateri");
+                .collection(CommonMethod.refOngoingMateriOnline);
 
         ongoingRef
                 .orderBy("dateCreated", Query.Direction.DESCENDING)
@@ -240,9 +246,9 @@ public class UsMainActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
-//                            ongoingOnlineMateri = queryDocumentSnapshot.toObject(OngoingMateriModel.class);
+                            ongoingMateriOnlineModel = queryDocumentSnapshot.toObject(OngoingMateriOnlineModel.class);
                         }
-                        compareOngoingMateri();
+                        compareOngoing();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -253,65 +259,53 @@ public class UsMainActivity extends AppCompatActivity {
                 });
     }
 
-    private void compareOngoingMateri() {
-//        if (ongoingBlendedMateri != null) {
-//            if (ongoingOnlineMateri == null) {
-//                setOngoingMateri("blended", ongoingBlendedMateri.getCourseId(), ongoingBlendedMateri.getMateriId());
-//            } else if (ongoingBlendedMateri.getDateCreated() > ongoingOnlineMateri.getDateCreated()) {
-//                setOngoingMateri("blended", ongoingBlendedMateri.getCourseId(), ongoingBlendedMateri.getMateriId());
-//            } else {
-//                setOngoingMateri("online", ongoingOnlineMateri.getCourseId(), ongoingOnlineMateri.getMateriId());
-//            }
-//        } else if (ongoingOnlineMateri != null) {
-//            setOngoingMateri("online", ongoingOnlineMateri.getCourseId(), ongoingOnlineMateri.getMateriId());
-//        }
-    }
-
-    private void setOngoingMateri(final String jenisKelas, String courseId, final String materiId) {
-        DocumentReference ongoingRef;
-        final Intent intent;
-        if (jenisKelas.equalsIgnoreCase("online")) {
-            ongoingRef = firebaseFirestore
-                    .collection("OnlineCourse")
-                    .document(courseId)
-                    .collection("OnlineMateri")
-                    .document(materiId);
-            setOngoingTag("OnlineCourse", courseId);
-            intent = new Intent(UsMainActivity.this, UsListVideoOnlineActivity.class);
+    private void compareOngoing() {
+        if (ongoingMateriOnlineModel != null) {
+            if (ongoingKelasBlendedModel == null) {
+                setOngoingMateriOnline(ongoingMateriOnlineModel.getKelasId(), ongoingMateriOnlineModel.getMateriId());
+            } else if (ongoingMateriOnlineModel.getDateCreated() > ongoingKelasBlendedModel.getDateCreated()) {
+                setOngoingMateriOnline(ongoingMateriOnlineModel.getKelasId(), ongoingMateriOnlineModel.getMateriId());
+            } else {
+                setOngoingKelasBlended(ongoingKelasBlendedModel.getKelasId());
+            }
         } else {
-            ongoingRef = firebaseFirestore
-                    .collection("BlendedCourse")
-                    .document(courseId)
-                    .collection("BlendedMateri")
-                    .document(materiId);
-            setOngoingTag("BlendedCourse", courseId);
-            intent = new Intent(UsMainActivity.this, UsListVideoBlendedActivity.class);
+            setOngoingKelasBlended(ongoingKelasBlendedModel.getKelasId());
         }
+    }
+
+    private void setOngoingMateriOnline(String courseId, final String materiId) {
+        DocumentReference ongoingRef;
+        ongoingRef = firebaseFirestore
+                .collection(CommonMethod.refKelasOnline)
+                .document(courseId)
+                .collection(CommonMethod.refMateriOnline)
+                .document(materiId);
+        setOngoingTagOnline(courseId);
+        final Intent intent = new Intent(UsMainActivity.this, UsListVideoOnlineActivity.class);
 
         ongoingRef.get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
-//                        materiModel = documentSnapshot.toObject(MateriModel.class);
-//                        if (materiModel != null) {
-//                            materiModel.setDocumentId(documentSnapshot.getId());
-//
-//                            Glide.with(UsMainActivity.this)
-//                                    .load(materiModel.getThumbnailUrl())
-//                                    .apply(new RequestOptions().centerCrop())
-//                                    .into(imgOngoing);
-//                            tvJudulOngoing.setText(materiModel.getTitle());
-//                            clOngoing.setOnClickListener(new View.OnClickListener() {
-//                                @Override
-//                                public void onClick(View v) {
-//                                    intent.putExtra("jenisKelas", jenisKelas);
-//                                    intent.putExtra("materiModel", materiModel);
-//                                    startActivity(intent);
-//                                }
-//                            });
-//
-//                            setOngoingView();
-//                        }
+                        final MateriOnlineModel materiOnlineModel = documentSnapshot.toObject(MateriOnlineModel.class);
+                        if (materiOnlineModel != null) {
+                            materiOnlineModel.setDocumentId(documentSnapshot.getId());
+
+                            Glide.with(UsMainActivity.this)
+                                    .load(materiOnlineModel.getThumbnailUrl())
+                                    .apply(new RequestOptions().centerCrop())
+                                    .into(imgOngoing);
+                            tvJudulOngoing.setText(materiOnlineModel.getTitle());
+                            clOngoing.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    intent.putExtra(CommonMethod.intentMateriOnlineModel, materiOnlineModel);
+                                    startActivity(intent);
+                                }
+                            });
+
+                            setOngoingView();
+                        }
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -322,18 +316,58 @@ public class UsMainActivity extends AppCompatActivity {
                 });
     }
 
-    private void setOngoingTag(String jenisKelas, String courseId) {
+    private void setOngoingKelasBlended(String courseId) {
+        DocumentReference ongoingRef;
+        ongoingRef = firebaseFirestore
+                .collection(CommonMethod.refKelasBlended)
+                .document(courseId);
+        setOngoingTagBlended(courseId);
+        final Intent intent = new Intent(UsMainActivity.this, UsMateriBlendedActivity.class);
+        ongoingRef.get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        final KelasBlendedModel kelasBlendedModel = documentSnapshot.toObject(KelasBlendedModel.class);
+                        if (kelasBlendedModel != null) {
+                            kelasBlendedModel.setDocumentId(documentSnapshot.getId());
+
+                            Glide.with(UsMainActivity.this)
+                                    .load(kelasBlendedModel.getThumbnailUrl())
+                                    .apply(new RequestOptions().centerCrop())
+                                    .into(imgOngoing);
+                            tvJudulOngoing.setText(kelasBlendedModel.getTitle());
+                            clOngoing.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    intent.putExtra(CommonMethod.intentKelasBlendedModel, kelasBlendedModel);
+                                    startActivity(intent);
+                                }
+                            });
+
+                            setOngoingView();
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, e.toString());
+                    }
+                });
+    }
+
+    private void setOngoingTagOnline(String courseId) {
         DocumentReference ongoingRef = firebaseFirestore
-                .collection(jenisKelas)
+                .collection(CommonMethod.refKelasOnline)
                 .document(courseId);
         ongoingRef.get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
-//                        CourseModel courseModel = documentSnapshot.toObject(CourseModel.class);
-//                        if (courseModel != null) {
-//                            tvTagOngoing.setText(courseModel.getTag());
-//                        }
+                        KelasOnlineModel kelasOnlineModel = documentSnapshot.toObject(KelasOnlineModel.class);
+                        if (kelasOnlineModel != null) {
+                            tvTagOngoing.setText(kelasOnlineModel.getTag());
+                        }
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -342,7 +376,28 @@ public class UsMainActivity extends AppCompatActivity {
                         Log.d(TAG, e.toString());
                     }
                 });
+    }
 
+    private void setOngoingTagBlended(String courseId) {
+        DocumentReference ongoingRef = firebaseFirestore
+                .collection(CommonMethod.refKelasBlended)
+                .document(courseId);
+        ongoingRef.get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        KelasBlendedModel kelasBlendedModel = documentSnapshot.toObject(KelasBlendedModel.class);
+                        if (kelasBlendedModel != null) {
+                            tvTagOngoing.setText(kelasBlendedModel.getTag());
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, e.toString());
+                    }
+                });
     }
 
     private void setOngoingView() {
@@ -351,7 +406,7 @@ public class UsMainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(UsMainActivity.this, UsOngoingActivity.class);
-                intent.putExtra("userDocId", userDocId);
+                intent.putExtra(CommonMethod.intentUserDocId, userDocId);
                 startActivity(intent);
             }
         });
@@ -359,7 +414,7 @@ public class UsMainActivity extends AppCompatActivity {
     }
 
     private void loadNews() {
-        CollectionReference newsRef = firebaseFirestore.collection("News");
+        CollectionReference newsRef = firebaseFirestore.collection(CommonMethod.refNews);
         newsRef.orderBy("dateCreated", Query.Direction.DESCENDING)
                 .limit(5)
                 .get()

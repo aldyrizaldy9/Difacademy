@@ -42,6 +42,7 @@ public class UsKelasBlendedAdapter extends RecyclerView.Adapter<UsKelasBlendedAd
         final KelasBlendedModel model = models.get(position);
         holder.tvJudul.setText(model.getTitle());
         holder.tvTag.setText(model.getTag());
+        holder.tvHarga.setText("Rp " + model.getHarga());
         Glide
                 .with(context)
                 .load(model.getThumbnailUrl())
@@ -50,7 +51,6 @@ public class UsKelasBlendedAdapter extends RecyclerView.Adapter<UsKelasBlendedAd
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, UsDetailKelasBlendedActivity.class);
-                intent.putExtra(CommonMethod.intentJenisKelas, "blended");
                 intent.putExtra(CommonMethod.intentKelasBlendedModel, model);
                 context.startActivity(intent);
             }
@@ -64,7 +64,7 @@ public class UsKelasBlendedAdapter extends RecyclerView.Adapter<UsKelasBlendedAd
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private ImageView imgThumbnail;
-        private TextView tvJudul, tvTag;
+        private TextView tvJudul, tvTag, tvHarga;
         private ConstraintLayout clContainer;
 
         public ViewHolder(@NonNull View itemView) {
@@ -72,6 +72,7 @@ public class UsKelasBlendedAdapter extends RecyclerView.Adapter<UsKelasBlendedAd
             imgThumbnail = itemView.findViewById(R.id.img_card_video_thumbnail);
             tvJudul = itemView.findViewById(R.id.tv_card_video_thumbnail_judul);
             tvTag = itemView.findViewById(R.id.tv_card_video_thumbnail_tag);
+            tvHarga = itemView.findViewById(R.id.tv_card_video_thumbnail_harga);
             clContainer = itemView.findViewById(R.id.cl_card_video_thumbnail_container);
         }
     }

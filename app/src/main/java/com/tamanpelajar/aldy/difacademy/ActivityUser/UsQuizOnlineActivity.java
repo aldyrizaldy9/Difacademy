@@ -53,7 +53,7 @@ import static com.tamanpelajar.aldy.difacademy.ActivityCommon.LoginActivity.USER
 import static com.tamanpelajar.aldy.difacademy.BuildConfig.ADMIN_USER_ID;
 
 public class UsQuizOnlineActivity extends AppCompatActivity {
-    private static final String TAG = "QuizActivity";
+    private static final String TAG = "UsQuizOnlineActivity";
 
     ArrayList<SoalOnlineModel> soalOnlineModels;
     ArrayList<String> jawabanBenar;

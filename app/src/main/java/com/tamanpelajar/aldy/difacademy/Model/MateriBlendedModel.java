@@ -4,10 +4,22 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class MateriBlendedModel implements Parcelable {
+    public static final Creator<MateriBlendedModel> CREATOR = new Creator<MateriBlendedModel>() {
+        @Override
+        public MateriBlendedModel createFromParcel(Parcel in) {
+            return new MateriBlendedModel(in);
+        }
+
+        @Override
+        public MateriBlendedModel[] newArray(int size) {
+            return new MateriBlendedModel[size];
+        }
+    };
     private String documentId, title, description, thumbnailUrl, lampiranUrl, kelasId;
     private long dateCreated;
 
-    public MateriBlendedModel() {}
+    public MateriBlendedModel() {
+    }
 
     public MateriBlendedModel(String title, String description, String thumbnailUrl, String lampiranUrl, String kelasId, long dateCreated) {
         this.title = title;
@@ -43,18 +55,6 @@ public class MateriBlendedModel implements Parcelable {
     public int describeContents() {
         return 0;
     }
-
-    public static final Creator<MateriBlendedModel> CREATOR = new Creator<MateriBlendedModel>() {
-        @Override
-        public MateriBlendedModel createFromParcel(Parcel in) {
-            return new MateriBlendedModel(in);
-        }
-
-        @Override
-        public MateriBlendedModel[] newArray(int size) {
-            return new MateriBlendedModel[size];
-        }
-    };
 
     public String getDocumentId() {
         return documentId;

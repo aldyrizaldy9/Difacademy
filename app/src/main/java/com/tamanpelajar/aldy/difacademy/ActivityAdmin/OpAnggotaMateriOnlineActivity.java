@@ -1,15 +1,15 @@
 package com.tamanpelajar.aldy.difacademy.ActivityAdmin;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -19,10 +19,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.tamanpelajar.aldy.difacademy.Adapter.OpAnggotaKelasBlendedAdapter;
 import com.tamanpelajar.aldy.difacademy.Adapter.OpAnggotaMateriOnlineAdapter;
 import com.tamanpelajar.aldy.difacademy.CommonMethod;
-import com.tamanpelajar.aldy.difacademy.Model.AnggotaKelasBlendedModel;
 import com.tamanpelajar.aldy.difacademy.Model.AnggotaMateriOnlineModel;
 import com.tamanpelajar.aldy.difacademy.Model.MateriOnlineModel;
 import com.tamanpelajar.aldy.difacademy.R;
@@ -53,16 +51,16 @@ public class OpAnggotaMateriOnlineActivity extends AppCompatActivity {
         getData();
     }
 
-    private void initView(){
+    private void initView() {
         imgBanner = findViewById(R.id.img_op_anggota_materi_banner);
         tvJudul = findViewById(R.id.tv_op_anggota_materi_judul);
         rvAnggota = findViewById(R.id.rv_anggota_materi);
     }
 
-    private void checkIntent(){
+    private void checkIntent() {
         Intent intent = getIntent();
         materiOnlineModel = intent.getParcelableExtra(CommonMethod.intentMateriOnlineModel);
-        if (materiOnlineModel != null){
+        if (materiOnlineModel != null) {
             Glide.with(this)
                     .load(materiOnlineModel.getThumbnailUrl())
                     .into(imgBanner);
@@ -71,13 +69,13 @@ public class OpAnggotaMateriOnlineActivity extends AppCompatActivity {
         }
     }
 
-    private void setRecyclerView(){
+    private void setRecyclerView() {
         rvAnggota.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         adapter = new OpAnggotaMateriOnlineAdapter(this, models);
         rvAnggota.setAdapter(adapter);
     }
 
-    private void getData(){
+    private void getData() {
         CollectionReference ref = db.collection(CommonMethod.refKelasOnline)
                 .document(materiOnlineModel.getKelasId())
                 .collection(CommonMethod.refMateriOnline)
@@ -89,7 +87,7 @@ public class OpAnggotaMateriOnlineActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                             AnggotaMateriOnlineModel model = documentSnapshot.toObject(AnggotaMateriOnlineModel.class);
                             model.setDocumentId(documentSnapshot.getId());
                             models.add(model);

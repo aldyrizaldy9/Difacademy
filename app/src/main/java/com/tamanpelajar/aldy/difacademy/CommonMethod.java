@@ -18,7 +18,7 @@ public class CommonMethod {
     public final static String refTags = "Tags-dev";
     public final static String refTokens = "Tokens";
     public final static String refOngoingKelasBlended = "OngoingKelasBlended-dev";
-    public final static String refOngoingMateriOnline = "OngoingKelasOnline-dev";
+    public final static String refOngoingMateriOnline = "OngoingMateriOnline-dev";
     public final static String refAnggota = "Anggota-dev";
 
     public final static String refKelasBlended = "KelasBlended-dev";
@@ -32,6 +32,8 @@ public class CommonMethod {
     public final static String refSoalOnline = "SoalOnline-dev";
 
     public final static String refNews = "News-dev";
+
+    public final static String intentUserDocId = "UserDocId";
 
     public final static String intentKelasBlendedModel = "KelasBlendedModel";
     public final static String intentMateriBlendedModel = "MateriBlendedModel";
@@ -48,6 +50,7 @@ public class CommonMethod {
     public final static String intentNewsModel = "NewsModel";
     public final static String intentVideoModel = "VideoModel";
     public final static String intentPaymentModel = "PaymentModel";
+    public final static String intentGraduationModel = "GraduationModel";
     public final static String intentFromNotification = "FromNotification";
 
     public final static String fieldDateCreated = "dateCreated";
@@ -67,21 +70,21 @@ public class CommonMethod {
     public final static int paginationMaxLoad = 30;
     public final static int paginationLoadNewData = 15;
 
-    public static long getTimeStamp(){
+    public static long getTimeStamp() {
         return Timestamp.now().getSeconds();
     }
 
-    public static boolean isInternetAvailable(Context context){
+    public static boolean isInternetAvailable(Context context) {
         try {
-            ConnectivityManager cm = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+            ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-            if (activeNetwork != null && activeNetwork.isConnectedOrConnecting()){
+            if (activeNetwork != null && activeNetwork.isConnectedOrConnecting()) {
                 return true;
             } else {
                 Toast.makeText(context, context.getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
                 return false;
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             return false;
         }
     }

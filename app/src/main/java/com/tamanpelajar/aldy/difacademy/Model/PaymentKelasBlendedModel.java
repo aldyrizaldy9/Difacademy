@@ -5,6 +5,17 @@ import android.os.Parcelable;
 
 public class PaymentKelasBlendedModel implements Parcelable {
 
+    public static final Creator<PaymentKelasBlendedModel> CREATOR = new Creator<PaymentKelasBlendedModel>() {
+        @Override
+        public PaymentKelasBlendedModel createFromParcel(Parcel in) {
+            return new PaymentKelasBlendedModel(in);
+        }
+
+        @Override
+        public PaymentKelasBlendedModel[] newArray(int size) {
+            return new PaymentKelasBlendedModel[size];
+        }
+    };
     private String documentId, userId, namaUser, email, noWa, kelasId, namaKelas, hargaKelas, namaBank;
     private long dateCreated;
     private boolean isSeen, isPaid;
@@ -61,18 +72,6 @@ public class PaymentKelasBlendedModel implements Parcelable {
     public int describeContents() {
         return 0;
     }
-
-    public static final Creator<PaymentKelasBlendedModel> CREATOR = new Creator<PaymentKelasBlendedModel>() {
-        @Override
-        public PaymentKelasBlendedModel createFromParcel(Parcel in) {
-            return new PaymentKelasBlendedModel(in);
-        }
-
-        @Override
-        public PaymentKelasBlendedModel[] newArray(int size) {
-            return new PaymentKelasBlendedModel[size];
-        }
-    };
 
     public String getDocumentId() {
         return documentId;

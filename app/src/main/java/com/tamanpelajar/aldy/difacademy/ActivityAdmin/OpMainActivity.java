@@ -23,13 +23,6 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.tamanpelajar.aldy.difacademy.ActivityCommon.LoginActivity;
-import com.tamanpelajar.aldy.difacademy.BuildConfig;
-import com.tamanpelajar.aldy.difacademy.CommonMethod;
-import com.tamanpelajar.aldy.difacademy.Model.GraduationMateriOnlineModel;
-import com.tamanpelajar.aldy.difacademy.Model.PaymentKelasBlendedModel;
-import com.tamanpelajar.aldy.difacademy.Notification.Token;
-import com.tamanpelajar.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -43,6 +36,15 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
+import com.tamanpelajar.aldy.difacademy.ActivityCommon.LoginActivity;
+import com.tamanpelajar.aldy.difacademy.BuildConfig;
+import com.tamanpelajar.aldy.difacademy.CommonMethod;
+import com.tamanpelajar.aldy.difacademy.Model.GraduationMateriBlendedModel;
+import com.tamanpelajar.aldy.difacademy.Model.GraduationMateriOnlineModel;
+import com.tamanpelajar.aldy.difacademy.Model.PaymentKelasBlendedModel;
+import com.tamanpelajar.aldy.difacademy.Model.PaymentMateriOnlineModel;
+import com.tamanpelajar.aldy.difacademy.Notification.Token;
+import com.tamanpelajar.aldy.difacademy.R;
 
 import static com.tamanpelajar.aldy.difacademy.ActivityCommon.LoginActivity.JENIS_USER_PREFS;
 import static com.tamanpelajar.aldy.difacademy.ActivityCommon.LoginActivity.SHARE_PREFS;
@@ -62,9 +64,10 @@ public class OpMainActivity extends AppCompatActivity {
     private Button btnFree, btnOnline, btnBlended, btnBerita, btnTags, btnBanner;
     private TextView tvNavbar;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private CollectionReference paymentBlendedRef = db.collection(CommonMethod.refPaymentKelasBlended);
     private CollectionReference paymentOnlineRef = db.collection(CommonMethod.refPaymentMateriOnline);
-    private CollectionReference graduationRef = db.collection(CommonMethod.refGraduationOnline);
+    private CollectionReference paymentBlendedRef = db.collection(CommonMethod.refPaymentKelasBlended);
+    private CollectionReference graduationOnlineRef = db.collection(CommonMethod.refGraduationOnline);
+    private CollectionReference graduationBlendedRef = db.collection(CommonMethod.refGraduationBlended);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,7 +95,7 @@ public class OpMainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-//        checkIfPaymentExist();
+        isPaymentOnlineExist();
     }
 
     private void showDialogAskPermission() {
@@ -271,7 +274,6 @@ public class OpMainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-//        super.onBackPressed();
         if (doubleBackToExitPressedOnce) {
             super.onBackPressed();
             Intent intent = new Intent(Intent.ACTION_MAIN);
@@ -292,31 +294,6 @@ public class OpMainActivity extends AppCompatActivity {
         }, 2000);
     }
 
-    private void isPaymentBlendedExist() {
-        paymentBlendedRef.addSnapshotListener(this, new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                if (e != null) {
-                    return;
-                }
-
-                if (queryDocumentSnapshots == null) {
-                    imgNotif.setImageResource(R.drawable.ic_notifications);
-                } else {
-                    for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
-                        PaymentKelasBlendedModel paymentKelasBlendedModel = queryDocumentSnapshot.toObject(PaymentKelasBlendedModel.class);
-                        paymentKelasBlendedModel.setDocumentId(queryDocumentSnapshot.getId());
-                        if (!paymentKelasBlendedModel.isSeen()) {
-                            imgNotif.setImageResource(R.drawable.ic_notifications_active);
-                            return;
-                        }
-                    }
-                    isPaymentOnlineExist();
-                }
-            }
-        });
-    }
-
     private void isPaymentOnlineExist() {
         paymentOnlineRef.addSnapshotListener(this, new EventListener<QuerySnapshot>() {
             @Override
@@ -324,7 +301,31 @@ public class OpMainActivity extends AppCompatActivity {
                 if (e != null) {
                     return;
                 }
+                if (queryDocumentSnapshots == null) {
+                    imgNotif.setImageResource(R.drawable.ic_notifications);
+                } else {
+                    for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
+                        PaymentMateriOnlineModel paymentMateriOnlineModel = queryDocumentSnapshot.toObject(PaymentMateriOnlineModel.class);
+                        paymentMateriOnlineModel.setDocumentId(queryDocumentSnapshot.getId());
+                        if (!paymentMateriOnlineModel.isSeen()) {
+                            imgNotif.setImageResource(R.drawable.ic_notifications_active);
+                            return;
+                        }
+                    }
+                    isPaymentBlendedExist();
+                }
+            }
+        });
+    }
 
+
+    private void isPaymentBlendedExist() {
+        paymentBlendedRef.addSnapshotListener(this, new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    return;
+                }
                 if (queryDocumentSnapshots == null) {
                     imgNotif.setImageResource(R.drawable.ic_notifications);
                 } else {
@@ -336,14 +337,15 @@ public class OpMainActivity extends AppCompatActivity {
                             return;
                         }
                     }
-                    isGraduationExist();
+                    isGraduationOnlineExist();
                 }
             }
         });
     }
 
-    private void isGraduationExist() {
-        graduationRef.addSnapshotListener(this, new EventListener<QuerySnapshot>() {
+
+    private void isGraduationOnlineExist() {
+        graduationOnlineRef.addSnapshotListener(this, new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                 if (e != null) {
@@ -360,10 +362,33 @@ public class OpMainActivity extends AppCompatActivity {
                             return;
                         }
                     }
-                    imgNotif.setImageResource(R.drawable.ic_notifications);
+                    isGraduationBlendedExist();
                 }
             }
         });
     }
 
+    private void isGraduationBlendedExist() {
+        graduationBlendedRef.addSnapshotListener(this, new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    return;
+                }
+                if (queryDocumentSnapshots == null) {
+                    imgNotif.setImageResource(R.drawable.ic_notifications);
+                } else {
+                    for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
+                        GraduationMateriBlendedModel graduationMateriBlendedModel = queryDocumentSnapshot.toObject(GraduationMateriBlendedModel.class);
+                        graduationMateriBlendedModel.setDocumentId(queryDocumentSnapshot.getId());
+                        if (!graduationMateriBlendedModel.isSeen()) {
+                            imgNotif.setImageResource(R.drawable.ic_notifications_active);
+                            return;
+                        }
+                    }
+                    imgNotif.setImageResource(R.drawable.ic_notifications);
+                }
+            }
+        });
+    }
 }

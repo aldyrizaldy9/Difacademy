@@ -19,10 +19,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.bumptech.glide.Glide;
-import com.tamanpelajar.aldy.difacademy.CommonMethod;
-import com.tamanpelajar.aldy.difacademy.Model.MateriOnlineModel;
-import com.tamanpelajar.aldy.difacademy.Model.VideoOnlineModel;
-import com.tamanpelajar.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
@@ -33,6 +29,10 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.tamanpelajar.aldy.difacademy.CommonMethod;
+import com.tamanpelajar.aldy.difacademy.Model.MateriOnlineModel;
+import com.tamanpelajar.aldy.difacademy.Model.VideoOnlineModel;
+import com.tamanpelajar.aldy.difacademy.R;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -96,7 +96,7 @@ public class OpAddOnlineMateriActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        if (thereIsData && dataHasChanged){
+        if (thereIsData && dataHasChanged) {
             isMateriOnlineChanged = true;
         }
     }

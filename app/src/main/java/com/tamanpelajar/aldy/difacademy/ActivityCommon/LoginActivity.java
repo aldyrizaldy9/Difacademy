@@ -1,10 +1,8 @@
 package com.tamanpelajar.aldy.difacademy.ActivityCommon;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -16,15 +14,15 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpMainActivity;
-import com.tamanpelajar.aldy.difacademy.ActivityUser.UsMainActivity;
-import com.tamanpelajar.aldy.difacademy.CommonMethod;
-import com.tamanpelajar.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpMainActivity;
+import com.tamanpelajar.aldy.difacademy.ActivityUser.UsMainActivity;
+import com.tamanpelajar.aldy.difacademy.CommonMethod;
+import com.tamanpelajar.aldy.difacademy.R;
 
 import static com.tamanpelajar.aldy.difacademy.BuildConfig.ADMIN_USER_ID;
 

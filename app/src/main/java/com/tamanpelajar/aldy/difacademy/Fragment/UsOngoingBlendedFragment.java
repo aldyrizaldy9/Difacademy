@@ -13,9 +13,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.tamanpelajar.aldy.difacademy.Adapter.UsMateriBlendedAdapter;
-import com.tamanpelajar.aldy.difacademy.Model.MateriBlendedModel;
-import com.tamanpelajar.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
@@ -25,6 +22,11 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.tamanpelajar.aldy.difacademy.Adapter.UsKelasBlendedAdapter;
+import com.tamanpelajar.aldy.difacademy.CommonMethod;
+import com.tamanpelajar.aldy.difacademy.Model.KelasBlendedModel;
+import com.tamanpelajar.aldy.difacademy.Model.OngoingKelasBlendedModel;
+import com.tamanpelajar.aldy.difacademy.R;
 
 import java.util.ArrayList;
 
@@ -35,14 +37,13 @@ import static com.tamanpelajar.aldy.difacademy.ActivityUser.UsOngoingActivity.US
  * A simple {@link Fragment} subclass.
  */
 public class UsOngoingBlendedFragment extends Fragment {
-
-    private static final String TAG = "OngoingBlendedFragment";
+    private static final String TAG = "UsOngoingBlendedFragmen";
     DocumentSnapshot lastVisible;
     boolean loadbaru;
-    CollectionReference ongoingMateriRef;
+    CollectionReference ongoingKelasRef;
     private RecyclerView rvOngoingBlended;
-    private ArrayList<MateriBlendedModel> materiBlendedModels;
-    private UsMateriBlendedAdapter usMateriBlendedAdapter;
+    private ArrayList<KelasBlendedModel> kelasBlendedModels;
+    private UsKelasBlendedAdapter usKelasBlendedAdapter;
     private ProgressDialog pd;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private View rootView;
@@ -60,7 +61,7 @@ public class UsOngoingBlendedFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_us_ongoing_blended, container, false);
         initView();
         setRecyclerView();
-        loadOngoingMateri();
+        loadOngoingKelas();
         return rootView;
     }
 
@@ -68,29 +69,29 @@ public class UsOngoingBlendedFragment extends Fragment {
         rvOngoingBlended = rootView.findViewById(R.id.rv_ongoing_blended);
         pd = new ProgressDialog(rootView.getContext());
 
-        ongoingMateriRef = db
-                .collection("User")
+        ongoingKelasRef = db
+                .collection(CommonMethod.refUser)
                 .document(USER_DOC_ID)
-                .collection("OngoingBlendedMateri");
+                .collection(CommonMethod.refOngoingKelasBlended);
     }
 
     private void setRecyclerView() {
-        materiBlendedModels = new ArrayList<>();
-        usMateriBlendedAdapter = new UsMateriBlendedAdapter(rootView.getContext(), materiBlendedModels);
+        kelasBlendedModels = new ArrayList<>();
+        usKelasBlendedAdapter = new UsKelasBlendedAdapter(rootView.getContext(), kelasBlendedModels);
 
         final LinearLayoutManager manager = new LinearLayoutManager(rootView.getContext(), RecyclerView.VERTICAL, false);
         rvOngoingBlended.setLayoutManager(manager);
-        rvOngoingBlended.setAdapter(usMateriBlendedAdapter);
+        rvOngoingBlended.setAdapter(usKelasBlendedAdapter);
 
         rvOngoingBlended.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                if (manager.findLastVisibleItemPosition() >= materiBlendedModels.size() - 10 &&
+                if (manager.findLastVisibleItemPosition() >= kelasBlendedModels.size() - 10 &&
                         lastVisible != null &&
                         loadbaru) {
                     loadbaru = false;
-                    Query load = ongoingMateriRef
+                    Query load = ongoingKelasRef
                             .orderBy("dateCreated", Query.Direction.DESCENDING)
                             .startAfter(lastVisible)
                             .limit(20);
@@ -99,38 +100,36 @@ public class UsOngoingBlendedFragment extends Fragment {
                             .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                                 @Override
                                 public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                    materiBlendedModels.clear();
+                                    kelasBlendedModels.clear();
                                     if (queryDocumentSnapshots.size() > 0) {
                                         for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
-//                                            OngoingMateriModel ongoingMateriModel = queryDocumentSnapshot.toObject(OngoingMateriModel.class);
-//
-//                                            DocumentReference blendedMateriRef = db
-//                                                    .collection("BlendedCourse")
-//                                                    .document(ongoingMateriModel.getCourseId())
-//                                                    .collection("BlendedMateri")
-//                                                    .document(ongoingMateriModel.getMateriId());
-//
-//                                            blendedMateriRef
-//                                                    .get()
-//                                                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-//                                                        @Override
-//                                                        public void onSuccess(DocumentSnapshot documentSnapshot) {
-//                                                            MateriModel materiModel = documentSnapshot.toObject(MateriModel.class);
-//                                                            if (materiModel != null) {
-//                                                                materiModel.setDocumentId(documentSnapshot.getId());
-//                                                            }
-//                                                            materiBlendedModels.add(materiModel);
-//                                                            usMateriBlendedAdapter.notifyDataSetChanged();
-//                                                            loadbaru = true;
-//                                                        }
-//                                                    })
-//                                                    .addOnFailureListener(new OnFailureListener() {
-//                                                        @Override
-//                                                        public void onFailure(@NonNull Exception e) {
-//                                                            loadbaru = true;
-//                                                            Log.d(TAG, e.toString());
-//                                                        }
-//                                                    });
+                                            OngoingKelasBlendedModel ongoingKelasBlendedModel = queryDocumentSnapshot.toObject(OngoingKelasBlendedModel.class);
+
+                                            DocumentReference kelasBlendedRef = db
+                                                    .collection(CommonMethod.refKelasBlended)
+                                                    .document(ongoingKelasBlendedModel.getKelasId());
+
+                                            kelasBlendedRef
+                                                    .get()
+                                                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                                        @Override
+                                                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                                            KelasBlendedModel kelasBlendedModel = documentSnapshot.toObject(KelasBlendedModel.class);
+                                                            if (kelasBlendedModel != null) {
+                                                                kelasBlendedModel.setDocumentId(documentSnapshot.getId());
+                                                            }
+                                                            kelasBlendedModels.add(kelasBlendedModel);
+                                                            usKelasBlendedAdapter.notifyDataSetChanged();
+                                                            loadbaru = true;
+                                                        }
+                                                    })
+                                                    .addOnFailureListener(new OnFailureListener() {
+                                                        @Override
+                                                        public void onFailure(@NonNull Exception e) {
+                                                            loadbaru = true;
+                                                            Log.d(TAG, e.toString());
+                                                        }
+                                                    });
                                         }
 
                                         if (queryDocumentSnapshots.size() < 20) {
@@ -160,12 +159,12 @@ public class UsOngoingBlendedFragment extends Fragment {
         });
     }
 
-    private void loadOngoingMateri() {
+    private void loadOngoingKelas() {
         pd.setMessage("Memuat...");
         pd.setCancelable(false);
         pd.show();
 
-        Query first = ongoingMateriRef
+        Query first = ongoingKelasRef
                 .orderBy("dateCreated", Query.Direction.DESCENDING)
                 .limit(20);
 
@@ -173,11 +172,11 @@ public class UsOngoingBlendedFragment extends Fragment {
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        materiBlendedModels.clear();
+                        kelasBlendedModels.clear();
                         if (queryDocumentSnapshots.size() > 0) {
                             for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
-//                                OngoingMateriModel ongoingMateriModel = queryDocumentSnapshot.toObject(OngoingMateriModel.class);
-//                                loadOngoingMateriDetail(ongoingMateriModel.getCourseId(), ongoingMateriModel.getMateriId());
+                                OngoingKelasBlendedModel ongoingKelasBlendedModel = queryDocumentSnapshot.toObject(OngoingKelasBlendedModel.class);
+                                loadOngoingKelasDetail(ongoingKelasBlendedModel.getKelasId());
                             }
 
                             if (queryDocumentSnapshots.size() < 20) {
@@ -199,23 +198,21 @@ public class UsOngoingBlendedFragment extends Fragment {
                 });
     }
 
-    private void loadOngoingMateriDetail(final String courseId, String materiId) {
-        DocumentReference blendedMateriref = db
-                .collection("BlendedCourse")
-                .document(courseId)
-                .collection("BlendedMateri")
-                .document(materiId);
-        blendedMateriref
+    private void loadOngoingKelasDetail(final String courseId) {
+        DocumentReference kelasBlendedRef = db
+                .collection(CommonMethod.refKelasBlended)
+                .document(courseId);
+        kelasBlendedRef
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
-//                        MateriModel materiModel = documentSnapshot.toObject(MateriModel.class);
-//                        if (materiModel != null) {
-//                            materiModel.setDocumentId(documentSnapshot.getId());
-//                        }
-//                        materiBlendedModels.add(materiModel);
-//                        usMateriBlendedAdapter.notifyDataSetChanged();
+                        KelasBlendedModel kelasBlendedModel = documentSnapshot.toObject(KelasBlendedModel.class);
+                        if (kelasBlendedModel != null) {
+                            kelasBlendedModel.setDocumentId(documentSnapshot.getId());
+                        }
+                        kelasBlendedModels.add(kelasBlendedModel);
+                        usKelasBlendedAdapter.notifyDataSetChanged();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {

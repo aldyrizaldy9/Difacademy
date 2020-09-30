@@ -19,7 +19,7 @@ import com.tamanpelajar.aldy.difacademy.R;
 
 import java.util.ArrayList;
 
-public class OpVideoBlendedAdapter extends RecyclerView.Adapter<OpVideoBlendedAdapter.ViewHolder>{
+public class OpVideoBlendedAdapter extends RecyclerView.Adapter<OpVideoBlendedAdapter.ViewHolder> {
     private Context context;
     private ArrayList<VideoBlendedModel> models;
 

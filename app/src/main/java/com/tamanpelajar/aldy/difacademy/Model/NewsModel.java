@@ -3,15 +3,24 @@ package com.tamanpelajar.aldy.difacademy.Model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.google.firebase.firestore.Exclude;
-
 public class NewsModel implements Parcelable {
+    public static final Creator<NewsModel> CREATOR = new Creator<NewsModel>() {
+        @Override
+        public NewsModel createFromParcel(Parcel in) {
+            return new NewsModel(in);
+        }
+
+        @Override
+        public NewsModel[] newArray(int size) {
+            return new NewsModel[size];
+        }
+    };
     private String documentId, judul, isi, linkfoto;
     private long dateCreated;
 
+
     public NewsModel() {
     }
-
 
     public NewsModel(String judul, String isi, String linkfoto, long dateCreated) {
         this.judul = judul;
@@ -41,18 +50,6 @@ public class NewsModel implements Parcelable {
     public int describeContents() {
         return 0;
     }
-
-    public static final Creator<NewsModel> CREATOR = new Creator<NewsModel>() {
-        @Override
-        public NewsModel createFromParcel(Parcel in) {
-            return new NewsModel(in);
-        }
-
-        @Override
-        public NewsModel[] newArray(int size) {
-            return new NewsModel[size];
-        }
-    };
 
     public String getDocumentId() {
         return documentId;

@@ -4,6 +4,17 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class KelasOnlineModel implements Parcelable {
+    public static final Creator<KelasOnlineModel> CREATOR = new Creator<KelasOnlineModel>() {
+        @Override
+        public KelasOnlineModel createFromParcel(Parcel in) {
+            return new KelasOnlineModel(in);
+        }
+
+        @Override
+        public KelasOnlineModel[] newArray(int size) {
+            return new KelasOnlineModel[size];
+        }
+    };
     private String documentId, title, description, thumbnailUrl, googleDrive, tagId, tag;
     private long dateCreated;
 
@@ -47,18 +58,6 @@ public class KelasOnlineModel implements Parcelable {
     public int describeContents() {
         return 0;
     }
-
-    public static final Creator<KelasOnlineModel> CREATOR = new Creator<KelasOnlineModel>() {
-        @Override
-        public KelasOnlineModel createFromParcel(Parcel in) {
-            return new KelasOnlineModel(in);
-        }
-
-        @Override
-        public KelasOnlineModel[] newArray(int size) {
-            return new KelasOnlineModel[size];
-        }
-    };
 
     public String getDocumentId() {
         return documentId;

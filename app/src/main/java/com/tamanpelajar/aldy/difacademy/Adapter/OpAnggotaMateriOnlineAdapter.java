@@ -70,7 +70,7 @@ public class OpAnggotaMateriOnlineAdapter extends RecyclerView.Adapter<OpAnggota
         return models.size();
     }
 
-    private void hapusAnggota(AnggotaMateriOnlineModel model){
+    private void hapusAnggota(AnggotaMateriOnlineModel model) {
         /**
          * ambil user doc id dulu
          * hapus materi di ongoingnya
@@ -80,7 +80,7 @@ public class OpAnggotaMateriOnlineAdapter extends RecyclerView.Adapter<OpAnggota
         getUserDocId(model);
     }
 
-    private void getUserDocId(final AnggotaMateriOnlineModel model){
+    private void getUserDocId(final AnggotaMateriOnlineModel model) {
         CollectionReference ref = db.collection(CommonMethod.refUser);
         ref.whereEqualTo(CommonMethod.fieldUserId, model.getUserId())
                 .get()
@@ -88,7 +88,7 @@ public class OpAnggotaMateriOnlineAdapter extends RecyclerView.Adapter<OpAnggota
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         String docId = "";
-                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                             docId = documentSnapshot.getId();
                         }
 
@@ -103,7 +103,7 @@ public class OpAnggotaMateriOnlineAdapter extends RecyclerView.Adapter<OpAnggota
                 });
     }
 
-    private void hapusKelas(AnggotaMateriOnlineModel model, String docId){
+    private void hapusKelas(AnggotaMateriOnlineModel model, String docId) {
         DocumentReference ref = db.collection(CommonMethod.refUser)
                 .document(docId)
                 .collection(CommonMethod.refOngoingMateriOnline)
@@ -114,7 +114,7 @@ public class OpAnggotaMateriOnlineAdapter extends RecyclerView.Adapter<OpAnggota
         hapusUserDariAnggota(model);
     }
 
-    private void hapusUserDariAnggota(AnggotaMateriOnlineModel model){
+    private void hapusUserDariAnggota(AnggotaMateriOnlineModel model) {
         DocumentReference ref = db.collection(CommonMethod.refKelasBlended)
                 .document(model.getKelasId())
                 .collection(CommonMethod.refMateriOnline)
@@ -125,14 +125,14 @@ public class OpAnggotaMateriOnlineAdapter extends RecyclerView.Adapter<OpAnggota
         ref.delete();
     }
 
-    private void showHapusDialog(final AnggotaMateriOnlineModel model, final int position){
+    private void showHapusDialog(final AnggotaMateriOnlineModel model, final int position) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setMessage("Ingin menghapus pertanyaan?");
         builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 //hapus pertanyaan
-                if (!CommonMethod.isInternetAvailable(context)){
+                if (!CommonMethod.isInternetAvailable(context)) {
                     return;
                 }
 
@@ -154,6 +154,7 @@ public class OpAnggotaMateriOnlineAdapter extends RecyclerView.Adapter<OpAnggota
     public class ViewHolder extends RecyclerView.ViewHolder {
         ConstraintLayout container;
         TextView tvNama, tvTanggal;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 

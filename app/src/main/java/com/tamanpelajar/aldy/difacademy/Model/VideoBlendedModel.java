@@ -4,10 +4,22 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class VideoBlendedModel implements Parcelable {
+    public static final Creator<VideoBlendedModel> CREATOR = new Creator<VideoBlendedModel>() {
+        @Override
+        public VideoBlendedModel createFromParcel(Parcel in) {
+            return new VideoBlendedModel(in);
+        }
+
+        @Override
+        public VideoBlendedModel[] newArray(int size) {
+            return new VideoBlendedModel[size];
+        }
+    };
     String documentId, title, description, videoUrl, kelasId, materiId;
     long dateCreated;
 
-    public VideoBlendedModel() {}
+    public VideoBlendedModel() {
+    }
 
     public VideoBlendedModel(String title, String description, String videoUrl, String kelasId, String materiId, long dateCreated) {
         this.title = title;
@@ -27,18 +39,6 @@ public class VideoBlendedModel implements Parcelable {
         materiId = in.readString();
         dateCreated = in.readLong();
     }
-
-    public static final Creator<VideoBlendedModel> CREATOR = new Creator<VideoBlendedModel>() {
-        @Override
-        public VideoBlendedModel createFromParcel(Parcel in) {
-            return new VideoBlendedModel(in);
-        }
-
-        @Override
-        public VideoBlendedModel[] newArray(int size) {
-            return new VideoBlendedModel[size];
-        }
-    };
 
     @Override
     public int describeContents() {
