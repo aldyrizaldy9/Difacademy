@@ -15,10 +15,11 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import com.google.android.material.tabs.TabLayout;
+import com.tamanpelajar.aldy.difacademy.CommonMethod;
 import com.tamanpelajar.aldy.difacademy.Fragment.UsOngoingBlendedFragment;
 import com.tamanpelajar.aldy.difacademy.Fragment.UsOngoingOnlineFragment;
 import com.tamanpelajar.aldy.difacademy.R;
-import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
 
@@ -40,7 +41,7 @@ public class UsOngoingActivity extends AppCompatActivity {
         setViewPager();
 
         Intent intent = getIntent();
-        USER_DOC_ID = intent.getStringExtra("userDocId");
+        USER_DOC_ID = intent.getStringExtra(CommonMethod.intentUserDocId);
     }
 
     private void initView() {
@@ -64,8 +65,8 @@ public class UsOngoingActivity extends AppCompatActivity {
 
     private void setViewPager() {
         final UsOngoingActivity.ViewPagerAdapter viewPagerAdapter = new UsOngoingActivity.ViewPagerAdapter(getSupportFragmentManager());
-        viewPagerAdapter.addFragment(new UsOngoingBlendedFragment(), "Blended");
-        viewPagerAdapter.addFragment(new UsOngoingOnlineFragment(), "Online");
+        viewPagerAdapter.addFragment(new UsOngoingBlendedFragment(), "Kelas Blended");
+        viewPagerAdapter.addFragment(new UsOngoingOnlineFragment(), "Materi Online");
 
         viewPager.setAdapter(viewPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);

@@ -13,9 +13,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.tamanpelajar.aldy.difacademy.Adapter.UsMateriOnlineAdapter;
-import com.tamanpelajar.aldy.difacademy.Model.MateriOnlineModel;
-import com.tamanpelajar.aldy.difacademy.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
@@ -25,6 +22,11 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.tamanpelajar.aldy.difacademy.Adapter.UsMateriOnlineAdapter;
+import com.tamanpelajar.aldy.difacademy.CommonMethod;
+import com.tamanpelajar.aldy.difacademy.Model.MateriOnlineModel;
+import com.tamanpelajar.aldy.difacademy.Model.OngoingMateriOnlineModel;
+import com.tamanpelajar.aldy.difacademy.R;
 
 import java.util.ArrayList;
 
@@ -35,8 +37,7 @@ import static com.tamanpelajar.aldy.difacademy.ActivityUser.UsOngoingActivity.US
  * A simple {@link Fragment} subclass.
  */
 public class UsOngoingOnlineFragment extends Fragment {
-
-    private static final String TAG = "OngoingOnlineFragment";
+    private static final String TAG = "UsOngoingOnlineFragment";
     DocumentSnapshot lastVisible;
     boolean loadbaru;
     CollectionReference ongoingMateriRef;
@@ -69,9 +70,9 @@ public class UsOngoingOnlineFragment extends Fragment {
         pd = new ProgressDialog(rootView.getContext());
 
         ongoingMateriRef = db
-                .collection("User")
+                .collection(CommonMethod.refUser)
                 .document(USER_DOC_ID)
-                .collection("OngoingOnlineMateri");
+                .collection(CommonMethod.refOngoingMateriOnline);
     }
 
     private void setRecyclerView() {
@@ -102,35 +103,35 @@ public class UsOngoingOnlineFragment extends Fragment {
                                     materiOnlineModels.clear();
                                     if (queryDocumentSnapshots.size() > 0) {
                                         for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
-//                                            OngoingMateriModel ongoingMateriModel = queryDocumentSnapshot.toObject(OngoingMateriModel.class);
-//
-//                                            DocumentReference onlineMateriRef = db
-//                                                    .collection("OnlineCourse")
-//                                                    .document(ongoingMateriModel.getCourseId())
-//                                                    .collection("OnlineMateri")
-//                                                    .document(ongoingMateriModel.getMateriId());
-//
-//                                            onlineMateriRef
-//                                                    .get()
-//                                                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-//                                                        @Override
-//                                                        public void onSuccess(DocumentSnapshot documentSnapshot) {
-//                                                            MateriModel materiModel = documentSnapshot.toObject(MateriModel.class);
-//                                                            if (materiModel != null) {
-//                                                                materiModel.setDocumentId(documentSnapshot.getId());
-//                                                            }
-//                                                            materiOnlineModels.add(materiModel);
-//                                                            usMateriOnlineAdapter.notifyDataSetChanged();
-//                                                            loadbaru = true;
-//                                                        }
-//                                                    })
-//                                                    .addOnFailureListener(new OnFailureListener() {
-//                                                        @Override
-//                                                        public void onFailure(@NonNull Exception e) {
-//                                                            loadbaru = true;
-//                                                            Log.d(TAG, e.toString());
-//                                                        }
-//                                                    });
+                                            OngoingMateriOnlineModel ongoingMateriOnlineModel = queryDocumentSnapshot.toObject(OngoingMateriOnlineModel.class);
+
+                                            DocumentReference onlineMateriRef = db
+                                                    .collection(CommonMethod.refKelasOnline)
+                                                    .document(ongoingMateriOnlineModel.getKelasId())
+                                                    .collection(CommonMethod.refMateriOnline)
+                                                    .document(ongoingMateriOnlineModel.getMateriId());
+
+                                            onlineMateriRef
+                                                    .get()
+                                                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                                        @Override
+                                                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                                            MateriOnlineModel materiOnlineModel = documentSnapshot.toObject(MateriOnlineModel.class);
+                                                            if (materiOnlineModel != null) {
+                                                                materiOnlineModel.setDocumentId(documentSnapshot.getId());
+                                                            }
+                                                            materiOnlineModels.add(materiOnlineModel);
+                                                            usMateriOnlineAdapter.notifyDataSetChanged();
+                                                            loadbaru = true;
+                                                        }
+                                                    })
+                                                    .addOnFailureListener(new OnFailureListener() {
+                                                        @Override
+                                                        public void onFailure(@NonNull Exception e) {
+                                                            loadbaru = true;
+                                                            Log.d(TAG, e.toString());
+                                                        }
+                                                    });
                                         }
 
                                         if (queryDocumentSnapshots.size() < 20) {
@@ -176,8 +177,8 @@ public class UsOngoingOnlineFragment extends Fragment {
                         materiOnlineModels.clear();
                         if (queryDocumentSnapshots.size() > 0) {
                             for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
-//                                OngoingMateriModel ongoingMateriModel = queryDocumentSnapshot.toObject(OngoingMateriModel.class);
-//                                loadOngoingMateriDetail(ongoingMateriModel.getCourseId(), ongoingMateriModel.getMateriId());
+                                OngoingMateriOnlineModel ongoingMateriOnlineModel = queryDocumentSnapshot.toObject(OngoingMateriOnlineModel.class);
+                                loadOngoingMateriDetail(ongoingMateriOnlineModel.getKelasId(), ongoingMateriOnlineModel.getMateriId());
                             }
 
                             if (queryDocumentSnapshots.size() < 20) {
@@ -201,21 +202,21 @@ public class UsOngoingOnlineFragment extends Fragment {
 
     private void loadOngoingMateriDetail(final String courseId, String materiId) {
         DocumentReference onlineMateriref = db
-                .collection("OnlineCourse")
+                .collection(CommonMethod.refKelasOnline)
                 .document(courseId)
-                .collection("OnlineMateri")
+                .collection(CommonMethod.refMateriOnline)
                 .document(materiId);
         onlineMateriref
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
-//                        MateriModel materiModel = documentSnapshot.toObject(MateriModel.class);
-//                        if (materiModel != null) {
-//                            materiModel.setDocumentId(documentSnapshot.getId());
-//                        }
-//                        materiOnlineModels.add(materiModel);
-//                        usMateriOnlineAdapter.notifyDataSetChanged();
+                        MateriOnlineModel materiOnlineModel = documentSnapshot.toObject(MateriOnlineModel.class);
+                        if (materiOnlineModel != null) {
+                            materiOnlineModel.setDocumentId(documentSnapshot.getId());
+                        }
+                        materiOnlineModels.add(materiOnlineModel);
+                        usMateriOnlineAdapter.notifyDataSetChanged();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
