@@ -68,27 +68,10 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp"
                 android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-                app:layout_constraintBottom_toTopOf="@+id/tv_detail_course_lampiran"
+                app:layout_constraintBottom_toTopOf="@+id/btn_detail_course_lampiran"
                 app:layout_constraintEnd_toEndOf="@+id/tv_detail_course_judul"
                 app:layout_constraintStart_toStartOf="@+id/tv_detail_course_judul"
                 app:layout_constraintTop_toBottomOf="@+id/tv_detail_course_tag" />
-
-            <TextView
-                android:id="@+id/tv_detail_course_lampiran"
-                style="@style/Difacademy.Subtitle2"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="16dp"
-                android:text="Lampiran"
-                android:textColor="@color/biruGelap"
-                android:visibility="visible"
-                app:layout_constraintBottom_toTopOf="@+id/btn_detail_course_daftar_materi"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_detail_course_detail"
-                app:layout_constraintVertical_bias="0.0" />
 
             <Button
                 android:id="@+id/btn_detail_course_daftar_materi"
@@ -102,6 +85,22 @@
                 android:text="daftar materi"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <Button
+                android:id="@+id/btn_detail_course_lampiran"
+                style="@style/Difacademy.Button"
+                android:layout_width="0dp"
+                android:layout_height="36dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="8dp"
+                android:background="@color/colorAccent"
+                android:text="lampiran"
+                android:visibility="visible"
+                app:layout_constraintBottom_toTopOf="@+id/btn_detail_course_daftar_materi"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

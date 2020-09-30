@@ -32,8 +32,8 @@ import static com.tamanpelajar.aldy.difacademy.ActivityCommon.LoginActivity.USER
 public class UsDetailKelasBlendedActivity extends AppCompatActivity {
     private static final String TAG = "UsDetailKelasBlendedAct";
     private ImageView imgThumbnail;
-    private TextView tvJudul, tvTag, tvDetail, tvLampiran;
-    private Button btnDaftarMateri;
+    private TextView tvJudul, tvTag, tvDetail;
+    private Button btnDaftarMateri,btnLampiran;
     private ProgressDialog progressDialog;
     private boolean isPaid = false;
 
@@ -58,9 +58,9 @@ public class UsDetailKelasBlendedActivity extends AppCompatActivity {
         tvJudul = findViewById(R.id.tv_detail_course_judul);
         tvTag = findViewById(R.id.tv_detail_course_tag);
         tvDetail = findViewById(R.id.tv_detail_course_detail);
-        tvLampiran = findViewById(R.id.tv_detail_course_lampiran);
+        btnLampiran = findViewById(R.id.btn_detail_course_lampiran);
         btnDaftarMateri = findViewById(R.id.btn_detail_course_daftar_materi);
-        tvLampiran.setVisibility(View.GONE);
+        btnLampiran.setVisibility(View.GONE);
         progressDialog = new ProgressDialog(this);
         sharedPreferences = getSharedPreferences(SHARE_PREFS, MODE_PRIVATE);
     }

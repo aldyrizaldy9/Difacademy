@@ -18,8 +18,8 @@ import com.tamanpelajar.aldy.difacademy.R;
 
 public class UsDetailKelasOnlineActivity extends AppCompatActivity {
     private ImageView imgThumbnail;
-    private TextView tvJudul, tvTag, tvDetail, tvLampiran;
-    private Button btnDaftarMateri;
+    private TextView tvJudul, tvTag, tvDetail;
+    private Button btnDaftarMateri, btnLampiran;
 
     private KelasOnlineModel kelasOnlineModel;
 
@@ -37,7 +37,7 @@ public class UsDetailKelasOnlineActivity extends AppCompatActivity {
         tvJudul = findViewById(R.id.tv_detail_course_judul);
         tvTag = findViewById(R.id.tv_detail_course_tag);
         tvDetail = findViewById(R.id.tv_detail_course_detail);
-        tvLampiran = findViewById(R.id.tv_detail_course_lampiran);
+        btnLampiran = findViewById(R.id.btn_detail_course_lampiran);
         btnDaftarMateri = findViewById(R.id.btn_detail_course_daftar_materi);
     }
 
@@ -52,9 +52,9 @@ public class UsDetailKelasOnlineActivity extends AppCompatActivity {
 
     private void onClick() {
         if (kelasOnlineModel.getGoogleDrive() == null || kelasOnlineModel.getGoogleDrive().equals("")) {
-            tvLampiran.setVisibility(View.GONE);
+            btnLampiran.setVisibility(View.GONE);
         } else {
-            tvLampiran.setOnClickListener(new View.OnClickListener() {
+            btnLampiran.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     try {

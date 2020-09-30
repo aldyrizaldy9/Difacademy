@@ -18,8 +18,8 @@ import com.tamanpelajar.aldy.difacademy.R;
 
 public class UsDetailMateriBlendedActivity extends AppCompatActivity {
     private ImageView imgThumbnail;
-    private TextView tvJudul, tvTag, tvDetail, tvLampiran;
-    private Button btnDaftarVideo;
+    private TextView tvJudul, tvTag, tvDetail;
+    private Button btnDaftarVideo, btnLampiran;
 
     private MateriBlendedModel materiBlendedModel;
 
@@ -38,7 +38,7 @@ public class UsDetailMateriBlendedActivity extends AppCompatActivity {
         tvTag = findViewById(R.id.tv_detail_course_tag);
         tvTag.setVisibility(View.GONE);
         tvDetail = findViewById(R.id.tv_detail_course_detail);
-        tvLampiran = findViewById(R.id.tv_detail_course_lampiran);
+        btnLampiran = findViewById(R.id.btn_detail_course_lampiran);
         btnDaftarVideo = findViewById(R.id.btn_detail_course_daftar_materi);
         btnDaftarVideo.setText("DAFTAR VIDEO");
     }
@@ -53,9 +53,9 @@ public class UsDetailMateriBlendedActivity extends AppCompatActivity {
 
     private void onClick() {
         if (materiBlendedModel.getLampiranUrl() == null || materiBlendedModel.getLampiranUrl().equals("")) {
-            tvLampiran.setVisibility(View.GONE);
+            btnLampiran.setVisibility(View.GONE);
         } else {
-            tvLampiran.setOnClickListener(new View.OnClickListener() {
+            btnLampiran.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     try {
