@@ -6,6 +6,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessagingService;
+import com.tamanpelajar.aldy.difacademy.CommonMethod;
 
 public class MyFirebaseIdService extends FirebaseMessagingService {
     @Override
@@ -23,12 +24,8 @@ public class MyFirebaseIdService extends FirebaseMessagingService {
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         //set tokennya di database
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        DocumentReference reference = db.collection("Tokens").document(firebaseUser.getUid());
+        DocumentReference reference = db.collection(CommonMethod.refTokens).document(firebaseUser.getUid());
         Token token = new Token(refreshToken);
         reference.set(token);
-
-//        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Tokens");
-//        Token token = new Token(refreshToken);
-//        reference.child(firebaseUser.getUid()).setValue(token);
     }
 }

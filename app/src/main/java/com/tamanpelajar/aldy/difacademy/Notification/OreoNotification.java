@@ -11,8 +11,8 @@ import android.net.Uri;
 import android.os.Build;
 
 public class OreoNotification extends ContextWrapper {
-    private static final String CHANNEL_ID = "com.example.aldy.difacademy";
-    private static final String CHANNEL_NAME = "difacademy";
+    private static final String CHANNEL_ID = "tamanpelajar";
+    private static final String CHANNEL_NAME = "payment";
 
     private NotificationManager notificationManager;
 
