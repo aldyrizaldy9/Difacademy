@@ -24,6 +24,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.tamanpelajar.aldy.difacademy.CommonMethod;
+import com.tamanpelajar.aldy.difacademy.Model.AnggotaMateriOnlineModel;
 import com.tamanpelajar.aldy.difacademy.Model.OngoingMateriOnlineModel;
 import com.tamanpelajar.aldy.difacademy.Model.PaymentMateriOnlineModel;
 import com.tamanpelajar.aldy.difacademy.Model.UserModel;
@@ -257,6 +258,37 @@ public class OpNotifPaymentMateriOnlineActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
+                        setUserAsAnggotaMateri();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        pd.dismiss();
+                        Toast.makeText(OpNotifPaymentMateriOnlineActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void setUserAsAnggotaMateri() {
+        CollectionReference anggotaMateriRef = db
+                .collection(CommonMethod.refKelasOnline)
+                .document(paymentMateriOnlineModel.getKelasId())
+                .collection(CommonMethod.refMateriOnline)
+                .document(paymentMateriOnlineModel.getMateriId())
+                .collection(CommonMethod.refAnggota);
+
+        AnggotaMateriOnlineModel anggotaMateriOnlineModel = new AnggotaMateriOnlineModel(
+                paymentMateriOnlineModel.getNamaUser(),
+                paymentMateriOnlineModel.getUserId(),
+                paymentMateriOnlineModel.getKelasId(),
+                paymentMateriOnlineModel.getMateriId(),
+                paymentMateriOnlineModel.getDateCreated());
+
+        anggotaMateriRef.add(anggotaMateriOnlineModel)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
                         pd.dismiss();
                         Toast.makeText(OpNotifPaymentMateriOnlineActivity.this,
                                 "Materi telah dibuka untuk user "

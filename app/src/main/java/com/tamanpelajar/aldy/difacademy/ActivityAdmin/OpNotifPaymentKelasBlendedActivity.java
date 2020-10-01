@@ -24,6 +24,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.tamanpelajar.aldy.difacademy.CommonMethod;
+import com.tamanpelajar.aldy.difacademy.Model.AnggotaKelasBlendedModel;
 import com.tamanpelajar.aldy.difacademy.Model.OngoingKelasBlendedModel;
 import com.tamanpelajar.aldy.difacademy.Model.PaymentKelasBlendedModel;
 import com.tamanpelajar.aldy.difacademy.Model.UserModel;
@@ -251,9 +252,37 @@ public class OpNotifPaymentKelasBlendedActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
+                        setUserAsAnggotaKelas();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        pd.dismiss();
+                        Toast.makeText(OpNotifPaymentKelasBlendedActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void setUserAsAnggotaKelas() {
+        CollectionReference anggotaKelasRef = db
+                .collection(CommonMethod.refKelasBlended)
+                .document(paymentKelasBlendedModel.getKelasId())
+                .collection(CommonMethod.refAnggota);
+
+        AnggotaKelasBlendedModel anggotaKelasBlendedModel = new AnggotaKelasBlendedModel(
+                paymentKelasBlendedModel.getNamaUser(),
+                paymentKelasBlendedModel.getUserId(),
+                paymentKelasBlendedModel.getKelasId(),
+                paymentKelasBlendedModel.getDateCreated());
+
+        anggotaKelasRef.add(anggotaKelasBlendedModel)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
                         pd.dismiss();
                         Toast.makeText(OpNotifPaymentKelasBlendedActivity.this,
-                                "Kelas telah dibuka untuk user "
+                                "Materi telah dibuka untuk user "
                                         + paymentKelasBlendedModel.getNamaUser(), Toast.LENGTH_SHORT).show();
                         finish();
                     }

@@ -268,7 +268,7 @@ public class UsMainActivity extends AppCompatActivity {
             } else {
                 setOngoingKelasBlended(ongoingKelasBlendedModel.getKelasId());
             }
-        } else {
+        } else if (ongoingKelasBlendedModel != null) {
             setOngoingKelasBlended(ongoingKelasBlendedModel.getKelasId());
         }
     }
