@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
+import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
 
@@ -21,9 +22,12 @@ import com.tamanpelajar.aldy.difacademy.CommonMethod;
 import static com.tamanpelajar.aldy.difacademy.ActivityCommon.LoginActivity.USERID_PREFS;
 
 public class MyFirebaseMessaging extends FirebaseMessagingService {
+    private static final String TAG = "ganteng";
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
+
+        Log.d(TAG, "MyFirebaseMessaging onMessageReceived: jalan");
         String sented = remoteMessage.getData().get("sented");
         String user = remoteMessage.getData().get("user");
 
@@ -43,6 +47,7 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
     }
 
     private void sendOreoNotification(RemoteMessage remoteMessage) {
+        Log.d(TAG, "MyFirebaseMessaging sendOreoNotification: jalan");
         String user = remoteMessage.getData().get("user");
         String icon = remoteMessage.getData().get("icon");
         String title = remoteMessage.getData().get("title");
@@ -68,6 +73,7 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
     }
 
     private void sendNotification(RemoteMessage remoteMessage) {
+        Log.d(TAG, "MyFirebaseMessaging sendNotification: jalan");
         String user = remoteMessage.getData().get("user");
         String icon = remoteMessage.getData().get("icon");
         String title = remoteMessage.getData().get("title");

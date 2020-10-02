@@ -9,8 +9,10 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.net.Uri;
 import android.os.Build;
+import android.util.Log;
 
 public class OreoNotification extends ContextWrapper {
+    private static final String TAG = "ganteng";
     private static final String CHANNEL_ID = "tamanpelajar";
     private static final String CHANNEL_NAME = "payment";
 
@@ -26,6 +28,7 @@ public class OreoNotification extends ContextWrapper {
 
     @TargetApi(Build.VERSION_CODES.O)
     private void createChannel() {
+        Log.d(TAG, "OreoNotification createChannel: jalan");
         NotificationChannel channel = new NotificationChannel(CHANNEL_ID,
                 CHANNEL_NAME,
                 NotificationManager.IMPORTANCE_DEFAULT);
@@ -37,6 +40,7 @@ public class OreoNotification extends ContextWrapper {
     }
 
     public NotificationManager getManager() {
+        Log.d(TAG, "OreoNotification getManager: jalan");
         if (notificationManager == null) {
             notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         }
@@ -50,6 +54,7 @@ public class OreoNotification extends ContextWrapper {
                                                     PendingIntent pendingIntent,
                                                     Uri soundUri,
                                                     String icon) {
+        Log.d(TAG, "OreoNotification getOeroNotification: jalan");
         return new Notification.Builder(getApplicationContext(), CHANNEL_ID)
                 .setContentIntent(pendingIntent)
                 .setContentTitle(title)

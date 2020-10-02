@@ -92,7 +92,7 @@ public class OpAnggotaKelasBlendedAdapter extends RecyclerView.Adapter<OpAnggota
                             docId = documentSnapshot.getId();
                         }
 
-                        hapusKelas(model, docId);
+                        hapusOngoingKelas(model, docId);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -103,7 +103,7 @@ public class OpAnggotaKelasBlendedAdapter extends RecyclerView.Adapter<OpAnggota
                 });
     }
 
-    private void hapusKelas(AnggotaKelasBlendedModel model, String docId) {
+    private void hapusOngoingKelas(AnggotaKelasBlendedModel model, String docId) {
         DocumentReference ref = db.collection(CommonMethod.refUser)
                 .document(docId)
                 .collection(CommonMethod.refOngoingKelasBlended)

@@ -92,7 +92,7 @@ public class OpAnggotaMateriOnlineAdapter extends RecyclerView.Adapter<OpAnggota
                             docId = documentSnapshot.getId();
                         }
 
-                        hapusKelas(model, docId);
+                        hapusOngoingMateri(model, docId);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -103,7 +103,7 @@ public class OpAnggotaMateriOnlineAdapter extends RecyclerView.Adapter<OpAnggota
                 });
     }
 
-    private void hapusKelas(AnggotaMateriOnlineModel model, String docId) {
+    private void hapusOngoingMateri(AnggotaMateriOnlineModel model, String docId) {
         DocumentReference ref = db.collection(CommonMethod.refUser)
                 .document(docId)
                 .collection(CommonMethod.refOngoingMateriOnline)
