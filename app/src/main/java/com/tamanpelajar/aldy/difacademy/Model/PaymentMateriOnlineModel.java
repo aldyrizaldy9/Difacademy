@@ -97,6 +97,10 @@ public class PaymentMateriOnlineModel implements Parcelable {
         return namaUser;
     }
 
+    public void setNamaUser(String namaUser) {
+        this.namaUser = namaUser;
+    }
+
     public String getEmail() {
         return email;
     }

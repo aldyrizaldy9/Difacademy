@@ -77,6 +77,7 @@ public class OpNotifPaymentMateriOnlineActivity extends AppCompatActivity {
         imgBack = findViewById(R.id.img_icon1);
         imgBack.setImageResource(R.drawable.ic_arrow_back);
         btnBukaMateri = findViewById(R.id.btn_op_notif_pay_buka_kelas);
+        btnBukaMateri.setText("buka materi");
 
         pd = new ProgressDialog(this);
         pd.setMessage("Memproses...");

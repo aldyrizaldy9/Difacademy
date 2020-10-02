@@ -84,6 +84,10 @@ public class GraduationMateriBlendedModel implements Parcelable {
         return namaUser;
     }
 
+    public void setNamaUser(String namaUser) {
+        this.namaUser = namaUser;
+    }
+
     public String getEmail() {
         return email;
     }

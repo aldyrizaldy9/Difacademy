@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -23,6 +24,14 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.tamanpelajar.aldy.difacademy.CommonMethod;
+import com.tamanpelajar.aldy.difacademy.Model.AnggotaKelasBlendedModel;
+import com.tamanpelajar.aldy.difacademy.Model.AnggotaMateriOnlineModel;
+import com.tamanpelajar.aldy.difacademy.Model.GraduationMateriBlendedModel;
+import com.tamanpelajar.aldy.difacademy.Model.GraduationMateriOnlineModel;
+import com.tamanpelajar.aldy.difacademy.Model.OngoingKelasBlendedModel;
+import com.tamanpelajar.aldy.difacademy.Model.OngoingMateriOnlineModel;
+import com.tamanpelajar.aldy.difacademy.Model.PaymentKelasBlendedModel;
+import com.tamanpelajar.aldy.difacademy.Model.PaymentMateriOnlineModel;
 import com.tamanpelajar.aldy.difacademy.Model.UserModel;
 import com.tamanpelajar.aldy.difacademy.R;
 
@@ -32,9 +41,11 @@ import static com.tamanpelajar.aldy.difacademy.ActivityCommon.LoginActivity.USER
 public class UsEditProfileActivity extends AppCompatActivity {
 
     private static final String TAG = "EditProfileActivity";
-    private ConstraintLayout clBack, clSave, clNavbar;
+    private ConstraintLayout clBack;
+    private ConstraintLayout clSave;
     private EditText edtNama, edtNoWa;
     private ProgressDialog progressDialog;
+    private FirebaseFirestore firebaseFirestore;
     private CollectionReference userRef;
     private DocumentReference userDocRef;
     private UserModel userModel;
@@ -50,7 +61,7 @@ public class UsEditProfileActivity extends AppCompatActivity {
     }
 
     private void initView() {
-        clNavbar = findViewById(R.id.cl_navbar);
+        ConstraintLayout clNavbar = findViewById(R.id.cl_navbar);
         clNavbar.setBackgroundColor(getResources().getColor(R.color.navKuning));
         clBack = findViewById(R.id.cl_icon1);
         clBack.setVisibility(View.VISIBLE);
@@ -88,7 +99,7 @@ public class UsEditProfileActivity extends AppCompatActivity {
         progressDialog.setCancelable(false);
         progressDialog.show();
         String userId = sharedPreferences.getString(USERID_PREFS, "");
-        FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+        firebaseFirestore = FirebaseFirestore.getInstance();
         userRef = firebaseFirestore.collection(CommonMethod.refUser);
         userRef
                 .whereEqualTo(CommonMethod.fieldUserId, userId)
@@ -124,8 +135,301 @@ public class UsEditProfileActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
+                        getOngoingKelasBlended();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
                         progressDialog.dismiss();
-                        Toast.makeText(UsEditProfileActivity.this, "Data telah disimpan", Toast.LENGTH_SHORT).show();
+                        Log.d(TAG, e.toString());
+                    }
+                });
+
+    }
+
+    private void getOngoingKelasBlended() {
+        userDocRef
+                .collection(CommonMethod.refOngoingKelasBlended)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
+                            OngoingKelasBlendedModel ongoingKelasBlendedModel = queryDocumentSnapshot.toObject(OngoingKelasBlendedModel.class);
+                            getRefAnggotaKelasBlended(ongoingKelasBlendedModel.getKelasId());
+                        }
+                        getOngoingMateriOnline();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        progressDialog.dismiss();
+                        Log.d(TAG, e.toString());
+                    }
+                });
+    }
+
+    private void getRefAnggotaKelasBlended(String kelasId) {
+        CollectionReference anggotaKelasRef = firebaseFirestore
+                .collection(CommonMethod.refKelasBlended)
+                .document(kelasId)
+                .collection(CommonMethod.refAnggota);
+
+        anggotaKelasRef
+                .whereEqualTo("userId", userModel.getUserId())
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
+                            AnggotaKelasBlendedModel anggotaKelasBlendedModel = queryDocumentSnapshot.toObject(AnggotaKelasBlendedModel.class);
+                            anggotaKelasBlendedModel.setName(edtNama.getText().toString());
+
+                            setNamaAnggotaKelasBlended(queryDocumentSnapshot.getId(), anggotaKelasBlendedModel);
+                        }
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        progressDialog.dismiss();
+                        Log.d(TAG, e.toString());
+                    }
+                });
+    }
+
+    private void setNamaAnggotaKelasBlended(String docId, AnggotaKelasBlendedModel anggotaKelasBlendedModel) {
+        DocumentReference anggotaKelasRef = firebaseFirestore
+                .collection(CommonMethod.refKelasBlended)
+                .document(anggotaKelasBlendedModel.getKelasId())
+                .collection(CommonMethod.refAnggota)
+                .document(docId);
+        anggotaKelasRef
+                .set(anggotaKelasBlendedModel)
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        progressDialog.dismiss();
+                        Log.d(TAG, e.toString());
+                    }
+                });
+    }
+
+    private void getOngoingMateriOnline() {
+        userDocRef
+                .collection(CommonMethod.refOngoingMateriOnline)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
+                            OngoingMateriOnlineModel ongoingMateriOnlineModel = queryDocumentSnapshot.toObject(OngoingMateriOnlineModel.class);
+                            getRefAnggotaMateriOnline(ongoingMateriOnlineModel.getKelasId(), ongoingMateriOnlineModel.getMateriId());
+                        }
+                        getPaymentKelasBlended();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        progressDialog.dismiss();
+                        Log.d(TAG, e.toString());
+                    }
+                });
+    }
+
+    private void getRefAnggotaMateriOnline(String kelasId, String materiId) {
+        CollectionReference anggotaMateriRef = firebaseFirestore
+                .collection(CommonMethod.refKelasOnline)
+                .document(kelasId)
+                .collection(CommonMethod.refMateriOnline)
+                .document(materiId)
+                .collection(CommonMethod.refAnggota);
+
+        anggotaMateriRef
+                .whereEqualTo("userId", userModel.getUserId())
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
+                            AnggotaMateriOnlineModel anggotaMateriOnlineModel = queryDocumentSnapshot.toObject(AnggotaMateriOnlineModel.class);
+                            anggotaMateriOnlineModel.setName(edtNama.getText().toString());
+
+                            setNamaAnggotaMateriOnline(queryDocumentSnapshot.getId(), anggotaMateriOnlineModel);
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        progressDialog.dismiss();
+                        Log.d(TAG, e.toString());
+                    }
+                });
+    }
+
+    private void setNamaAnggotaMateriOnline(String docId, AnggotaMateriOnlineModel anggotaMateriOnlineModel) {
+        DocumentReference anggotaMateriRef = firebaseFirestore
+                .collection(CommonMethod.refKelasOnline)
+                .document(anggotaMateriOnlineModel.getKelasId())
+                .collection(CommonMethod.refMateriOnline)
+                .document(anggotaMateriOnlineModel.getMateriId())
+                .collection(CommonMethod.refAnggota)
+                .document(docId);
+        anggotaMateriRef
+                .set(anggotaMateriOnlineModel)
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        progressDialog.dismiss();
+                        Log.d(TAG, e.toString());
+                    }
+                });
+    }
+
+    private void getPaymentKelasBlended() {
+        CollectionReference paymentKelasBlendedRef = firebaseFirestore.collection(CommonMethod.refPaymentKelasBlended);
+        paymentKelasBlendedRef
+                .whereEqualTo("userId", userModel.getUserId())
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
+                            PaymentKelasBlendedModel paymentKelasBlendedModel = queryDocumentSnapshot.toObject(PaymentKelasBlendedModel.class);
+                            paymentKelasBlendedModel.setNamaUser(edtNama.getText().toString());
+
+                            setNamaPaymentKelasBlended(queryDocumentSnapshot.getId(), paymentKelasBlendedModel);
+                        }
+                        getGraduationBlended();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        progressDialog.dismiss();
+                        Log.d(TAG, e.toString());
+                    }
+                });
+    }
+
+    private void setNamaPaymentKelasBlended(String docId, PaymentKelasBlendedModel paymentKelasBlendedModel) {
+        DocumentReference paymentKelasBlendedRef = firebaseFirestore
+                .collection(CommonMethod.refPaymentKelasBlended)
+                .document(docId);
+        paymentKelasBlendedRef
+                .set(paymentKelasBlendedModel)
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        progressDialog.dismiss();
+                        Log.d(TAG, e.toString());
+                    }
+                });
+    }
+
+    private void getGraduationBlended() {
+        CollectionReference graduationBlendedRef = firebaseFirestore.collection(CommonMethod.refGraduationBlended);
+        graduationBlendedRef
+                .whereEqualTo("userId", userModel.getUserId())
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
+                            GraduationMateriBlendedModel graduationMateriBlendedModel = queryDocumentSnapshot.toObject(GraduationMateriBlendedModel.class);
+                            graduationMateriBlendedModel.setNamaUser(edtNama.getText().toString());
+
+                            setNamaGraduationBlended(queryDocumentSnapshot.getId(), graduationMateriBlendedModel);
+                        }
+                        getPaymentMateriOnline();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        progressDialog.dismiss();
+                        Log.d(TAG, e.toString());
+                    }
+                });
+    }
+
+    private void setNamaGraduationBlended(String docId, GraduationMateriBlendedModel graduationMateriBlendedModel) {
+        DocumentReference graduationBlendedRef = firebaseFirestore
+                .collection(CommonMethod.refGraduationBlended)
+                .document(docId);
+        graduationBlendedRef
+                .set(graduationMateriBlendedModel)
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        progressDialog.dismiss();
+                        Log.d(TAG, e.toString());
+                    }
+                });
+    }
+
+    private void getPaymentMateriOnline() {
+        CollectionReference paymentMateriOnlineRef = firebaseFirestore.collection(CommonMethod.refPaymentMateriOnline);
+        paymentMateriOnlineRef
+                .whereEqualTo("userId", userModel.getUserId())
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
+                            PaymentMateriOnlineModel paymentMateriOnlineModel = queryDocumentSnapshot.toObject(PaymentMateriOnlineModel.class);
+                            paymentMateriOnlineModel.setNamaUser(edtNama.getText().toString());
+
+                            setNamaPaymentMateriOnline(queryDocumentSnapshot.getId(), paymentMateriOnlineModel);
+                        }
+                        getGraduationOnline();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        progressDialog.dismiss();
+                        Log.d(TAG, e.toString());
+                    }
+                });
+    }
+
+    private void setNamaPaymentMateriOnline(String docId, PaymentMateriOnlineModel paymentMateriOnlineModel) {
+        DocumentReference paymentMateriOnlineRef = firebaseFirestore
+                .collection(CommonMethod.refPaymentMateriOnline)
+                .document(docId);
+        paymentMateriOnlineRef
+                .set(paymentMateriOnlineModel)
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        progressDialog.dismiss();
+                        Log.d(TAG, e.toString());
+                    }
+                });
+    }
+
+    private void getGraduationOnline() {
+        CollectionReference graduationOnlineRef = firebaseFirestore.collection(CommonMethod.refGraduationOnline);
+        graduationOnlineRef
+                .whereEqualTo("userId", userModel.getUserId())
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
+                            GraduationMateriOnlineModel graduationMateriOnlineModel = queryDocumentSnapshot.toObject(GraduationMateriOnlineModel.class);
+                            graduationMateriOnlineModel.setNamaUser(edtNama.getText().toString());
+
+                            setNamaGraduationOnline(queryDocumentSnapshot.getId(), graduationMateriOnlineModel);
+                        }
+                        progressDialog.dismiss();
+                        Toast.makeText(UsEditProfileActivity.this, "Data anda telah disimpan", Toast.LENGTH_SHORT).show();
                         onBackPressed();
                     }
                 })
@@ -133,11 +437,25 @@ public class UsEditProfileActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         progressDialog.dismiss();
+                        Log.d(TAG, e.toString());
                     }
                 });
-
     }
 
+    private void setNamaGraduationOnline(String docId, GraduationMateriOnlineModel graduationMateriOnlineModel) {
+        DocumentReference graduationOnlineRef = firebaseFirestore
+                .collection(CommonMethod.refGraduationOnline)
+                .document(docId);
+        graduationOnlineRef
+                .set(graduationMateriOnlineModel)
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        progressDialog.dismiss();
+                        Log.d(TAG, e.toString());
+                    }
+                });
+    }
 
     private void konfirmasiSimpan() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -147,17 +465,15 @@ public class UsEditProfileActivity extends AppCompatActivity {
         builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-//                if (!isNetworkConnected()) {
-//                    Toast.makeText(UsEditProfileActivity.this, "Tidak ada koneksi internet!", Toast.LENGTH_SHORT).show();
-//                } else {
-//                    if (edtNama.length() == 0 || edtNoWa.length() == 0) {
-//                        Toast.makeText(UsEditProfileActivity.this, "Form tidak boleh kosong", Toast.LENGTH_SHORT).show();
-//                    } else if (edtNoWa.length() < 8) {
-//                        Toast.makeText(UsEditProfileActivity.this, "Nomor Whatsapp minimal 8 digit", Toast.LENGTH_SHORT).show();
-//                    } else {
-//                        updateProfile();
-//                    }
-//                }
+                if (CommonMethod.isInternetAvailable(UsEditProfileActivity.this)) {
+                    if (edtNama.length() == 0 ) {
+                        Toast.makeText(UsEditProfileActivity.this, "Nama tidak boleh kosong", Toast.LENGTH_SHORT).show();
+                    } else if (edtNoWa.length() < 8) {
+                        Toast.makeText(UsEditProfileActivity.this, "Nomor Whatsapp minimal 8 digit", Toast.LENGTH_SHORT).show();
+                    } else {
+                        updateProfile();
+                    }
+                }
             }
         });
 
