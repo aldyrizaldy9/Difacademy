@@ -33,6 +33,8 @@ import java.util.Map;
 
 import de.cketti.mailto.EmailIntentBuilder;
 
+import static com.tamanpelajar.aldy.difacademy.Fragment.OpGraduationOnlineFragment.isGradOnlineChanged;
+
 public class OpNotifGradMateriOnlineActivity extends AppCompatActivity {
     private static final String TAG = "OpNotifGradMateriOnline";
     private TextView tvNavBar, tvNama, tvEmail, tvNoWa, tvNamaMateri, tvTulisanLulus;
@@ -47,6 +49,7 @@ public class OpNotifGradMateriOnlineActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_op_notif_grad);
+        isGradOnlineChanged = true;
         initView();
         setViewWithParcelable();
         onClick();

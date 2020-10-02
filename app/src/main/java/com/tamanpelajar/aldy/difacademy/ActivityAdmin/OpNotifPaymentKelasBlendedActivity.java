@@ -35,6 +35,8 @@ import java.util.Map;
 
 import de.cketti.mailto.EmailIntentBuilder;
 
+import static com.tamanpelajar.aldy.difacademy.Fragment.OpPaymentBlendedFragment.isPaymentBlendedChanged;
+
 public class OpNotifPaymentKelasBlendedActivity extends AppCompatActivity {
     private TextView tvNavBar, tvNama, tvEmail, tvNoWa, tvNamaKelas, tvHargaKelas, tvNamaBank;
     private ConstraintLayout clBack;
@@ -50,6 +52,7 @@ public class OpNotifPaymentKelasBlendedActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_op_notif_payment);
+        isPaymentBlendedChanged = true;
         initView();
         checkIntent();
         onClick();

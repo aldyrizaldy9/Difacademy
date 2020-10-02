@@ -30,7 +30,6 @@ import java.util.ArrayList;
 
 public class OpPaymentOnlineFragment extends Fragment {
     public static boolean isPaymentOnlineChanged;
-    private Context context;
     private OpPaymentOnlineAdapter adapter;
     private View rootView;
     private RecyclerView rvPaymentOnline;
@@ -42,10 +41,6 @@ public class OpPaymentOnlineFragment extends Fragment {
     private CollectionReference paymentOnlineRef = db.collection(CommonMethod.refPaymentMateriOnline);
 
     public OpPaymentOnlineFragment() {
-    }
-
-    public OpPaymentOnlineFragment(Context context) {
-        this.context = context;
     }
 
     @Override
@@ -63,6 +58,7 @@ public class OpPaymentOnlineFragment extends Fragment {
     public void onResume() {
         super.onResume();
         if (isPaymentOnlineChanged) {
+            isPaymentOnlineChanged = false;
             srl.setRefreshing(true);
             paymentMateriOnlineModels.clear();
             adapter.notifyDataSetChanged();
@@ -72,6 +68,7 @@ public class OpPaymentOnlineFragment extends Fragment {
 
     private void initView() {
         paymentMateriOnlineModels = new ArrayList<>();
+
         rvPaymentOnline = rootView.findViewById(R.id.rv_op_payment_online);
         srl = rootView.findViewById(R.id.srl_op_payment_online);
         srl.setRefreshing(true);
@@ -89,7 +86,7 @@ public class OpPaymentOnlineFragment extends Fragment {
         final LinearLayoutManager manager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
         rvPaymentOnline.setLayoutManager(manager);
 
-        adapter = new OpPaymentOnlineAdapter(context, paymentMateriOnlineModels);
+        adapter = new OpPaymentOnlineAdapter(getContext(), paymentMateriOnlineModels);
         rvPaymentOnline.setAdapter(adapter);
 
         rvPaymentOnline.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -142,7 +139,7 @@ public class OpPaymentOnlineFragment extends Fragment {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         loadNewData = true;
-                        Toast.makeText(context, context.getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), getContext().getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -178,9 +175,8 @@ public class OpPaymentOnlineFragment extends Fragment {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         srl.setRefreshing(false);
-                        Toast.makeText(context, R.string.no_internet, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), getContext().getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
                     }
                 });
-
     }
 }

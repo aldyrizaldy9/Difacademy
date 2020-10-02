@@ -79,8 +79,8 @@ public class OpNotifActivity extends AppCompatActivity {
 
     private void setViewPager() {
         final ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-        viewPagerAdapter.addFragment(new OpPaymentBlendedFragment(OpNotifActivity.this), "Payment Blended");
-        viewPagerAdapter.addFragment(new OpPaymentOnlineFragment(OpNotifActivity.this), "Payment Online");
+        viewPagerAdapter.addFragment(new OpPaymentBlendedFragment(), "Payment Blended");
+        viewPagerAdapter.addFragment(new OpPaymentOnlineFragment(), "Payment Online");
         viewPagerAdapter.addFragment(new OpGraduationBlendedFragment(), "Graduation Blended");
         viewPagerAdapter.addFragment(new OpGraduationOnlineFragment(), "Graduation Online");
 

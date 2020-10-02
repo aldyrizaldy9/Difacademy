@@ -35,6 +35,8 @@ import java.util.Map;
 
 import de.cketti.mailto.EmailIntentBuilder;
 
+import static com.tamanpelajar.aldy.difacademy.Fragment.OpPaymentOnlineFragment.isPaymentOnlineChanged;
+
 public class OpNotifPaymentMateriOnlineActivity extends AppCompatActivity {
     private TextView tvNavBar, tvNama, tvEmail, tvNoWa, tvNamaMateri, tvHargaMateri, tvNamaBank, tvTulisanNamaMateri, tvTulisanHargaMateri;
     private ConstraintLayout clBack;
@@ -50,6 +52,7 @@ public class OpNotifPaymentMateriOnlineActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_op_notif_payment);
+        isPaymentOnlineChanged = true;
         initView();
         checkIntent();
         onClick();

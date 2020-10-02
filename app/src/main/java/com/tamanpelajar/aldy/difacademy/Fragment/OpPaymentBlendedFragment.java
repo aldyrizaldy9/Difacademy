@@ -30,7 +30,6 @@ import java.util.ArrayList;
 
 public class OpPaymentBlendedFragment extends Fragment {
     public static boolean isPaymentBlendedChanged;
-    private Context context;
     private OpPaymentBlendedAdapter adapter;
     private View rootView;
     private RecyclerView rvPaymentBlended;
@@ -42,10 +41,6 @@ public class OpPaymentBlendedFragment extends Fragment {
     private CollectionReference paymentBlendedRef = db.collection(CommonMethod.refPaymentKelasBlended);
 
     public OpPaymentBlendedFragment() {
-    }
-
-    public OpPaymentBlendedFragment(Context context) {
-        this.context = context;
     }
 
     @Override
@@ -63,6 +58,7 @@ public class OpPaymentBlendedFragment extends Fragment {
     public void onResume() {
         super.onResume();
         if (isPaymentBlendedChanged) {
+            isPaymentBlendedChanged = false;
             srl.setRefreshing(true);
             paymentKelasBlendedModels.clear();
             adapter.notifyDataSetChanged();
@@ -72,6 +68,7 @@ public class OpPaymentBlendedFragment extends Fragment {
 
     private void initView() {
         paymentKelasBlendedModels = new ArrayList<>();
+
         rvPaymentBlended = rootView.findViewById(R.id.rv_op_payment_blended);
         srl = rootView.findViewById(R.id.srl_op_payment_blended);
         srl.setRefreshing(true);
@@ -89,7 +86,7 @@ public class OpPaymentBlendedFragment extends Fragment {
         final LinearLayoutManager manager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
         rvPaymentBlended.setLayoutManager(manager);
 
-        adapter = new OpPaymentBlendedAdapter(context, paymentKelasBlendedModels);
+        adapter = new OpPaymentBlendedAdapter(getContext(), paymentKelasBlendedModels);
         rvPaymentBlended.setAdapter(adapter);
 
         rvPaymentBlended.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -142,7 +139,7 @@ public class OpPaymentBlendedFragment extends Fragment {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         loadNewData = true;
-                        Toast.makeText(context, context.getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), getContext().getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -178,7 +175,7 @@ public class OpPaymentBlendedFragment extends Fragment {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         srl.setRefreshing(false);
-                        Toast.makeText(context, R.string.no_internet, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), getContext().getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
                     }
                 });
 

@@ -33,6 +33,8 @@ import java.util.Map;
 
 import de.cketti.mailto.EmailIntentBuilder;
 
+import static com.tamanpelajar.aldy.difacademy.Fragment.OpGraduationBlendedFragment.isGradBlendedChanged;
+
 public class OpNotifGradMateriBlendedActivity extends AppCompatActivity {
     private static final String TAG = "OpNotifGradMateriBlende";
     private TextView tvNavBar, tvNama, tvEmail, tvNoWa, tvNamaMateri, tvTulisanLulus;
@@ -47,6 +49,7 @@ public class OpNotifGradMateriBlendedActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_op_notif_grad);
+        isGradBlendedChanged = true;
         initView();
         setViewWithParcelable();
         onClick();
