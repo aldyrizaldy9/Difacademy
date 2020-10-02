@@ -100,7 +100,7 @@ public class UsDetailKelasBlendedActivity extends AppCompatActivity {
 
         CollectionReference userRef = firebaseFirestore.collection(CommonMethod.refUser);
         userRef
-                .whereEqualTo("userId", userId)
+                .whereEqualTo(CommonMethod.fieldUserId, userId)
                 .get(Source.SERVER)
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
@@ -155,5 +155,4 @@ public class UsDetailKelasBlendedActivity extends AppCompatActivity {
                     }
                 });
     }
-
 }

@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,12 +22,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.tamanpelajar.aldy.difacademy.Adapter.UsKelasBlendedAdapter;
 import com.tamanpelajar.aldy.difacademy.Adapter.UsKelasOnlineAdapter;
 import com.tamanpelajar.aldy.difacademy.CommonMethod;
+import com.tamanpelajar.aldy.difacademy.Model.KelasBlendedModel;
 import com.tamanpelajar.aldy.difacademy.Model.KelasOnlineModel;
 import com.tamanpelajar.aldy.difacademy.Model.TagModel;
 import com.tamanpelajar.aldy.difacademy.R;
@@ -48,6 +52,8 @@ public class UsKelasOnlineActivity extends AppCompatActivity {
     private Spinner spnTags;
     private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
     private CollectionReference kelasRef = firebaseFirestore.collection(CommonMethod.refKelasOnline);
+    private DocumentSnapshot lastVisible;
+    private boolean loadNewData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +63,7 @@ public class UsKelasOnlineActivity extends AppCompatActivity {
         onClick();
         setRecyclerView();
         loadTagsData();
-        loadKelasData();
+        getFirstData();
     }
 
     private void initView() {
@@ -103,28 +109,90 @@ public class UsKelasOnlineActivity extends AppCompatActivity {
 
     private void setRecyclerView() {
         kelasOnlineModels = new ArrayList<>();
+        final LinearLayoutManager manager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
+        rvKelas.setLayoutManager(manager);
+
         adapter = new UsKelasOnlineAdapter(this, kelasOnlineModels);
-        rvKelas.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         rvKelas.setAdapter(adapter);
+
+        rvKelas.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (manager.findLastVisibleItemPosition() >= kelasOnlineModels.size() - CommonMethod.paginationLoadNewData &&
+                        lastVisible != null &&
+                        loadNewData) {
+                    loadNewData = false;
+                    getNewData();
+                }
+            }
+
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+            }
+        });
     }
 
-    private void loadKelasData() {
+    private void getNewData() {
+        Query load = kelasRef
+                .orderBy(CommonMethod.fieldDateCreated, Query.Direction.DESCENDING)
+                .startAfter(lastVisible)
+                .limit(CommonMethod.paginationMaxLoad);
+        load.get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                            KelasOnlineModel model = documentSnapshot.toObject(KelasOnlineModel.class);
+                            model.setDocumentId(documentSnapshot.getId());
+                            kelasOnlineModels.add(model);
+                        }
+
+                        if (queryDocumentSnapshots.size() >= CommonMethod.paginationMaxLoad) {
+                            lastVisible = queryDocumentSnapshots.getDocuments()
+                                    .get(queryDocumentSnapshots.size() - 1);
+                        } else {
+                            lastVisible = null;
+                        }
+
+                        adapter.notifyDataSetChanged();
+                        loadNewData = true;
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        loadNewData = true;
+                        Toast.makeText(UsKelasOnlineActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void getFirstData() {
         pd.show();
-        kelasRef
-                .orderBy("dateCreated", Query.Direction.DESCENDING)
-                .get()
+        Query first = kelasRef
+                .orderBy(CommonMethod.fieldDateCreated, Query.Direction.DESCENDING)
+                .limit(CommonMethod.paginationMaxLoad);
+
+        first.get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         kelasOnlineModels.clear();
-                        if (queryDocumentSnapshots.size() > 0) {
-                            for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                                KelasOnlineModel courseModel = documentSnapshot.toObject(KelasOnlineModel.class);
-                                courseModel.setDocumentId(documentSnapshot.getId());
-
-                                kelasOnlineModels.add(courseModel);
-                            }
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                            KelasOnlineModel newModel = documentSnapshot.toObject(KelasOnlineModel.class);
+                            newModel.setDocumentId(documentSnapshot.getId());
+                            kelasOnlineModels.add(newModel);
                         }
+
+                        if (queryDocumentSnapshots.size() >= CommonMethod.paginationMaxLoad) {
+                            lastVisible = queryDocumentSnapshots.getDocuments()
+                                    .get(queryDocumentSnapshots.size() - 1);
+                        } else {
+                            lastVisible = null;
+                        }
+
                         adapter.notifyDataSetChanged();
                         pd.dismiss();
                     }
@@ -133,7 +201,7 @@ public class UsKelasOnlineActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         pd.dismiss();
-                        Log.d(TAG, e.toString());
+                        Toast.makeText(UsKelasOnlineActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -142,7 +210,7 @@ public class UsKelasOnlineActivity extends AppCompatActivity {
         pd.show();
         kelasRef
                 .whereEqualTo("tag", tag)
-                .orderBy("dateCreated", Query.Direction.DESCENDING)
+                .orderBy(CommonMethod.fieldDateCreated, Query.Direction.DESCENDING)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
@@ -230,7 +298,7 @@ public class UsKelasOnlineActivity extends AppCompatActivity {
                     tag = "";
                     clSearchContainer.setVisibility(View.GONE);
                     if (CommonMethod.isInternetAvailable(UsKelasOnlineActivity.this)) {
-                        loadKelasData();
+                        getFirstData();
                     }
                 }
             }

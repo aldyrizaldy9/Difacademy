@@ -23,6 +23,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.tamanpelajar.aldy.difacademy.Adapter.UsNewsAdapter;
 import com.tamanpelajar.aldy.difacademy.CommonMethod;
+import com.tamanpelajar.aldy.difacademy.Model.KelasBlendedModel;
 import com.tamanpelajar.aldy.difacademy.Model.NewsModel;
 import com.tamanpelajar.aldy.difacademy.R;
 
@@ -33,12 +34,13 @@ public class UsListNewsActivity extends AppCompatActivity {
     FirebaseFirestore firestore = FirebaseFirestore.getInstance();
     CollectionReference newsRef = firestore.collection(CommonMethod.refNews);
     DocumentSnapshot lastVisible;
-    boolean loadbaru;
+    boolean loadNewData;
     private ConstraintLayout clBack, clNavbar;
     private RecyclerView rvNews;
     private ArrayList<NewsModel> newsModels;
     private UsNewsAdapter adapter;
-    private ProgressDialog progressDialog;
+    private ProgressDialog pd;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +49,7 @@ public class UsListNewsActivity extends AppCompatActivity {
         initView();
         onClick();
         setRecyclerView();
-        loadData();
+        getFirstData();
     }
 
     private void initView() {
@@ -60,7 +62,10 @@ public class UsListNewsActivity extends AppCompatActivity {
         ImageView imgBack = findViewById(R.id.img_icon1);
         imgBack.setImageResource(R.drawable.ic_arrow_back);
         rvNews = findViewById(R.id.rv_list_news);
-        progressDialog = new ProgressDialog(this);
+
+        pd = new ProgressDialog(this);
+        pd.setMessage("Memuat...");
+        pd.setCancelable(false);
     }
 
     private void onClick() {
@@ -74,56 +79,21 @@ public class UsListNewsActivity extends AppCompatActivity {
 
     private void setRecyclerView() {
         newsModels = new ArrayList<>();
-        adapter = new UsNewsAdapter(this, newsModels);
+        final LinearLayoutManager manager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
+        rvNews.setLayoutManager(manager);
 
-        final LinearLayoutManager layoutManager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
-        rvNews.setLayoutManager(layoutManager);
+        adapter = new UsNewsAdapter(this, newsModels);
         rvNews.setAdapter(adapter);
 
         rvNews.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                if (layoutManager.findLastVisibleItemPosition() >= newsModels.size() - 10) {
-                    if (lastVisible != null) {
-                        if (loadbaru) {
-                            loadbaru = false;
-                            Query load = newsRef
-                                    .orderBy("dateCreated", Query.Direction.DESCENDING)
-                                    .startAfter(lastVisible)
-                                    .limit(20);
-                            load.get()
-                                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                                        @Override
-                                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                            if (queryDocumentSnapshots.size() > 0) {
-                                                for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                                                    NewsModel newsModel = documentSnapshot.toObject(NewsModel.class);
-                                                    newsModel.setDocumentId(documentSnapshot.getId());
-                                                    newsModels.add(newsModel);
-                                                }
-
-                                                if (queryDocumentSnapshots.size() < 20) {
-                                                    lastVisible = null;
-                                                } else {
-                                                    lastVisible = queryDocumentSnapshots.getDocuments()
-                                                            .get(queryDocumentSnapshots.size() - 1);
-                                                }
-
-                                                adapter.notifyDataSetChanged();
-                                            }
-                                            loadbaru = true;
-                                        }
-                                    })
-                                    .addOnFailureListener(new OnFailureListener() {
-                                        @Override
-                                        public void onFailure(@NonNull Exception e) {
-                                            loadbaru = true;
-                                            Toast.makeText(UsListNewsActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
-                        }
-                    }
+                if (manager.findLastVisibleItemPosition() >= newsModels.size() - CommonMethod.paginationLoadNewData &&
+                        lastVisible != null &&
+                        loadNewData) {
+                    loadNewData = false;
+                    getNewData();
                 }
             }
 
@@ -134,43 +104,74 @@ public class UsListNewsActivity extends AppCompatActivity {
         });
     }
 
-    private void loadData() {
-        progressDialog.setMessage("Memuat...");
-        progressDialog.setCancelable(false);
-        progressDialog.show();
-
-        Query first = newsRef
-                .orderBy("dateCreated", Query.Direction.DESCENDING)
-                .limit(20);
-        first.get()
+    private void getNewData() {
+        Query load = newsRef
+                .orderBy(CommonMethod.fieldDateCreated, Query.Direction.DESCENDING)
+                .startAfter(lastVisible)
+                .limit(CommonMethod.paginationMaxLoad);
+        load.get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        newsModels.clear();
-
-                        if (queryDocumentSnapshots.size() > 0) {
-                            for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
-                                NewsModel newsModel = queryDocumentSnapshot.toObject(NewsModel.class);
-                                newsModel.setDocumentId(queryDocumentSnapshot.getId());
-                                newsModels.add(newsModel);
-                            }
-
-                            if (queryDocumentSnapshots.size() < 20) {
-                                lastVisible = null;
-                            } else {
-                                lastVisible = queryDocumentSnapshots.getDocuments()
-                                        .get(queryDocumentSnapshots.size() - 1);
-                            }
-
-                            adapter.notifyDataSetChanged();
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                            NewsModel model = documentSnapshot.toObject(NewsModel.class);
+                            model.setDocumentId(documentSnapshot.getId());
+                            newsModels.add(model);
                         }
-                        progressDialog.dismiss();
+
+                        if (queryDocumentSnapshots.size() >= CommonMethod.paginationMaxLoad) {
+                            lastVisible = queryDocumentSnapshots.getDocuments()
+                                    .get(queryDocumentSnapshots.size() - 1);
+                        } else {
+                            lastVisible = null;
+                        }
+
+                        adapter.notifyDataSetChanged();
+                        loadNewData = true;
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        progressDialog.dismiss();
+                        loadNewData = true;
+                        Toast.makeText(UsListNewsActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void getFirstData() {
+        pd.show();
+        Query first = newsRef
+                .orderBy(CommonMethod.fieldDateCreated, Query.Direction.DESCENDING)
+                .limit(CommonMethod.paginationMaxLoad);
+
+        first.get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        newsModels.clear();
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                            NewsModel newModel = documentSnapshot.toObject(NewsModel.class);
+                            newModel.setDocumentId(documentSnapshot.getId());
+                            newsModels.add(newModel);
+                        }
+
+                        if (queryDocumentSnapshots.size() >= CommonMethod.paginationMaxLoad) {
+                            lastVisible = queryDocumentSnapshots.getDocuments()
+                                    .get(queryDocumentSnapshots.size() - 1);
+                        } else {
+                            lastVisible = null;
+                        }
+
+                        adapter.notifyDataSetChanged();
+                        pd.dismiss();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        pd.dismiss();
+                        Toast.makeText(UsListNewsActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
                     }
                 });
     }

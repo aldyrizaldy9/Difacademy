@@ -80,7 +80,5 @@ public class UsDetailMateriBlendedActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
     }
-
 }

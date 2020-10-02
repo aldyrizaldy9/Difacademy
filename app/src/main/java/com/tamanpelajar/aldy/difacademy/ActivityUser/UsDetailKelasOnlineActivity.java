@@ -79,7 +79,5 @@ public class UsDetailKelasOnlineActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
     }
-
 }

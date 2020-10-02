@@ -22,6 +22,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.tamanpelajar.aldy.difacademy.CommonMethod;
 import com.tamanpelajar.aldy.difacademy.Model.UserModel;
 import com.tamanpelajar.aldy.difacademy.R;
 
@@ -88,9 +89,9 @@ public class UsEditProfileActivity extends AppCompatActivity {
         progressDialog.show();
         String userId = sharedPreferences.getString(USERID_PREFS, "");
         FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
-        userRef = firebaseFirestore.collection("User");
+        userRef = firebaseFirestore.collection(CommonMethod.refUser);
         userRef
-                .whereEqualTo("userId", userId)
+                .whereEqualTo(CommonMethod.fieldUserId, userId)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override

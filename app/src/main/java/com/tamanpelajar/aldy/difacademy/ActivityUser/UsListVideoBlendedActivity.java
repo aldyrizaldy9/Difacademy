@@ -104,7 +104,7 @@ public class UsListVideoBlendedActivity extends AppCompatActivity {
 
 
         videoRef
-                .orderBy("dateCreated", Query.Direction.ASCENDING)
+                .orderBy(CommonMethod.fieldDateCreated, Query.Direction.ASCENDING)
                 .get(Source.SERVER)
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
