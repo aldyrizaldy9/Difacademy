@@ -21,6 +21,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -76,13 +77,16 @@ public class OpNotifGradMateriBlendedActivity extends AppCompatActivity {
     private void setViewWithParcelable() {
         Intent intent = getIntent();
         graduationMateriBlendedModel = intent.getParcelableExtra(CommonMethod.intentGraduationModel);
-        tvNama.setText(graduationMateriBlendedModel.getNamaUser());
-        tvEmail.setText(graduationMateriBlendedModel.getEmail());
-        tvNoWa.setText(graduationMateriBlendedModel.getNoWa());
-        tvNamaMateri.setText(graduationMateriBlendedModel.getNamaMateri());
-        tvTulisanLulus.setText("Materi yang lulus");
-        if (graduationMateriBlendedModel.isDone()) {
-            btnTandai.setVisibility(View.GONE);
+        if (graduationMateriBlendedModel != null) {
+            tvNama.setText(graduationMateriBlendedModel.getNamaUser());
+            tvEmail.setText(graduationMateriBlendedModel.getEmail());
+            tvNoWa.setText(graduationMateriBlendedModel.getNoWa());
+            tvNamaMateri.setText(graduationMateriBlendedModel.getNamaMateri());
+            tvTulisanLulus.setText("Materi yang lulus");
+            if (graduationMateriBlendedModel.isDone()) {
+                btnTandai.setVisibility(View.GONE);
+            }
+            checkIfKelasExist(graduationMateriBlendedModel.getKelasId());
         }
     }
 
@@ -178,12 +182,7 @@ public class OpNotifGradMateriBlendedActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
-                            if (queryDocumentSnapshot != null) {
-                                setDone(queryDocumentSnapshot);
-                            } else {
-                                Toast.makeText(OpNotifGradMateriBlendedActivity.this, "Maaf, materi " + graduationMateriBlendedModel.getNamaMateri() + " sudah dihapus", Toast.LENGTH_SHORT).show();
-                                btnTandai.setVisibility(View.GONE);
-                            }
+                            setDone(queryDocumentSnapshot);
                         }
                     }
                 })
@@ -227,4 +226,62 @@ public class OpNotifGradMateriBlendedActivity extends AppCompatActivity {
                 });
 
     }
+
+    private void checkIfKelasExist(String kelasId) {
+        progressDialog.setMessage("Memuat...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+
+        DocumentReference kelasBlendedRef = firebaseFirestore
+                .collection(CommonMethod.refKelasBlended)
+                .document(kelasId);
+
+        kelasBlendedRef
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if (!documentSnapshot.exists()) {
+                            btnTandai.setVisibility(View.GONE);
+                        }
+                        checkIfMateriExist(graduationMateriBlendedModel.getKelasId(), graduationMateriBlendedModel.getMateriId());
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        progressDialog.dismiss();
+                        Log.d(TAG, e.toString());
+                    }
+                });
+    }
+
+    private void checkIfMateriExist(String kelasId, String materiId) {
+        DocumentReference materiBlendedRef = firebaseFirestore
+                .collection(CommonMethod.refKelasBlended)
+                .document(kelasId)
+                .collection(CommonMethod.refMateriBlended)
+                .document(materiId);
+
+        materiBlendedRef
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if (!documentSnapshot.exists()) {
+                            btnTandai.setVisibility(View.GONE);
+                        }
+                        progressDialog.dismiss();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        progressDialog.dismiss();
+                        Log.d(TAG, e.toString());
+                    }
+                });
+
+    }
+
 }

@@ -17,7 +17,7 @@ public class GraduationMateriBlendedModel implements Parcelable {
             return new GraduationMateriBlendedModel[size];
         }
     };
-    private String userId, namaUser, email, noWa, materiId, namaMateri, documentId;
+    private String userId, namaUser, email, noWa, kelasId, materiId, namaMateri, documentId;
     private long dateCreated;
     private boolean isSeen, isDone;
 
@@ -28,6 +28,7 @@ public class GraduationMateriBlendedModel implements Parcelable {
                                         String namaUser,
                                         String email,
                                         String noWa,
+                                        String kelasId,
                                         String materiId,
                                         String namaMateri,
                                         long dateCreated,
@@ -37,6 +38,7 @@ public class GraduationMateriBlendedModel implements Parcelable {
         this.namaUser = namaUser;
         this.email = email;
         this.noWa = noWa;
+        this.kelasId = kelasId;
         this.materiId = materiId;
         this.namaMateri = namaMateri;
         this.dateCreated = dateCreated;
@@ -49,6 +51,7 @@ public class GraduationMateriBlendedModel implements Parcelable {
         namaUser = in.readString();
         email = in.readString();
         noWa = in.readString();
+        kelasId = in.readString();
         materiId = in.readString();
         namaMateri = in.readString();
         documentId = in.readString();
@@ -63,6 +66,7 @@ public class GraduationMateriBlendedModel implements Parcelable {
         dest.writeString(namaUser);
         dest.writeString(email);
         dest.writeString(noWa);
+        dest.writeString(kelasId);
         dest.writeString(materiId);
         dest.writeString(namaMateri);
         dest.writeString(documentId);
@@ -94,6 +98,10 @@ public class GraduationMateriBlendedModel implements Parcelable {
 
     public String getNoWa() {
         return noWa;
+    }
+
+    public String getKelasId() {
+        return kelasId;
     }
 
     public String getMateriId() {

@@ -406,7 +406,7 @@ public class UsQuizBlendedActivity extends AppCompatActivity {
     private void sendGraduationDetailsToAdmin() {
 
         long dateCreated = Timestamp.now().getSeconds();
-        GraduationMateriBlendedModel graduationMateriBlendedModel = new GraduationMateriBlendedModel(userId, namaUser, email, noWa, materiBlendedModel.getDocumentId(), namaMateri, dateCreated, false, false);
+        GraduationMateriBlendedModel graduationMateriBlendedModel = new GraduationMateriBlendedModel(userId, namaUser, email, noWa, materiBlendedModel.getKelasId(), materiBlendedModel.getDocumentId(), namaMateri, dateCreated, false, false);
 
         CollectionReference gradRef = db.collection(CommonMethod.refGraduationBlended);
         gradRef

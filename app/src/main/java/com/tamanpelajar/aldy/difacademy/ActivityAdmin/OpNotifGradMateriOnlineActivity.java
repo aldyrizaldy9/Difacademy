@@ -21,6 +21,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -76,13 +77,16 @@ public class OpNotifGradMateriOnlineActivity extends AppCompatActivity {
     private void setViewWithParcelable() {
         Intent intent = getIntent();
         graduationMateriOnlineModel = intent.getParcelableExtra(CommonMethod.intentGraduationModel);
-        tvNama.setText(graduationMateriOnlineModel.getNamaUser());
-        tvEmail.setText(graduationMateriOnlineModel.getEmail());
-        tvNoWa.setText(graduationMateriOnlineModel.getNoWa());
-        tvNamaMateri.setText(graduationMateriOnlineModel.getNamaMateri());
-        tvTulisanLulus.setText("Materi yang lulus");
-        if (graduationMateriOnlineModel.isDone()) {
-            btnTandai.setVisibility(View.GONE);
+        if(graduationMateriOnlineModel != null) {
+            tvNama.setText(graduationMateriOnlineModel.getNamaUser());
+            tvEmail.setText(graduationMateriOnlineModel.getEmail());
+            tvNoWa.setText(graduationMateriOnlineModel.getNoWa());
+            tvNamaMateri.setText(graduationMateriOnlineModel.getNamaMateri());
+            tvTulisanLulus.setText("Materi yang lulus");
+            if (graduationMateriOnlineModel.isDone()) {
+                btnTandai.setVisibility(View.GONE);
+            }
+            checkIfKelasExist(graduationMateriOnlineModel.getKelasId());
         }
     }
 
@@ -216,6 +220,62 @@ public class OpNotifGradMateriOnlineActivity extends AppCompatActivity {
                                         + graduationMateriOnlineModel.getNamaUser()
                                         + " sudah ditandai", Toast.LENGTH_SHORT).show();
 
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        progressDialog.dismiss();
+                        Log.d(TAG, e.toString());
+                    }
+                });
+
+    }
+    private void checkIfKelasExist(String kelasId) {
+        progressDialog.setMessage("Memuat...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+
+        DocumentReference kelasOnlineRef = firebaseFirestore
+                .collection(CommonMethod.refKelasOnline)
+                .document(kelasId);
+
+        kelasOnlineRef
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if (!documentSnapshot.exists()) {
+                            btnTandai.setVisibility(View.GONE);
+                        }
+                        checkIfMateriExist(graduationMateriOnlineModel.getKelasId(), graduationMateriOnlineModel.getMateriId());
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        progressDialog.dismiss();
+                        Log.d(TAG, e.toString());
+                    }
+                });
+    }
+
+    private void checkIfMateriExist(String kelasId, String materiId) {
+        DocumentReference materiOnlineRef = firebaseFirestore
+                .collection(CommonMethod.refKelasOnline)
+                .document(kelasId)
+                .collection(CommonMethod.refMateriOnline)
+                .document(materiId);
+
+        materiOnlineRef
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if (!documentSnapshot.exists()) {
+                            btnTandai.setVisibility(View.GONE);
+                        }
+                        progressDialog.dismiss();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {

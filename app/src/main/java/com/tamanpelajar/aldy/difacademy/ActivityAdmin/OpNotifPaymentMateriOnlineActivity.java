@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -20,6 +21,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -38,6 +40,7 @@ import de.cketti.mailto.EmailIntentBuilder;
 import static com.tamanpelajar.aldy.difacademy.Fragment.OpPaymentOnlineFragment.isPaymentOnlineChanged;
 
 public class OpNotifPaymentMateriOnlineActivity extends AppCompatActivity {
+    private static final String TAG = "OpNotifPaymentMateriOnl";
     private TextView tvNavBar, tvNama, tvEmail, tvNoWa, tvNamaMateri, tvHargaMateri, tvNamaBank, tvTulisanNamaMateri, tvTulisanHargaMateri;
     private ConstraintLayout clBack;
     private ImageView imgBack;
@@ -80,8 +83,6 @@ public class OpNotifPaymentMateriOnlineActivity extends AppCompatActivity {
         btnBukaMateri.setText("buka materi");
 
         pd = new ProgressDialog(this);
-        pd.setMessage("Memproses...");
-        pd.setCancelable(false);
     }
 
     private void checkIntent() {
@@ -100,6 +101,7 @@ public class OpNotifPaymentMateriOnlineActivity extends AppCompatActivity {
                 btnBukaMateri.setVisibility(View.GONE);
             }
             paymentRef = db.collection(CommonMethod.refPaymentMateriOnline);
+            checkIfKelasExist(paymentMateriOnlineModel.getKelasId());
         }
     }
 
@@ -159,8 +161,6 @@ public class OpNotifPaymentMateriOnlineActivity extends AppCompatActivity {
                 if (!CommonMethod.isInternetAvailable(OpNotifPaymentMateriOnlineActivity.this)) {
                     return;
                 }
-
-                pd.show();
                 getUserDocId();
             }
         });
@@ -176,6 +176,9 @@ public class OpNotifPaymentMateriOnlineActivity extends AppCompatActivity {
     }
 
     private void getUserDocId() {
+        pd.setMessage("Memproses...");
+        pd.setCancelable(false);
+        pd.show();
         CollectionReference userRef = db.collection(CommonMethod.refUser);
         userRef
                 .whereEqualTo(CommonMethod.fieldUserId, paymentMateriOnlineModel.getUserId())
@@ -312,4 +315,62 @@ public class OpNotifPaymentMateriOnlineActivity extends AppCompatActivity {
                     }
                 });
     }
+
+    private void checkIfKelasExist(String kelasId) {
+        pd.setMessage("Memuat...");
+        pd.setCancelable(false);
+        pd.show();
+
+        DocumentReference kelasOnlineRef = db
+                .collection(CommonMethod.refKelasOnline)
+                .document(kelasId);
+
+        kelasOnlineRef
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if (!documentSnapshot.exists()) {
+                            btnBukaMateri.setVisibility(View.GONE);
+                        }
+                        checkIfMateriExist(paymentMateriOnlineModel.getKelasId(), paymentMateriOnlineModel.getMateriId());
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        pd.dismiss();
+                        Log.d(TAG, e.toString());
+                    }
+                });
+    }
+
+    private void checkIfMateriExist(String kelasId, String materiId) {
+        DocumentReference materiOnlineRef = db
+                .collection(CommonMethod.refKelasOnline)
+                .document(kelasId)
+                .collection(CommonMethod.refMateriOnline)
+                .document(materiId);
+
+        materiOnlineRef
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if (!documentSnapshot.exists()) {
+                            btnBukaMateri.setVisibility(View.GONE);
+                        }
+                        pd.dismiss();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        pd.dismiss();
+                        Log.d(TAG, e.toString());
+                    }
+                });
+
+    }
+
 }

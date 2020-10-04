@@ -406,7 +406,7 @@ public class UsQuizOnlineActivity extends AppCompatActivity {
     private void sendGraduationDetailsToAdmin() {
 
         long dateCreated = Timestamp.now().getSeconds();
-        GraduationMateriOnlineModel graduationMateriOnlineModel = new GraduationMateriOnlineModel(userId, namaUser, email, noWa, materiOnlineModel.getDocumentId(), namaMateri, dateCreated, false, false);
+        GraduationMateriOnlineModel graduationMateriOnlineModel = new GraduationMateriOnlineModel(userId, namaUser, email, noWa, materiOnlineModel.getKelasId(), materiOnlineModel.getDocumentId(), namaMateri, dateCreated, false, false);
 
         CollectionReference gradRef = db.collection(CommonMethod.refGraduationOnline);
         gradRef

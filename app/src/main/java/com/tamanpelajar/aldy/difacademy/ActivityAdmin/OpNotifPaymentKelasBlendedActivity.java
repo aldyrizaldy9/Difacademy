@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -20,6 +21,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -38,6 +40,7 @@ import de.cketti.mailto.EmailIntentBuilder;
 import static com.tamanpelajar.aldy.difacademy.Fragment.OpPaymentBlendedFragment.isPaymentBlendedChanged;
 
 public class OpNotifPaymentKelasBlendedActivity extends AppCompatActivity {
+    private static final String TAG = "OpNotifPaymentKelasBlen";
     private TextView tvNavBar, tvNama, tvEmail, tvNoWa, tvNamaKelas, tvHargaKelas, tvNamaBank;
     private ConstraintLayout clBack;
     private ImageView imgBack;
@@ -73,10 +76,7 @@ public class OpNotifPaymentKelasBlendedActivity extends AppCompatActivity {
         imgBack = findViewById(R.id.img_icon1);
         imgBack.setImageResource(R.drawable.ic_arrow_back);
         btnBukaKelas = findViewById(R.id.btn_op_notif_pay_buka_kelas);
-
         pd = new ProgressDialog(this);
-        pd.setMessage("Memproses...");
-        pd.setCancelable(false);
     }
 
     private void checkIntent() {
@@ -94,6 +94,7 @@ public class OpNotifPaymentKelasBlendedActivity extends AppCompatActivity {
                 btnBukaKelas.setVisibility(View.GONE);
             }
             paymentRef = db.collection(CommonMethod.refPaymentKelasBlended);
+            checkIfKelasExist(paymentKelasBlendedModel.getKelasId());
         }
     }
 
@@ -168,6 +169,8 @@ public class OpNotifPaymentKelasBlendedActivity extends AppCompatActivity {
 
     private void getUserDocId() {
         pd.show();
+        pd.setMessage("Memproses...");
+        pd.setCancelable(false);
         CollectionReference userRef = db.collection(CommonMethod.refUser);
         userRef
                 .whereEqualTo(CommonMethod.fieldUserId, paymentKelasBlendedModel.getUserId())
@@ -227,12 +230,7 @@ public class OpNotifPaymentKelasBlendedActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
-                            if (queryDocumentSnapshot != null) {
-                                setPaid(queryDocumentSnapshot.getId());
-                            } else {
-                                Toast.makeText(OpNotifPaymentKelasBlendedActivity.this, "Maaf, kelas " + paymentKelasBlendedModel.getNamaKelas() + " sudah dihapus", Toast.LENGTH_SHORT).show();
-                                btnBukaKelas.setVisibility(View.GONE);
-                            }
+                            setPaid(queryDocumentSnapshot.getId());
                         }
                     }
                 })
@@ -298,6 +296,35 @@ public class OpNotifPaymentKelasBlendedActivity extends AppCompatActivity {
                     public void onFailure(@NonNull Exception e) {
                         pd.dismiss();
                         Toast.makeText(OpNotifPaymentKelasBlendedActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void checkIfKelasExist(String kelasId) {
+        pd.setMessage("Memuat...");
+        pd.setCancelable(false);
+        pd.show();
+
+        DocumentReference kelasBlendedRef = db
+                .collection(CommonMethod.refKelasBlended)
+                .document(kelasId);
+
+        kelasBlendedRef
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if (!documentSnapshot.exists()) {
+                            btnBukaKelas.setVisibility(View.GONE);
+                        }
+                        pd.dismiss();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        pd.dismiss();
+                        Log.d(TAG, e.toString());
                     }
                 });
     }
