@@ -97,8 +97,7 @@ public class OpNotifPaymentMateriOnlineActivity extends AppCompatActivity {
             tvNamaBank.setText(paymentMateriOnlineModel.getNamaBank());
             if (paymentMateriOnlineModel.isPaid()) {
                 //Kalo sudah bayar tombol buka materi jadi disabled
-                btnBukaMateri.setEnabled(false);
-                btnBukaMateri.setText("sudah dibuka");
+                btnBukaMateri.setVisibility(View.GONE);
             }
             paymentRef = db.collection(CommonMethod.refPaymentMateriOnline);
         }
@@ -236,7 +235,12 @@ public class OpNotifPaymentMateriOnlineActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
-                            setPaid(queryDocumentSnapshot.getId());
+                            if (queryDocumentSnapshot != null) {
+                                setPaid(queryDocumentSnapshot.getId());
+                            } else {
+                                Toast.makeText(OpNotifPaymentMateriOnlineActivity.this, "Maaf, materi " + paymentMateriOnlineModel.getNamaMateri() + " sudah dihapus", Toast.LENGTH_SHORT).show();
+                                btnBukaMateri.setVisibility(View.GONE);
+                            }
                         }
                     }
                 })

@@ -82,7 +82,7 @@ public class OpNotifGradMateriBlendedActivity extends AppCompatActivity {
         tvNamaMateri.setText(graduationMateriBlendedModel.getNamaMateri());
         tvTulisanLulus.setText("Materi yang lulus");
         if (graduationMateriBlendedModel.isDone()) {
-            btnTandai.setEnabled(false);
+            btnTandai.setVisibility(View.GONE);
         }
     }
 
@@ -178,7 +178,12 @@ public class OpNotifGradMateriBlendedActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
-                            setDone(queryDocumentSnapshot);
+                            if (queryDocumentSnapshot != null) {
+                                setDone(queryDocumentSnapshot);
+                            } else {
+                                Toast.makeText(OpNotifGradMateriBlendedActivity.this, "Maaf, materi " + graduationMateriBlendedModel.getNamaMateri() + " sudah dihapus", Toast.LENGTH_SHORT).show();
+                                btnTandai.setVisibility(View.GONE);
+                            }
                         }
                     }
                 })

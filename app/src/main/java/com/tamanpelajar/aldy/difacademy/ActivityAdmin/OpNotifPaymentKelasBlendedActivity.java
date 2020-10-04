@@ -91,9 +91,7 @@ public class OpNotifPaymentKelasBlendedActivity extends AppCompatActivity {
             tvHargaKelas.setText(harga);
             tvNamaBank.setText(paymentKelasBlendedModel.getNamaBank());
             if (paymentKelasBlendedModel.isPaid()) {
-                //Kalo sudah bayar tombol buka kelas jadi disabled
-                btnBukaKelas.setEnabled(false);
-                btnBukaKelas.setText("sudah dibuka");
+                btnBukaKelas.setVisibility(View.GONE);
             }
             paymentRef = db.collection(CommonMethod.refPaymentKelasBlended);
         }
@@ -229,7 +227,12 @@ public class OpNotifPaymentKelasBlendedActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
-                            setPaid(queryDocumentSnapshot.getId());
+                            if (queryDocumentSnapshot != null) {
+                                setPaid(queryDocumentSnapshot.getId());
+                            } else {
+                                Toast.makeText(OpNotifPaymentKelasBlendedActivity.this, "Maaf, kelas " + paymentKelasBlendedModel.getNamaKelas() + " sudah dihapus", Toast.LENGTH_SHORT).show();
+                                btnBukaKelas.setVisibility(View.GONE);
+                            }
                         }
                     }
                 })
