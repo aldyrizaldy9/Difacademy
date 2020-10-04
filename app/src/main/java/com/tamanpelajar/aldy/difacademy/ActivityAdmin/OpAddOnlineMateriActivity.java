@@ -30,7 +30,9 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.tamanpelajar.aldy.difacademy.CommonMethod;
+import com.tamanpelajar.aldy.difacademy.Model.AnggotaMateriOnlineModel;
 import com.tamanpelajar.aldy.difacademy.Model.MateriOnlineModel;
+import com.tamanpelajar.aldy.difacademy.Model.UserModel;
 import com.tamanpelajar.aldy.difacademy.Model.VideoOnlineModel;
 import com.tamanpelajar.aldy.difacademy.R;
 
@@ -75,6 +77,7 @@ public class OpAddOnlineMateriActivity extends AppCompatActivity {
     private ProgressDialog pd;
 
     private ArrayList<String> listVideoUrl;
+    private ArrayList<String> listAnggotaUserId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +90,7 @@ public class OpAddOnlineMateriActivity extends AppCompatActivity {
 
         firebaseStorage.setMaxUploadRetryTimeMillis(60000);
         listVideoUrl = new ArrayList<>();
+        listAnggotaUserId = new ArrayList<>();
 
         initView();
         onClick();
@@ -475,17 +479,82 @@ public class OpAddOnlineMateriActivity extends AppCompatActivity {
 
     private void hapusMateri() {
         /**
+         * hapus materi di ongoing user
+         *
          * ambil link online video di storage
          * hapus online video document
          * hapus online video collection
          * hapus online video storage
+         *
          * hapus online soal document
          * hapus online soal collection
+         *
+         * hapus online anggota document
+         * hapus online anggota collection
+         *
          * ambil link online materi thumbnail
          * hapus online materi document
          * hapus online materi thumbnail storage
          */
-        getListVideoUrl();
+        getListAnggotaUserId();
+    }
+
+    private void getListAnggotaUserId(){
+        CollectionReference ref = onlineMateriRef
+                .document(onlineMateriDocId)
+                .collection(CommonMethod.refAnggota);
+
+        ref.get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
+                            AnggotaMateriOnlineModel model = documentSnapshot.toObject(AnggotaMateriOnlineModel.class);
+                            model.setDocumentId(documentSnapshot.getId());
+
+                            listAnggotaUserId.add(model.getUserId());
+                        }
+
+                        hapusOngoingUser1();
+                    }
+                });
+    }
+
+    private void hapusOngoingUser1(){
+        for (String userId : listAnggotaUserId){
+            final CollectionReference ref = db.collection(CommonMethod.refUser);
+
+            ref.whereEqualTo(CommonMethod.fieldUserId, userId)
+                    .get()
+                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        @Override
+                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                            for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
+                                hapusOngoingUser2(documentSnapshot.getId());
+                            }
+                        }
+                    });
+        }
+    }
+
+    private void hapusOngoingUser2(String docId){
+        final CollectionReference ref = db.collection(CommonMethod.refUser)
+                .document(docId)
+                .collection(CommonMethod.refOngoingMateriOnline);
+
+        ref.whereEqualTo("materiId", onlineMateriDocId)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
+                            DocumentReference docRef = ref.document(documentSnapshot.getId());
+                            docRef.delete();
+                        }
+
+                        getListVideoUrl();
+                    }
+                });
     }
 
     private void getListVideoUrl() {
@@ -542,6 +611,26 @@ public class OpAddOnlineMateriActivity extends AppCompatActivity {
                             DocumentReference docRef = ref.document(documentSnapshot.getId());
                             docRef.delete();
                         }
+                    }
+                });
+
+        //karena anggota ini gak nyatu gitu jadi gpp di luar get
+        hapusOnlineAnggotaDoc();
+    }
+
+    private void hapusOnlineAnggotaDoc() {
+        final CollectionReference ref = onlineMateriRef.document(onlineMateriDocId)
+                .collection(CommonMethod.refAnggota);
+
+        ref.get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                            DocumentReference docRef = ref.document(documentSnapshot.getId());
+                            docRef.delete();
+                        }
+
                         hapusOnlineMateriDoc();
                     }
                 });

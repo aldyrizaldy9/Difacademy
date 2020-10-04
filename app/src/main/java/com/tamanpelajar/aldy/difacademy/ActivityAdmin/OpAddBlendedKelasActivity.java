@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -35,6 +36,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.tamanpelajar.aldy.difacademy.CommonMethod;
+import com.tamanpelajar.aldy.difacademy.Model.AnggotaMateriOnlineModel;
 import com.tamanpelajar.aldy.difacademy.Model.KelasBlendedModel;
 import com.tamanpelajar.aldy.difacademy.Model.MateriBlendedModel;
 import com.tamanpelajar.aldy.difacademy.Model.TagModel;
@@ -52,6 +54,7 @@ import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpMainActivity.PHOT
 import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpMainActivity.UPDATE_REQUEST_CODE;
 
 public class OpAddBlendedKelasActivity extends AppCompatActivity {
+    private static final String TAG = "ganteng";
     public static String kelasBlendedDocId = "";
 
     private TextView tvNavbar;
@@ -84,6 +87,7 @@ public class OpAddBlendedKelasActivity extends AppCompatActivity {
 
     private ArrayList<String> listBlendedVideoUrl;
     private ArrayList<String> listBlendedMateriThumbnailUrl;
+    private ArrayList<String> listAnggotaUserId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,6 +101,7 @@ public class OpAddBlendedKelasActivity extends AppCompatActivity {
         firebaseStorage.setMaxUploadRetryTimeMillis(60000);
         listBlendedVideoUrl = new ArrayList<>();
         listBlendedMateriThumbnailUrl = new ArrayList<>();
+        listAnggotaUserId = new ArrayList<>();
 
         initView();
         onClick();
@@ -527,6 +532,8 @@ public class OpAddBlendedKelasActivity extends AppCompatActivity {
 
     private void hapusKelas() {
         /**
+         * hapus ongoing di user
+         *
          * ambil link blended video di storage
          * hapus blended video document
          * hapus blended video collection
@@ -540,12 +547,78 @@ public class OpAddBlendedKelasActivity extends AppCompatActivity {
          * hapus blended materi collection
          * hapus blended materi thumbnail storage
          *
+         * hapus blended anggota document
+         * hapus blended anggota collection
+         *
          * ambil link blended course thumbnail
          * hapus blended course document
          * hapus blended course thumbnail storage
          */
 
-        getListVideoUrl();
+        getListAnggotaUserId();
+    }
+
+    private void getListAnggotaUserId(){
+        CollectionReference ref = refKelasBlended
+                .document(kelasBlendedDocId)
+                .collection(CommonMethod.refAnggota);
+
+        ref.get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
+                            AnggotaMateriOnlineModel model = documentSnapshot.toObject(AnggotaMateriOnlineModel.class);
+                            model.setDocumentId(documentSnapshot.getId());
+
+                            Log.d(TAG, "getListAnggotaUserId onSuccess: docId : " + documentSnapshot.getId());
+                            Log.d(TAG, "getListAnggotaUserId onSuccess: userId : " + model.getUserId());
+                            listAnggotaUserId.add(model.getUserId());
+                        }
+
+                        hapusOngoingUser1();
+                    }
+                });
+    }
+
+    private void hapusOngoingUser1(){
+        for (String userId : listAnggotaUserId){
+            Log.d(TAG, "hapusOngoingUser1: userId : " + userId);
+            final CollectionReference ref = db.collection(CommonMethod.refUser);
+
+            ref.whereEqualTo(CommonMethod.fieldUserId, userId)
+                    .get()
+                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        @Override
+                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                            for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
+                                hapusOngoingUser2(documentSnapshot.getId());
+                                Log.d(TAG, "hapusOngoingUser1 onSuccess: docId : " + documentSnapshot.getId());
+                            }
+                        }
+                    });
+        }
+    }
+
+    private void hapusOngoingUser2(String docId){
+        final CollectionReference ref = db.collection(CommonMethod.refUser)
+                .document(docId)
+                .collection(CommonMethod.refOngoingKelasBlended);
+
+        ref.whereEqualTo("kelasId", kelasBlendedDocId)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
+                            DocumentReference docRef = ref.document(documentSnapshot.getId());
+                            docRef.delete();
+                            Log.d(TAG, "hapusOngoingUser2 onSuccess: docId : " + documentSnapshot.getId());
+                        }
+
+                        getListVideoUrl();
+                    }
+                });
     }
 
     private void getListVideoUrl() {
@@ -666,17 +739,36 @@ public class OpAddBlendedKelasActivity extends AppCompatActivity {
                             DocumentReference docRef = ref.document(documentSnapshot.getId());
                             docRef.delete();
                         }
+
                         hapusBlendedMateriStorage();
                     }
                 });
     }
 
-    private void hapusBlendedMateriStorage() {
+        private void hapusBlendedMateriStorage() {
         for (String url : listBlendedMateriThumbnailUrl) {
             StorageReference ref = firebaseStorage.getReferenceFromUrl(url);
             ref.delete();
         }
-        hapusBlendedCourseDoc();
+        hapusBlendedAnggotaDoc();
+    }
+
+    private void hapusBlendedAnggotaDoc() {
+        final CollectionReference ref = refKelasBlended
+                .document(kelasBlendedDocId)
+                .collection(CommonMethod.refAnggota);
+
+        ref.get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                            DocumentReference docRef2 = ref.document(documentSnapshot.getId());
+                            docRef2.delete();
+                        }
+                        hapusBlendedCourseDoc();
+                    }
+                });
     }
 
     private void hapusBlendedCourseDoc() {
