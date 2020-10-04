@@ -556,9 +556,11 @@ public class OpAddBlendedKelasActivity extends AppCompatActivity {
          */
 
         getListAnggotaUserId();
+        getListVideoUrl();
     }
 
     private void getListAnggotaUserId(){
+        Log.d(TAG, "getListAnggotaUserId: jalan");
         CollectionReference ref = refKelasBlended
                 .document(kelasBlendedDocId)
                 .collection(CommonMethod.refAnggota);
@@ -615,8 +617,6 @@ public class OpAddBlendedKelasActivity extends AppCompatActivity {
                             docRef.delete();
                             Log.d(TAG, "hapusOngoingUser2 onSuccess: docId : " + documentSnapshot.getId());
                         }
-
-                        getListVideoUrl();
                     }
                 });
     }

@@ -497,6 +497,7 @@ public class OpAddOnlineMateriActivity extends AppCompatActivity {
          * hapus online materi thumbnail storage
          */
         getListAnggotaUserId();
+        getListVideoUrl();
     }
 
     private void getListAnggotaUserId(){
@@ -551,8 +552,6 @@ public class OpAddOnlineMateriActivity extends AppCompatActivity {
                             DocumentReference docRef = ref.document(documentSnapshot.getId());
                             docRef.delete();
                         }
-
-                        getListVideoUrl();
                     }
                 });
     }
