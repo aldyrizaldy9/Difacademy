@@ -237,14 +237,20 @@ public class OpNotifPaymentMateriOnlineActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
-                            if (queryDocumentSnapshot != null) {
+                        boolean exist = false;
+
+                        if (queryDocumentSnapshots.size() > 0){
+                            for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
+                                exist = true;
                                 setPaid(queryDocumentSnapshot.getId());
-                            } else {
-                                Toast.makeText(OpNotifPaymentMateriOnlineActivity.this, "Maaf, materi " + paymentMateriOnlineModel.getNamaMateri() + " sudah dihapus", Toast.LENGTH_SHORT).show();
-                                btnBukaMateri.setVisibility(View.GONE);
                             }
+                        } else {
+                            Toast.makeText(OpNotifPaymentMateriOnlineActivity.this, "Maaf, materi " + paymentMateriOnlineModel.getNamaMateri() + " sudah dihapus", Toast.LENGTH_SHORT).show();
+                            btnBukaMateri.setVisibility(View.GONE);
                         }
+
+                        if (exist)
+                            setUserAsAnggotaMateri();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -264,21 +270,7 @@ public class OpNotifPaymentMateriOnlineActivity extends AppCompatActivity {
         Map<String, Object> payment = new HashMap<>();
         payment.put("paid", true);
         payment.put("seen", true);
-        docRef
-                .update(payment)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        setUserAsAnggotaMateri();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        pd.dismiss();
-                        Toast.makeText(OpNotifPaymentMateriOnlineActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
-                    }
-                });
+        docRef.update(payment);
     }
 
     private void setUserAsAnggotaMateri() {

@@ -3,6 +3,7 @@ package com.tamanpelajar.aldy.difacademy.Adapter;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class OpAnggotaKelasBlendedAdapter extends RecyclerView.Adapter<OpAnggotaKelasBlendedAdapter.ViewHolder> {
+    private static final String TAG = "ganteng";
     private Context context;
     private ArrayList<AnggotaKelasBlendedModel> models;
 
@@ -51,7 +53,7 @@ public class OpAnggotaKelasBlendedAdapter extends RecyclerView.Adapter<OpAnggota
     public void onBindViewHolder(@NonNull OpAnggotaKelasBlendedAdapter.ViewHolder holder, final int position) {
         final AnggotaKelasBlendedModel model = models.get(position);
 
-        Date date = new Date(model.getDateCreated());
+        Date date = new Date(model.getDateCreated() * 1000);
         SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy");
 
         holder.tvNama.setText(model.getName());
@@ -91,7 +93,6 @@ public class OpAnggotaKelasBlendedAdapter extends RecyclerView.Adapter<OpAnggota
                         for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                             docId = documentSnapshot.getId();
                         }
-
                         hapusOngoingKelas(model, docId);
                     }
                 })
@@ -103,15 +104,33 @@ public class OpAnggotaKelasBlendedAdapter extends RecyclerView.Adapter<OpAnggota
                 });
     }
 
-    private void hapusOngoingKelas(AnggotaKelasBlendedModel model, String docId) {
-        DocumentReference ref = db.collection(CommonMethod.refUser)
+    private void hapusOngoingKelas(final AnggotaKelasBlendedModel model, final String docId) {
+        //get ongoingkelasblended
+
+        CollectionReference colRef = db.collection(CommonMethod.refUser)
                 .document(docId)
-                .collection(CommonMethod.refOngoingKelasBlended)
-                .document(model.getKelasId());
+                .collection(CommonMethod.refOngoingKelasBlended);
 
-        ref.delete();
+        colRef.whereEqualTo("kelasId", model.getKelasId())
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        DocumentReference ref;
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                            ref = db.collection(CommonMethod.refUser)
+                                    .document(docId)
+                                    .collection(CommonMethod.refOngoingKelasBlended)
+                                    .document(documentSnapshot.getId());
+                            Log.d(TAG, "hapusOngoingKelas: user docId : " + docId);
+                            Log.d(TAG, "hapusOngoingKelas: ongoing docId : " + documentSnapshot.getId());
 
-        hapusUserDariAnggota(model);
+                            ref.delete();
+                        }
+
+                        hapusUserDariAnggota(model);
+                    }
+                });
     }
 
     private void hapusUserDariAnggota(AnggotaKelasBlendedModel model) {
@@ -125,7 +144,7 @@ public class OpAnggotaKelasBlendedAdapter extends RecyclerView.Adapter<OpAnggota
 
     private void showHapusDialog(final AnggotaKelasBlendedModel model, final int position) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setMessage("Ingin menghapus pertanyaan?");
+        builder.setMessage("Ingin menghapus anggota?");
         builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

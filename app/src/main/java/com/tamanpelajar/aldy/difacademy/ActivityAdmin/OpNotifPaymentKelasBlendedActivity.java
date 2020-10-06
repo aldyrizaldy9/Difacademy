@@ -40,7 +40,7 @@ import de.cketti.mailto.EmailIntentBuilder;
 import static com.tamanpelajar.aldy.difacademy.Fragment.OpPaymentBlendedFragment.isPaymentBlendedChanged;
 
 public class OpNotifPaymentKelasBlendedActivity extends AppCompatActivity {
-    private static final String TAG = "OpNotifPaymentKelasBlen";
+    private static final String TAG = "ganteng";
     private TextView tvNavBar, tvNama, tvEmail, tvNoWa, tvNamaKelas, tvHargaKelas, tvNamaBank;
     private ConstraintLayout clBack;
     private ImageView imgBack;
@@ -229,9 +229,20 @@ public class OpNotifPaymentKelasBlendedActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
-                            setPaid(queryDocumentSnapshot.getId());
+                        boolean exist = false;
+
+                        if (queryDocumentSnapshots.size() > 0){
+                            for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
+                                exist = true;
+                                setPaid(queryDocumentSnapshot.getId());
+                            }
+                        } else {
+                            Toast.makeText(OpNotifPaymentKelasBlendedActivity.this, "Maaf, kelas " + paymentKelasBlendedModel.getNamaKelas() + " sudah dihapus", Toast.LENGTH_SHORT).show();
+                            btnBukaKelas.setVisibility(View.GONE);
                         }
+
+                        if (exist)
+                            setUserAsAnggotaKelas();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -251,21 +262,7 @@ public class OpNotifPaymentKelasBlendedActivity extends AppCompatActivity {
         Map<String, Object> payment = new HashMap<>();
         payment.put("paid", true);
         payment.put("seen", true);
-        docRef
-                .update(payment)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        setUserAsAnggotaKelas();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        pd.dismiss();
-                        Toast.makeText(OpNotifPaymentKelasBlendedActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
-                    }
-                });
+        docRef.update(payment);
     }
 
     private void setUserAsAnggotaKelas() {

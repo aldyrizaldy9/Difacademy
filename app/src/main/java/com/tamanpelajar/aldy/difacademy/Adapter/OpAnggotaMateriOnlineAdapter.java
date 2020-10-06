@@ -3,6 +3,7 @@ package com.tamanpelajar.aldy.difacademy.Adapter;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -103,15 +104,31 @@ public class OpAnggotaMateriOnlineAdapter extends RecyclerView.Adapter<OpAnggota
                 });
     }
 
-    private void hapusOngoingMateri(AnggotaMateriOnlineModel model, String docId) {
-        DocumentReference ref = db.collection(CommonMethod.refUser)
+    private void hapusOngoingMateri(final AnggotaMateriOnlineModel model, final String docId) {
+        //get ongoingkelasblended
+
+        CollectionReference colRef = db.collection(CommonMethod.refUser)
                 .document(docId)
-                .collection(CommonMethod.refOngoingMateriOnline)
-                .document(model.getMateriId());
+                .collection(CommonMethod.refOngoingMateriOnline);
 
-        ref.delete();
+        colRef.whereEqualTo("materiId", model.getKelasId())
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        DocumentReference ref;
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                            ref = db.collection(CommonMethod.refUser)
+                                    .document(docId)
+                                    .collection(CommonMethod.refOngoingMateriOnline)
+                                    .document(documentSnapshot.getId());
 
-        hapusUserDariAnggota(model);
+                            ref.delete();
+                        }
+
+                        hapusUserDariAnggota(model);
+                    }
+                });
     }
 
     private void hapusUserDariAnggota(AnggotaMateriOnlineModel model) {
