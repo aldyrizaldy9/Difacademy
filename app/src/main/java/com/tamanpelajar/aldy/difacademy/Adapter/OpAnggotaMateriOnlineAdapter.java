@@ -144,7 +144,7 @@ public class OpAnggotaMateriOnlineAdapter extends RecyclerView.Adapter<OpAnggota
 
     private void showHapusDialog(final AnggotaMateriOnlineModel model, final int position) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setMessage("Ingin menghapus pertanyaan?");
+        builder.setMessage("Ingin menghapus anggota?");
         builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
