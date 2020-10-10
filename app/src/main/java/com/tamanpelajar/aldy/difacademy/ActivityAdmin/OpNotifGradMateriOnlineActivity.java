@@ -182,12 +182,7 @@ public class OpNotifGradMateriOnlineActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
-                            if (queryDocumentSnapshot != null) {
-                                setDone(queryDocumentSnapshot);
-                            } else {
-                                Toast.makeText(OpNotifGradMateriOnlineActivity.this, "Maaf, materi " + graduationMateriOnlineModel.getNamaMateri() + " sudah dihapus", Toast.LENGTH_SHORT).show();
-                                btnTandai.setVisibility(View.GONE);
-                            }
+                            setDone(queryDocumentSnapshot);
                         }
                     }
                 })

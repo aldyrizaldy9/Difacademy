@@ -238,13 +238,9 @@ public class OpNotifPaymentMateriOnlineActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
-                            if (queryDocumentSnapshot != null) {
-                                setPaid(queryDocumentSnapshot.getId());
-                            } else {
-                                Toast.makeText(OpNotifPaymentMateriOnlineActivity.this, "Maaf, materi " + paymentMateriOnlineModel.getNamaMateri() + " sudah dihapus", Toast.LENGTH_SHORT).show();
-                                btnBukaMateri.setVisibility(View.GONE);
-                            }
+                            setPaid(queryDocumentSnapshot.getId());
                         }
+                        setUserAsAnggotaMateri();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -266,12 +262,6 @@ public class OpNotifPaymentMateriOnlineActivity extends AppCompatActivity {
         payment.put("seen", true);
         docRef
                 .update(payment)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        setUserAsAnggotaMateri();
-                    }
-                })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
