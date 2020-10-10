@@ -232,6 +232,7 @@ public class OpNotifPaymentKelasBlendedActivity extends AppCompatActivity {
                         for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
                             setPaid(queryDocumentSnapshot.getId());
                         }
+                        setUserAsAnggotaKelas();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -253,12 +254,6 @@ public class OpNotifPaymentKelasBlendedActivity extends AppCompatActivity {
         payment.put("seen", true);
         docRef
                 .update(payment)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        setUserAsAnggotaKelas();
-                    }
-                })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
