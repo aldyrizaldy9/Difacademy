@@ -106,6 +106,7 @@ public class UsMainActivity extends AppCompatActivity {
         tvTagOngoing = findViewById(R.id.tv_main_ongoing_tag);
         rvMainBerita = findViewById(R.id.rv_main_berita);
 
+        btnBeritaLainnya.setVisibility(View.GONE);
         rvMainBerita.setNestedScrollingEnabled(false);
         firebaseFirestore = FirebaseFirestore.getInstance();
     }
@@ -415,12 +416,16 @@ public class UsMainActivity extends AppCompatActivity {
 
     private void loadNews() {
         CollectionReference newsRef = firebaseFirestore.collection(CommonMethod.refNews);
-        newsRef.orderBy("dateCreated", Query.Direction.DESCENDING)
+        newsRef.orderBy(CommonMethod.fieldDateCreated, Query.Direction.DESCENDING)
                 .limit(5)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        if (queryDocumentSnapshots.size() == 5){
+                            btnBeritaLainnya.setVisibility(View.VISIBLE);
+                        }
+
                         for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
                             NewsModel newsModel = queryDocumentSnapshot.toObject(NewsModel.class);
                             newsModel.setDocumentId(queryDocumentSnapshot.getId());

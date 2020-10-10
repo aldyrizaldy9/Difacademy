@@ -10,8 +10,8 @@ android {
         applicationId "com.tamanpelajar.aldy.difacademy"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 3
-        versionName "1.01"
+        versionCode 5
+        versionName "1.10.20.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         buildConfigField("String", "ADMIN_USER_ID", ADMIN_USER_ID)
