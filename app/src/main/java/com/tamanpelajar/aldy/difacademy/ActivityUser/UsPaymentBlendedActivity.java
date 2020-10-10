@@ -236,7 +236,7 @@ public class UsPaymentBlendedActivity extends AppCompatActivity {
                         if (token != null) {
                             tokenAdmin = token.getToken();
                         }
-                        Data data = new Data(userId, R.mipmap.ic_launcher, "Ketuk untuk menuju ke daftar pembelian", "Pembelian materi", ADMIN_USER_ID);
+                        Data data = new Data(userId, R.mipmap.ic_launcher, "Ketuk untuk menuju ke daftar pembelian", "Pembelian kelas", ADMIN_USER_ID);
                         Sender sender = new Sender(data, tokenAdmin);
                         Retrofit retrofit = new Retrofit.Builder()
                                 .baseUrl("https://fcm.googleapis.com/")

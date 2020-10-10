@@ -11,27 +11,27 @@ public class CommonMethod {
 
     public final static String refUser = "User";
     public final static String refBannerPhotoUrl = "BannerPhotoUrl";
-    public final static String refPaymentKelasBlended = "PaymentBlended-dev";
-    public final static String refPaymentMateriOnline = "PaymentOnline-dev";
-    public final static String refGraduationOnline = "GraduationOnline-dev";
-    public final static String refGraduationBlended = "GraduationBlended-dev";
-    public final static String refTags = "Tags-dev";
+    public final static String refPaymentKelasBlended = "PaymentBlended";
+    public final static String refPaymentMateriOnline = "PaymentOnline";
+    public final static String refGraduationOnline = "GraduationOnline";
+    public final static String refGraduationBlended = "GraduationBlended";
+    public final static String refTags = "Tags";
     public final static String refTokens = "Tokens";
-    public final static String refOngoingKelasBlended = "OngoingKelasBlended-dev";
-    public final static String refOngoingMateriOnline = "OngoingMateriOnline-dev";
-    public final static String refAnggota = "Anggota-dev";
+    public final static String refOngoingKelasBlended = "OngoingKelasBlended";
+    public final static String refOngoingMateriOnline = "OngoingMateriOnline";
+    public final static String refAnggota = "Anggota";
 
-    public final static String refKelasBlended = "KelasBlended-dev";
-    public final static String refMateriBlended = "MateriBlended-dev";
-    public final static String refSoalBlended = "SoalBlended-dev";
-    public final static String refVideoBlended = "VideoBlended-dev";
+    public final static String refKelasBlended = "KelasBlended";
+    public final static String refMateriBlended = "MateriBlended";
+    public final static String refSoalBlended = "SoalBlended";
+    public final static String refVideoBlended = "VideoBlended";
 
-    public final static String refKelasOnline = "KelasOnline-dev";
-    public final static String refMateriOnline = "MateriOnline-dev";
-    public final static String refVideoOnline = "VideoOnline-dev";
-    public final static String refSoalOnline = "SoalOnline-dev";
+    public final static String refKelasOnline = "KelasOnline";
+    public final static String refMateriOnline = "MateriOnline";
+    public final static String refVideoOnline = "VideoOnline";
+    public final static String refSoalOnline = "SoalOnline";
 
-    public final static String refNews = "News-dev";
+    public final static String refNews = "News";
 
     public final static String intentUserDocId = "UserDocId";
 
@@ -58,14 +58,14 @@ public class CommonMethod {
     public final static String fieldKelasId = "kelasId";
     public final static String fieldMateriId = "materiId";
 
-    public final static String storageBlendedKelas = "BlendedKelas-dev/";
-    public final static String storageBlendedMateri = "BlendedMateri-dev/";
-    public final static String storageBlendedVideo = "BlendedVideo-dev/";
-    public final static String storageOnlineKelas = "OnlineKelas-dev/";
-    public final static String storageOnlineMateri = "OnlineMateri-dev/";
-    public final static String storageOnlineVideo = "OnlineVideo-dev/";
-    public final static String storageBannerPhoto = "BannerPhoto-dev/";
-    public final static String storageNews = "NewsPhoto-dev/";
+    public final static String storageBlendedKelas = "BlendedKelas/";
+    public final static String storageBlendedMateri = "BlendedMateri/";
+    public final static String storageBlendedVideo = "BlendedVideo/";
+    public final static String storageOnlineKelas = "OnlineKelas/";
+    public final static String storageOnlineMateri = "OnlineMateri/";
+    public final static String storageOnlineVideo = "OnlineVideo/";
+    public final static String storageBannerPhoto = "BannerPhoto/";
+    public final static String storageNews = "NewsPhoto/";
 
     public final static int paginationMaxLoad = 30;
     public final static int paginationLoadNewData = 15;
