@@ -29,6 +29,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpAddBlendedKelasActivity.kelasBlendedDocId;
+
 public class OpAnggotaKelasBlendedAdapter extends RecyclerView.Adapter<OpAnggotaKelasBlendedAdapter.ViewHolder> {
     private static final String TAG = "ganteng";
     private Context context;
@@ -89,11 +91,15 @@ public class OpAnggotaKelasBlendedAdapter extends RecyclerView.Adapter<OpAnggota
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        String docId = "";
+                        String docIdUser = "";
                         for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                            docId = documentSnapshot.getId();
+                            docIdUser = documentSnapshot.getId();
                         }
-                        hapusOngoingKelas(model, docId);
+
+                        if (!docIdUser.equals(""))
+                            hapusOngoingKelas(model, docIdUser);
+                        else
+                            Log.d(TAG, "onSuccess: docIdUser : " + docIdUser);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -104,26 +110,26 @@ public class OpAnggotaKelasBlendedAdapter extends RecyclerView.Adapter<OpAnggota
                 });
     }
 
-    private void hapusOngoingKelas(final AnggotaKelasBlendedModel model, final String docId) {
+    private void hapusOngoingKelas(final AnggotaKelasBlendedModel model, final String userDocId) {
         //get ongoingkelasblended
 
         CollectionReference colRef = db.collection(CommonMethod.refUser)
-                .document(docId)
+                .document(userDocId)
                 .collection(CommonMethod.refOngoingKelasBlended);
 
-        colRef.whereEqualTo("kelasId", model.getKelasId())
+        colRef.whereEqualTo(CommonMethod.fieldKelasId, model.getKelasId())
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        DocumentReference ref;
+
                         for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                            ref = db.collection(CommonMethod.refUser)
-                                    .document(docId)
+                            DocumentReference ref = db.collection(CommonMethod.refUser)
+                                    .document(userDocId)
                                     .collection(CommonMethod.refOngoingKelasBlended)
                                     .document(documentSnapshot.getId());
-                            Log.d(TAG, "hapusOngoingKelas: user docId : " + docId);
-                            Log.d(TAG, "hapusOngoingKelas: ongoing docId : " + documentSnapshot.getId());
+                            Log.d(TAG, "hapusOngoingKelas: user userDocId : " + userDocId);
+                            Log.d(TAG, "hapusOngoingKelas: ongoing userDocId : " + documentSnapshot.getId());
 
                             ref.delete();
                         }
@@ -135,7 +141,7 @@ public class OpAnggotaKelasBlendedAdapter extends RecyclerView.Adapter<OpAnggota
 
     private void hapusUserDariAnggota(AnggotaKelasBlendedModel model) {
         DocumentReference ref = db.collection(CommonMethod.refKelasBlended)
-                .document(model.getKelasId())
+                .document(kelasBlendedDocId)
                 .collection(CommonMethod.refAnggota)
                 .document(model.getDocumentId());
 

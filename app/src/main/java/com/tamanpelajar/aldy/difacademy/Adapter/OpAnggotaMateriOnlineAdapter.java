@@ -29,7 +29,12 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpAddBlendedKelasActivity.kelasBlendedDocId;
+import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpAddOnlineKelasActivity.kelasOnlineDocId;
+import static com.tamanpelajar.aldy.difacademy.ActivityAdmin.OpAddOnlineMateriActivity.onlineMateriDocId;
+
 public class OpAnggotaMateriOnlineAdapter extends RecyclerView.Adapter<OpAnggotaMateriOnlineAdapter.ViewHolder> {
+    private static final String TAG = "ganteng";
     private Context context;
     private ArrayList<AnggotaMateriOnlineModel> models;
 
@@ -52,7 +57,9 @@ public class OpAnggotaMateriOnlineAdapter extends RecyclerView.Adapter<OpAnggota
     public void onBindViewHolder(@NonNull OpAnggotaMateriOnlineAdapter.ViewHolder holder, final int position) {
         final AnggotaMateriOnlineModel model = models.get(position);
 
-        Date date = new Date(model.getDateCreated());
+        Log.d(TAG, "onBindViewHolder: materiDocId : " + onlineMateriDocId);
+
+        Date date = new Date(model.getDateCreated() * 1000);
         SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy");
 
         holder.tvNama.setText(model.getName());
@@ -88,12 +95,14 @@ public class OpAnggotaMateriOnlineAdapter extends RecyclerView.Adapter<OpAnggota
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        String docId = "";
+                        String userDocId = "";
                         for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                            docId = documentSnapshot.getId();
+                            userDocId = documentSnapshot.getId();
                         }
-
-                        hapusOngoingMateri(model, docId);
+                        if (!userDocId.equals(""))
+                            hapusOngoingMateri(model, userDocId);
+                        else
+                            Log.d(TAG, "onSuccess: userDocId : " + userDocId);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -104,14 +113,14 @@ public class OpAnggotaMateriOnlineAdapter extends RecyclerView.Adapter<OpAnggota
                 });
     }
 
-    private void hapusOngoingMateri(final AnggotaMateriOnlineModel model, final String docId) {
+    private void hapusOngoingMateri(final AnggotaMateriOnlineModel model, final String userDocId) {
         //get ongoingkelasblended
 
         CollectionReference colRef = db.collection(CommonMethod.refUser)
-                .document(docId)
+                .document(userDocId)
                 .collection(CommonMethod.refOngoingMateriOnline);
 
-        colRef.whereEqualTo("materiId", model.getKelasId())
+        colRef.whereEqualTo(CommonMethod.fieldMateriId, model.getMateriId())
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
@@ -119,7 +128,7 @@ public class OpAnggotaMateriOnlineAdapter extends RecyclerView.Adapter<OpAnggota
                         DocumentReference ref;
                         for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                             ref = db.collection(CommonMethod.refUser)
-                                    .document(docId)
+                                    .document(userDocId)
                                     .collection(CommonMethod.refOngoingMateriOnline)
                                     .document(documentSnapshot.getId());
 
@@ -132,10 +141,10 @@ public class OpAnggotaMateriOnlineAdapter extends RecyclerView.Adapter<OpAnggota
     }
 
     private void hapusUserDariAnggota(AnggotaMateriOnlineModel model) {
-        DocumentReference ref = db.collection(CommonMethod.refKelasBlended)
-                .document(model.getKelasId())
+        DocumentReference ref = db.collection(CommonMethod.refKelasOnline)
+                .document(kelasOnlineDocId)
                 .collection(CommonMethod.refMateriOnline)
-                .document(model.getMateriId())
+                .document(onlineMateriDocId)
                 .collection(CommonMethod.refAnggota)
                 .document(model.getDocumentId());
 
