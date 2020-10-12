@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -50,7 +51,6 @@ public class OpAddNewsActivity extends AppCompatActivity {
     private TextView tvNavbar;
 
     private FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
-    private StorageReference storageReference = firebaseStorage.getReference();
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference newsRef = db.collection(CommonMethod.refNews);
@@ -330,6 +330,8 @@ public class OpAddNewsActivity extends AppCompatActivity {
     }
 
     private void hapusNews() {
+        Log.d(TAG, "hapusNews: jalan");
+        Log.d(TAG, "hapusNews: newsDocId : " + newsDocId);
         DocumentReference ref = newsRef.document(newsDocId);
         ref.delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -348,6 +350,8 @@ public class OpAddNewsActivity extends AppCompatActivity {
     }
 
     private void deletePhotoInStorage() {
+        Log.d(TAG, "deletePhotoInStorage: jalan");
+        Log.d(TAG, "deletePhotoInStorage: thumbnailUrl : " + thumbnailUrl);
         //method ini khusus hapus
         StorageReference ref = firebaseStorage.getReferenceFromUrl(thumbnailUrl);
         ref.delete()

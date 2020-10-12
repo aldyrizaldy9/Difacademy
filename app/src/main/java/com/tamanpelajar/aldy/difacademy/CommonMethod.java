@@ -31,7 +31,7 @@ public class CommonMethod {
     public final static String refVideoOnline = "VideoOnline";
     public final static String refSoalOnline = "SoalOnline";
 
-    public final static String refNews = "News";
+    public final static String refNews = "News-dev";
 
     public final static String intentUserDocId = "UserDocId";
 
@@ -65,7 +65,7 @@ public class CommonMethod {
     public final static String storageOnlineMateri = "OnlineMateri/";
     public final static String storageOnlineVideo = "OnlineVideo/";
     public final static String storageBannerPhoto = "BannerPhoto/";
-    public final static String storageNews = "NewsPhoto/";
+    public final static String storageNews = "NewsPhoto-dev/";
 
     public final static int paginationMaxLoad = 30;
     public final static int paginationLoadNewData = 15;
